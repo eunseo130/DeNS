@@ -3,6 +3,7 @@
 ### 0110 (월) 진행사항
 
 <hr>
+
 * ToDo List 만들기
 
 | 사용 기술                 |
@@ -56,3 +57,4 @@
 
 * 사진
 <hr>
+![erd](/uploads/df2b023d364774ef6feea0a717808cf5/erd.png)
