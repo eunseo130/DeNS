@@ -1,6 +1,8 @@
 # README
 
-### 0110 (월)
+[toc]
+
+### 1/10 (월)
 
 <hr>
 
@@ -17,7 +19,7 @@
 
   ![ERD](README.assets/ERD-1805114.png)
 
-### 0110 (월)
+### 1/11 (화)
 
 <hr>
 
@@ -57,5 +59,19 @@
 
     - 웹을 기본으로 생각하고 진행
 
+### 1/12 (수)
 
+<hr>
+
+- NoSQL 스터디
+
+- ERD 수정 및 보완
+
+  - 관계형 DB
+
+    ![ERD2](README.assets/ERD2-1976856.png)
+
+  - NoSQL
+
+    ![NoSQL](README.assets/NoSQL-1976937.png)
 
