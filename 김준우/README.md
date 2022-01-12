@@ -1,5 +1,54 @@
 # README
 
+[toc]
+
+### 0112 (화) 진행사항
+
+| 변경 사항                                      |
+| ---------------------------------------------- |
+| :white_check_mark: ERD 다이어그램 수정 및 보완 |
+| :white_check_mark: NoSQL 사전학습              |
+
+- MongoDB 학습
+
+<hr>
+
+1. MongDB 쉘 명령어 환경 만들기
+
+![1](/uploads/d6f74e228da1fe9f63e38bc8b3857d23/1.png)
+
+2. books 컬렉션 추가하기
+
+![2](/uploads/845e34fbe96e2bb32e2dbb10160ef58d/2.png)
+
+3. books에 데이터 insert 하기
+
+![3](/uploads/c8941bd69a0dc097fe48f73dfd880d5c/3.png)
+
+4. insert한 데이터 찾기
+
+![4](/uploads/3c86ab909b2ec8b4c76c44dbb5d5893e/4.png)
+
+<hr>
+
+- ERD 수정 및 보완
+
+<hr>
+
+![erd2](/uploads/4b7571a966ae805e8892fd862043d0fe/erd2.png)
+
+<hr>
+
+- NoSQL 설계 하기
+
+<hr>
+
+![nosql](/uploads/19934370ddf48db6966fa1f08fb19567/nosql.png)
+
+<hr>
+
+<hr>
+
 ### 0111 (화) 진행사항
 
 | 변경 사항                                                    |
