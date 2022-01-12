@@ -7,7 +7,7 @@
 - ![Copy_of_Copy_of_ERD](/uploads/f9c73684ee7f0c64b5f8190d86cdd96a/Copy_of_Copy_of_ERD.png)!
 - 프로필테이블 부분이 noSQL로 하는 것이 좋을 것이라 생각하여 noSQL 공부
 - 프로필 부분 noSQL 모델링
--[Image_Pasted_at_2022-1-12_17-40](/uploads/446a665448702f38fb79601e7a1e6881/Image_Pasted_at_2022-1-12_17-40.png)
+- ![Image_Pasted_at_2022-1-12_17-40](/uploads/c1054c094b32f697aa2943238b20c88d/Image_Pasted_at_2022-1-12_17-40.png)
 
 * noSQL 공부 & noSQL과 관계형데이터베이스 같이 사용할 수 있는지
 ### 0111 (화)
