@@ -1,4 +1,98 @@
 # README
+
+### 0113 (목)
+<hr>
+- 기능별 테이블 설계 및 테이블 연결 관계 정립
+
+- 회원관리
+    - 회원가입
+        - userid
+        - email
+        - username
+        - password
+        - admin(status)
+    - 로그인
+        - userid
+        - password
+        
+- 검색
+    - 검색 내용
+        - team_name
+        - user_name
+        - hashtag
+- 프로필
+    - about
+        - content
+        - user_id
+        - hashtag
+    - image
+        - image_id
+        - image_name
+    - skill
+        - skill_name
+        - skill_id
+        - level
+        
+- 메세지
+    - 메세지
+        - message_id
+        - content
+        - time
+        - date
+        - type
+        - user_id
+    - 팀 요청
+        - user_id
+        - type
+        - team_id
+        - time
+        - date
+        - request_id
+- 팀관리
+    - 팀만들기
+        - team_id
+        - team_name
+    - 팀 피드
+        - title
+        - content
+        - regist_date
+        - update_date
+        - file
+    - 팀 설정
+        - team_id
+        - team_name
+        - team_intro
+        - team_hashtag
+        - team_icon(img)
+        - user_id
+        - user_name
+    - 팀 멤버 관리
+        - team_id
+        - user_id
+        - user_name
+        - position
+        - 
+- 알림
+    - 알림연결
+        - message_id
+        - alert_id
+        - type
+    - 알림내용
+        - content
+        - time
+
+- ![Image_Pasted_at_2022-1-13_16-24](/uploads/983447d2bce3db00291b9ecbf0520eae/Image_Pasted_at_2022-1-13_16-24.png)
+
+### 0112 (수)
+<hr>
+
+- 전날 회의결과를 바탕으로 관계형데이터베이스 ERD 수정 및 보완
+- ![Copy_of_Copy_of_ERD](/uploads/f9c73684ee7f0c64b5f8190d86cdd96a/Copy_of_Copy_of_ERD.png)
+- 프로필테이블 부분이 noSQL로 하는 것이 좋을 것이라 생각하여 noSQL 공부
+- 프로필 부분 noSQL 모델링
+- ![Image_Pasted_at_2022-1-12_17-40](/uploads/c1054c094b32f697aa2943238b20c88d/Image_Pasted_at_2022-1-12_17-40.png)
+
+* noSQL 공부 & noSQL과 관계형데이터베이스 같이 사용할 수 있는지
 ### 0111 (화)
 <hr>
 
