@@ -2,7 +2,105 @@
 
 [toc]
 
-### 0112 (화) 진행사항
+### 0113 (목) 진행사항
+
+| 변경 사항                             |
+| ------------------------------------- |
+| :white_check_mark: 기능별 흐름도 작성 |
+
+- 기능별로 필요한 데이터 정리
+
+<hr>
+
+- 회원관리
+  - 회원가입
+    - userid
+    - email
+    - username
+    - password
+    - admin(status)
+  - 로그인
+    - userid
+    - password
+- 검색
+  - 검색 내용
+    - team_name
+    - user_name
+    - hashtag
+- 프로필
+  - about
+    - content
+    - user_id
+    - hashtag
+  - image
+    - image_id
+    - image_name
+  - skill
+    - skill_name
+    - skill_id
+    - level
+- 메세지
+  - 메세지
+    - message_id
+    - content
+    - time
+    - date
+    - type
+    - user_id
+  - 팀 요청
+    - user_id
+    - type
+    - team_id
+    - time
+    - date
+    - request_id
+- 팀관리
+  - 팀만들기
+    - team_id
+    - team_name
+  - 팀 피드
+    - title
+    - content
+    - regist_date
+    - update_date
+    - file
+  - 팀 설정
+    - team_id
+    - team_name
+    - team_intro
+    - team_hashtag
+    - team_icon(img)
+    - user_id
+    - user_name
+  - 팀 멤버 관리
+    - team_id
+    - user_id
+    - user_name
+    - position
+    -
+- 알림
+
+  - 알림연결
+    - message_id
+    - alert_id
+    - type
+  - 알림내용
+    - content
+    - time
+
+<hr>
+
+- 정리된 데이터를 바탕으로 흐름관계도 작성
+
+<hr>
+
+![Image_Pasted_at_2022-1-13_16-24](/uploads/bc76f2d4e3953d04d28b51c746c60828/Image_Pasted_at_2022-1-13_16-24.png)
+
+<hr>
+
+<hr>
+
+### 0112 (수) 진행사항
 
 | 변경 사항                                      |
 | ---------------------------------------------- |
