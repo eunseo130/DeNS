@@ -1,7 +1,10 @@
 # README
 
+# 0113 (목)
 
 
+기획 마무리 <br>
+https://pleasant-skate-6bb.notion.site/2c635564feb0470a957a99d57a6991ad
 
 
 # 0112 (수)
