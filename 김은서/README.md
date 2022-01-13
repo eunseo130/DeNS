@@ -75,3 +75,84 @@
 
     ![NoSQL](README.assets/NoSQL-1976937.png)
 
+### 1/13 (목)
+
+<hr>
+
+- 기능에 따라 필요한 필드 작성
+  - 회원관리
+    - 회원가입
+      - userid
+      - email
+      - username
+      - password
+      - admin(status)
+    - 로그인
+      - userid
+      - password
+  - 검색
+    - 검색 내용
+      - team_name
+      - user_name
+      - hashtag
+  - 프로필
+    - about
+      - content
+      - user_id
+      - hashtag
+    - image
+      - image_id
+      - image_name
+    - skill
+      - skill_name
+      - skill_id
+      - level
+  - 메세지
+    - 메세지
+      - message_id
+      - content
+      - time
+      - date
+      - type
+      - user_id
+    - 팀 요청
+      - user_id
+      - type
+      - team_id
+      - time
+      - date
+      - request_id
+  - 팀관리
+    - 팀만들기
+      - team_id
+      - team_name
+    - 팀 피드
+      - title
+      - content
+      - regist_date
+      - update_date
+      - file
+    - 팀 설정
+      - team_id
+      - team_name
+      - team_intro
+      - team_hashtag
+      - team_icon(img)
+      - user_id
+      - user_name
+    - 팀 멤버 관리
+      - team_id
+      - user_id
+      - user_name
+      - position
+      - 
+  - 알림
+    - 알림연결
+      - message_id
+      - alert_id
+      - type
+    - 알림내용
+      - content
+      - time
+- 테이블 관계 작성
+  - ![관계도](README.assets/관계도-2059802.png)
