@@ -1,5 +1,10 @@
 # README
 
+### 0114 (금)
+- ERD 최종 완성
+
+![Untitled](/uploads/cef9c7b6e23dfd480e30c88af498191a/Untitled.png)
+
 ### 0113 (목)
 <hr>
 - 기능별 테이블 설계 및 테이블 연결 관계 정립
