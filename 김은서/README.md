@@ -155,4 +155,10 @@
       - content
       - time
 - 테이블 관계 작성
-  - ![관계도](README.assets/관계도-2059802.png)
+  - ![Relation](README.assets/Relation-2059802.png)
+
+### 1/14 (금)
+
+<hr>
+
+![ERD final](README.assets/ERD final-2133224.png)
