@@ -2,7 +2,136 @@
 
 [toc]
 
-### 0112 (화) 진행사항
+### 0114 (금) 진행사항
+
+| 변경 사항                                   |
+| ------------------------------------------- |
+| :white_check_mark: ERD 다이어그램 최종 설계 |
+| :white_check_mark: 백엔드 코드 컨벤션       |
+
+- 0113(목)에 진행한 관계도를 기반으로 ERD 다이어그램 최종 설계
+
+<hr>
+
+![erd_다이어그램](/uploads/204e7e33d68019a97a890137a8856560/erd_다이어그램.PNG)
+
+<hr>
+
+- 백엔드 코드 컨벤션
+
+<hr>
+
+테이블 필드 명을 변수이름을 똑같이, 테이블명, 변수명 쓸 때
+
+-**스네이크표기법**으로 무조건 소문자 (user_id, team_id)
+
+함수, 메서드, 클래스를 만들게 되면
+
+-**카멜 표기법**으로 접두사 소문자 시작 다음 단어부터 단어의 첫 글자만 대문자 (findById)
+
+<hr>
+
+<hr>
+
+### 0113 (목) 진행사항
+
+| 변경 사항                             |
+| ------------------------------------- |
+| :white_check_mark: 기능별 흐름도 작성 |
+
+- 기능별로 필요한 데이터 정리
+
+<hr>
+
+- 회원관리
+  - 회원가입
+    - userid
+    - email
+    - username
+    - password
+    - admin(status)
+  - 로그인
+    - userid
+    - password
+- 검색
+  - 검색 내용
+    - team_name
+    - user_name
+    - hashtag
+- 프로필
+  - about
+    - content
+    - user_id
+    - hashtag
+  - image
+    - image_id
+    - image_name
+  - skill
+    - skill_name
+    - skill_id
+    - level
+- 메세지
+  - 메세지
+    - message_id
+    - content
+    - time
+    - date
+    - type
+    - user_id
+  - 팀 요청
+    - user_id
+    - type
+    - team_id
+    - time
+    - date
+    - request_id
+- 팀관리
+  - 팀만들기
+    - team_id
+    - team_name
+  - 팀 피드
+    - title
+    - content
+    - regist_date
+    - update_date
+    - file
+  - 팀 설정
+    - team_id
+    - team_name
+    - team_intro
+    - team_hashtag
+    - team_icon(img)
+    - user_id
+    - user_name
+  - 팀 멤버 관리
+    - team_id
+    - user_id
+    - user_name
+    - position
+    -
+- 알림
+
+  - 알림연결
+    - message_id
+    - alert_id
+    - type
+  - 알림내용
+    - content
+    - time
+
+<hr>
+
+- 정리된 데이터를 바탕으로 흐름관계도 작성
+
+<hr>
+
+![Image_Pasted_at_2022-1-13_16-24](/uploads/bc76f2d4e3953d04d28b51c746c60828/Image_Pasted_at_2022-1-13_16-24.png)
+
+<hr>
+
+<hr>
+
+### 0112 (수) 진행사항
 
 | 변경 사항                                      |
 | ---------------------------------------------- |
