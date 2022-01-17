@@ -1,4 +1,4 @@
-import ReactDOM from 'react-dom';
-import InputBox from './component/commonComponent/InputBox';
+import ReactDOM from 'react-dom'
+import Indx from './component/commonComponent/indx'
 
-ReactDOM.render(<InputBox />,document.getElementById('root'));
+ReactDOM.render(<Indx />, document.getElementById('root'))
