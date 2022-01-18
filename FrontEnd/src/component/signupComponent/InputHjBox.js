@@ -1,17 +1,27 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
-
 function InputHjBox(props) {
+
+  const { title, ph, idcheck } = props;
+  
+  const styleTest = {
+    fontFamily: 'Roboto',
+    fontStyle: 'normal',
+    fontWeight: '700',
+    color: '000000',  
+    width: '233px',
+    height: '30px',
+    marginLeft: '10px',
+    border:'none',
+  };
+
   return (
     <Container {...props}>
-      <비밀번호2>비밀번호</비밀번호2>
+      <Test2>{ title}</Test2>
       <Rect>
-        <input>
-          <InputBox>
-            아이디를 입력해주세요.
-          </InputBox>
-        </input>
+        <input placeholder={ph} style={styleTest} onChange={(e) => { props.check(e.target.value,idcheck) }}></input>
       </Rect>
+      <span>tests문장입니다</span>
     </Container>
   );
 }
@@ -21,12 +31,12 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const 비밀번호2 = styled.span`
+const Test2 = styled.span`
   font-family: Roboto;
   font-style: normal;
   font-weight: 700;
   color: rgba(131,131,131,1);
-  width: 93px;
+  width: 120px;
   height: 18px;
   margin-left: 4px;
 `;
@@ -41,17 +51,6 @@ const Rect = styled.div`
   display: flex;
   margin-top: 5px;
   border-style: solid;
-`;
-
-const InputBox = styled.span`
-  font-family: Roboto;
-  font-style: normal;
-  font-weight: 700;
-  color: rgba(220,220,220,1);
-  width: 233px;
-  height: 18px;
-  margin-top: 9px;
-  margin-left: 10px;
 `;
 
 export default InputHjBox;
