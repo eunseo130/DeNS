@@ -13,3 +13,7 @@ ReactDOM.render(<SignupBox />,document.getElementById('root'));
 // ReactDOM.render(<NavIcon />,document.getElementById('root'));
 // ReactDOM.render(<NaviBox />,document.getElementById('root'));
 // ReactDOM.render(<HeaderNav />,document.getElementById('root'));
+import ReactDOM from 'react-dom'
+import Indx from './component/commonComponent/indx'
+
+ReactDOM.render(<Indx />, document.getElementById('root'))
