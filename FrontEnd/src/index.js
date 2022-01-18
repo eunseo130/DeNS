@@ -1,6 +1,5 @@
 import ReactDOM from 'react-dom';
-import InputHjBox from './component/commonComponent/InputHjBox';
-// import InputBox from './component/commonComponent/InputBox';
+// import Login from './component/loginComponent/Login';
 
-// ReactDOM.render(<InputBox />,document.getElementById('root'));
-ReactDOM.render(<InputHjBox />,document.getElementById('root'));
+// ReactDOM.render(<Login/>,document.getElementById('root'));
+// ReactDOM.render(app ,document.getElementById('root'));
