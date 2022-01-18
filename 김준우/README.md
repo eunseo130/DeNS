@@ -2,11 +2,51 @@
 
 [toc]
 
+### 0118 (화) 진행사항
+
+| 변경 사항                                   |
+| ------------------------------------------- |
+| :white_check_mark: 로그인 기능 구현 |
+| :white_check_mark: jwt 학습 및 기능 구현       |
+
+## JWT란? (Json Web Token)
+
+![https://media.vlpt.us/images/ehdrms2034/post/86436c80-4b84-4581-85be-de8c013c22e0/image.png](https://media.vlpt.us/images/ehdrms2034/post/86436c80-4b84-4581-85be-de8c013c22e0/image.png)
+
+이름 그대로 JSON을 이용한 Web Token 입니다. 주로 서비스에 대한 인증이나 CSRF 토큰등에 사용될 수 있겠지요. 이런 JWT는 위와 같은 구조를 가집니다.
+
+- Header : 이 JWT가 어떤 방식으로, 어떤 알고리즘을 사용하여 토큰화 했는지 명시
+- Payload : 토큰에 사용자가 담고자 하는 정보를 담는 곳
+- Signature : 위 토큰이 유효한지 유효하지 않은지에 대한 정보를 가짐. 암호화에 사용되는 키 값은 서버에 저장해놓는다. 그리고 발행된 JWT 값이 서버에 들어왔을 때 두 값을 비교해서 올바른 JWT 토큰이 맞는지 확인한다.
+
+
+#jwt 흐름도 
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3053c2d9-7375-42d4-bfee-2d48ac7c6b56/Untitled.png)
+
+출처 : [https://velog.io/@ehdrms2034/Spring-Security-JWT-Redis를-통한-회원인증허가-구현](https://velog.io/@ehdrms2034/Spring-Security-JWT-Redis%EB%A5%BC-%ED%86%B5%ED%95%9C-%ED%9A%8C%EC%9B%90%EC%9D%B8%EC%A6%9D%ED%97%88%EA%B0%80-%EA%B5%AC%ED%98%84)
+
+<hr>
+
+#jwt 주입 하기
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/73007e64-6190-4361-80cc-8917990516ba/Untitled.png)
+
+#jwt 기본 클래스 만들기
+
+![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/fd4290cc-7b6a-4887-b198-43988560211f/Untitled.png)
+
+
+<hr>
+
+<hr>
+
+
 ### 0117 (월) 진행사항
 
 | 변경 사항                                   |
 | ------------------------------------------- |
-| :white_check_mark:  |
+| :white_check_mark: 기본 기능 구현 |
 | :white_check_mark: 백엔드 코드 컨벤션       |
 
 - 비회원(로그인X)
