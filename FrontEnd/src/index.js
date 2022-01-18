@@ -1,10 +1,4 @@
 import ReactDOM from 'react-dom';
-<<<<<<< HEAD
-// import Login from './component/loginComponent/Login';
-
-// ReactDOM.render(<Login/>,document.getElementById('root'));
-// ReactDOM.render(app ,document.getElementById('root'));
-=======
 // import HeaderBox from './component/commonComponent/HeaderBox';
 // import NaviBox from './component/commonComponent/NaviBox';
 // import NavIcon from './component/commonComponent/NavIcon';
@@ -26,4 +20,3 @@ ReactDOM.render(<Indx />, document.getElementById('root'))
 import InputBox from './component/commonComponent/InputBox';
 
 ReactDOM.render(<InputBox />,document.getElementById('root'));
->>>>>>> e30d0c2d6dd0fde1be0cdcecf146b716c47e1954
