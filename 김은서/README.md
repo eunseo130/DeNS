@@ -206,3 +206,126 @@
       - 회원의 정보를 확인할 수 있다.
 
     채널 관리자 페이지(일반 유저가 채널관리자가 될 때, 권한 부임 & 기능 등 생각)
+
+### 1/18 (화)
+
+<hr>
+
+- 회원가입 1차 코드
+
+  ```java
+  @PostMapping("/signup")
+  @ResponseBody
+  public String signup(@Valid User newUser) {
+  
+      String email = newUser.getEmail();
+      String password = newUser.getPassword();
+      String name = newUser.getName();
+      int identity = newUser.getIdentity();
+  
+      User user = new User();
+      user.setEmail(email);
+      user.setPassword(password);
+      user.setName(name);
+      user.setIdentity(identity);
+  
+      userService.signup(user);
+  
+      return "success";
+  }
+  ```
+
+  ```java
+  @Service
+  @RequiredArgsConstructor
+  public class UserService {
+  
+      private final UserRepository userRepository;
+  
+      public String signup(User user){
+          validateDuplicateUser(user);
+          userRepository.save(user);
+          return user.getEmail();
+      }
+  
+      private void validateDuplicateUser(User user) {
+          List<User> findUsers = userRepository.findByEmail(user.getEmail());
+          if (!findUsers.isEmpty()) {
+              throw new IllegalStateException("이미 존재하는 회원입니다.");
+          }
+      }
+  }
+  ```
+
+- 회원가입 2차 코드
+
+  ```java
+  package com.ssafy.TeamZOI.service;
+  
+  import com.ssafy.TeamZOI.entity.Salt;
+  import com.ssafy.TeamZOI.entity.User;
+  import com.ssafy.TeamZOI.repository.UserRepository;
+  import lombok.RequiredArgsConstructor;
+  import lombok.extern.slf4j.Slf4j;
+  import org.springframework.beans.factory.annotation.Autowired;
+  import org.springframework.stereotype.Service;
+  import org.springframework.transaction.annotation.Transactional;
+  
+  import java.util.List;
+  
+  @Service
+  public class AuthServiceImpl implements AuthService{
+  
+      @Autowired
+      private UserRepository userRepository;
+  
+      @Autowired
+      private SaltUtil saltUtil;
+  
+      @Override
+      @Transactional(rollbackFor = Exception.class)
+      public void signUp(User user) {
+          String password = user.getPassword();
+          String salt = saltUtil.genSalt();
+          user.setSalt(new Salt(salt));
+          user.setPassword(saltUtil.encodePassword(salt, password));
+          validateDuplicateUser(user);
+          userRepository.save(user);
+          System.out.println(userRepository.findByEmail(user.getEmail()));
+          System.out.println(user.getPassword());
+          System.out.println(user.getEmail());
+          System.out.println(salt);
+      }
+  
+      private void validateDuplicateUser(User user) {
+          List<User> findUsers = userRepository.findByEmail(user.getEmail());
+          if (!findUsers.isEmpty()) {
+              throw new IllegalStateException("이미 존재하는 회원입니다.");
+          }
+      }
+  
+  }
+  ```
+
+  ```java
+  @PostMapping("/signup")
+      public Response signUp(User user) {
+          Response response = new Response();
+  
+          try {
+              authService.signUp(user);
+              response.setResponse("success");
+              response.setMessage("회원가입을 성공적으로 완료했습니다.");
+              response.setData(null);
+          }
+          catch(Exception e) {
+              response.setResponse("failed");
+              response.setMessage("회원가입을 하는 도중 오류가 발생했습니다.");
+              response.setData(e.toString());
+          }
+          return response;
+      }
+  ```
+
+  
+
