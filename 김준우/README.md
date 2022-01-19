@@ -17,10 +17,10 @@
 
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e5aee54e-126c-4517-825e-890e4c32d0fb/Untitled.png)
 
-  -토큰 발급 확인
+  - 토큰 발급 확인
       
     ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3518b9d2-4e2e-41db-aec5-b44dd154bce8/Untitled.png)
-        
+          
     
   - 코드
 
@@ -30,7 +30,7 @@
 
 ## 이메일 인증 기능 구현 (서예진)
 
-    회원가입 시, 이메일 인증을 통하여 회원가입 
+  -  회원가입 시, 이메일 인증을 통하여 회원가입 
 
   - 회원가입 폼을 통하여 자신의 정보를 보내면, 서버에서 인증이메일 발송
 
