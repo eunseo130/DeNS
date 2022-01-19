@@ -19,7 +19,7 @@ function InputHjBox(props) {
     <Container {...props}>
       <Test2>{ title}</Test2>
       <Rect>
-        <input placeholder={ph} style={styleTest} onChange={(e) => { props.check(e.target.value,idcheck) }}></input>
+        <input placeholder={ph} style={styleTest} onChange={(e) => { props.check(e.target.value) }}></input>
       </Rect>
       <span>tests문장입니다</span>
     </Container>

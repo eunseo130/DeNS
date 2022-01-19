@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-TeamZoiApplication<TeamZOI>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.ssafy.TeamZOI.TeamZoiApplication",
+            "projectName": "TeamZOI",
+            "args": ""
+        }
+    ]
+}

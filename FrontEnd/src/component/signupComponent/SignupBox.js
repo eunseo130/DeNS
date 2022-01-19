@@ -1,45 +1,28 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import InputHjBox from './InputHjBox';
-
+import '../../test.css';
 
 function SignupBox(props) {
-  
-  const [data, setData] = useState({
-    name: '',
-    email: '',
-    password: '',
-    pwdCerti: '',
-  });
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [pwdCerti, setPwdCerti] = useState('');
+  const [correct, setCorrect] = useState(false);
 
-  //check = 입력값  id = 항목
-  const setTest = (check, id) => {
-    const temp = check;
-    const temp2 = id;
-    setData({
-      ...data,
-      [temp2]: temp   //자료구조 dic 
-    });
-    console.log(data);
+  if (name.length > 5 && email.length > 10) {
+    setCorrect(true);
+    console.log("check");
   }
-
-  const testfunc = () => {
-    console.log(data);
-  }
-
-  //아이디, 값, true/false
-  //아이디, 값
-  //아이디, 값
-  //아이디, 값
-  //모두 true라면 버튼 활성화.
-
-  //if(Bname && Bpwd && BpwdCerti ){
-  //  버튼 활성화
-  //}
   
+  const testFunc = () => {
+    if (correct) {
+      console.log("test ok ");
+    }
+  }
 
   return (
-    <Container {...props}>
+    <>
       <SignupBoxBg>
         <SignupBoxTitleStack>
           <SignupBoxTitle>
@@ -47,13 +30,13 @@ function SignupBox(props) {
             <WelcomeBack>Welcome Back!</WelcomeBack>
           </SignupBoxTitle>
         </SignupBoxTitleStack>
-          <InputHjBox title="이름" ph="이름" idcheck={"name"} check={setTest}/>
-          <InputHjBox title="이메일" ph="이메일" idcheck={"email" } check={setTest} />
-          <InputHjBox title="비밀번호" ph="비밀번호" idcheck={"pwd" } check={setTest}/>
-          <InputHjBox title="비밀번호확인" ph="비밀번호확인" idcheck={"pwdCerti" } check={setTest}/>
-        <button style={SendFormbtn} onClick={ testfunc}>전송하기</button>
+          <InputHjBox title="이름" ph="이름" idcheck={"name"} check={setName}/>
+          <InputHjBox title="이메일" ph="이메일" idcheck={"email" } check={setEmail} />
+          <InputHjBox title="비밀번호" ph="비밀번호" idcheck={"password" } check={setPassword}/>
+          <InputHjBox title="비밀번호확인" ph="비밀번호확인" idcheck={"pwdCerti" } check={setPwdCerti}/>
+        <button className={correct ? 'active' : 'unactive'} onClick={ testFunc}style={SendFormbtn} disabled>전송하기</button>
       </SignupBoxBg>
-    </Container>
+    </>
   );
 }
 
