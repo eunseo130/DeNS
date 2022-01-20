@@ -393,4 +393,74 @@
       }
   ```
 
+
+### 1/20 (목)
+
+<hr>
+
+- 비밀번호 변경 요청 메일 보내기
+
+  ```java
+  @GetMapping("/password/{key}")
+      public Response isPasswordUUIDValidate(@PathVariable String key) {
+          Response response = new Response();
+          try {
+              if (authService.isPasswordUuidValidate(key)) {
+                  response.setResponse("success");
+                  response.setMessage("정상적인 접근입니다.");
+                  response.setData(null);
+              }
+              else {
+                  response.setResponse("error");
+                  response.setMessage("유효하지 않은 key값입니다.");
+                  response.setData(null);
+              }
+          } catch (Exception e) {
+              response.setResponse("error");
+              response.setMessage("유효하지 않은 key값입니다.");
+              response.setData(null);
+          }
+          return response;
+      }
+  
+      @PostMapping(value = "/password")
+      public Response requestChangePassword(RequestChangePassword1 requestChangePassword1) {
+          Response response = new Response();
+          try {
+              User user = authService.findByEmail(requestChangePassword1.getEmail());
+              if (!user.getEmail().equals(requestChangePassword1.getEmail())) throw new NoSuchFieldException("");
+              authService.requestChangePassword(user);
+              response.setResponse("success");
+              response.setMessage("성공적으로 사용자의 비밀번호를 변경요청을 수행했습니다.");
+              response.setData(null);
+          } catch (NoSuchFieldException e) {
+              response.setResponse("error");
+              response.setMessage("사용자의 정보를 조회할 수 없습니다.");
+              response.setData(null);
+          } catch (Exception e) {
+              response.setResponse("error");
+              response.setMessage("비밀번호 변경 요청을 할 수 없습니다.");
+              response.setData(null);
+          }
+          return response;
+      }
+  ```
+
+  ```java
+  @Override
+      public void requestChangePassword(User user) throws NotFoundException {
+          String CHANGE_PASSWORD_LINK = "http://localhost:8080/password/";
+          if(user == null) throw new NotFoundException("멤버가 조회되지 않습니다.");
+          String key = REDIS_CHANGE_PASSWORD_PREFIX+ UUID.randomUUID();
+          redisUtil.setDataExpire(key, user.getName(), 60*30L);
+          emailService.sendMail(user.getEmail(), "사용자 비밀번호 안내 메일", CHANGE_PASSWORD_LINK+key);
+      }
+  
+      @Override
+      public boolean isPasswordUuidValidate(String key) {
+          String userId = redisUtil.getData(key);
+          return !userId.equals("");
+      }
+  ```
+
   
