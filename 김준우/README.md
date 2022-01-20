@@ -2,6 +2,49 @@
 
 [toc]
 
+
+### 0119 (수) 진행사항
+
+| 변경 사항                                   |
+| ------------------------------------------- |
+| :white_check_mark: jwt, 이메일인증, 비밀번호 찾기 기능 병합 |
+| :white_check_mark: 오류정리      |
+
+
+### 발생오류 정리
+
+- query did not a return ~
+    - 원인
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/df33c9ae-2154-44a1-9a08-6078f9e7f59d/Untitled.png)
+        
+    - 받아올 값이 중복되면 안된다
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/d379e3e7-8203-4174-90a1-9d03ad1850c2/Untitled.png)
+        
+
+ 
+
+- signin 415오류
+    - @RequestBody 삭제하면 해결
+    - [x]  나중에 프론트랑 연결해서 json으로 데이터 받아올 때는 필요할지도..?
+    - json으로 받아오려면 @Requstbody 필요
+    
+- 8080/signin 403/ 405
+    - 원인
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/9b491a40-d609-49f0-9231-3b3c301696fd/Untitled.png)
+        
+    - 해결방법
+        
+        ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6578d7ce-9efb-4063-92a2-47c88f895cf4/Untitled.png)
+        
+    - seucrity config에서 해당 페이지를 막아놨는지 확인
+
+<hr>
+
+<hr>
+
 ### 0118 (화) 진행사항
 
 | 변경 사항                                   |
