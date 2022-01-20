@@ -2,6 +2,71 @@
 
 [toc]
 
+
+### 0119 (수) 진행사항
+
+| 변경 사항                                   |
+| ------------------------------------------- |
+| :white_check_mark: jwt 발급 기능 구현 |
+| :white_check_mark: 회원가입 시 이메일 인증 기능 구현      |
+| :white_check_mark: 비밀번호 변경 기능 구현      |
+
+## jwt 기능 구현 결과
+    
+  - 웹페이지(임시페이지) 결과
+
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/e5aee54e-126c-4517-825e-890e4c32d0fb/Untitled.png)
+
+  - 토큰 발급 확인
+      
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/3518b9d2-4e2e-41db-aec5-b44dd154bce8/Untitled.png)
+          
+    
+  - 코드
+
+    ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/4adb3522-a60e-43ba-b3c1-8fd35b15992e/Untitled.png)
+
+<hr>
+
+## 이메일 인증 기능 구현 (서예진)
+
+  -  회원가입 시, 이메일 인증을 통하여 회원가입 
+
+  - 회원가입 폼을 통하여 자신의 정보를 보내면, 서버에서 인증이메일 발송
+
+  - name을 기준으로 메일 보내기때문에 name중복 불가능 처리??
+
+  - 가입하려고하는 사람은 이메일의 링크를 누르면 바로 본인인증 완료
+  - User테이블의 identity가 1(회원)으로 바뀌면서 로그인 가능
+
+  회원가입 폼 작성 후, 이메일 인증 전 identity는 0(비회원)
+
+  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/dda68bec-dd1d-4eb2-90a7-ad49e9a39c4d/Untitled.png)
+
+  폼으로 적었던 이메일로 인증메일 발송
+
+  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/6e822458-667d-482a-b33a-2503da023065/Untitled.png)
+
+  링크 클릭 후 identity는 1(회원)로 업데이트
+
+  ![Untitled](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/614d5789-470d-4ced-986f-b2f240e9eaac/Untitled.png)
+
+<hr>
+
+## 비밀번호 변경 기능 구현 (김은서)
+    
+  -
+    
+  ![비밀번호 변경.PNG](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/1743e732-7d4c-4cba-bd62-ae03acd55c3e/비밀번호_변경.png)
+    
+  ![비밀번호 db.PNG](https://s3-us-west-2.amazonaws.com/secure.notion-static.com/0730f9fa-be42-4ab8-8d70-c03bf5afdec3/비밀번호_db.png)
+    
+- 추가로 해야할 일 : 비밀번호 변경 메일 보내기
+
+<hr>
+
+<hr>
+
 ### 0118 (화) 진행사항
 
 | 변경 사항                                   |
