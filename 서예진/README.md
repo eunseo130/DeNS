@@ -1,4 +1,9 @@
 # README
+### 0120 (목)
+
+회원가입 & 로그인 & 이메일 본인인증 & 비밀번호 변경 코드 합친 후 git에 push
+git에 대한 전반적인 이해와 공부
+
 
 ### 0119 (수)
 
@@ -10,11 +15,11 @@
 - User테이블의 identity가 1(회원)으로 바뀌면서 로그인 가능
 
 회원가입 폼 작성 후, 이메일 인증 전 identity는 0(비회원)
-![Untitled](/uploads/323c05095f537aa846a3927744f7b772/Untitled.png)
+- ![Untitled](/uploads/323c05095f537aa846a3927744f7b772/Untitled.png)
 폼으로 적었던 이메일로 인증메일 발송
-![Untitled__1_](/uploads/7547523cc68b0eef1db3f71d4d9e3a8a/Untitled__1_.png)
+- ![Untitled__1_](/uploads/7547523cc68b0eef1db3f71d4d9e3a8a/Untitled__1_.png)
 링크 클릭 후 identity는 1(회원)로 업데이트
-![Untitled__2_](/uploads/3798bafaf6d53fd7b20056aaaf73025e/Untitled__2_.png)
+- ![Untitled__2_](/uploads/3798bafaf6d53fd7b20056aaaf73025e/Untitled__2_.png)
 
 ### 0118 (화)
 
