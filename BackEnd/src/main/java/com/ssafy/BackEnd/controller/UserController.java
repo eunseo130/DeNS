@@ -21,12 +21,20 @@ import java.util.HashMap;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/user")
 @RequiredArgsConstructor // final
 public class UserController {
 
 //    private final UserService userService;
     private final JwtServiceImpl jwtService;
     private final AuthService authService;
+
+    /*
+    *
+    *
+    *
+    * */
+
 
 //    @GetMapping("/#")
 //    public void Home() {
@@ -37,6 +45,9 @@ public class UserController {
 //    public void join(){
 //
 //    }
+
+
+
 
     @PostMapping("/signup")
     public Response signUp(User user) {
@@ -55,6 +66,19 @@ public class UserController {
         }
         return response;
     }
+
+    @GetMapping()
+    public void findUser() {
+
+
+    }
+
+    @DeleteMapping()
+    public void deleteUser() {
+
+    }
+
+
 
     @GetMapping("/password/{key}")
     public Response isPasswordUUIDValidate(@PathVariable String key) {
@@ -78,7 +102,7 @@ public class UserController {
         return response;
     }
 
-    @PostMapping(value = "/password")
+    @PostMapping("/password")
     public Response requestChangePassword(RequestChangePassword1 requestChangePassword1) {
         Response response = new Response();
         try {
