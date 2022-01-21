@@ -35,6 +35,10 @@ public class User{
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "salt_id")
     private Salt salt;
+
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 //    @Column
 //    private boolean emailSuccess;
 //
