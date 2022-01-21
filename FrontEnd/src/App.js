@@ -33,23 +33,23 @@ const App = () => {
         {
             path: "search/", element: <EmptyPage number={"search페이지"} />,
             children: [
-                { path: ":teamid", element: <EmptyPage number={"search페[이지 내부"} /> },
+                { path: ":teamid", element: <EmptyPage number={"search페이지 내부"} /> },
             ],
         },
         {
             path: "group/*", element: <EmptyPage number={"그룹페이지"} /> ,
             children: [
-                { path: "start", element: <EmptyPage number={"ㅅ,팉,페이지"} />  },
-                { path: "channels", element: <EmptyPage number={"채ㅔ너ㅏㄹ페이지"} /> },
+                { path: "start", element: <EmptyPage number={"스타트페이지"} />  },
+                { path: "channels", element: <EmptyPage number={"채널페이지"} /> },
                 { path: "link", element: <EmptyPage number={"링크페이지"} />  },
-            ]    
+            ]
         },
         {
             path: "error", element: <DayList />,
             children: [
                 { path: "404page", element: <DayList /> },
             ]
-        }, 
+        },
         {  path: '*', component: <DayList></DayList> },
     ])
 
