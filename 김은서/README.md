@@ -329,7 +329,7 @@
 
   
 
-### 1/18 (화)
+### 1/19 (수)
 
 <hr>
 
@@ -463,4 +463,109 @@
       }
   ```
 
+
+### 1/21 (금)
+
+<hr>
+
+- 프로필 생성 회원가입에 추가
+
+  ```java
+   @Override
+      @Transactional(rollbackFor = Exception.class)
+      public void signUp(User user) {
+          String password = user.getPassword();
+          String salt = saltUtil.genSalt();
+          user.setSalt(new Salt(salt));
+          user.setPassword(saltUtil.encodePassword(salt, password));
+          validateDuplicateUser(user);
   
+          Profile profile = new Profile();
+          profile.setName(user.getName());
+          profile.setEmail(user.getEmail());
+          profile.setJob(null);
+          profile.setStack(null);
+          user.setProfile(profile);
+          userRepository.save(user);
+      }
+  ```
+
+- 프로필 조회
+
+  ```java
+  @Override
+      public Optional<Profile> findProfile(RequestModifyProfile1 requestModifyProfile1) throws NotFoundException{
+          List<User> findUsers = userRepository.findByEmail(requestModifyProfile1.getEmail());
+          if (findUsers.isEmpty()) throw new NotFoundException("회원이 조회되지 않습니다.");
+          User findUser = findUsers.get(0);
+          String hashedPassword = findUser.getPassword();
+          SaltUtil.checkPassword(hashedPassword, requestModifyProfile1.getPassword());
+          Optional<Profile> findProfile = profileRepository.findByName(findUser.getName());
+          return findProfile;
+      }
+  ```
+
+  ```java
+  @GetMapping
+  @ApiOperation(value = "유저 프로필 조회")
+  public Response findProfile(RequestModifyProfile1 requestModifyProfile1) {
+      Response response = new Response();
+      try {
+          Optional<Profile> profile = profileService.findProfile(requestModifyProfile1);
+          response.setResponse("success");
+          response.setMessage("사용자의 프로필을 성공적으로 조회했습니다.");
+          response.setData(null);
+          return response;
+      }
+      catch (Exception e) {
+          response.setResponse("error");
+          response.setMessage("사용자의 프로필을 조회할 수 없습니다.");
+          response.setData(null);
+          return response;
+      }
+  }
+  ```
+
+- 프로필 수정
+
+  ```java
+  @Override
+  public Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException {
+  
+      User user = userRepository.findByName(findProfile.getName());
+      findProfile.setName(requestModifyProfile2.getName());
+      user.setName(requestModifyProfile2.getName());
+      user.setEmail(requestModifyProfile2.getEmail());
+      findProfile.setJob(requestModifyProfile2.getJob());
+      findProfile.setStack(requestModifyProfile2.getStack());
+  
+      profileRepository.save(findProfile);
+  
+      return findProfile;
+  }
+  ```
+
+  ```java
+  @PutMapping
+  @ApiOperation(value = "유저 프로필 수정")
+  public Response modifyProfile(RequestModifyProfile2 requestModifyProfile2) {
+      Response response = new Response();
+      try {
+          List<User> findUsers = userRepository.findByEmail(requestModifyProfile2.getEmail());
+          Profile findProfile = findUsers.get(0).getProfile();
+          Profile newProfile = profileService.modifyProfile(findProfile, requestModifyProfile2);
+          response.setResponse("success");
+          response.setMessage("사용자의 프로필을 성공적으로 수정했습니다.");
+          response.setData(null);
+      }
+      catch (Exception e) {
+          response.setResponse("error");
+          response.setMessage("사용자의 프로필을 조회할 수 없습니다.");
+          response.setData(null);
+      }
+      return response;
+  }
+  ```
+
+  
+
