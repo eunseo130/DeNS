@@ -4,6 +4,12 @@ import { useForm } from 'react-hook-form'
 import '../../test.css'
 
 function SignupBox(props) {
+
+  //java getter setter
+  //정보 보호를 위해서 가져올때 get  쓸때 set
+  //useState = 현재컴포넌트내부에서의 오브젝트 선언
+  //ES6 내용이라 
+
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
