@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.Salt;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.entity.UserIdentity;
@@ -12,6 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.UUID;
+
 
 @Service
 @RequiredArgsConstructor
@@ -38,6 +40,13 @@ public class AuthServiceImpl implements AuthService{
         user.setSalt(new Salt(salt));
         user.setPassword(saltUtil.encodePassword(salt, password));
         validateDuplicateUser(user);
+
+        Profile profile = new Profile();
+        profile.setName(user.getName());
+        profile.setEmail(user.getEmail());
+        profile.setJob(null);
+        profile.setStack(null);
+        user.setProfile(profile);
         userRepository.save(user);
     }
 

@@ -8,19 +8,17 @@ import javax.persistence.*;
 
 @Entity
 @RequiredArgsConstructor
-@Table(name = "teamkeyword")
 @Getter @Setter
-public class TeamKeyword {
-    @Id
-    @GeneratedValue
-    @Column(name="teamkeyword_id")
-    long teamkeyword_id;
+public class ProfileKeyword {
+
+    @Id @GeneratedValue
+    private Long profilekeyword_id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "team_id")
-    Team team;
+    @JoinColumn(name = "profile_id")
+    private Profile profile;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "keyword_id")
-    Keyword keyword;
+    private Keyword keyword;
 }

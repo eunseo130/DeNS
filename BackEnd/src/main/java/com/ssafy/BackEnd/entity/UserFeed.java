@@ -3,7 +3,6 @@ package com.ssafy.BackEnd.entity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
-import org.apache.tomcat.jni.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -13,13 +12,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "userfeed")
 @RequiredArgsConstructor
-@Table(name = "teamfeed")
 @Getter @Setter
+public class UserFeed {
 
-public class TeamFeed {
-    @Id @GeneratedValue
-    long teamfeed_id;
+    @Id
+    @GeneratedValue
+    long userfeed_id;
 
     String content;
 
@@ -29,13 +29,13 @@ public class TeamFeed {
     @LastModifiedDate
     LocalDateTime modify_time;
 
-    @ManyToOne
-    @JoinColumn(name = "team_id")
-    Team team;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "profile_id")
+    Profile profile;
 
-    @OneToMany(mappedBy = "team_feed", cascade = CascadeType.ALL) // many로 끝날때 fetch nono
-    List<TeamFeedFile> teamfeed_file = new ArrayList<>();
+    @OneToMany(mappedBy = "user_feed", cascade = CascadeType.ALL)
+    List<UserFeedFile> userfeed_file = new ArrayList<>();
 
-    @OneToMany(mappedBy = "team_feed", cascade = CascadeType.ALL)
-    List<TeamFeedKeyword> teamfeed_keyword = new ArrayList<>();
+    @OneToMany(mappedBy = "user_feed", cascade = CascadeType.ALL)
+    List<UserFeedKeyword>  userfeed_keyword = new ArrayList<>();
 }

@@ -3,6 +3,7 @@ package com.ssafy.BackEnd.entity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +11,9 @@ import javax.persistence.Id;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Entity
@@ -21,6 +25,9 @@ public class User{
     @Id @Column(name = "email")
     @NotBlank
     private String email;
+
+//    @GeneratedValue
+//    private Long user_id;
 
     @NotBlank
     private String name;
@@ -39,11 +46,10 @@ public class User{
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
     private Profile profile;
-//    @Column
-//    private boolean emailSuccess;
-//
-//    public void verifiedSuccess() {
-//        emailSuccess = true;
-//    }
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<TeamMember> team_member = new ArrayList<>( );
+
+    @CreatedDate
+    private LocalDateTime create_time;
 }

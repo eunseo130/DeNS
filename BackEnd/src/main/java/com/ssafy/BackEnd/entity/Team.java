@@ -3,15 +3,16 @@ package com.ssafy.BackEnd.entity;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @RequiredArgsConstructor
-@Table(name = "team")
 @Getter @Setter
 public class Team {
 
@@ -23,16 +24,18 @@ public class Team {
     @NotBlank
     String title;
 
-    @NotBlank
     String content;
 
-    @OneToMany
-    List<TeamKeyword> team_keyword = new ArrayList<>(); //이거 왜 안돼ㅐㅐㅐㅐㅐㅐ?
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
+    List<TeamKeyword> team_keyword = new ArrayList<>();
 
-    @OneToMany
-    List<TeamMember> team_member = new ArrayList<>(); //list 왜 import 안돼ㅐㅐㅐㅐㅐㅐ?
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
+    List<TeamMember> team_member = new ArrayList<>();
 
-    @OneToMany
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
     List<TeamFeed> team_feed = new ArrayList<>();
+
+    @CreatedDate
+    LocalDateTime create_time;
 
 }

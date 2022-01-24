@@ -7,20 +7,19 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "userfeedkeyword")
 @RequiredArgsConstructor
-@Table(name = "teamkeyword")
 @Getter @Setter
-public class TeamKeyword {
-    @Id
-    @GeneratedValue
-    @Column(name="teamkeyword_id")
-    long teamkeyword_id;
+public class UserFeedKeyword {
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "team_id")
-    Team team;
+    @Id @GeneratedValue
+    long userfeedkeyword_id;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "keyword_id")
     Keyword keyword;
+
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @JoinColumn(name = "userfeed_id")
+    UserFeed user_feed;
 }
