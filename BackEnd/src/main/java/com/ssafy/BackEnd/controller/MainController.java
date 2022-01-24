@@ -26,23 +26,30 @@ public class MainController {
     private final JwtServiceImpl jwtService;
     private final AuthService authService;
 
+
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "사용자의 정보를 입력 받고 'success'면 회원가입 or 'fail이면 에러메세지", response = String.class)
-    public Response signUp(User user) {
+    public ResponseEntity<Map<String, Object>> signUp(@RequestBody User user) {
         Response response = new Response();
+        Map<String, Object> resultMap = new HashMap<>();
+        HttpStatus status;
         System.out.println("up : "+user.getEmail());
         try {
             authService.signUp(user);
             response.setResponse("success");
             response.setMessage("회원가입을 성공적으로 완료했습니다.");
             response.setData(null);
+            status = HttpStatus.ACCEPTED;
+            resultMap.put("message", "success");
+
         }
         catch(Exception e) {
             response.setResponse("failed");
             response.setMessage("회원가입을 하는 도중 오류가 발생했습니다.");
             response.setData(e.toString());
+            status = HttpStatus.ACCEPTED;
         }
-        return response;
+        return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
     @GetMapping("/password/{key}")
@@ -111,14 +118,14 @@ public class MainController {
 
 
     @GetMapping("/signin")
-    @ApiOperation(value = "회원가입 페이지")
+    @ApiOperation(value = "로그인 페이지")
     public void signinPage() {
         System.out.println("sign in hi");
     }
 
     @PostMapping("/signin") // 스켈레톤이랑 연결할땐 signin 지우고 '/' 상태에서
     @ApiOperation(value = "회원가입", response = Map.class)
-    public ResponseEntity<Map<String, Object>> signin(User users,
+    public ResponseEntity<Map<String, Object>> signin(@RequestBody User users,
                                                       HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;

@@ -5,8 +5,8 @@ import com.ssafy.BackEnd.repository.TeamRespository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
+import com.ssafy.BackEnd.entity.Team;
 
 @Service
 @RequiredArgsConstructor
@@ -23,12 +23,23 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public void createTeam(Team team) {
-
+    public Team createTeam(Team team) {
+        teamRespository.save(team);
+        return team;
     }
 
     @Override
-    public Team modifyTeam(String name, Team team) throws NotFoundException {
-        return null;
+    public void modifyTeam(long team_id, Team team){
+        Team old_team = teamRespository.findByTeam(team_id);
+        old_team.setTitle(team.getTitle());
+        old_team.setContent(team.getContent());
+
+        teamRespository.save(team);
     }
+
+    @Override
+    public void deleteTeam(long team_id) {
+        teamRespository.deleteById(team_id);
+    }
+
 }

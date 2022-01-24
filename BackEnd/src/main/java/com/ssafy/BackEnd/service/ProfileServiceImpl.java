@@ -1,14 +1,15 @@
 package com.ssafy.BackEnd.service;
 
+
 import com.ssafy.BackEnd.entity.Profile;
+import com.ssafy.BackEnd.entity.Request.RequestModifyProfile1;
+import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
-import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,29 +25,30 @@ public class ProfileServiceImpl implements ProfileService{
     @Autowired
     private ProfileRepository profileRepository;
 
+    @Autowired
+    private SaltUtil saltUtil;
+
     @Override
-    public Profile findProfile(User user) throws NotFoundException{
-        User findUser = userRepository.findByName(user.getName());
-        if(findUser==null) throw new NotFoundException("회원이 조회되지 않습니다.");
-        Profile findProfile = findUser.getProfile();
+    public Optional<Profile> findProfile(RequestModifyProfile1 requestModifyProfile1) throws NotFoundException{
+        List<User> findUsers = userRepository.findByEmail(requestModifyProfile1.getEmail());
+        if (findUsers.isEmpty()) throw new NotFoundException("회원이 조회되지 않습니다.");
+        User findUser = findUsers.get(0);
+        String hashedPassword = findUser.getPassword();
+        SaltUtil.checkPassword(hashedPassword, requestModifyProfile1.getPassword());
+        Optional<Profile> findProfile = profileRepository.findByName(findUser.getName());
         return findProfile;
     }
 
-    @Override
-    public void createProfile(Profile profile) {
-        User findUser = userRepository.findByProfileId(profile.getId());
-        profile.setName(findUser.getName());
-        profileRepository.save(profile);
-    }
 
     @Override
-    public Profile modifyProfile(Profile findProfile, Profile profile) throws NotFoundException {
+    public Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException {
 
         User user = userRepository.findByName(findProfile.getName());
-        findProfile.setName(profile.getName());
-        user.setName(profile.getName());
-        findProfile.setJob(profile.getJob());
-        findProfile.setStack(profile.getStack());
+        findProfile.setName(requestModifyProfile2.getName());
+        user.setName(requestModifyProfile2.getName());
+        user.setEmail(requestModifyProfile2.getEmail());
+        findProfile.setJob(requestModifyProfile2.getJob());
+        findProfile.setStack(requestModifyProfile2.getStack());
 
         profileRepository.save(findProfile);
 
