@@ -567,5 +567,126 @@
   }
   ```
 
+
+### 1/24 (월)
+
+<hr>
+
+- 이미지
+
+  ```java
+  package com.ssafy.BackEnd.entity;
+  
+  import lombok.*;
+  
+  import javax.persistence.*;
+  
+  @Entity
+  @NoArgsConstructor(access = AccessLevel.PROTECTED)
+  @Table(name = "image")
+  @Getter @Setter
+  
+  public class Image {
+  
+      @Id @GeneratedValue
+      Long image_id;
+  
+      @Column(nullable = false)
+      String orig_image_name;
+  
+      @Column(nullable = false)
+      String image_name;
+  
+      @Column(nullable = false)
+      String savefolder;
+  
+      @Builder
+      public Image(Long image_id, String orig_image_name, String image_name, String savefolder) {
+          this.image_id = image_id;
+          this.orig_image_name = orig_image_name;
+          this.image_name = image_name;
+          this.savefolder = savefolder;
+      }
+  
+      public Image(String savefolder) {
+          this.savefolder = savefolder;
+      }
+  }
+  
+  ```
+
+  ```java
+  package com.ssafy.BackEnd.service;
+  
+  import com.ssafy.BackEnd.dto.ImageDto;
+  import com.ssafy.BackEnd.entity.Image;
+  import com.ssafy.BackEnd.repository.ImageRepository;
+  import org.springframework.stereotype.Service;
+  
+  import javax.transaction.Transactional;
+  
+  @Service
+  public class ImageService {
+  
+      private ImageRepository imageRepository;
+  
+      public ImageService(ImageRepository imageRepository) {
+          this.imageRepository = imageRepository;
+      }
+  
+      @Transactional
+      public Long saveImage(ImageDto imageDto) {
+          return imageRepository.save(imageDto.toEntity()).getImage_id();
+      }
+  
+      @Transactional
+      public ImageDto getImage(Long image_id) {
+          Image image = imageRepository.findById(image_id).get();
+  
+          ImageDto imageDto = ImageDto.builder()
+                  .image_id(image_id)
+                  .orig_image_name(image.getOrig_image_name())
+                  .image_name(image.getImage_name())
+                  .savefolder(image.getSavefolder())
+                  .build();
+          return imageDto;
+      }
+  }
+  
+  ```
+
+  ```java
+  @PostMapping("/image")
+      public String uploadImage(@RequestParam("image") MultipartFile image) {
+          try {
+              String orig_image_name = image.getOriginalFilename();
+              String image_name = new MD5Generator(orig_image_name).toString();
+              String folder = System.getProperty("user.dir") + "\\image";
+  
+              if (!new File(folder).exists()) {
+                  try {
+                      new File(folder).mkdir();
+                  }
+                  catch(Exception e) {
+                      e.getStackTrace();
+                  }
+              }
+              String savefolder = folder + "\\" + image_name;
+              image.transferTo(new File(savefolder));
+  
+              ImageDto imageDto = new ImageDto();
+              imageDto.setOrig_image_name(orig_image_name);
+              imageDto.setImage_name(image_name);
+              imageDto.setSavefolder(savefolder);
+  
+              Long image_id = imageService.saveImage(imageDto);
+  
+          } catch (Exception e) {
+              e.printStackTrace();
+          }
+          return "redirect:/";
+      }
+  ```
+
   
 
