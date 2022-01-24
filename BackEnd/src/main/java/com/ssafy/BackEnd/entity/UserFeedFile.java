@@ -7,20 +7,20 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "userfeedfile")
 @RequiredArgsConstructor
-@Table(name = "teamkeyword")
 @Getter @Setter
-public class TeamKeyword {
+public class UserFeedFile {
+
     @Id
     @GeneratedValue
-    @Column(name="teamkeyword_id")
-    long teamkeyword_id;
+    long userfeedfile_id;
+
+    String file_name;
+
+    String savefolder;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "team_id")
-    Team team;
-
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "keyword_id")
-    Keyword keyword;
+    @JoinColumn(name = "userfeed_id")
+    UserFeed user_feed;
 }
