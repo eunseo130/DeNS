@@ -332,3 +332,65 @@
 ### 1/18 (화)
 
 <hr>
+
+- 비밀번호 변경 기능 구현
+
+  ```java
+  @Override
+      public void changePassword(User user, String password) throws NotFoundException {
+          if(user==null) throw new NotFoundException("changePassword(), 멤버가 조회되지 않습니다.");
+          String salt = saltUtil.genSalt();
+          user.setSalt(new Salt(salt));
+          user.setPassword(saltUtil.encodePassword(salt, password));
+          userRepository.save(user);
+  
+      }
+  @Override
+      public boolean isPasswordUuidValidate(String key) {
+          return false;
+      }
+  ```
+
+  ```java
+  @PostMapping(value = "/password")
+      public Response requestChangePassword(RequestChangePassword1 requestChangePassword1) {
+          Response response = new Response();
+          try {
+              User user = authService.findByEmail(requestChangePassword1.getEmail());
+              if (!user.getEmail().equals(requestChangePassword1.getEmail())) throw new NoSuchFieldException("");
+              authService.requestChangePassword(user);
+              response.setResponse("success");
+              response.setMessage("성공적으로 사용자의 비밀번호를 변경했습니다.");
+              response.setData(null);
+          } catch (NoSuchFieldException e) {
+              response.setResponse("error");
+              response.setMessage("사용자의 정보를 조회할 수 없습니다.");
+              response.setData(null);
+          } catch (Exception e) {
+              response.setResponse("error");
+              response.setMessage("비밀번호 변경 요청을 할 수 없습니다.");
+              response.setData(null);
+          }
+          return response;
+      }
+  
+      @PutMapping("/password")
+      public Response changePassword(RequestChangePassword2 requestChangePassword2) {
+          Response response = new Response();
+          HttpStatus status;
+          try {
+              User user = authService.findByEmail(requestChangePassword2.getEmail());
+              authService.changePassword(user, requestChangePassword2.getPassword());
+              response.setResponse("success");
+              response.setMessage("사용자의 비밀번호를 성공적으로 변경했습니다.");
+              response.setData(null);
+          } catch (Exception e) {
+              response.setResponse("error");
+              response.setMessage("사용자의 비밀번호를 변경할 수 없습니다.");
+              response.setData(null);
+          }
+          return response;
+      }
+  ```
+
+  
