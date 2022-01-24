@@ -1,11 +1,13 @@
 import React from 'react';
 import Day from './component/Day';
 import DayList from './component/DayList';
-import Header from "./component/Header";
 import { BrowserRouter, Route, Routes, useRoutes } from 'react-router-dom';
-
+import Teamid from './component/Teamid';
 import EmptyPage from './component/EmptyPage';
-
+import Searchid from './component/Searchid';
+import ProfileInfo from './component/ProfileInfo';
+import ProfileKeyword from './component/ProfileKeyword';
+import ProfileMain from './component/ProfileMain';
 
 
 const App = () => {
@@ -18,30 +20,33 @@ const App = () => {
             ]
         },
         {
-            path: "profile", element: <DayList />,
+            path: "/profile", element: <ProfileMain />,
             children: [
-                { path: ":info", element: <DayList /> },
-                { path: ":keyword", element: <DayList /> },
+                // { index: true, element:<ProfileMain />},
+                { path: "/profile/info", element: <ProfileInfo /> },
+                { path: "/profile/keyword", element: <ProfileKeyword /> },
             ]
         },
         {
-            path: "team/:id", element:  <EmptyPage number={"xla페이지"} />,
+            path: "team/:id", element:  <Teamid />,
             children: [
                 {path: "setting", element: <DayList />}
             ]
         },
         {
-            path: "search/", element: <EmptyPage number={"search페이지"} />,
+            path: "/search", element: <EmptyPage number={"search페이지"} />,
             children: [
-                { path: ":teamid", element: <EmptyPage number={"search페[이지 내부"} /> },
+                { index: true, elelment:<DayList/>},
+                { path: "/search/:teamid", element: <Searchid /> },
             ],
         },
         {
-            path: "group/*", element: <EmptyPage number={"그룹페이지"} /> ,
+            path: "/group", element: <DayList /> ,
             children: [
-                { path: "start", element: <EmptyPage number={"ㅅ,팉,페이지"} />  },
-                { path: "channels", element: <EmptyPage number={"채ㅔ너ㅏㄹ페이지"} /> },
-                { path: "link", element: <EmptyPage number={"링크페이지"} />  },
+                { index: true, elelment: <DayList /> },
+                { path: "/group/start", element: <EmptyPage number={"ㅅ,팉,페이지"} />  },
+                { path: "/group/channels", element: <EmptyPage number={"채ㅔ너ㅏㄹ페이지"} /> },
+                { path: "/group/link", element: <EmptyPage number={"링크페이지"} />  },
             ]    
         },
         {
