@@ -5,7 +5,7 @@ import { BrowserRouter, Route, Routes, useRoutes } from 'react-router-dom';
 import DayList from './component/DayList';
 
 
-import Signin from './component/BeforeloginComponent/signin';
+import Signin from './component/BeforeloginComponent/Signin';
 import Signup from './component/BeforeloginComponent/Signup';
 import Password from './component/BeforeloginComponent/Password';
 
