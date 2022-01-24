@@ -1,65 +1,64 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import SideBar from './routes/siderouter';
-import { Layout, Menu } from 'antd';
-import styled from 'styled-components';
-import Head from './component/Header/Header';
-import { UserOutlined, HomeOutlined } from '@ant-design/icons';
-const { Header, Content, Sider } = Layout;
+import Day from './component/Day';
+import DayList from './component/DayList';
+import { BrowserRouter, Route, Routes, useRoutes } from 'react-router-dom';
+import Teamid from './component/Teamid';
+import EmptyPage from './component/EmptyPage';
+import Searchid from './component/Searchid';
+import ProfileInfo from './component/ProfileInfo';
+import ProfileKeyword from './component/ProfileKeyword';
+import ProfileMain from './component/ProfileMain';
 
 
-function App() {
-    return (
-        <Layout>
-            <StyledHeader><Head/></StyledHeader>
-            <StyledSider>
-                <Menu mode="inline" defaultSelectedKeys={['1']}>
-                    <Menu.Item key={"1"}>
-                        <Link to='/DashBoard'>
-                            <HomeOutlined />
-                            <a>DashBoard</a>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item key={"2"}>
-                        <Link to='/Profile'>
-                            <HomeOutlined />
-                            <a>Profile</a>
-                        </Link>
-                    </Menu.Item>
-                    <Menu.Item key={"3"}>
-                        <Link to='/Messenger'>
-                            <UserOutlined />
-                            <a>Messenger</a>
-                        </Link>
-                    </Menu.Item>
-                </Menu>
-            </StyledSider>
-            <StyledContent>
-                <SideBar />
-            </StyledContent>
-        </Layout>
-    );
+const App = () => {
+    const routes = useRoutes([
+        { path: "/", element: <DayList />,
+            children: [
+                {path: "/signin", element: <DayList />},
+                {path: "/signup", element: <DayList />},
+                {path: "/password", element: <DayList />},
+            ]
+        },
+        {
+            path: "/profile", element: <ProfileMain />,
+            children: [
+                // { index: true, element:<ProfileMain />},
+                { path: "/profile/info", element: <ProfileInfo /> },
+                { path: "/profile/keyword", element: <ProfileKeyword /> },
+            ]
+        },
+        {
+            path: "team/:id", element:  <Teamid />,
+            children: [
+                {path: "setting", element: <DayList />}
+            ]
+        },
+        {
+            path: "/search", element: <EmptyPage number={"search페이지"} />,
+            children: [
+                { index: true, elelment:<DayList/>},
+                { path: "/search/:teamid", element: <Searchid /> },
+            ],
+        },
+        {
+            path: "/group", element: <DayList /> ,
+            children: [
+                { index: true, elelment: <DayList /> },
+                { path: "/group/start", element: <EmptyPage number={"ㅅ,팉,페이지"} />  },
+                { path: "/group/channels", element: <EmptyPage number={"채ㅔ너ㅏㄹ페이지"} /> },
+                { path: "/group/link", element: <EmptyPage number={"링크페이지"} />  },
+            ]    
+        },
+        {
+            path: "error", element: <DayList />,
+            children: [
+                { path: "404page", element: <DayList /> },
+            ]
+        }, 
+        {  path: '*', component: <DayList></DayList> },
+    ])
+
+    return routes;
 }
-const StyledSider = styled(Sider)`
-  overflow: auto;
-  height: 100vh;
-  position: fixed;
-  background: white;
-  left: 0;
-`
-const StyledHeader = styled(Header)`
-  padding: 0;
-  text-align: center;
-  font-weight: bold;
-  font-size: 20px;
-  -webkit-box-shadow: 2px 1px 5px 0px rgba(0,0,0,0.26);
-  -moz-box-shadow: 2px 1px 5px 0px rgba(0,0,0,0.26);
-  box-shadow: 2px 1px 5px 0px rgba(0,0,0,0.26);
-  background: #F0F3F4
-`
-const StyledContent = styled(Content)`
-  height: 100vh;
-  padding: 10px;
-  overflow: initial;
-`
+
 export default App;
