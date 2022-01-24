@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
+import { test22 } from "../../api/test";
 
 function Login() {
     const [name, setName] = useState('');
@@ -13,6 +14,17 @@ function Login() {
     const LoginConsole = () => {
       console.log([name, password])
     };
+    
+    useEffect(() => {
+      test22("가세요",
+          (response) => {
+          console.log(response);
+      },  
+      (error) => {
+      console.log("오류가 됨.", (error));
+  });
+  }, []);;
+
     return (
       <LoginBox>
         <H3>로그인</H3>
