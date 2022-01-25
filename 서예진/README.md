@@ -1,5 +1,21 @@
 # README
 
+### 0119 (수)
+
+회원가입 시, 이메일 인증을 통하여 회원가입
+
+- 회원가입 폼을 통하여 자신의 정보를 보내면, 서버에서 인증이메일 발송
+    - name을 기준으로 메일 보내기때문에 name중복 불가능 처리??
+- 가입하려고하는 사람은 이메일의 링크를 누르면 바로 본인인증 완료
+- User테이블의 identity가 1(회원)으로 바뀌면서 로그인 가능
+
+회원가입 폼 작성 후, 이메일 인증 전 identity는 0(비회원)
+![Untitled](/uploads/323c05095f537aa846a3927744f7b772/Untitled.png)
+폼으로 적었던 이메일로 인증메일 발송
+![Untitled__1_](/uploads/7547523cc68b0eef1db3f71d4d9e3a8a/Untitled__1_.png)
+링크 클릭 후 identity는 1(회원)로 업데이트
+![Untitled__2_](/uploads/3798bafaf6d53fd7b20056aaaf73025e/Untitled__2_.png)
+
 ### 0118 (화)
 
 - IDE 인텔리제이로 변경
