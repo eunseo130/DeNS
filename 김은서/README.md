@@ -688,5 +688,230 @@
       }
   ```
 
-  
 
+### 1/25 (화)
+
+<hr>
+
+- UserFeedFile
+
+  ```java
+    @PostMapping("/post")
+      public String post(String email, @Validated @ModelAttribute UserFeedAddForm userFeedAddForm, BindingResult bindingResult) throws IOException, NotFoundException {
+          if (bindingResult.hasErrors()) {
+              log.info("bindingResult : {}", bindingResult.getFieldError());
+              return "post";
+          }
+          Profile profile = profileService.findProfile(email).get();
+          UserFeedDto userFeedDto = userFeedAddForm.createUserFeedDto(profile);
+          UserFeed post = userFeedService.post(userFeedDto);
+          return "redirect:/main/board" + post.getProfile();
+      }
+  
+      @ResponseBody
+      @GetMapping("/images/{filename}")
+      public UrlResource processImg(@PathVariable String filename) throws MalformedURLException {
+          return new UrlResource("file:" + fileStore.createPath(filename, FileType.IMAGE));
+      }
+  
+      @GetMapping("/files/{filename}")
+      public ResponseEntity<UrlResource> processFiles(@PathVariable String filename, @RequestParam String originName) throws MalformedURLException {
+          UrlResource urlResource = new UrlResource("file:" + fileStore.createPath(filename, FileType.GENERAL));
+          String encodedUploadFileName = UriUtils.encode(originName, StandardCharsets.UTF_8);
+          String contentDisposition = "files; filename=\"" + encodedUploadFileName + "\"";
+  
+          return ResponseEntity.ok()
+                  .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
+                  .body(urlResource);
+      }
+  ```
+
+  ```java
+  package com.ssafy.BackEnd.dto;
+  
+  import com.ssafy.BackEnd.entity.FileType;
+  import com.ssafy.BackEnd.entity.Profile;
+  import com.ssafy.BackEnd.entity.UserFeed;
+  import lombok.Builder;
+  import lombok.Data;
+  import lombok.NoArgsConstructor;
+  import org.springframework.web.multipart.MultipartFile;
+  
+  import javax.validation.constraints.NotBlank;
+  import java.util.ArrayList;
+  import java.util.List;
+  import java.util.Map;
+  import java.util.concurrent.ConcurrentHashMap;
+  
+  @Data
+  @NoArgsConstructor
+  public class UserFeedDto {
+  
+      private Profile profile;
+  
+      @NotBlank
+      private String content;
+  
+      private Map<FileType, List<MultipartFile>> userFeedFiles = new ConcurrentHashMap<>();
+  
+      @Builder
+      public UserFeedDto(Profile profile, String content, Map<FileType, List<MultipartFile>> userFeedFiles) {
+          this.profile = profile;
+          this.content = content;
+          this.userFeedFiles = userFeedFiles;
+      }
+  
+      public UserFeed createUserFeed() {
+          return UserFeed.builder()
+                  .profile(profile)
+                  .content(content)
+                  .userFeedFiles(new ArrayList<>())
+                  .build();
+      }
+  }
+  
+  ```
+
+  ```java
+  package com.ssafy.BackEnd.entity;
+  
+  import com.ssafy.BackEnd.dto.UserFeedDto;
+  import lombok.Builder;
+  import lombok.Data;
+  import lombok.NoArgsConstructor;
+  import org.springframework.web.multipart.MultipartFile;
+  
+  import javax.validation.constraints.NotBlank;
+  import java.util.ArrayList;
+  import java.util.List;
+  import java.util.Map;
+  import java.util.concurrent.ConcurrentHashMap;
+  
+  @Data
+  @NoArgsConstructor
+  public class UserFeedAddForm {
+  
+      @NotBlank
+      private String content;
+  
+      private List<MultipartFile> imageFiles;
+      private List<MultipartFile> generalFiles;
+  
+      @Builder
+      private UserFeedAddForm(String content, List<MultipartFile> imageFiles, List<MultipartFile> generalFiles) {
+          this.content = content;
+          this.imageFiles = (imageFiles != null) ? imageFiles : new ArrayList<>();
+          this.generalFiles = (generalFiles != null) ? generalFiles : new ArrayList<>();
+      }
+  
+      public UserFeedDto createUserFeedDto(Profile profile) {
+          Map<FileType, List<MultipartFile>> userFeedFiles = getFileTypeListMap();
+          return UserFeedDto.builder()
+                  .profile(profile)
+                  .content(content)
+                  .userFeedFiles(userFeedFiles)
+                  .build();
+      }
+  
+      private Map<FileType, List<MultipartFile>> getFileTypeListMap() {
+          Map<FileType, List<MultipartFile>> userFeedFiles = new ConcurrentHashMap<>();
+          userFeedFiles.put(FileType.IMAGE, imageFiles);
+          userFeedFiles.put(FileType.GENERAL, generalFiles);
+          return userFeedFiles;
+      }
+  }
+  
+  ```
+
+  ```java
+  package com.ssafy.BackEnd.entity;
+  
+  import lombok.*;
+  
+  import javax.persistence.*;
+  
+  @Entity
+  @Table(name = "userfeedfile")
+  @NoArgsConstructor(access = AccessLevel.PROTECTED)
+  @SequenceGenerator(
+          name = "File_SEQ_GENERATOR",
+          sequenceName = "FILE_SEQ"
+  )
+  @Getter @Setter
+  public class UserFeedFile {
+  
+      @Id
+      @GeneratedValue(strategy = GenerationType.SEQUENCE)
+      private long userfeedfile_id;
+  
+      private String originalFileName;
+  
+      private String fileName;
+  
+      @Enumerated(EnumType.STRING)
+      private FileType fileType;
+  
+      @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+      @JoinColumn(name = "userfeed_id")
+      UserFeed user_feed;
+  
+      @Builder
+      public UserFeedFile(String originalFileName, String storePath, FileType fileType) {
+          this.originalFileName = originalFileName;
+          this.fileName = storePath;
+          this.fileType = fileType;
+      }
+  }
+  
+  ```
+
+  ```java
+  package com.ssafy.BackEnd.service;
+  
+  import com.ssafy.BackEnd.entity.FileType;
+  import com.ssafy.BackEnd.entity.UserFeedFile;
+  import com.ssafy.BackEnd.repository.UserFeedFileRepository;
+  import lombok.RequiredArgsConstructor;
+  import org.springframework.stereotype.Service;
+  import org.springframework.web.multipart.MultipartFile;
+  
+  import java.io.IOException;
+  import java.util.List;
+  import java.util.Map;
+  import java.util.stream.Collectors;
+  import java.util.stream.Stream;
+  
+  @Service
+  @RequiredArgsConstructor
+  public class UserFeedFileServiceImpl implements UserFeedFileService {
+  
+      private final UserFeedFileRepository userFeedFileRepository;
+      private final FileStore fileStore;
+  
+      @Override
+      public List<UserFeedFile> saveUserFeedFiles(Map<FileType, List<MultipartFile>> multipartFileListMap) throws IOException {
+          List<UserFeedFile> imageFiles = fileStore.storeFiles(multipartFileListMap.get(FileType.IMAGE), FileType.IMAGE);
+          List<UserFeedFile> generalFiles = fileStore.storeFiles(multipartFileListMap.get(FileType.GENERAL), FileType.GENERAL);
+          List<UserFeedFile> result = Stream.of(imageFiles, generalFiles)
+                  .flatMap(f -> f.stream())
+                  .collect(Collectors.toList());
+          return result;
+      }
+  
+      @Override
+      public Map<FileType, List<UserFeedFile>> findUserFeedFiles() {
+          List<UserFeedFile> userFeedFiles = userFeedFileRepository.findAll();
+          Map<FileType, List<UserFeedFile>> result = userFeedFiles.stream()
+                  .collect(Collectors.groupingBy(UserFeedFile::getFileType));
+          return result;
+      }
+  
+      @Override
+      public void save(UserFeedFile file) {
+          userFeedFileRepository.save(file);
+      }
+  }
+  
+  ```
+
+  
