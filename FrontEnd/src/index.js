@@ -7,3 +7,5 @@ import ReactDOM from 'react-dom'
 
 import Login from './component/loginComponent/Login'
 ReactDOM.render(<Login/>, document.getElementById('root'));
+// import Dashboard from './component/dashboardComponent/Dashboard'
+// ReactDOM.render(<Dashboard/>, document.getElementById('root'));
