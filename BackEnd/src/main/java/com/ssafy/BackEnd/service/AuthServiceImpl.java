@@ -1,6 +1,5 @@
 package com.ssafy.BackEnd.service;
 
-import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.Salt;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.entity.UserIdentity;

@@ -5,7 +5,8 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
+//@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 @Table(name = "image")
 @Getter @Setter
 
@@ -31,7 +32,5 @@ public class Image {
         this.savefolder = savefolder;
     }
 
-    public Image(String savefolder) {
-        this.savefolder = savefolder;
-    }
+
 }
