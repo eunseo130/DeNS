@@ -5,6 +5,9 @@ import com.ssafy.BackEnd.repository.TeamRespository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import com.ssafy.BackEnd.entity.Team;
 
@@ -12,19 +15,21 @@ import com.ssafy.BackEnd.entity.Team;
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService{
 
-    private TeamRespository teamRespository;
+    private final TeamRespository teamRespository;
 
 
     @Override
     public Team findByTeam(Long team_id) throws NotFoundException {
         Team findTeam = teamRespository.findByTeam(team_id);
-        if(findTeam==null) throw new NotFoundException("팀을 찾을 수 없습니다");
+        if(findTeam == null) throw new NotFoundException("팀을 찾을 수 없습니다");
+
         return findTeam;
     }
 
     @Override
     public Team createTeam(Team team) {
         teamRespository.save(team);
+
         return team;
     }
 
@@ -40,6 +45,14 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public void deleteTeam(long team_id) {
         teamRespository.deleteById(team_id);
+    }
+
+    @Override
+    public List<Team> showTeamList() {
+        List<Team> teams = new ArrayList<>();
+        teamRespository.findAll().forEach(team -> teams.add(team));
+
+        return teams;
     }
 
 }
