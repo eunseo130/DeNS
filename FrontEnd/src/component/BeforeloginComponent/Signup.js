@@ -24,15 +24,19 @@ export default function Signup() {
         email: "junu@testnnmse.wasera",
         password: "12312123132", 
     };
+    
     const data4 = {
         email: "hj@testnnmse.wasera",
         name: "윤설1211232",
         password: "12312123132", 
     };
+    
     const data42 = {
         email: "hj@testnnmse.wasera",
         password: "12312123132", 
     };
+
+
     const signupTest = () => {
         signup(data, (response) => { console.log("success check", JSON.stringify(response.data)) }, (error) => { console.log("fail Check", error) });
     }
