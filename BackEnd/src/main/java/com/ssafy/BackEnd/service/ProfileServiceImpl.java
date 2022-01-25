@@ -11,6 +11,7 @@ import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.DeleteMapping;
 
 import java.util.List;
 import java.util.Optional;
@@ -47,11 +48,19 @@ public class ProfileServiceImpl implements ProfileService{
         findProfile.setName(requestModifyProfile2.getName());
         user.setName(requestModifyProfile2.getName());
         user.setEmail(requestModifyProfile2.getEmail());
+        findProfile.setEmail(requestModifyProfile2.getEmail());
         findProfile.setJob(requestModifyProfile2.getJob());
         findProfile.setStack(requestModifyProfile2.getStack());
 
         profileRepository.save(findProfile);
+        userRepository.save(user);
 
         return findProfile;
+    }
+
+    @Override
+    public void deleteUser(String email) {
+        User user = userRepository.findByEmail(email).get(0);
+        userRepository.delete(user);
     }
 }

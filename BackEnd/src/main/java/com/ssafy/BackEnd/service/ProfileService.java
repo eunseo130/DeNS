@@ -17,4 +17,5 @@ public interface ProfileService {
 
     Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException;
 
+    void deleteUser(String email);
 }

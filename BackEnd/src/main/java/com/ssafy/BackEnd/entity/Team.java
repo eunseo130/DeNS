@@ -26,6 +26,10 @@ public class Team {
 
     String content;
 
+    @Column(name = "team_identity")
+    @Enumerated(EnumType.STRING)
+    TeamMemberIdentity team_identity = TeamMemberIdentity.LEADER;
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
     List<TeamKeyword> team_keyword = new ArrayList<>();
 

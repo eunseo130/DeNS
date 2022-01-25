@@ -27,9 +27,11 @@ public class Profile {
 
     private String email;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
-    Image image;
+    private String image;
+
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "image_id")
+//    Image image;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
     List<UserFeed> user_feed = new ArrayList<>();

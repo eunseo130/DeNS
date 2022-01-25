@@ -78,35 +78,15 @@ public class ProfileController {
         return response;
     }
 
-    @PostMapping("/image")
-    public String uploadImage(@RequestParam("image") MultipartFile image) {
-        try {
-            String orig_image_name = image.getOriginalFilename();
-            String image_name = new MD5Generator(orig_image_name).toString();
-            String folder = System.getProperty("user.dir") + "\\image";
+    @PostMapping("/update/image")
+    public String updateImage(String email, MultipartFile multipartFile) {
+        imageService.update(email, multipartFile);
+        return "redirect:/profile";
+    }
 
-            if (!new File(folder).exists()) {
-                try {
-                    new File(folder).mkdir();
-                }
-                catch(Exception e) {
-                    e.getStackTrace();
-                }
-            }
-            String savefolder = folder + "\\" + image_name;
-            image.transferTo(new File(savefolder));
-
-            ImageDto imageDto = new ImageDto();
-            imageDto.setOrig_image_name(orig_image_name);
-            imageDto.setImage_name(image_name);
-            imageDto.setSavefolder(savefolder);
-
-            Long image_id = imageService.saveImage(imageDto);
-
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return "redirect:/";
+    @DeleteMapping("/delete")
+    public void deleteUser(String email) {
+        profileService.deleteUser(email);
     }
 
 }

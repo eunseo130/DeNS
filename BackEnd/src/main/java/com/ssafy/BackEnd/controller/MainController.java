@@ -124,7 +124,7 @@ public class MainController {
     }
 
     @PostMapping("/signin") // 스켈레톤이랑 연결할땐 signin 지우고 '/' 상태에서
-    @ApiOperation(value = "회원가입", response = Map.class)
+    @ApiOperation(value = "로그인 환경", response = Map.class)
     public ResponseEntity<Map<String, Object>> signin(@RequestBody User users,
                                                       HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();

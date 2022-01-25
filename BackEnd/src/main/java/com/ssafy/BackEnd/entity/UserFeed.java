@@ -15,7 +15,7 @@ import java.util.List;
 @Table(name = "userfeed")
 @RequiredArgsConstructor
 @Getter @Setter
-public class UserFeed {
+public class UserFeed extends BaseTimeEntity {
 
     @Id
     @GeneratedValue
@@ -23,11 +23,11 @@ public class UserFeed {
 
     String content;
 
-    @CreatedDate
-    LocalDateTime create_time;
-
-    @LastModifiedDate
-    LocalDateTime modify_time;
+//    @CreatedDate
+//    LocalDateTime create_time;
+//
+//    @LastModifiedDate
+//    LocalDateTime modify_time;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id")
