@@ -2,16 +2,18 @@ import React from 'react';
 import { Outlet } from 'react-router-dom';
 import styled from 'styled-components';
 import Searchbigbox from './Searchbigbox';
+import dummy from '../../db/data.json';
 export default function Search() {
+    const check = dummy;
+
     return (
-        <>                <input type="text"></input><button>check</button><br></br>
+        <>
+            <input type="text"></input><button>check</button><br></br>
             <Contain>
-                <Searchbigbox />
-                <Searchbigbox />
+                <Searchbigbox info={check }/>
                 <Outlet />
             </Contain>
-            </>
-
+        </>
     )
 }
 
