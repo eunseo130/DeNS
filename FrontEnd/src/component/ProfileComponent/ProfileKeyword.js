@@ -1,16 +1,11 @@
 import React from 'react';
 import { Outlet } from 'react-router-dom';
 
-
-export default function BeforeLogin() {
+export default function ProfileKeyword() {
     return (
         <>
-            <h2>로그인전 양식</h2>
-            <Outlet/>
+            <h3>ProfileKeyword 페이지입니다</h3>
         </>
-
-
     )
-
 
 }
