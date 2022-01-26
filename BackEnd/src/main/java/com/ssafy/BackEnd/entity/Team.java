@@ -7,6 +7,7 @@ import org.springframework.data.annotation.CreatedDate;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +19,17 @@ public class Team {
 
     @Id
     @GeneratedValue
-    @NotBlank
+    @NotNull
     long team_id;
 
     @NotBlank
     String title;
 
     String content;
+
+    @Column(name = "team_identity")
+    @Enumerated(EnumType.STRING)
+    TeamMemberIdentity team_identity = TeamMemberIdentity.LEADER;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
     List<TeamKeyword> team_keyword = new ArrayList<>();
