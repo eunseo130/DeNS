@@ -56,7 +56,7 @@ const App = () => {
                 {
                     path: "/afterlogin/profile", element: <ProfileMain />,
                     children: [
-                         { index: true, element:<ProfileMain />},
+                        //  { index: true, element:<ProfileMain />},
                         { path: "/afterlogin/profile/info", element: <ProfileInfo /> },
                         { path: "/afterlogin/profile/keyword", element: <ProfileKeyword /> },
                     ]
@@ -81,7 +81,7 @@ const App = () => {
                         { path: "/afterlogin/group/start", element: <Groupstart />  },
                         { path: "/afterlogin/group/channel", element: <Groupchannel /> },
                         { path: "/afterlogin/group/link", element: <Grouplink />  },
-                    ]    
+                    ]
                 },
                 {
                     path: "error", element: <Error />,
