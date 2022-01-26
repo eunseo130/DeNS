@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name="team")
 @RequiredArgsConstructor
 @Getter @Setter
 public class Team {

@@ -5,7 +5,12 @@ import com.ssafy.BackEnd.repository.TeamRespository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
+
 import com.ssafy.BackEnd.entity.Team;
 
 @Service
@@ -41,5 +46,14 @@ public class TeamServiceImpl implements TeamService{
     public void deleteTeam(long team_id) {
         teamRespository.deleteById(team_id);
     }
+
+    @Override
+    public List<Team> showFindTeamList(String keyword) {
+            List<Team> teams = teamRespository.findAll();
+            System.out.println(teams.toString());
+            return teams;
+    }
+
+ 
 
 }

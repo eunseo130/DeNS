@@ -3,10 +3,17 @@ package com.ssafy.BackEnd.controller;
 import com.ssafy.BackEnd.entity.Request.RequestChangePassword1;
 import com.ssafy.BackEnd.entity.Request.RequestChangePassword2;
 import com.ssafy.BackEnd.entity.Request.RequestVerifyEmail;
+import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.Response;
+import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.User;
+import com.ssafy.BackEnd.entity.dummy;
 import com.ssafy.BackEnd.service.AuthService;
 import com.ssafy.BackEnd.service.JwtServiceImpl;
+import com.ssafy.BackEnd.service.ProfileService;
+import com.ssafy.BackEnd.service.TeamService;
+import com.ssafy.BackEnd.service.dummyService;
+
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -15,7 +22,10 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -24,9 +34,12 @@ import java.util.Map;
 public class MainController {
 
     private final JwtServiceImpl jwtService;
+    
     private final AuthService authService;
-
-
+    
+    private final dummyService dummyService;
+    private final TeamService teamService;
+    private final ProfileService profileService;
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "사용자의 정보를 입력 받고 'success'면 회원가입 or 'fail이면 에러메세지", response = String.class)
     public ResponseEntity<Map<String, Object>> signUp(@RequestBody User user) {
@@ -61,8 +74,7 @@ public class MainController {
                 response.setResponse("success");
                 response.setMessage("정상적인 접근입니다.");
                 response.setData(null);
-            }
-            else {
+            } else {
                 response.setResponse("error");
                 response.setMessage("유효하지 않은 key값입니다.");
                 response.setData(null);
@@ -74,6 +86,61 @@ public class MainController {
         }
         return response;
     }
+
+    @GetMapping("/search/team")
+    public ResponseEntity<List<Team>> findSearchedTeams(@RequestParam String keyword) {
+        HttpStatus status;
+        List<Team> teamList = teamService.showFindTeamList(keyword);
+        //  System.out.println(keyword+"###############################################################");
+        if(teamList.size()!= 0) {
+            status = HttpStatus.OK;
+
+        } else {
+            status = HttpStatus.NO_CONTENT;
+            // System.out.println("fail");
+        }
+
+        return new ResponseEntity<>(teamList, status);
+    }
+    @GetMapping("/search/user")
+    public ResponseEntity<List<Profile>> searchUser(@RequestParam String keyword) {
+        HttpStatus status;
+        List<Profile> teamList = profileService.showFindUserList(keyword);
+        //  System.out.println(keyword+"###############################################################");
+        if(teamList.size()!= 0) {
+            // System.out.println(keyword+"###############################################################");
+            status = HttpStatus.OK;
+            // System.out.println("success\n"+teamList.get(0).getTeam_id());
+            
+        } else {
+            // System.out.println(keyword+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@###############################################################");
+            status = HttpStatus.NO_CONTENT;
+            // System.out.println("fail");
+        }
+
+        return new ResponseEntity<>(teamList, status);
+    }
+
+    @GetMapping("/search/keyword/{param}")
+    public ResponseEntity<List<dummy>> searchKeyword(@PathVariable String param) {
+
+        System.out.println(param);
+
+        if (param == null) {
+            dummy temp = new dummy();
+            temp.setId(45);
+            temp.setName("name");
+            List<dummy> senddata = new ArrayList<>();
+            senddata.add(temp);
+            return new ResponseEntity<List<dummy>>(senddata, HttpStatus.OK);
+        } else {
+            List<dummy> search_teams = dummyService.searchTestCheck(param);
+            return new ResponseEntity<List<dummy>>(search_teams, HttpStatus.OK);
+        }
+    }
+
+
+
 
     @PostMapping("/password")
     @ApiOperation(value = "사용자 비밀번호 변경요청", response = String.class)

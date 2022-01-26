@@ -14,5 +14,17 @@ function login(param, success, fail) {
     api.post(`/signin`,JSON.stringify(param)).then(success).catch(fail);
 }
 
+function dummytest(param, success, fail) {
+    console.log("check team" + param);
+    api.get(`/search/keyword/${param}`).then(success).catch(fail);
+}
+function dummytest2(param, success, fail) {
+    api.get(`/search/user`, { params: {keyword: param}}).then(success).catch(fail);
+}
+function dummytest3(param, success, fail) {
+    console.log("check team" + param);
+    api.get(`/search/team`, { params: { keyword: param } }).then(success).catch(fail);
+}
 
-export { test22, signup,login };
+
+export { test22, signup,login,dummytest,dummytest2,dummytest3 };

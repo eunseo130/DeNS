@@ -9,6 +9,7 @@ import javassist.NotFoundException;
 import org.apache.coyote.Request;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProfileService {
@@ -16,5 +17,7 @@ public interface ProfileService {
     Optional<Profile> findProfile(RequestModifyProfile1 requestModifyProfile1) throws NotFoundException;
 
     Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException;
+
+    List<Profile> showFindUserList(String keyword);
 
 }

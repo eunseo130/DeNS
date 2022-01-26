@@ -1,12 +1,13 @@
 import React from 'react';
+import styled from 'styled-components';
 
 
-export default function Searchsmallbox(props) {
+export default function Searchsmallbox() {
+
     return (
-        <div style={{ background: 'white', display: 'inline-block',width:'400px',height:'150px', marginTop:'10px', marginLeft:'10px'}}>
-            test
-        </div>
+            <ComTest>test</ComTest>
     )
 }
-
-
+const ComTest = styled.div`
+color:white;
+`

@@ -1,23 +1,18 @@
 import React from 'react';
 import  styled  from 'styled-components';
 import Searchsmallbox from './Searchsmallbox';
-import dummy from '../../db/data.json';
 export default function Searchbigbox(props) {
-    //상위 컴포넌트
-    //객체를 만들기.
-    console.log(props.info);
-    const temp = props.info;
     return (
-        <Contain>
-                    <Searchsmallbox></Searchsmallbox>
-
-        </Contain>
+        <>
+            <Searchsmallbox info={ props.info}></Searchsmallbox>
+        </>
     )
 }
 
 const Contain = styled.div`
     background-color:black;
     text-align: center;
+    display:inline-block;
     width:800px;
     height:700px;
     margin-top:50px;
