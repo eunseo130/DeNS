@@ -3,23 +3,31 @@ import styled, { css } from "styled-components";
 
 function MessageTitle(props) {
   return (
-    <Container {...props}>
-      <팀이름팀장2Row>
-        <팀이름팀장2>팀 이름/팀장</팀이름팀장2>
-        <최근메시지내용>최근 메시지 내용</최근메시지내용>
-        <프로필>프로필</프로필>
-        <연결된팀원정보명>연결된 팀원 정보(명)</연결된팀원정보명>
-      </팀이름팀장2Row>
+    <Container>
+      <ColumnBox>
+        <Title>팀 이름/팀장</Title>
+      </ColumnBox>
+      <ColumnBox>
+        <Title>최근 메시지 내용</Title>
+      </ColumnBox>
+      <ColumnBox>
+        <Title>프로필</Title>
+      </ColumnBox>
+      <ColumnBox>
+        <Title>연결된 팀원 정보(명)</Title>
+      </ColumnBox>
     </Container>
   );
 }
 
 const Container = styled.div`
   display: flex;
-  flex-direction: row;
+  flex-direction: space-around;
 `;
 
-const 팀이름팀장2 = styled.span`
+const ColumnBox = styled.div`
+`;
+const Title = styled.h5`
   font-family: Roboto;
   font-style: normal;
   font-weight: 700;
@@ -58,11 +66,5 @@ const 연결된팀원정보명 = styled.span`
   margin-left: 131px;
 `;
 
-const 팀이름팀장2Row = styled.div`
-  height: 22px;
-  flex-direction: row;
-  display: flex;
-  flex: 1 1 0%;
-`;
 
 export default MessageTitle;

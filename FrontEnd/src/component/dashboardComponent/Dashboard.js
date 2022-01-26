@@ -2,53 +2,33 @@ import React from "react";
 import styled from "styled-components";
 import TeamLink from "./TeamLink";
 import Message from "./Message";
-import MessageTitle from "./MessageTitle"
+import TeamList from "./TeamList"
 
 export default function Dashboard() {
     return (
       <DashBoardBox>
-        <TeamLink
-          style={{
-            height: 215,
-            width: 1387,
-            marginTop: 103,
-            marginLeft: 293
-          }}
-          ></TeamLink>
-        <MessageStack>
-          <Message
-            style={{
-              position: "absolute",
-              top: 0,
-              left: 0,
-              height: 348,
-              width: 1387
-            }}
-          ></Message>
-          <MessageTitle
-            style={{
-              position: "absolute",
-              top: 78,
-              left: 133,
-              height: 22,
-              width: 1113
-            }}
-          ></MessageTitle>
-          <팀이름팀장>팀 이름/팀장</팀이름팀장>
-        </MessageStack>
-        <최근내가본팀>최근 내가 본 팀</최근내가본팀>
-        <Rect5Row>
-          <Rect5></Rect5>
-          <Rect6></Rect6>
-        </Rect5Row>
+
+        <TeamLink></TeamLink>
+
+        <MessageBox>
+          <Message></Message>
+
+        </MessageBox>
+
+        <TeamList/>
+
       </DashBoardBox>
     );
   }
   const DashBoardBox = styled.div`
     position: absolute;
-    top: 50%;
+    top: 17%;
     left: 50%;
     transform:translate(-50%, -50%);
+    height: 215px;
+    width: 1387px;
+    // marginTop: 103px;
+    // marginLeft: 293px;
   `
   const 팀이름팀장 = styled.span`
     font-family: Roboto;
@@ -62,12 +42,7 @@ export default function Dashboard() {
     width: 88px;
   `;
   
-  const MessageStack = styled.div`
-    width: 1387px;
-    height: 348px;
-    margin-top: 52px;
-    margin-left: 293px;
-    position: relative;
+  const MessageBox = styled.div`
   `;
   
   const 최근내가본팀 = styled.span`

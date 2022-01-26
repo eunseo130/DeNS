@@ -29,15 +29,15 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-const Rect = styled.div`
-  width: 217px;
-  height: 192px;
-  border: 1px solid;
-`;
-
 const RectRow = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const Rect = styled.div`
+  width: 217px;
+  height: 192px;
+  box-shadow: 3px 3px 5px;
 `;
 
 const LinkTitle = styled.h3`

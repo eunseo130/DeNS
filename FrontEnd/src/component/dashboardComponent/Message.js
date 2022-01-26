@@ -1,11 +1,14 @@
 import React, { Component } from "react";
 import styled, { css } from "styled-components";
+import MessageTitle from "./MessageTitle"
 
 function Message(props) {
   return (
     <Container {...props}>
-      <메시지>메시지</메시지>
-      <Rect4></Rect4>
+      <Title>메시지</Title>
+      <Rect>
+        <MessageTitle></MessageTitle>
+      </Rect>
     </Container>
   );
 }
@@ -13,9 +16,10 @@ function Message(props) {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
+  margin-top: 2vh;
 `;
 
-const 메시지 = styled.span`
+const Title = styled.span`
   font-family: Roboto;
   font-style: normal;
   font-weight: 700;
@@ -25,11 +29,11 @@ const 메시지 = styled.span`
   margin-left: 3px;
 `;
 
-const Rect4 = styled.div`
-  width: 1387px;
-  height: 305px;
-  background-color: #E6E6E6;
+const Rect = styled.div`
+  width: 100%;
+  height: 40vh;
   margin-top: 21px;
+  box-shadow: 3px 3px 5px;
 `;
 
 export default Message;

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import styled from "styled-components";
-import { test22 } from "../../api/test";
+import { team } from "../../api/test";
 
 function Login() {
     const [name, setName] = useState('');
@@ -16,7 +16,7 @@ function Login() {
     };
     
     useEffect(() => {
-      test22("가세요",
+      team("가세요",
           (response) => {
           console.log(response);
       },  
