@@ -13,7 +13,7 @@ import java.util.Optional;
 
 public interface ProfileService {
 
-    Optional<Profile> findProfile(RequestModifyProfile1 requestModifyProfile1) throws NotFoundException;
+    Optional<Profile> findProfile(String email) throws NotFoundException;
 
     Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException;
 

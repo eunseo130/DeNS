@@ -1,21 +1,29 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.dto.UserFeedDto;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.entity.UserFeed;
+import com.ssafy.BackEnd.entity.UserFeedFile;
+import com.ssafy.BackEnd.repository.UserFeedFileRepository;
 import com.ssafy.BackEnd.repository.UserFeedRepository;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.swing.text.html.Option;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class UserFeedServiceImpl implements UserFeedService{
 
     private final UserFeedRepository userFeedRepository;
+
+    private final UserFeedFileService userFeedFileService;
 
     @Override
     public UserFeed createUserFeed(UserFeed userFeed) {
@@ -52,5 +60,16 @@ public class UserFeedServiceImpl implements UserFeedService{
     @Override
     public List<String> checkHashTag(String content) { // 키워드 분리 알고리즘
         return null;
+    }
+
+    @Override
+    public UserFeed post(UserFeedDto userFeedDto) throws IOException {
+        List<UserFeedFile> userFeedFiles = userFeedFileService.saveUserFeedFiles(userFeedDto.getUserFeedFiles());
+        for(UserFeedFile userFeedFile : userFeedFiles) {
+            log.info(userFeedFile.getOriginalFileName());
+        }
+        UserFeed userFeed = userFeedDto.createUserFeed();
+        userFeed.setUserFeedFiles(userFeedFiles);
+        return userFeedRepository.save(userFeed);
     }
 }

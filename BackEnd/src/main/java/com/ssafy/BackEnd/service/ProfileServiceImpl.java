@@ -30,12 +30,9 @@ public class ProfileServiceImpl implements ProfileService{
     private SaltUtil saltUtil;
 
     @Override
-    public Optional<Profile> findProfile(RequestModifyProfile1 requestModifyProfile1) throws NotFoundException{
-        List<User> findUsers = userRepository.findByEmail(requestModifyProfile1.getEmail());
-        if (findUsers.isEmpty()) throw new NotFoundException("회원이 조회되지 않습니다.");
-        User findUser = findUsers.get(0);
-        String hashedPassword = findUser.getPassword();
-        SaltUtil.checkPassword(hashedPassword, requestModifyProfile1.getPassword());
+    public Optional<Profile> findProfile(String email) throws NotFoundException{
+        User findUser = userRepository.findByEmail(email).get(0);
+        if (findUser == null) throw new NotFoundException("회원이 조회되지 않습니다.");
         Optional<Profile> findProfile = profileRepository.findByName(findUser.getName());
         return findProfile;
     }

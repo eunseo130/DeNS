@@ -41,10 +41,10 @@ public class ProfileController {
 
     @GetMapping("/{user_id}")
     @ApiOperation(value = "유저 프로필 조회")
-    public Response findProfile(RequestModifyProfile1 requestModifyProfile1) {
+    public Response findProfile(String email) {
         Response response = new Response();
         try {
-            Optional<Profile> profile = profileService.findProfile(requestModifyProfile1);
+            Optional<Profile> profile = profileService.findProfile(email);
             response.setResponse("success");
             response.setMessage("사용자의 프로필을 성공적으로 조회했습니다.");
             response.setData(null);

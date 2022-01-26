@@ -1,8 +1,6 @@
 package com.ssafy.BackEnd.entity;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -13,9 +11,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "userfeed")
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
-public class UserFeed extends BaseTimeEntity {
+public class UserFeed {
 
     @Id
     @GeneratedValue
@@ -34,8 +32,16 @@ public class UserFeed extends BaseTimeEntity {
     Profile profile;
 
     @OneToMany(mappedBy = "user_feed", cascade = CascadeType.ALL)
-    List<UserFeedFile> userfeed_file = new ArrayList<>();
+    List<UserFeedFile> userFeedFiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "user_feed", cascade = CascadeType.ALL)
-    List<UserFeedKeyword>  userfeed_keyword = new ArrayList<>();
+    List<UserFeedKeyword> userfeed_keyword = new ArrayList<>();
+
+    @Builder
+    public UserFeed(Profile profile, String content, List<UserFeedFile> userFeedFiles) {
+        this.profile = profile;
+        this.content = content;
+        this.userFeedFiles = userFeedFiles;
+    }
+
 }
