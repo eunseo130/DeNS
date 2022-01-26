@@ -1,12 +1,13 @@
 package com.ssafy.BackEnd.service;
 
-import com.ssafy.BackEnd.dto.ImageDto;
-import com.ssafy.BackEnd.entity.Image;
+//import com.ssafy.BackEnd.dto.ImageDto;
+//import com.ssafy.BackEnd.entity.Image;
 import com.ssafy.BackEnd.entity.Profile;
-import com.ssafy.BackEnd.repository.ImageRepository;
+//import com.ssafy.BackEnd.repository.ImageRepository;
 import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import io.lettuce.core.ScriptOutputType;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -21,11 +22,11 @@ import java.nio.file.Paths;
 @Service
 public class ImageService {
 
-    @Autowired
-    private final ImageRepository imageRepository;
+    //@Autowired
+    //private final ImageRepository imageRepository;
 
-    @Autowired
-    private final UserRepository userRepository;
+//    @Autowired
+//    private final UserRepository userRepository;
 
     @Autowired
     private final ProfileRepository profileRepository;
@@ -33,14 +34,15 @@ public class ImageService {
     @Value("${profileImg.path}")
     private String uploadFolder;
 
-    public ImageService(ImageRepository imageRepository, UserRepository userRepository, ProfileRepository profileRepository) {
-        this.imageRepository = imageRepository;
-        this.userRepository = userRepository;
+    public ImageService(ProfileRepository profileRepository) {
+//        this.imageRepository = imageRepository;
+//        this.userRepository = userRepository;
         this.profileRepository = profileRepository;
     }
 
+    // 주소 같이 넘겨주기
     @Transactional
-    public void update(String email, MultipartFile multipartFile) {
+    public String update(String email, MultipartFile multipartFile) {
         Profile profile = profileRepository.findByEmail(email);
         String imageFileName = profile.getProfile_id() + "_" + multipartFile.getOriginalFilename();
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
@@ -57,5 +59,6 @@ public class ImageService {
             }
             profile.setImage(imageFileName);
         }
+        return imageFilePath.toString();
     }
 }

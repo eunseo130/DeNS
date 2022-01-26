@@ -1,6 +1,7 @@
 package com.ssafy.BackEnd.service;
 
 import com.ssafy.BackEnd.entity.FileType;
+import com.ssafy.BackEnd.entity.UserFeed;
 import com.ssafy.BackEnd.entity.UserFeedFile;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

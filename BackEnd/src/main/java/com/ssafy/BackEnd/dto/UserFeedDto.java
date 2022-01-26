@@ -1,6 +1,8 @@
 package com.ssafy.BackEnd.dto;
 
 import com.ssafy.BackEnd.entity.FileType;
+import com.ssafy.BackEnd.entity.Profile;
+import com.ssafy.BackEnd.entity.UserFeed;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;

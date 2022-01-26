@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.Salt;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.entity.UserIdentity;
@@ -43,7 +44,7 @@ public class AuthServiceImpl implements AuthService{
         Profile profile = new Profile();
         profile.setName(user.getName());
         profile.setEmail(user.getEmail());
-        profile.setJob(null);
+        profile.setPosition(null);
         profile.setStack(null);
         user.setProfile(profile);
         userRepository.save(user);

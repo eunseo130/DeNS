@@ -5,12 +5,12 @@ import lombok.*;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "userfeedfile")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @SequenceGenerator(
         name = "File_SEQ_GENERATOR",
         sequenceName = "FILE_SEQ"
 )
+@Table(name = "userfeedfile")
 @Getter @Setter
 public class UserFeedFile {
 

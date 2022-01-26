@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "profile")
 @RequiredArgsConstructor
 @Getter @Setter
-public class Profile {
+public class Profile extends BaseTimeEntity{
 
     @Id
     @GeneratedValue
@@ -21,7 +21,7 @@ public class Profile {
 
     private String name;
 
-    private String job;
+    private String position;
 
     private String stack;
 

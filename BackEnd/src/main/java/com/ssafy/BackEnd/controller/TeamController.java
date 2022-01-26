@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.controller;
 
+import com.ssafy.BackEnd.dto.TeamDto;
 import com.ssafy.BackEnd.entity.Response;
 import com.ssafy.BackEnd.repository.TeamRespository;
 import com.ssafy.BackEnd.service.TeamService;
@@ -32,32 +33,37 @@ public class TeamController {
         return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @PostMapping
     @ApiOperation(value = "팀 만들기")
-    public ResponseEntity<Team> createTeam(@RequestBody Team team) {
+    public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamDto) {
+        Team team = teamDto.createTeam();
         return new ResponseEntity<Team>(teamService.createTeam(team), HttpStatus.OK);
 
     }
 
     @GetMapping("/{team_id}")
     @ApiOperation(value = "팀 조회")
-    public ResponseEntity<Team> findTeam(@RequestParam long team_id) throws NotFoundException {
-        return new ResponseEntity<Team>(teamService.findByTeam(team_id), HttpStatus.OK);
+    public ResponseEntity<Team> findTeam(@RequestBody TeamDto teamDto) throws NotFoundException {
+        Team team = teamDto.createTeam();
+        return new ResponseEntity<Team>(teamService.findByTeam(team.getTeam_id()), HttpStatus.OK);
     }
 
 
     @PutMapping("/{team_id}")
     @ApiOperation(value = "팀 수정") //팀 수정이 무엇에 대한 수정인가(name과 content에 대한 수정??)
-    public ResponseEntity<Team> modifyTeam(@RequestBody long team_id, @RequestBody Team team) {
-        teamService.modifyTeam(team_id, team);
+    public ResponseEntity<Team> modifyTeam(@RequestBody TeamDto teamDto) {
+        Team team = teamDto.createTeam();
+        teamService.modifyTeam(team.getTeam_id(), team);
 
         return new ResponseEntity<Team>(team, HttpStatus.OK);
     }
 
     @DeleteMapping("/{team_id}")
     @ApiOperation(value = "팀 삭제")
-    public ResponseEntity<Void> deleteTeam(@RequestParam long team_id){
-        teamService.deleteTeam(team_id);
+    public ResponseEntity<Void> deleteTeam(@RequestBody TeamDto teamDto){
+        Team team = teamDto.createTeam();
+
+        teamService.deleteTeam(team.getTeam_id());
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
@@ -69,15 +75,19 @@ public class TeamController {
 
     }
 
-    @GetMapping("/profile/{team_id}")
-    @ApiOperation(value = "팀 프로필 조회")
-    public void findTeamProfile() { // 팀 컨텐츠 수정 (소개 같은거)
-
-    }
-
-
     @PutMapping("/profile/{team_id}")
     @ApiOperation(value = "팀 프로필 수정")
-    public void modifyTeamProfile() {
+    public ResponseEntity<Team> modifyTeamProfile(@RequestBody TeamDto teamDto) {
+        Team team = teamDto.createTeam();
+        teamService.modifyTeamProfile(team.getTeam_id(), team);
+
+        return new ResponseEntity<Team>(team, HttpStatus.OK);
+    }
+
+    @GetMapping("/search") //팀 키워드도 검색 가능하게 해야함 !!!
+    public ResponseEntity<List<Team>> searchTeam(@RequestParam String keyword) {
+        List<Team> search_teams = teamService.showFindTeamList(keyword);
+
+        return new ResponseEntity<List<Team>>(search_teams, HttpStatus.OK);
     }
 }
