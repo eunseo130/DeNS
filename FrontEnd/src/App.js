@@ -90,7 +90,12 @@ const App = () => {
                     ]
                 },
             ]
+<<<<<<< HEAD
         }
+=======
+        },
+        {  path: '*', component: <DayList></DayList> },
+>>>>>>> 9c1cfc2c12d4bd8509c3f8a74a30d6cfb093f2bf
     ])
 
     return routes;
