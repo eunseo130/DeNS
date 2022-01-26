@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Optional;
 import com.ssafy.BackEnd.entity.Team;
 
+import javax.transaction.Transactional;
+
 @Service
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService{
@@ -29,15 +31,13 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public Team createTeam(Team team) {
         teamRespository.save(team);
-
         return team;
     }
 
     @Override
     public void modifyTeam(long team_id, Team team){
         Team old_team = teamRespository.findByTeam(team_id);
-        old_team.setTitle(team.getTitle());
-        old_team.setContent(team.getContent());
+        old_team.setTitle(team.getTitle()); //팀 이름만 수정
 
         teamRespository.save(team);
     }
@@ -51,6 +51,22 @@ public class TeamServiceImpl implements TeamService{
     public List<Team> showTeamList() {
         List<Team> teams = new ArrayList<>();
         teamRespository.findAll().forEach(team -> teams.add(team));
+
+        return teams;
+    }
+
+    @Override
+    public void modifyTeamProfile(long team_id, Team team) {
+        Team old_team = teamRespository.findByTeam(team_id);
+        old_team.setContent(team.getContent()); //content(팀 프로필)만 수정
+
+        teamRespository.save(team);
+    }
+
+    @Override
+    @Transactional
+    public List<Team> showFindTeamList(String keyword) {
+        List<Team> teams = teamRespository.findByTitleContaining(keyword);
 
         return teams;
     }

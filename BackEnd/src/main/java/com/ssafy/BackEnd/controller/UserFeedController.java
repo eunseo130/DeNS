@@ -3,12 +3,12 @@ package com.ssafy.BackEnd.controller;
 import com.ssafy.BackEnd.dto.UserFeedDto;
 import com.ssafy.BackEnd.entity.FileType;
 import com.ssafy.BackEnd.entity.Profile;
-import com.ssafy.BackEnd.entity.UserFeedAddForm;
 import com.ssafy.BackEnd.repository.UserFeedRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.FileStore;
 import com.ssafy.BackEnd.service.ProfileService;
 import com.ssafy.BackEnd.service.UserFeedService;
+import com.ssafy.BackEnd.util.UserFeedAddForm;
 import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -76,7 +76,8 @@ public class UserFeedController {
     // Update
     @PutMapping("/userfeed_id")
     @ApiOperation(value = "유저 피드 수정")
-    public ResponseEntity<UserFeed> modifyUserFeed(@RequestBody UserFeed userFeed) {
+    public ResponseEntity<UserFeed> modifyUserFeed(@RequestBody UserFeedDto userFeedDto) {
+        UserFeed userFeed = userFeedDto.createUserFeed();
         userFeedService.modifyUserFeed(userFeed.getUserfeed_id(), userFeed);
 
         return new ResponseEntity<UserFeed>(userFeed, HttpStatus.OK);
@@ -85,7 +86,8 @@ public class UserFeedController {
     // Delete
     @DeleteMapping("/userfeed_id")
     @ApiOperation(value = "유저 피드 삭제")
-    public ResponseEntity<Void>deleteUserFeed(@RequestBody UserFeed userFeed) {
+    public ResponseEntity<Void>deleteUserFeed(@RequestBody UserFeedDto userFeedDto) {
+        UserFeed userFeed = userFeedDto.createUserFeed();
         userFeedService.deleteUserFeed(userFeed.getUserfeed_id());
 
         return new ResponseEntity<Void>(HttpStatus.OK);

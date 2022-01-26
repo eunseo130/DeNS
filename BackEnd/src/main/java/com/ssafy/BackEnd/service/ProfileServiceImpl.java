@@ -37,16 +37,18 @@ public class ProfileServiceImpl implements ProfileService{
         return findProfile;
     }
 
+    public List<Profile> showFindTeamList(String keyword){
+        List<Profile> profiles = profileRepository.findByNameContaining(keyword);
+        if(profiles == null) System.out.println("에러염");
+        return profiles;
+    }
 
+    // 이름, 이메일 수정 x, user 번호로 조회하기
     @Override
     public Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException {
 
         User user = userRepository.findByName(findProfile.getName());
-        findProfile.setName(requestModifyProfile2.getName());
-        user.setName(requestModifyProfile2.getName());
-        user.setEmail(requestModifyProfile2.getEmail());
-        findProfile.setEmail(requestModifyProfile2.getEmail());
-        findProfile.setJob(requestModifyProfile2.getJob());
+        findProfile.setPosition(requestModifyProfile2.getPosition());
         findProfile.setStack(requestModifyProfile2.getStack());
 
         profileRepository.save(findProfile);

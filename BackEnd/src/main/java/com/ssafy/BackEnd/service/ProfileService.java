@@ -9,6 +9,7 @@ import javassist.NotFoundException;
 import org.apache.coyote.Request;
 import org.springframework.web.client.HttpClientErrorException;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface ProfileService {
@@ -18,4 +19,6 @@ public interface ProfileService {
     Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException;
 
     void deleteUser(String email);
+
+    List<Profile> showFindTeamList(String keyword);
 }

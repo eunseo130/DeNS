@@ -13,7 +13,7 @@ import java.util.List;
 @Table(name = "userfeed")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
-public class UserFeed {
+public class UserFeed extends BaseTimeEntity{
 
     @Id
     @GeneratedValue

@@ -25,10 +25,14 @@ public class UserFeedServiceImpl implements UserFeedService{
 
     private final UserFeedFileService userFeedFileService;
 
+    private HashTagAlgorithm hashTagAlgorithm = new HashTagAlgorithm();
+
     @Override
     public UserFeed createUserFeed(UserFeed userFeed) {
         userFeedRepository.save(userFeed);
         // 키워드 알고리즘 넣기
+        List<String> hashtag = hashTagAlgorithm.strList(userFeed.getContent());
+        //checkHashTag(userFeed.getContent()); // 일단 엔티티에서
 
         return userFeed;
     }
@@ -59,6 +63,9 @@ public class UserFeedServiceImpl implements UserFeedService{
 
     @Override
     public List<String> checkHashTag(String content) { // 키워드 분리 알고리즘
+        String exStr = "안녕하세요 #프론트엔드 입니다 #백엔드";
+
+
         return null;
     }
 

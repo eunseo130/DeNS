@@ -17,5 +17,7 @@ public interface TeamService {
 
     List<Team> showTeamList();
 
-    //List<Team> showFindTeamList(String keyword);
+    void modifyTeamProfile(long team_id, Team team);
+
+    List<Team> showFindTeamList(String keyword);
 }
