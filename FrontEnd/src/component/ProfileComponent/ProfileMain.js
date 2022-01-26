@@ -31,42 +31,74 @@ export default function ProfileMain() {
     (res) => {
       setInputs({
         ...inputs,
-        [image]: res.data.image,
-        [name]: res.data.name,
-        [position]: res.data.position,
-        [stack]: res.data.stack,
-        [email]: res.data.email,
+        image: res.data.image,
+        name: res.data.name,
+        position: res.data.position,
+        stack: res.data.stack,
+        email: res.data.email,
       })
     },
     (error) => console.log(error)
   )
-  profileUpdate(email, null, { params: { position, stack } })
+  profileUpdate(
+    [email, { params: { position: position, stack: stack } }],
+    (res) => {
+      setInputs({
+        ...inputs,
+        position: res.data.position,
+        stack: res.data.stack,
+      })
+    },
+    (error) => console.log(error)
+  )
   function onEdit() {
     setInputs({
       ...inputs,
       edit: !edit,
     })
   }
+  function onSave(e) {
+    const { value, name } = e.target
+    setInputs({
+      ...inputs,
+      [name]: value,
+    })
+  }
+
   return (
     <div>
       <h3>프로필 메인페이지입니다</h3>
       <TagCloud minSize={12} maxSize={35} tags={keyword} />
-
       <div>
         <img src={image} alt={name} />
-        <p>이름: {name}</p>
-        <p>직무:{edit ? <input></input> : position}</p>
-        <p>스택:{edit ? <input></input> : stack}</p>
-        <p>이메일: {email}</p>
-        {edit ? <button>확인</button> : <button onClick={onEdit}>편집</button>}
+        <p>이름:&nbsp; {name}</p>
+        <p>
+          직무 : &nbsp;
+          {edit ? (
+            <input onChange={onSave} name="position" value={position}></input>
+          ) : (
+            position
+          )}
+        </p>
+        <p>
+          스택 : &nbsp;
+          {edit ? (
+            <input onChange={onSave} name="stack" value={stack}></input>
+          ) : (
+            stack
+          )}
+        </p>
+        <p>이메일:&nbsp; {email}</p>
+        {edit ? (
+          <button onClick={onEdit}>확인</button>
+        ) : (
+          <button onClick={onEdit}>편집</button>
+        )}
       </div>
-      <form>
-        키워드를 입력해 주세요.
-        <br />
-        <input></input>
-        <button>전송</button>
-      </form>
-
+      키워드를 입력해 주세요.
+      <br />
+      <input></input>
+      <button>전송</button>
       <Outlet />
     </div>
   )

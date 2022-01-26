@@ -17,8 +17,8 @@ function login(param, success, fail) {
 function profileTest(param, success, fail) {
   api.get(`/profile/${param}`).then(success).catch(fail)
 }
-function profileUpdate(param, success, fail) {
-  api.post(`/profile/${param}`, JSON.stringify(param)).then(success).catch(fail)
+function profileUpdate([url,data], success, fail) {
+  api.post(`/profile/${url}`,null, JSON.stringify(data)).then(success).catch(fail)
 }
 
 export { test22, signup, login, profileTest, profileUpdate }
