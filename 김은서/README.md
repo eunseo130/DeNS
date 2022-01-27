@@ -914,4 +914,174 @@
   
   ```
 
+
+### 1/26 (수)
+
+<hr>
+
+- 프로필 기능 수정
+
+  ```java
+   @GetMapping("/{profile_id}")
+      @ApiOperation(value = "유저 프로필 조회")
+      public ResponseEntity<Profile> findProfile(@PathVariable Long profile_id) {
+          Response response = new Response();
+          try {
+              Optional<Profile> profile = profileService.findById(profile_id);
+              if (profile != null) {
+                  return new ResponseEntity<Profile>(profile.get(),HttpStatus.OK);
+              }
+  //            response.setResponse("success");
+  //            response.setMessage("사용자의 프로필을 성공적으로 조회했습니다.");
+  //            response.setData(null);
+              else {
+                  return new ResponseEntity<Profile>((Profile) null, HttpStatus.NOT_FOUND);
+              }
+  
+          }
+          catch (Exception e) {
+  //            response.setResponse("error");
+  //            response.setMessage("사용자의 프로필을 조회할 수 없습니다.");
+  //            response.setData(null);
+              return new ResponseEntity<Profile>((Profile) null, HttpStatus.NOT_FOUND);
+          }
+      }
+  
+      @PutMapping("/{profile_id}")
+      @ApiOperation(value = "유저 프로필 수정")
+      public ResponseEntity<Profile> modifyProfile(@PathVariable Long profile_id, @RequestBody RequestModifyProfile2 requestModifyProfile2) {
+          Response response = new Response();
+          try {
+  
+              Profile findProfile = profileService.findById(profile_id).get();
+              Profile newProfile = profileService.modifyProfile(findProfile, requestModifyProfile2);
+  //            response.setResponse("success");
+  //            response.setMessage("사용자의 프로필을 성공적으로 수정했습니다.");
+  //            response.setData(null);
+              return new ResponseEntity<Profile>(newProfile, HttpStatus.OK);
+          }
+          catch (Exception e) {
+  //            response.setResponse("error");
+  //            response.setMessage("사용자의 프로필을 조회할 수 없습니다.");
+  //            response.setData(null);
+              return new ResponseEntity<Profile>((Profile) null, HttpStatus.NOT_FOUND);
+          }
+      }
+  
+      @PostMapping("/update/image/{profile_id}")
+      public ResponseEntity<String> updateImage(@PathVariable Long profile_id, MultipartFile multipartFile) throws NotFoundException {
+          String imagePath = imageService.update(profile_id, multipartFile);
+          return new ResponseEntity<String>(imagePath, HttpStatus.OK);
+      }
+  ```
+
+- keyword 연관관계 수정
+
+### 1/27 (목)
+
+<hr>
+
+- 팀 기능 오류 수정
+
+- Custom Exception
+
+  ```java
+  public class CustomException extends RuntimeException {
+  
+      private ErrorCode errorCode;
+  
+      public CustomException(String message, ErrorCode errorCode) {
+          super(message);
+          this.errorCode = errorCode;
+      }
+  
+      public CustomException(ErrorCode errorCode) {
+          super(errorCode.getMessage());
+          this.errorCode = errorCode;
+      }
+  
+      public ErrorCode getErrorCode() {
+          return this.errorCode;
+      }
+  ```
+
+  ```java
+  @Getter
+  @RequiredArgsConstructor
+  @JsonFormat(shape = JsonFormat.Shape.OBJECT)
+  public enum ErrorCode implements EnumModel{
+  
+      INVALID_CODE(400, "C001", "Invalid Code"),
+      RESOURCE_NOT_FOUND(204, "C002", "Resource not found"),
+      EXPIRED_CODE(400, "C003", "Expired Code"),
+      AWS_ERROR(400, "A001", "aws client error"),
+      INTERNER_SERVER_ERROR(500, "A005", "interner server error");
+  
+      private int status;
+      private String code;
+      private String message;
+      private String detail;
+  
+      ErrorCode(int status, String code, String message) {
+          this.status = status;
+          this.message = message;
+          this.code = code;
+      }
+  
+      @Override
+      public String getKey() {
+          return this.code;
+      }
+  
+      @Override
+      public String getValue() {
+          return this.message;
+      }
+  
+  }
+  ```
+
+  ```java
+  @Getter @Setter
+  public class ErrorResponse {
+  
+      private String message;
+      private String code;
+      private int status;
+      private String detail;
+  
+      public ErrorResponse(ErrorCode code) {
+          this.message = code.getMessage();
+          this.status = code.getStatus();
+          this.code = code.getCode();
+          this.detail = code.getDetail();
+      }
+  }
+  ```
+
+  ```java
+  @RestControllerAdvice
+  @Slf4j
+  public class GlobalExceptionHandler {
+  
+      @ExceptionHandler(value = Exception.class)
+      @ResponseStatus(value = HttpStatus.BAD_REQUEST)
+      protected ResponseEntity<ErrorResponse> handleException(Exception e) {
+          ErrorResponse response = ErrorResponse.of(ErrorCode.EXPIRED_CODE);
+          response.setDetail(e.getMessage());
+          return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+      }
+  }
+  ```
+
+  ```java
+  public interface EnumModel {
+  
+      String getKey();
+      String getValue();
+  }
+  ```
+
+  
+
   
