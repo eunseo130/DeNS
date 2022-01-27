@@ -9,6 +9,7 @@ import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -30,10 +31,17 @@ public class ProfileServiceImpl implements ProfileService{
     private SaltUtil saltUtil;
 
     @Override
-    public Optional<Profile> findProfile(String email) throws NotFoundException{
-        User findUser = userRepository.findByEmail(email).get(0);
+    public Optional<Profile> findProfile(Long user_id) throws NotFoundException{
+        User findUser = userRepository.findById(user_id).get();
         if (findUser == null) throw new NotFoundException("회원이 조회되지 않습니다.");
         Optional<Profile> findProfile = profileRepository.findByName(findUser.getName());
+        return findProfile;
+    }
+
+    @Override
+    public Optional<Profile> findById(Long profile_id) throws NotFoundException {
+        Optional<Profile> findProfile = profileRepository.findById(profile_id);
+        if (findProfile == null) throw new NotFoundException("회원이 조회되지 않습니다.");
         return findProfile;
     }
 
@@ -59,7 +67,7 @@ public class ProfileServiceImpl implements ProfileService{
 
     @Override
     public void deleteUser(String email) {
-        User user = userRepository.findByEmail(email).get(0);
+        User user = userRepository.findByEmail(email);
         userRepository.delete(user);
     }
 }

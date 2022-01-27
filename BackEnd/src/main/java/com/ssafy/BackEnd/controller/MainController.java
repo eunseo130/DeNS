@@ -158,11 +158,11 @@ public class MainController {
 
     @PostMapping("/verify")
     @ApiOperation(value = "회원가입 인증", response = String.class)
-    public Response verify(RequestVerifyEmail requestVerifyEmail, HttpServletRequest req, HttpServletResponse res) {
+    public Response verify(@RequestBody RequestVerifyEmail requestVerifyEmail, HttpServletRequest req, HttpServletResponse res) {
         Response response = new Response();
-        System.out.println("ve : "+requestVerifyEmail.getName());
+        System.out.println("ve : "+requestVerifyEmail.getEmail());
         try {
-            User user = authService.findByName(requestVerifyEmail.getName());
+            User user = authService.findByEmail(requestVerifyEmail.getEmail());
             System.out.println("u : "+user.getName());
             authService.sendVerificationMail(user);
 
@@ -180,15 +180,18 @@ public class MainController {
 
     @GetMapping("/verify/{key}")
     @ApiOperation(value = "회원가입 인증 확인")
-    public Response getVerify(@PathVariable String key) {
+    public ResponseEntity<User> getVerify(@PathVariable String key) {
         Response response;
         try {
-            authService.verifyEmail(key);
+            ResponseEntity<User> userResponseEntity = authService.verifyEmail(key);
+            User user = userResponseEntity.getBody();
+            authService.createProfile(user);
             response = new Response("success", "성공적으로 인증메일을 확인했습니다.", null);
+            return new ResponseEntity<User>(user, HttpStatus.OK);
 
         } catch (Exception e) {
             response = new Response("error", "인증메일을 확인하는데 실패했습니다.", null);
+            return new ResponseEntity<User>((User) null, HttpStatus.UNAUTHORIZED);
         }
-        return response;
     }
 }

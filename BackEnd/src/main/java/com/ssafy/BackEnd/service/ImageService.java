@@ -7,10 +7,12 @@ import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import io.lettuce.core.ScriptOutputType;
+import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
@@ -18,6 +20,7 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.Optional;
 
 @Service
 public class ImageService {
@@ -42,9 +45,11 @@ public class ImageService {
 
     // 주소 같이 넘겨주기
     @Transactional
-    public String update(String email, MultipartFile multipartFile) {
-        Profile profile = profileRepository.findByEmail(email);
-        String imageFileName = profile.getProfile_id() + "_" + multipartFile.getOriginalFilename();
+    public String update(Long profile_id, MultipartFile multipartFile) throws NotFoundException{
+        Optional<Profile> findProfile = profileRepository.findById(profile_id);
+        if (findProfile == null) throw new NotFoundException("프로필을 조회하지 못했습니다.");
+        Profile profile = findProfile.get();
+        String imageFileName = profile_id + "_" + multipartFile.getOriginalFilename();
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
         if(multipartFile.getSize() != 0) {

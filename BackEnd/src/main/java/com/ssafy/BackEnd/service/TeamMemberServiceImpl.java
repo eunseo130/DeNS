@@ -25,10 +25,10 @@ public class TeamMemberServiceImpl implements TeamMemberService{
     @Override
     public Team addTeamMember(String email, String teamName) { //팀에 팀원 추가하는 기능
         System.out.println("add "+email);
-        List<User> user = userRepository.findByEmail(email); //해당 유저정보 가져오기
-        for(User u : user){
-            System.out.println(u.getEmail()+" hihi");
-        }
+        User user = userRepository.findByEmail(email); //해당 유저정보 가져오기
+//        for(User u : user){
+//            System.out.println(u.getEmail()+" hihi");
+//        }
         //System.out.println(user.getEmail()+" "+teamName+" hihi");
         Team team = teamRespository.findByTitle(teamName); //팀이름으로 해당 팀정보 가
 
