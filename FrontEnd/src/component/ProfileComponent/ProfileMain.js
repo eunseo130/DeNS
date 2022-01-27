@@ -16,6 +16,15 @@ export default function ProfileMain() {
     edit: false,
   })
   const { image, name, position, stack, email, edit } = inputs
+  // const [keyword, setKeyword] = useState(
+  //   { value: 'JavaScript', count: 10000 },
+  //   { value: 'React', count: 30 },
+  //   { value: 'Nodejs', count: 28 },
+  //   { value: 'Express.js', count: 25 },
+  //   { value: 'HTML5', count: 33 },
+  //   { value: 'MongoDB', count: 18 },
+  //   { value: 'CSS3', count: 20 }
+  // )
   const keyword = [
     { value: 'JavaScript', count: 10000 },
     { value: 'React', count: 30 },
@@ -47,6 +56,7 @@ export default function ProfileMain() {
         ...inputs,
         position: res.data.position,
         stack: res.data.stack,
+        edit: !edit,
       })
     },
     (error) => console.log(error)
@@ -64,7 +74,13 @@ export default function ProfileMain() {
       [name]: value,
     })
   }
-
+  // function plusKeyword(e) {
+  //   const { value, name } = e.target
+  //   setKeyword({
+  //     ...keyword,
+  //     [name]:value
+  //   })
+  // }
   return (
     <div>
       <h3>프로필 메인페이지입니다</h3>
@@ -90,7 +106,7 @@ export default function ProfileMain() {
         </p>
         <p>이메일:&nbsp; {email}</p>
         {edit ? (
-          <button onClick={onEdit}>확인</button>
+          <button onClick={profileUpdate}>확인</button>
         ) : (
           <button onClick={onEdit}>편집</button>
         )}
