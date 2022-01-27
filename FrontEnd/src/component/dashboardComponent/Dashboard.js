@@ -15,7 +15,8 @@ export default function Dashboard() {
 
         </MessageBox>
 
-        <TeamList/>
+        {/* 캐러셀 */}
+        <TeamList/> 
 
       </DashBoardBox>
     );

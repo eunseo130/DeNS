@@ -1,32 +1,35 @@
 import React from "react";
 import Slider from "react-slick";
+import styled from "styled-components";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import SlideBox from "./SlideBox";
+
 
 export default function TeamList() {
     const settings = {
         dots: true,
-        infinite: true,
+        infinite: false,
         speed: 350,
         slidesToShow: 2,
         slidesToScroll: 2
       };
     return (
         <div>
-          <h1>hello</h1>
+          <Title>최근에 본 팀</Title>
             <Slider {...settings}>
-                
-                <div>
-                    <h3>hello mather father</h3>
-                </div>
-                <div>
-                    <h3>hello</h3>
-                </div>
-                <div>
-                    <h3>hello</h3>
-                </div>
+                <SlideBox/>
+                <SlideBox/>
+                <SlideBox/>
+                <SlideBox/>
                 
             </Slider>
         </div>
     );
 }
+const Title = styled.h1`
+    font-family: Roboto;
+    font-style: normal;
+    font-weight: 700;
+    color: rgba(244,106,114,1);
+`
