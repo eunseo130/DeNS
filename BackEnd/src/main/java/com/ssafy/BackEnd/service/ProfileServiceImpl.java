@@ -66,8 +66,10 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
-    public void deleteUser(String email) {
-        User user = userRepository.findByEmail(email);
-        userRepository.delete(user);
+    public List<Profile> showFindUserList(String keyword){
+        List<Profile> profiles = profileRepository.findByNameContaining(keyword);
+        if(profiles == null) System.out.println("에러염");
+        return profiles;
     }
+
 }

@@ -1,5 +1,6 @@
 {
     "configurations": [
+        
         {
             "type": "java",
             "name": "Spring Boot-TeamZoiApplication<TeamZOI>",
@@ -8,6 +9,16 @@
             "console": "internalConsole",
             "mainClass": "com.ssafy.TeamZOI.TeamZoiApplication",
             "projectName": "TeamZOI",
+            "args": ""
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BackEndApplication<BackEnd>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "console": "internalConsole",
+            "mainClass": "com.ssafy.BackEnd.BackEndApplication",
+            "projectName": "BackEnd",
             "args": ""
         }
     ]

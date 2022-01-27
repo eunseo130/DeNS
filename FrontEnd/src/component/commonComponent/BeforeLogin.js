@@ -1,13 +1,16 @@
-import React, { Component, useEffect, useState } from "react";
-import { Link } from 'react-router-dom';
+import React from 'react';
+import { Outlet } from 'react-router-dom';
 
 
-function BeforeLogin() {
-  return (
-    <>
-      <span>testSyntex</span>
-    </>
+export default function BeforeLogin() {
+    return (
+        <>
+            <h2>로그인전 양식</h2>
+            <Outlet/>
+        </>
+
+
     )
-}
 
-export default BeforeLogin;
+
+}
