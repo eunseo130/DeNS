@@ -24,12 +24,9 @@ import java.util.List;
 @Getter @Setter
 public class User extends BaseTimeEntity {
 
-    @Id @Column(name = "email")
+    @Id
     @NotBlank
     private String email;
-
-    @GeneratedValue
-    private Long user_id;
 
     @NotBlank
     private String name;

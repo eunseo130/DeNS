@@ -8,6 +8,8 @@ import com.ssafy.BackEnd.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -40,29 +42,36 @@ public class AuthServiceImpl implements AuthService{
         user.setSalt(new Salt(salt));
         user.setPassword(saltUtil.encodePassword(salt, password));
         validateDuplicateUser(user);
-
-        Profile profile = new Profile();
-        profile.setName(user.getName());
-        profile.setEmail(user.getEmail());
-        profile.setPosition(null);
-        profile.setStack(null);
-        user.setProfile(profile);
         userRepository.save(user);
     }
 
-    private void validateDuplicateUser(User user) {
-        List<User> findUsers = userRepository.findByEmail(user.getEmail());
-        if (!findUsers.isEmpty()) {
+    @Override
+    public void validateDuplicateUser(User user) {
+        User findUsers = userRepository.findByEmail(user.getEmail());
+        if (findUsers != null) {
             throw new IllegalStateException("이미 존재하는 회원입니다.");
         }
     }
 
     @Override
+    public ResponseEntity<Profile> createProfile(User user) {
+        Profile profile = new Profile();
+        profile.setName(user.getName());
+        profile.setEmail(user.getEmail());
+        profile.setPosition(null);
+        profile.setStack(null);
+        profile.setImage(null);
+        user.setProfile(profile);
+        userRepository.save(user);
+
+        return new ResponseEntity<Profile>(profile, HttpStatus.OK);
+    }
+
+    @Override
     public User signIn(String email, String password) throws Exception{
-        List<User> findUsers = userRepository.findByEmail(email);
-        User findUser = findUsers.get(0);
+        User findUser = userRepository.findByEmail(email);
         System.out.println("find "+findUser.getEmail());
-        if(findUsers.isEmpty()) throw new Exception ("멤버가 조회되지 않습니다.");
+        if(findUser == null) throw new Exception ("멤버가 조회되지 않습니다.");
         String salt = findUser.getSalt().getSalt();
         password = saltUtil.encodePassword(salt, password);
         System.out.println("pass : "+password);
@@ -74,9 +83,9 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public User findByEmail(String email) throws NotFoundException {
-        List<User> findUser = userRepository.findByEmail(email);
-        if(findUser.isEmpty()) throw new NotFoundException("멤버가 조회되지 않습니다.");
-        return findUser.get(0);
+        User findUser = userRepository.findByEmail(email);
+        if(findUser == null) throw new NotFoundException("멤버가 조회되지 않습니다.");
+        return findUser;
     }
 
     @Override
@@ -116,16 +125,17 @@ public class AuthServiceImpl implements AuthService{
         if(user==null) throw new NotFoundException("멤버가 조회되지 않음");
         UUID uuid = UUID.randomUUID();
         System.out.println("key : " + uuid);
-        redisUtil.setDataExpire(uuid.toString(),user.getName(), 60 * 30L);
+        redisUtil.setDataExpire(uuid.toString(),user.getEmail(), 60 * 30L);
         emailService.sendMail(user.getEmail(),"[팀 조이] 회원가입 인증메일입니다.",VERIFICATION_LINK+uuid.toString());
     }
 
-    public void verifyEmail(String key) throws NotFoundException {
+    public ResponseEntity<User> verifyEmail(String key) throws NotFoundException {
         String userId = redisUtil.getData(key);
-        User user = userRepository.findByName(userId);
+        User user = userRepository.findByEmail(userId);
         if(user==null) throw new NotFoundException("멤버가 조회되지않음");
         modifyUserRole(user, UserIdentity.USER); //enum으로 수정
         redisUtil.deleteData(key);
+        return new ResponseEntity<User>(user, HttpStatus.OK);
     }
 
     public void modifyUserRole(User user, UserIdentity role){

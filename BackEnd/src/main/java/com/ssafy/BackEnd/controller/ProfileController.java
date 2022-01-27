@@ -14,6 +14,7 @@ import com.ssafy.BackEnd.util.MD5Generator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.models.Model;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,12 +41,12 @@ public class ProfileController {
     @Autowired
     private ImageService imageService;
 
-    @GetMapping("/{user_id}")
+    @GetMapping("/{profile_id}")
     @ApiOperation(value = "유저 프로필 조회")
-    public ResponseEntity<Profile> findProfile(String email) {
+    public ResponseEntity<Profile> findProfile(@PathVariable Long profile_id) {
         Response response = new Response();
         try {
-            Optional<Profile> profile = profileService.findProfile(email);
+            Optional<Profile> profile = profileService.findById(profile_id);
             if (profile != null) {
                 return new ResponseEntity<Profile>(profile.get(),HttpStatus.OK);
             }
@@ -65,12 +66,13 @@ public class ProfileController {
         }
     }
 
-    @PutMapping("/{email}")
+    @PutMapping("/{profile_id}")
     @ApiOperation(value = "유저 프로필 수정")
-    public ResponseEntity<Profile> modifyProfile(RequestModifyProfile2 requestModifyProfile2) {
+    public ResponseEntity<Profile> modifyProfile(@PathVariable Long profile_id, @RequestBody RequestModifyProfile2 requestModifyProfile2) {
         Response response = new Response();
         try {
-            Profile findProfile = profileService.findProfile(requestModifyProfile2.getEmail()).get();
+
+            Profile findProfile = profileService.findById(profile_id).get();
             Profile newProfile = profileService.modifyProfile(findProfile, requestModifyProfile2);
 //            response.setResponse("success");
 //            response.setMessage("사용자의 프로필을 성공적으로 수정했습니다.");
@@ -85,14 +87,15 @@ public class ProfileController {
         }
     }
 
-    @PostMapping("/update/image")
-    public ResponseEntity<String> updateImage(String email, MultipartFile multipartFile) {
-        String imagePath = imageService.update(email, multipartFile);
+    @PostMapping("/update/image/{profile_id}")
+    public ResponseEntity<String> updateImage(@PathVariable Long profile_id, MultipartFile multipartFile) throws NotFoundException {
+        String imagePath = imageService.update(profile_id, multipartFile);
         return new ResponseEntity<String>(imagePath, HttpStatus.OK);
     }
 
     @DeleteMapping("/delete")
     public void deleteUser(String email) {
+
         profileService.deleteUser(email);
     }
 

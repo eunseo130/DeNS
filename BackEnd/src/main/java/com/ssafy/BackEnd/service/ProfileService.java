@@ -14,11 +14,10 @@ import java.util.Optional;
 
 public interface ProfileService {
 
-    Optional<Profile> findProfile(String email) throws NotFoundException;
+    Optional<Profile> findProfile(Long user_id) throws NotFoundException;
 
     Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException;
 
-    void deleteUser(String email);
+    List<Profile> showFindUserList(String keyword);
 
-    List<Profile> showFindTeamList(String keyword);
 }

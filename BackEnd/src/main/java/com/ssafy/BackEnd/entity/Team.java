@@ -1,5 +1,7 @@
 package com.ssafy.BackEnd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,9 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@Table(name = "team")
+@Table(name="team")
 @RequiredArgsConstructor
 @Getter @Setter
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, property = "id")
 public class Team extends CreateTimeEntity {
 
     @Id
@@ -28,10 +31,6 @@ public class Team extends CreateTimeEntity {
     String title;
 
     String content;
-
-    @Column(name = "team_identity")
-    @Enumerated(EnumType.STRING)
-    TeamMemberIdentity team_identity = TeamMemberIdentity.LEADER;
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
     List<TeamKeyword> team_keyword = new ArrayList<>();

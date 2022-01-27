@@ -1,6 +1,8 @@
 package com.ssafy.BackEnd.service;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
 import java.util.Date;
 import java.util.Map;
 
@@ -9,6 +11,7 @@ import javax.servlet.http.HttpServletRequest;
 import com.ssafy.BackEnd.exception.UnAuthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -24,8 +27,14 @@ public class JwtServiceImpl implements JwtService {
 
     public static final Logger logger = LoggerFactory.getLogger(JwtServiceImpl.class);
 
-    private static final String SALT = "ssafySecret";
-    private static final int EXPIRE_MINUTES = 60;
+    private String SALT = "ssafySecret";
+    private static final long EXPIRE_MINUTES = 30 * 60 *1000L;
+    //private final ProfileService profileService;
+
+    protected void init() {
+        SALT = Base64.getEncoder().encodeToString(SALT.getBytes(StandardCharsets.UTF_8));
+    }
+
 
     @Override
     public <T> String create(String key, T data, String subject) {
@@ -33,7 +42,7 @@ public class JwtServiceImpl implements JwtService {
         String jwt = Jwts.builder()
                 .setHeaderParam("typ", "JWT")
                 .setHeaderParam("regDate", System.currentTimeMillis())
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * EXPIRE_MINUTES))
+                .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_MINUTES))
                 .setSubject(subject).claim(key, data)
                 .signWith(SignatureAlgorithm.HS256, this.generateKey()).compact();
         //System.out.println("jwt : "+jwt);
@@ -54,6 +63,10 @@ public class JwtServiceImpl implements JwtService {
 
         return key;
     }
+
+//    public Authentication getAuthentication(String token){
+//
+//    }
     //    전달 받은 토큰이 제대로 생성된것인지 확인 하고 문제가 있다면 UnauthorizedException을 발생.
     @Override
     public boolean isUsable(String jwt) {
