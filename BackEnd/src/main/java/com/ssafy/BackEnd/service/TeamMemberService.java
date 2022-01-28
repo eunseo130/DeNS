@@ -1,8 +1,9 @@
 package com.ssafy.BackEnd.service;
 
 import com.ssafy.BackEnd.entity.Team;
+import com.ssafy.BackEnd.entity.TeamMember;
 
 public interface TeamMemberService{
 
-    Team addTeamMember(String email, String teamName);
+    TeamMember addTeamMember(String email, String teamName);
 }

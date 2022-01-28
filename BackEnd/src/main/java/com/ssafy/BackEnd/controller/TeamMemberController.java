@@ -1,6 +1,7 @@
 package com.ssafy.BackEnd.controller;
 
 import com.ssafy.BackEnd.entity.Team;
+import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.repository.TeamRespository;
 import com.ssafy.BackEnd.service.TeamMemberService;
 import com.ssafy.BackEnd.service.TeamService;
@@ -18,17 +19,17 @@ public class TeamMemberController {
     private final TeamMemberService teamMemberService;
 
     @PostMapping
-    public ResponseEntity<Team> createTeamMember(@RequestParam String email, @RequestParam String teamName) {
+    public ResponseEntity<TeamMember> createTeamMember(@RequestParam String email, @RequestParam String teamName) {
         System.out.println("cont "+email+" "+teamName);
-        Team team = teamMemberService.addTeamMember(email, teamName);
+        TeamMember teamMember = teamMemberService.addTeamMember(email, teamName);
 
-        return new ResponseEntity<Team>(team, HttpStatus.OK);
+        return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
     }
 
-    @PutMapping
-    public ResponseEntity<Team> addTeamMember(@RequestParam String email, @RequestParam String teamName) {
-        Team team = teamMemberService.addTeamMember(email, teamName);
-
-        return new ResponseEntity<Team>(team, HttpStatus.OK);
-    }
+//    @PutMapping
+//    public ResponseEntity<Team> addTeamMember(@RequestParam String email, @RequestParam String teamName) {
+//        Team team = teamMemberService.addTeamMember(email, teamName);
+//
+//        return new ResponseEntity<Team>(team, HttpStatus.OK);
+//    }
 }
