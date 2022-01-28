@@ -13,4 +13,6 @@ public class SaltUtil {
     public String genSalt() {
         return BCrypt.gensalt();
     }
+
+    public static boolean checkPassword(String hashed_password, String password) { return BCrypt.checkpw(password, hashed_password); }
 }

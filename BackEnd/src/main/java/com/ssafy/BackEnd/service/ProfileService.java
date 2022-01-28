@@ -1,15 +1,26 @@
 package com.ssafy.BackEnd.service;
 
+
 import com.ssafy.BackEnd.entity.Profile;
+import com.ssafy.BackEnd.entity.Request.RequestModifyProfile1;
+import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
 import com.ssafy.BackEnd.entity.User;
 import javassist.NotFoundException;
+import org.apache.coyote.Request;
 import org.springframework.web.client.HttpClientErrorException;
+
+import java.util.List;
+import java.util.Optional;
 
 public interface ProfileService {
 
-    Profile findProfile(User user) throws NotFoundException;
+    Optional<Profile> findProfile(Long user_id) throws NotFoundException;
 
-    void createProfile(Profile profile);
+    Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException;
 
-    Profile modifyProfile(Profile findProfile, Profile profile) throws NotFoundException;
+    List<Profile> showFindUserList(String keyword);
+
+    Optional<Profile> findById(Long profile_id) throws NotFoundException;
+
+    void deleteUser(String email);
 }

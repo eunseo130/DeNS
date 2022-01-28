@@ -9,10 +9,12 @@ public interface TeamService {
 
     Team findByTeam(Long team_id) throws NotFoundException;
 
-    void createTeam(Team team);
+    Team createTeam(Team team);
 
-    Team modifyTeam(String name, Team team) throws NotFoundException;
+    void modifyTeam(long team_id, Team team);
+
+    void deleteTeam(long team_id);
 
     //List<Team> showTeamList();
-    //List<Team> showFindTeamList(String keyword);
+    List<Team> showFindTeamList(String keyword);
 }
