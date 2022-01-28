@@ -1,8 +1,10 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.entity.UserIdentity;
 import javassist.NotFoundException;
+import org.springframework.http.ResponseEntity;
 
 public interface AuthService {
 
@@ -10,9 +12,13 @@ public interface AuthService {
 
     void signUp(User user);
 
+    void validateDuplicateUser(User user);
+
+    ResponseEntity<Profile> createProfile(User user);
+
     User signIn(String email, String password) throws Exception;
 
-    void verifyEmail(String key) throws NotFoundException;
+    ResponseEntity<User> verifyEmail(String key) throws NotFoundException;
 
     void sendVerificationMail(User user) throws NotFoundException;
 

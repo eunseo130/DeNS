@@ -29,4 +29,9 @@ public class UserService {
 //        if(user != null) return true;
 //        else return false;
     }
+
+//    public User loadUserByEmail(String email){
+//        User user = userRepository.findByEmail(email);
+//
+//    }
 }

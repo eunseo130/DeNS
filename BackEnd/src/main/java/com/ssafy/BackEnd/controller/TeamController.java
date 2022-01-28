@@ -1,7 +1,8 @@
 package com.ssafy.BackEnd.controller;
 
 import com.ssafy.BackEnd.dto.TeamDto;
-import com.ssafy.BackEnd.entity.Response;
+import com.ssafy.BackEnd.exception.CustomException;
+import com.ssafy.BackEnd.exception.ErrorCode;
 import com.ssafy.BackEnd.repository.TeamRespository;
 import com.ssafy.BackEnd.service.TeamService;
 import io.swagger.annotations.Api;
@@ -26,21 +27,29 @@ public class TeamController {
     @Autowired
     TeamRespository teamRespository;
 
+
+    //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @GetMapping
     @ApiOperation(value = "팀 목록 가져오기")
     public ResponseEntity<List<Team>> getAllTeams() {
         List<Team> teams = teamService.showTeamList();
+
         return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
     }
 
+    //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @PostMapping
     @ApiOperation(value = "팀 만들기")
     public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamDto) {
         Team team = teamDto.createTeam();
+        if(team == null) {
+            throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
+        }
         return new ResponseEntity<Team>(teamService.createTeam(team), HttpStatus.OK);
 
     }
 
+    //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @GetMapping("/{team_id}")
     @ApiOperation(value = "팀 조회")
     public ResponseEntity<Team> findTeam(@RequestParam Long team_id) throws NotFoundException {
@@ -48,7 +57,7 @@ public class TeamController {
         return new ResponseEntity<Team>(teamService.findByTeam(team_id), HttpStatus.OK);
     }
 
-
+    //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @PutMapping("/{team_id}")
     @ApiOperation(value = "팀 수정") //팀 수정이 무엇에 대한 수정인가(name과 content에 대한 수정??)
     public ResponseEntity<Team> modifyTeam(@RequestBody TeamDto teamDto) {
@@ -58,6 +67,7 @@ public class TeamController {
         return new ResponseEntity<Team>(team, HttpStatus.OK);
     }
 
+    //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @DeleteMapping("/{team_id}")
     @ApiOperation(value = "팀 삭제")
     public ResponseEntity<Void> deleteTeam(@RequestBody TeamDto teamDto){
@@ -69,7 +79,7 @@ public class TeamController {
 
     // ------ team manage
 
-
+    //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @PutMapping("/profile/{team_id}")
     @ApiOperation(value = "팀 프로필 수정")
     public ResponseEntity<Team> modifyTeamProfile(@RequestBody TeamDto teamDto) {
@@ -79,6 +89,7 @@ public class TeamController {
         return new ResponseEntity<Team>(team, HttpStatus.OK);
     }
 
+    //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @GetMapping("/search") //팀 키워드도 검색 가능하게 해야함 !!!
     public ResponseEntity<List<Team>> searchTeam(@RequestParam String keyword) {
         List<Team> search_teams = teamService.showFindTeamList(keyword);
