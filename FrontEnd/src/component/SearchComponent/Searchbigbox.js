@@ -10,7 +10,7 @@ export default function Searchbigbox(props) {
 }
 
 const Contain = styled.div`
-    background-color:black;
+    background-color:white;
     text-align: center;
     display:inline-block;
     width:800px;
