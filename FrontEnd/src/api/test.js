@@ -15,7 +15,7 @@ function login(param, success, fail) {
 }
 
 function dummytest(param, success, fail) {
-    console.log("check team" + param);
+    console.log("check keyword" + param);
     api.get(`/search/keyword/${param}`).then(success).catch(fail);
 }
 function dummytest2(param, success, fail) {

@@ -8,10 +8,6 @@
 # testing
 /coverage
 
-<<<<<<< HEAD
-=======
-# production
->>>>>>> 317813d1b312c9e23dc3463d57716cc69defbc7d
 
 # misc
 .launch.json
