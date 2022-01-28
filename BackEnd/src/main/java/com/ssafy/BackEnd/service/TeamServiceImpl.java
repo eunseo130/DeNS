@@ -6,29 +6,56 @@ import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
+
+import javax.transaction.Transactional;
+
+import com.ssafy.BackEnd.entity.Team;
+
+import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService{
 
-    private TeamRespository teamRespository;
+    private final TeamRespository teamRespository;
 
 
     @Override
     public Team findByTeam(Long team_id) throws NotFoundException {
         Team findTeam = teamRespository.findByTeam(team_id);
-        if(findTeam==null) throw new NotFoundException("팀을 찾을 수 없습니다");
+        if(findTeam == null) throw new NotFoundException("팀을 찾을 수 없습니다");
+
         return findTeam;
     }
 
     @Override
-    public void createTeam(Team team) {
-
+    public Team createTeam(Team team) {
+        teamRespository.save(team);
+        return team;
     }
 
     @Override
-    public Team modifyTeam(String name, Team team) throws NotFoundException {
-        return null;
+    public void modifyTeam(long team_id, Team team){
+        Team old_team = teamRespository.findByTeam(team_id);
+        old_team.setTitle(team.getTitle()); //팀 이름만 수정
+
+        teamRespository.save(team);
     }
+
+    @Override
+    public void deleteTeam(long team_id) {
+        teamRespository.deleteById(team_id);
+    }
+
+    @Override
+    public List<Team> showFindTeamList(String keyword) {
+            List<Team> teams = teamRespository.findAll();
+            System.out.println(teams.toString());
+            return teams;
+    }
+
+ 
+
 }
