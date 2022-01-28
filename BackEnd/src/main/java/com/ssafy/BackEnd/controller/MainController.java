@@ -37,10 +37,13 @@ public class MainController {
     private final JwtServiceImpl jwtService;
     
     private final AuthService authService;
-    
-    private final dummyService dummyService;
-    private final TeamService teamService;
-    private final ProfileService profileService;
+
+    @GetMapping("/test22")
+    @ApiOperation(value = "테스트페이지 ")
+    public void test22() {
+        System.out.println("###########################################테스트페이지 확인용");
+    }
+
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "사용자의 정보를 입력 받고 'success'면 회원가입 or 'fail이면 에러메세지", response = String.class)
     public ResponseEntity<Map<String, Object>> signUp(@RequestBody UserDto userDto) {

@@ -16,12 +16,24 @@ import org.springframework.web.bind.annotation.*;
 import com.ssafy.BackEnd.entity.Team;
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import com.ssafy.BackEnd.service.TeamService;
+import com.ssafy.BackEnd.repository.TeamRespository;
+import org.springframework.http.ResponseEntity;
+import java.util.List;
+import com.ssafy.BackEnd.entity.Team;
+import org.springframework.http.HttpStatus;
+
+
 @RestController
 @Api(tags = "팀 컨트롤러 API")
 @RequestMapping("/team")
 public class TeamController {
+    @Autowired
+    TeamService teamService;
 
     @Autowired
+<<<<<<< HEAD
     TeamService teamService;
 
     @Autowired
@@ -95,5 +107,13 @@ public class TeamController {
         List<Team> search_teams = teamService.showFindTeamList(keyword);
 
         return new ResponseEntity<List<Team>>(search_teams, HttpStatus.OK);
+=======
+    TeamRespository teamRespository;
+    @GetMapping
+    public ResponseEntity<List<Team>> getAllTeams() {
+        List<Team> teams = teamService.showTeamList();
+        System.out.print("hello");
+        return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
+>>>>>>> feature_hyeongjun
     }
 }
