@@ -44,7 +44,7 @@ public class AuthServiceImpl implements AuthService{
         Profile profile = new Profile();
         profile.setName(user.getName());
         profile.setEmail(user.getEmail());
-        profile.setJob(null);
+        profile.setPosition(null);
         profile.setStack(null);
         user.setProfile(profile);
         userRepository.save(user);

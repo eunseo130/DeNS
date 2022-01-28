@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Entity
+@Table(name = "teammember")
 @RequiredArgsConstructor
 @Getter @Setter
 public class TeamMember {

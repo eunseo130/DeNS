@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.controller;
 
+import com.ssafy.BackEnd.dto.TeamDto;
 import com.ssafy.BackEnd.entity.Response;
 import com.ssafy.BackEnd.repository.TeamRespository;
 import com.ssafy.BackEnd.service.TeamService;
@@ -12,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import com.ssafy.BackEnd.entity.Team;
-
 import java.util.List;
 
 @RestController
@@ -35,21 +35,24 @@ public class TeamController {
 
     @PostMapping
     @ApiOperation(value = "팀 만들기")
-    public ResponseEntity<Team> createTeam(@RequestBody Team team) {
+    public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamDto) {
+        Team team = teamDto.createTeam();
         return new ResponseEntity<Team>(teamService.createTeam(team), HttpStatus.OK);
 
     }
 
     @GetMapping("/{team_id}")
     @ApiOperation(value = "팀 조회")
-    public ResponseEntity<Team> findTeam(@RequestBody Team team) throws NotFoundException {
-        return new ResponseEntity<Team>(teamService.findByTeam(team.getTeam_id()), HttpStatus.OK);
+    public ResponseEntity<Team> findTeam(@RequestParam Long team_id) throws NotFoundException {
+        //Team team = teamDto.createTeam();
+        return new ResponseEntity<Team>(teamService.findByTeam(team_id), HttpStatus.OK);
     }
 
 
     @PutMapping("/{team_id}")
     @ApiOperation(value = "팀 수정") //팀 수정이 무엇에 대한 수정인가(name과 content에 대한 수정??)
-    public ResponseEntity<Team> modifyTeam(@RequestBody Team team) {
+    public ResponseEntity<Team> modifyTeam(@RequestBody TeamDto teamDto) {
+        Team team = teamDto.createTeam();
         teamService.modifyTeam(team.getTeam_id(), team);
 
         return new ResponseEntity<Team>(team, HttpStatus.OK);
@@ -57,22 +60,20 @@ public class TeamController {
 
     @DeleteMapping("/{team_id}")
     @ApiOperation(value = "팀 삭제")
-    public ResponseEntity<Void> deleteTeam(@RequestBody Team team){
+    public ResponseEntity<Void> deleteTeam(@RequestBody TeamDto teamDto){
+        Team team = teamDto.createTeam();
+
         teamService.deleteTeam(team.getTeam_id());
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
     // ------ team manage
 
-    @PostMapping("/profile")
-    @ApiOperation(value = "팀 프로필 만들기")
-    public void createTeamProfile(){
-
-    }
 
     @PutMapping("/profile/{team_id}")
     @ApiOperation(value = "팀 프로필 수정")
-    public ResponseEntity<Team> modifyTeamProfile(@RequestBody Team team) {
+    public ResponseEntity<Team> modifyTeamProfile(@RequestBody TeamDto teamDto) {
+        Team team = teamDto.createTeam();
         teamService.modifyTeamProfile(team.getTeam_id(), team);
 
         return new ResponseEntity<Team>(team, HttpStatus.OK);

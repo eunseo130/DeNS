@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -13,9 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
+@Table(name = "team")
 @RequiredArgsConstructor
 @Getter @Setter
-public class Team {
+public class Team extends CreateTimeEntity {
 
     @Id
     @GeneratedValue
@@ -35,12 +37,18 @@ public class Team {
     List<TeamKeyword> team_keyword = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
-    List<TeamMember> team_member = new ArrayList<>();
+    List<TeamMember> team_member = new ArrayList<>(); //타입을 TeamMember에서 User로 바꿈
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
     List<TeamFeed> team_feed = new ArrayList<>();
 
-    @CreatedDate
-    LocalDateTime create_time;
+//    @CreatedDate
+//    LocalDateTime create_time;
+
+    @Builder
+    public Team(String title, String content) {
+        this.title = title;
+        this.content = content;
+    }
 
 }

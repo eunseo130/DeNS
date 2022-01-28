@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.controller;
 
+import com.ssafy.BackEnd.dto.UserDto;
 import com.ssafy.BackEnd.entity.Request.RequestChangePassword1;
 import com.ssafy.BackEnd.entity.Request.RequestChangePassword2;
 import com.ssafy.BackEnd.entity.Request.RequestVerifyEmail;
@@ -29,12 +30,13 @@ public class MainController {
 
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "사용자의 정보를 입력 받고 'success'면 회원가입 or 'fail이면 에러메세지", response = String.class)
-    public ResponseEntity<Map<String, Object>> signUp(@RequestBody User user) {
+    public ResponseEntity<Map<String, Object>> signUp(@RequestBody UserDto userDto) {
         Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
-        System.out.println("up : "+user.getEmail());
+        System.out.println("up : "+userDto.getEmail());
         try {
+            User user = userDto.createUser();
             authService.signUp(user);
             response.setResponse("success");
             response.setMessage("회원가입을 성공적으로 완료했습니다.");
@@ -123,7 +125,7 @@ public class MainController {
     }
 
     @PostMapping("/signin") // 스켈레톤이랑 연결할땐 signin 지우고 '/' 상태에서
-    @ApiOperation(value = "회원가입", response = Map.class)
+    @ApiOperation(value = "로그인 환경", response = Map.class)
     public ResponseEntity<Map<String, Object>> signin(@RequestBody User users,
                                                       HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
