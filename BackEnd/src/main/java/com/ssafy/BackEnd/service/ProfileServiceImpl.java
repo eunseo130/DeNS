@@ -72,4 +72,10 @@ public class ProfileServiceImpl implements ProfileService{
         return profiles;
     }
 
+    @Override
+    public void deleteUser(String email) {
+        User user = userRepository.findByEmail(email);
+        userRepository.delete(user);
+    }
+
 }

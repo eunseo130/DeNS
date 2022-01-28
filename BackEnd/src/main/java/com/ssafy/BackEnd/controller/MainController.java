@@ -56,7 +56,6 @@ public class MainController {
             response.setData(null);
             status = HttpStatus.ACCEPTED;
             resultMap.put("message", "success");
-
         }
         catch(Exception e) {
             response.setResponse("failed");

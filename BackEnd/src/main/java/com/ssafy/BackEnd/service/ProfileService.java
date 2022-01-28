@@ -20,4 +20,7 @@ public interface ProfileService {
 
     List<Profile> showFindUserList(String keyword);
 
+    Optional<Profile> findById(Long profile_id) throws NotFoundException;
+
+    void deleteUser(String email);
 }
