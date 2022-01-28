@@ -38,6 +38,11 @@ public class MainController {
     
     private final AuthService authService;
 
+    private final dummyService dummyService;
+    private final TeamService teamService;
+    private final ProfileService profileService;
+
+
     @GetMapping("/test22")
     @ApiOperation(value = "테스트페이지 ")
     public void test22() {
@@ -66,8 +71,10 @@ public class MainController {
             response.setData(e.toString());
             status = HttpStatus.ACCEPTED;
         }
+        //return response;
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
+
 
     @GetMapping("/password/{key}")
     @ApiOperation(value = "비밀번호 변경 인증 절차", response = String.class)
@@ -91,7 +98,7 @@ public class MainController {
         return response;
     }
 
-    @GetMapping("/search/team")
+    @GetMapping("main/search/team")
     public ResponseEntity<List<Team>> findSearchedTeams(@RequestParam String keyword) {
         HttpStatus status;
         List<Team> teamList = teamService.showFindTeamList(keyword);
@@ -106,7 +113,7 @@ public class MainController {
 
         return new ResponseEntity<>(teamList, status);
     }
-    @GetMapping("/search/user")
+    @GetMapping("main/search/user")
     public ResponseEntity<List<Profile>> searchUser(@RequestParam String keyword) {
         HttpStatus status;
         List<Profile> teamList = profileService.showFindUserList(keyword);

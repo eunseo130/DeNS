@@ -45,6 +45,7 @@ public class ProfileServiceImpl implements ProfileService{
         return findProfile;
     }
 
+    @Override
     public List<Profile> showFindTeamList(String keyword){
         List<Profile> profiles = profileRepository.findByNameContaining(keyword);
         if(profiles == null) System.out.println("에러염");

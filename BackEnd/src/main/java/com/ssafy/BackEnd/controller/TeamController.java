@@ -32,9 +32,6 @@ public class TeamController {
     @Autowired
     TeamService teamService;
 
-    @Autowired
-<<<<<<< HEAD
-    TeamService teamService;
 
     @Autowired
     TeamRespository teamRespository;
@@ -54,7 +51,7 @@ public class TeamController {
     @ApiOperation(value = "팀 만들기")
     public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamDto) {
         Team team = teamDto.createTeam();
-        if(team == null) {
+        if (team == null) {
             throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
         }
         return new ResponseEntity<Team>(teamService.createTeam(team), HttpStatus.OK);
@@ -82,7 +79,7 @@ public class TeamController {
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @DeleteMapping("/{team_id}")
     @ApiOperation(value = "팀 삭제")
-    public ResponseEntity<Void> deleteTeam(@RequestBody TeamDto teamDto){
+    public ResponseEntity<Void> deleteTeam(@RequestBody TeamDto teamDto) {
         Team team = teamDto.createTeam();
 
         teamService.deleteTeam(team.getTeam_id());
@@ -107,13 +104,6 @@ public class TeamController {
         List<Team> search_teams = teamService.showFindTeamList(keyword);
 
         return new ResponseEntity<List<Team>>(search_teams, HttpStatus.OK);
-=======
-    TeamRespository teamRespository;
-    @GetMapping
-    public ResponseEntity<List<Team>> getAllTeams() {
-        List<Team> teams = teamService.showTeamList();
-        System.out.print("hello");
-        return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
->>>>>>> feature_hyeongjun
+
     }
 }

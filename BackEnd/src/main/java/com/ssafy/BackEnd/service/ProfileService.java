@@ -23,4 +23,6 @@ public interface ProfileService {
     Optional<Profile> findById(Long profile_id) throws NotFoundException;
 
     void deleteUser(String email);
+
+    List<Profile> showFindTeamList(String keyword);
 }

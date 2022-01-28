@@ -53,11 +53,29 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public List<Team> showFindTeamList(String keyword) {
-            List<Team> teams = teamRespository.findAll();
-            System.out.println(teams.toString());
-            return teams;
+        List<Team> teams = teamRespository.findAll();
+        System.out.println(teams.toString());
+        return teams;
     }
 
- 
+    @Override
+    public List<Team> showTeamList() {
+        List<Team> teams = new ArrayList<>();
+        teamRespository.findAll().forEach(team -> teams.add(team));
+
+        return teams;
+    }
+
+    @Override
+    public void modifyTeamProfile(long team_id, Team team) {
+        Team old_team = teamRespository.findByTeam(team_id);
+        old_team.setContent(team.getContent()); //content(팀 프로필)만 수정
+
+        teamRespository.save(team);
+    }
+
+
+
 
 }
+
