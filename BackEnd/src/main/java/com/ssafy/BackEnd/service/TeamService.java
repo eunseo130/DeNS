@@ -13,6 +13,6 @@ public interface TeamService {
 
     Team modifyTeam(String name, Team team) throws NotFoundException;
 
-    //List<Team> showTeamList();
-    //List<Team> showFindTeamList(String keyword);
+    List<Team> showTeamList();
+    // List<Team> showFindTeamList(String keyword);
 }

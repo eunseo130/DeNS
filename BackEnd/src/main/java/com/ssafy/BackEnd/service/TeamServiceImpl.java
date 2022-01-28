@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
+import java.util.List;
+import java.util.ArrayList;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +32,13 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public Team modifyTeam(String name, Team team) throws NotFoundException {
         return null;
+    }
+
+    @Override
+    public List<Team> showTeamList() {
+        List<Team> teams = new ArrayList<>();
+        teamRespository.findAll().forEach(team -> teams.add(team));
+
+        return teams;
     }
 }
