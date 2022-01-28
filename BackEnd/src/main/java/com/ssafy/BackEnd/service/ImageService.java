@@ -1,36 +1,69 @@
 package com.ssafy.BackEnd.service;
 
-import com.ssafy.BackEnd.dto.ImageDto;
-import com.ssafy.BackEnd.entity.Image;
-import com.ssafy.BackEnd.repository.ImageRepository;
+//import com.ssafy.BackEnd.dto.ImageDto;
+//import com.ssafy.BackEnd.entity.Image;
+import com.ssafy.BackEnd.entity.Profile;
+//import com.ssafy.BackEnd.repository.ImageRepository;
+import com.ssafy.BackEnd.repository.ProfileRepository;
+import com.ssafy.BackEnd.repository.UserRepository;
+import io.lettuce.core.ScriptOutputType;
+import javassist.NotFoundException;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Optional;
 
 @Service
 public class ImageService {
 
-    private ImageRepository imageRepository;
+    //@Autowired
+    //private final ImageRepository imageRepository;
 
-    public ImageService(ImageRepository imageRepository) {
-        this.imageRepository = imageRepository;
+//    @Autowired
+//    private final UserRepository userRepository;
+
+    @Autowired
+    private final ProfileRepository profileRepository;
+
+    @Value("${profileImg.path}")
+    private String uploadFolder;
+
+    public ImageService(ProfileRepository profileRepository) {
+//        this.imageRepository = imageRepository;
+//        this.userRepository = userRepository;
+        this.profileRepository = profileRepository;
     }
 
+    // 주소 같이 넘겨주기
     @Transactional
-    public Long saveImage(ImageDto imageDto) {
-        return imageRepository.save(imageDto.toEntity()).getImage_id();
-    }
+    public String update(Long profile_id, MultipartFile multipartFile) throws NotFoundException{
+        Optional<Profile> findProfile = profileRepository.findById(profile_id);
+        if (findProfile == null) throw new NotFoundException("프로필을 조회하지 못했습니다.");
+        Profile profile = findProfile.get();
+        String imageFileName = profile_id + "_" + multipartFile.getOriginalFilename();
+        Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
-    @Transactional
-    public ImageDto getImage(Long image_id) {
-        Image image = imageRepository.findById(image_id).get();
-
-        ImageDto imageDto = ImageDto.builder()
-                .image_id(image_id)
-                .orig_image_name(image.getOrig_image_name())
-                .image_name(image.getImage_name())
-                .savefolder(image.getSavefolder())
-                .build();
-        return imageDto;
+        if(multipartFile.getSize() != 0) {
+            try {
+                if (profile.getImage() != null) {
+                    File file = new File(uploadFolder + profile.getImage());
+                    file.delete();
+                }
+                Files.write(imageFilePath, multipartFile.getBytes());
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            profile.setImage(imageFileName);
+        }
+        return imageFilePath.toString();
     }
 }

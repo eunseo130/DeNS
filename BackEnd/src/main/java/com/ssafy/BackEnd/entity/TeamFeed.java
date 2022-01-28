@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Entity
-@RequiredArgsConstructor
 @Table(name = "teamfeed")
+@RequiredArgsConstructor
 @Getter @Setter
 
 public class TeamFeed {

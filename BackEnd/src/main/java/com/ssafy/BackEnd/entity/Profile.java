@@ -12,7 +12,7 @@ import java.util.List;
 @Table(name = "profile")
 @RequiredArgsConstructor
 @Getter @Setter
-public class Profile {
+public class Profile extends BaseTimeEntity{
 
     @Id
     @GeneratedValue
@@ -21,15 +21,17 @@ public class Profile {
 
     private String name;
 
-    private String job;
+    private String position;
 
     private String stack;
 
     private String email;
 
-    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "image_id")
-    Image image;
+    private String image;
+
+//    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "image_id")
+//    Image image;
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
     List<UserFeed> user_feed = new ArrayList<>();

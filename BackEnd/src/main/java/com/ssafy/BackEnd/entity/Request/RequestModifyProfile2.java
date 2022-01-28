@@ -5,8 +5,6 @@ import lombok.Setter;
 
 @Getter @Setter
 public class RequestModifyProfile2 {
-    private String email;
-    private String name;
-    private String job;
+    private String position;
     private String stack;
 }

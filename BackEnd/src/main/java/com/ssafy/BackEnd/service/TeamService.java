@@ -16,5 +16,5 @@ public interface TeamService {
     void deleteTeam(long team_id);
 
     //List<Team> showTeamList();
-    //List<Team> showFindTeamList(String keyword);
+    List<Team> showFindTeamList(String keyword);
 }

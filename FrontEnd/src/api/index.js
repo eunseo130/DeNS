@@ -8,7 +8,7 @@ function apiInstance() {
         headers: {
             "Content-type": "application/json",
             "Access-Control-Allow-Origin":"*",
-        },
+        }
     });
     return instance;
 }
