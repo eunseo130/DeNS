@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import { apiInstance } from './index.js';
 
 const api = apiInstance();
@@ -28,3 +29,14 @@ function dummytest3(param, success, fail) {
 
 
 export { test22, signup,login,dummytest,dummytest2,dummytest3 };
+=======
+import { apiInstance } from "./index.js";
+
+const api = apiInstance();
+
+function team(param, success, fail) {
+    api.get(`/team`,param).then(success).catch(fail);
+}
+
+export { team } ;
+>>>>>>> 6b5ef2687990ae68e923ea43d76c20d6878c9b95
