@@ -25,4 +25,5 @@ public interface TeamService {
     void modifyTeamProfile(long team_id, Team team);
 
     TeamMember setTeamLeader(Team team, String email);
+
 }

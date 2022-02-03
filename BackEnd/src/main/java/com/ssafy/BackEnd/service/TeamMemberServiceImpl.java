@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -99,6 +100,27 @@ public class TeamMemberServiceImpl implements TeamMemberService {
         teamMemberRepository.save(teamMember);
 
         return teamMember;
+    }
+
+    @Override
+    public List<User> showTeamMemberList(Long team_id) {
+        List<TeamMember> teammembers = new ArrayList<>();
+        teammembers = teamMemberRepository.showTeamMemberList(team_id);
+
+        List<User> teammembers_infos = new ArrayList<>();
+
+        for (TeamMember teammember_info: teammembers) {
+            System.out.println(teammember_info.getUser().getName());
+
+            teammembers_infos.add(teammember_info.getUser());
+
+        }
+
+        for (User info : teammembers_infos) {
+            System.out.println("이거 제발 나와라" + info.getName());
+        }
+
+        return teammembers_infos;
     }
 }
 
