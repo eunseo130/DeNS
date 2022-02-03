@@ -37,10 +37,18 @@ public class MainController {
     private final JwtServiceImpl jwtService;
     
     private final AuthService authService;
-    
+
     private final dummyService dummyService;
     private final TeamService teamService;
     private final ProfileService profileService;
+
+
+    @GetMapping("/test22")
+    @ApiOperation(value = "테스트페이지 ")
+    public void test22() {
+        System.out.println("###########################################테스트페이지 확인용");
+    }
+
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "사용자의 정보를 입력 받고 'success'면 회원가입 or 'fail이면 에러메세지", response = String.class)
     public ResponseEntity<Map<String, Object>> signUp(@RequestBody UserDto userDto) {
@@ -50,7 +58,13 @@ public class MainController {
         System.out.println("up : "+userDto.getEmail());
         try {
             User user = userDto.createUser();
+            if (authService.validateDuplicateUser(user)==false) {
+                status = HttpStatus.IM_USED;
+                resultMap.put("message", "이미 존재하는 회원입니다.");
+                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+            }
             authService.signUp(user);
+            System.out.println(user.getPassword());
             response.setResponse("success");
             response.setMessage("회원가입을 성공적으로 완료했습니다.");
             response.setData(null);
@@ -63,32 +77,36 @@ public class MainController {
             response.setData(e.toString());
             status = HttpStatus.ACCEPTED;
         }
+        //return response;
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
+
     @GetMapping("/password/{key}")
     @ApiOperation(value = "비밀번호 변경 인증 절차", response = String.class)
-    public Response isPasswordUUIDValidate(@PathVariable String key) {
+    public ResponseEntity<Response> isPasswordUUIDValidate(@PathVariable String key) {
         Response response = new Response();
         try {
             if (authService.isPasswordUuidValidate(key)) {
                 response.setResponse("success");
                 response.setMessage("정상적인 접근입니다.");
                 response.setData(null);
+                return new ResponseEntity<Response>(response, HttpStatus.OK);
             } else {
                 response.setResponse("error");
                 response.setMessage("유효하지 않은 key값입니다.");
                 response.setData(null);
+                return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
             }
         } catch (Exception e) {
             response.setResponse("error");
             response.setMessage("유효하지 않은 key값입니다.");
             response.setData(null);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
         }
-        return response;
     }
 
-    @GetMapping("/search/team")
+    @GetMapping("main/search/team")
     public ResponseEntity<List<Team>> findSearchedTeams(@RequestParam String keyword) {
         HttpStatus status;
         List<Team> teamList = teamService.showFindTeamList(keyword);
@@ -103,7 +121,7 @@ public class MainController {
 
         return new ResponseEntity<>(teamList, status);
     }
-    @GetMapping("/search/user")
+    @GetMapping("main/search/user")
     public ResponseEntity<List<Profile>> searchUser(@RequestParam String keyword) {
         HttpStatus status;
         List<Profile> teamList = profileService.showFindUserList(keyword);
@@ -145,43 +163,46 @@ public class MainController {
 
     @PostMapping("/password")
     @ApiOperation(value = "사용자 비밀번호 변경요청", response = String.class)
-    public Response requestChangePassword(RequestChangePassword1 requestChangePassword1) {
+    public ResponseEntity<Response> requestChangePassword(@RequestParam String email) {
         Response response = new Response();
         try {
-            User user = authService.findByEmail(requestChangePassword1.getEmail());
-            if (!user.getEmail().equals(requestChangePassword1.getEmail())) throw new NoSuchFieldException("");
+            User user = authService.findByEmail(email);
+            if (!user.getEmail().equals(email)) throw new NoSuchFieldException("");
             authService.requestChangePassword(user);
             response.setResponse("success");
             response.setMessage("성공적으로 사용자의 비밀번호를 변경요청을 수행했습니다.");
             response.setData(null);
+            return new ResponseEntity<Response>(response, HttpStatus.OK);
         } catch (NoSuchFieldException e) {
             response.setResponse("error");
             response.setMessage("사용자의 정보를 조회할 수 없습니다.");
             response.setData(null);
+            return new ResponseEntity<Response>(response, HttpStatus.NOT_FOUND);
         } catch (Exception e) {
             response.setResponse("error");
             response.setMessage("비밀번호 변경 요청을 할 수 없습니다.");
             response.setData(null);
+            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
         }
-        return response;
     }
 
     @PutMapping("/password")
     @ApiOperation(value = "비밀번호 변경", response = String.class)
-    public Response changePassword(RequestChangePassword2 requestChangePassword2) {
+    public ResponseEntity<User> changePassword(@RequestBody RequestChangePassword2 requestChangePassword2) {
         Response response = new Response();
         try {
             User user = authService.findByEmail(requestChangePassword2.getEmail());
-            authService.changePassword(user, requestChangePassword2.getPassword());
+            User savedUser = authService.changePassword(user, requestChangePassword2.getPassword());
             response.setResponse("success");
             response.setMessage("사용자의 비밀번호를 성공적으로 변경했습니다.");
             response.setData(null);
+            return new ResponseEntity<User>(savedUser, HttpStatus.OK);
         } catch (Exception e) {
             response.setResponse("error");
             response.setMessage("사용자의 비밀번호를 변경할 수 없습니다.");
             response.setData(null);
+            return new ResponseEntity<User>((User) null, HttpStatus.NOT_MODIFIED);
         }
-        return response;
     }
 
 

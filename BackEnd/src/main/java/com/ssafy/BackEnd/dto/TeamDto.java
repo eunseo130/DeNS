@@ -15,6 +15,7 @@ public class TeamDto {
 
     private String content;
 
+
     @Builder
     public TeamDto(String title, String content) {
         this.title = title;

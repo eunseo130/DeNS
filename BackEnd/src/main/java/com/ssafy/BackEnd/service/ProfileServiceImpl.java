@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
+import javax.swing.text.html.Option;
 import java.util.List;
 import java.util.Optional;
 
@@ -45,6 +46,14 @@ public class ProfileServiceImpl implements ProfileService{
         return findProfile;
     }
 
+    @Override
+    public User findUserById(Long profile_id) {
+        Profile profile = profileRepository.findById(profile_id).get();
+        User user = userRepository.findByEmail(profile.getEmail());
+        return user;
+    }
+
+    @Override
     public List<Profile> showFindTeamList(String keyword){
         List<Profile> profiles = profileRepository.findByNameContaining(keyword);
         if(profiles == null) System.out.println("에러염");
@@ -73,9 +82,11 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
-    public void deleteUser(String email) {
-        User user = userRepository.findByEmail(email);
+    public void deleteUser(Long profile_id) {
+        Profile findProfile = profileRepository.findById(profile_id).get();
+        User user = userRepository.findByEmail(findProfile.getEmail());
         userRepository.delete(user);
+        profileRepository.delete(findProfile);
     }
 
 }

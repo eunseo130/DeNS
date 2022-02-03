@@ -52,11 +52,11 @@ export default function Search() {
 }
 
 const Contain = styled.div`
-    background-color:black;
+    background-color:white;
     text-align: center;
     flexDirection:row;
     display:inline-block;
     width:800px;
-    height:700px;
+    height:700px
     margin-top:50px;
 `
