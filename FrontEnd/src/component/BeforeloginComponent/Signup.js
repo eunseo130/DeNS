@@ -3,12 +3,12 @@ import { profile, signup, test22,insertTeam, searchTeam ,searchUser, searchTeamk
 // import TeamList from './TeamList';
 // import UserList from './UserList';
 
-export default function Signup() { 
+export default function Signup() {
     const [input, setInput] = useState({
         email: '',
         name: '',
         password: '',
-    });    
+    });
     useEffect(() => { console.log(input) }, [input]);
 
     const changeCheck = (e) => {
@@ -16,16 +16,16 @@ export default function Signup() {
         setInput({
             ...input,
             [name]: value,
-        }); 
+        });
     }
     const join = () => {
         signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
     }
-    
+
     const profilesearch = () => {
         profile("1", (response) => { console.log(response) }, (error) => { console.log(error) });
     }
-    
+
     //유저프로필
 
     const check = () => {
@@ -56,7 +56,7 @@ export default function Signup() {
             console.log(response.data);
         }, (error) => { console.log(error) });
     }
-    
+
     const searchUserKeywordf = (e) => {
         if (!e.target.value) {
             console.log("check");
@@ -67,7 +67,7 @@ export default function Signup() {
             console.log(response.data);
         }, (error) => { console.log(error) });
     }
-    
+
 
     return (
         <>
