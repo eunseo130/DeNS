@@ -10,7 +10,7 @@ export default function Search() {
     const [keyword, setKeyword] = useState("");
     const [user, setUser] = useState("");
     const [team, setTeam] = useState("");
-    //악시오스를 실행함.
+    //악시오스를 실행함.z
     // const checkdummy = dummytest(keyword, (response) => { console.log(response) }, () => { console.log("check") });
 
     useEffect(() => {
@@ -26,17 +26,12 @@ export default function Search() {
         }
         fetchData();
      }, [user]);
-    
     useEffect(() => {
         const fetchData = async () => {
             await dummytest3(team, (response) => { console.log(response.data) }, () => { console.log("checkError Team") })
         }
         fetchData();
      }, [team]);
-    
-    // useEffect(dummytest2(user, (response) => { console.log(response.data) }, () => { console.log("checkError User") }), [user]);
-    
-    // useEffect(dummytest3(team, (response) => { console.log(response.data) }, () => { console.log("checkError Team") }), [team]);
     return (
         <>
             <input type="text" onKeyUp={(e) => { setKeyword(e.target.value) }}></input><br></br>
