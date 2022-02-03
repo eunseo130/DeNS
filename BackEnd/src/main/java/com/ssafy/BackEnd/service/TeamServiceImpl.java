@@ -1,21 +1,17 @@
 package com.ssafy.BackEnd.service;
 
-import com.ssafy.BackEnd.entity.Team;
+import com.ssafy.BackEnd.entity.*;
+import com.ssafy.BackEnd.repository.TeamMemberRepository;
 import com.ssafy.BackEnd.repository.TeamRespository;
+import com.ssafy.BackEnd.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
-import java.util.List;
 import java.util.ArrayList;
 
-import javax.transaction.Transactional;
-
 import com.ssafy.BackEnd.entity.Team;
-
-import javax.transaction.Transactional;
 
 @Service
 @RequiredArgsConstructor
@@ -23,6 +19,9 @@ public class TeamServiceImpl implements TeamService{
 
     private final TeamRespository teamRespository;
 
+    private final TeamMemberRepository teamMemberRepository;
+
+    private final UserRepository userRepository;
 
     @Override
     public Team findByTeam(Long team_id) throws NotFoundException {
@@ -74,7 +73,17 @@ public class TeamServiceImpl implements TeamService{
         teamRespository.save(team);
     }
 
+    @Override
+    public TeamMember setTeamLeader(Team team, String email) {
+        TeamMember teamMember = new TeamMember();
+        teamMember.setTeam(team);
+        teamMember.setUser(userRepository.findByEmail(email));
+        teamMember.setTeam_identity(TeamMemberIdentity.LEADER);
 
+        teamMemberRepository.save(teamMember);
+
+        return teamMember;
+    }
 
 
 }

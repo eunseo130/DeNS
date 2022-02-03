@@ -1,9 +1,13 @@
 package com.ssafy.BackEnd.controller;
 
 import com.ssafy.BackEnd.dto.TeamDto;
+import com.ssafy.BackEnd.entity.*;
 import com.ssafy.BackEnd.exception.CustomException;
 import com.ssafy.BackEnd.exception.ErrorCode;
 import com.ssafy.BackEnd.repository.TeamRespository;
+import com.ssafy.BackEnd.repository.UserRepository;
+import com.ssafy.BackEnd.service.ProfileService;
+import com.ssafy.BackEnd.service.TeamMemberService;
 import com.ssafy.BackEnd.service.TeamService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,7 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import com.ssafy.BackEnd.entity.Team;
+
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,10 +36,14 @@ public class TeamController {
     @Autowired
     TeamService teamService;
 
-
     @Autowired
     TeamRespository teamRespository;
 
+    @Autowired
+    ProfileService profileService;
+
+    @Autowired
+    TeamMemberService teamMemberService;
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @GetMapping
@@ -47,14 +55,18 @@ public class TeamController {
     }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
-    @PostMapping
+    @PostMapping(value="/create/{profileId}")
     @ApiOperation(value = "팀 만들기")
-    public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamDto) {
+    public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamDto, @PathVariable Long profileId) throws NotFoundException {
         Team team = teamDto.createTeam();
         if (team == null) {
+            System.out.println("error");
             throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
         }
-        return new ResponseEntity<Team>(teamService.createTeam(team), HttpStatus.OK);
+        Team newTeam = teamService.createTeam(team);
+        Profile findProfile = profileService.findById(profileId).get();
+        TeamMember teamMember = teamMemberService.addTeamLeader(findProfile.getEmail(), newTeam);
+        return new ResponseEntity<Team>(newTeam, HttpStatus.OK);
 
     }
 
@@ -79,10 +91,9 @@ public class TeamController {
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @DeleteMapping("/{team_id}")
     @ApiOperation(value = "팀 삭제")
-    public ResponseEntity<Void> deleteTeam(@RequestBody TeamDto teamDto) {
-        Team team = teamDto.createTeam();
+    public ResponseEntity<Void> deleteTeam(@PathVariable Long team_id) {
 
-        teamService.deleteTeam(team.getTeam_id());
+        teamService.deleteTeam(team_id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 

@@ -2,28 +2,20 @@ package com.ssafy.BackEnd.controller;
 
 ////
 import com.ssafy.BackEnd.entity.Profile;
-import com.ssafy.BackEnd.entity.Request.RequestModifyProfile1;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
 import com.ssafy.BackEnd.entity.Response;
-import com.ssafy.BackEnd.entity.User;
-import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.ImageService;
 import com.ssafy.BackEnd.service.ProfileService;
-import com.ssafy.BackEnd.util.MD5Generator;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
-import io.swagger.models.Model;
 import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.util.List;
 import java.util.Optional;
 
 
@@ -93,10 +85,11 @@ public class ProfileController {
         return new ResponseEntity<String>(imagePath, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete")
-    public void deleteUser(String email) {
+    @DeleteMapping("/delete/{profile_id}")
+    public void deleteUser(@PathVariable Long profile_id) throws NotFoundException {
 
-        profileService.deleteUser(email);
+        Optional<Profile> findProfile = profileService.findById(profile_id);
+        profileService.deleteUser(profile_id);
     }
 
 }
