@@ -6,6 +6,10 @@ function test22(param, success, fail) {
     api.get(`/test22`,param).then(success).catch(fail);
 }
 
+function team(success, fail) {
+    api.get(`/team`).then(success).catch(fail);
+}
+
 function signup(param, success, fail) {
     api.post(`/signup`,param).then(success).catch(fail);
 }
@@ -48,4 +52,5 @@ export {
   dummytest3,
   profileTest,
   profileUpdate,
+  team,
 }

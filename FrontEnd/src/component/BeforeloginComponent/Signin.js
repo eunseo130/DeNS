@@ -7,10 +7,10 @@ function Login() {
     const [password, setPassword] = useState('');
     const onChangeId = (e) => {
       setName(e.target.value);
-    }
+    };
     const onChangePw = (e) => {
       setPassword(e.target.value)
-    }
+    };
     const LoginConsole = () => {
       console.log([name, password])
     };

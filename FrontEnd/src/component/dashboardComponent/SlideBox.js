@@ -1,16 +1,16 @@
 import React from "react";
 import styled from "styled-components";
 
-export default function SlideBox() {
+export default function SlideBox(props) {
     return (
         <Box>
             <Rect>
-                <TopText>프로젝트 개요, 설명</TopText>
+                <TopText>{props.content}</TopText>
             </Rect>
             <Rect>
                 <BotBox>
-                    <BotText>ZOI</BotText>
-                    <BotText>#프론트엔드 #백엔드 #자바스크립트</BotText>
+                    <BotText>{props.title}</BotText>
+                    <BotText></BotText>
                 </BotBox>
             </Rect>
         </Box>
