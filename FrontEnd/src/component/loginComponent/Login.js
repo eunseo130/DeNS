@@ -5,7 +5,29 @@ import Btn from "../commonComponent/Btn";
 import InputBox from "../commonComponent/InputBox";
 
 function Login() {
-  
+    const [name, setName] = useState('');
+    const [password, setPassword] = useState('');
+    const onChangeId = (e) => {
+      setName(e.target.value);
+    }
+    const onChangePw = (e) => {
+      setPassword(e.target.value)
+    }
+    
+    const LoginConsole = () => {
+      console.log([name, password])
+    };
+    
+    useEffect(() => {
+      team("가세요",
+          (response) => {
+          console.log(response);
+      },  
+      (error) => {
+      console.log("오류가 됨.", (error));
+  });
+  }, []);;
+
     return (
       <LoginBox>
         <H3>로그인</H3>
