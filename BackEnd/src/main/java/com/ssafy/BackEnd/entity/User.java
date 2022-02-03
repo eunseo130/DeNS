@@ -38,9 +38,9 @@ public class User extends BaseTimeEntity {
     @Enumerated(EnumType.STRING)
     private UserIdentity identity = UserIdentity.UNAUTH;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    @JoinColumn(name = "salt_id")
-    private Salt salt;
+//    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "salt_id")
+//    private Salt salt;
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
