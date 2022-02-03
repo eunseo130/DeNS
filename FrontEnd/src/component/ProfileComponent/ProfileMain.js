@@ -1,14 +1,14 @@
-import React, { useState } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
-import ProfileInfo from './ProfileInfo'
-import ProfileKeyword from './ProfileKeyword.js'
+import React, { useState, useEffect } from 'react'
+import { Outlet } from 'react-router-dom'
+// import ProfileInfo from './ProfileInfo'
+// import ProfileKeyword from './ProfileKeyword.js'
 import { TagCloud } from 'react-tagcloud'
 import { profileTest, profileUpdate } from '../../api/test'
 
 export default function ProfileMain() {
-  let [inputs, setInputs] = useState({
+  const [inputs, setInputs] = useState({
     image: '',
-    name: '',
+    namecosn: '',
     position: '',
     stack: '',
     email: '',
@@ -16,15 +16,6 @@ export default function ProfileMain() {
     edit: false,
   })
   const { image, name, position, stack, email, edit } = inputs
-  // const [keyword, setKeyword] = useState(
-  //   { value: 'JavaScript', count: 10000 },
-  //   { value: 'React', count: 30 },
-  //   { value: 'Nodejs', count: 28 },
-  //   { value: 'Express.js', count: 25 },
-  //   { value: 'HTML5', count: 33 },
-  //   { value: 'MongoDB', count: 18 },
-  //   { value: 'CSS3', count: 20 }
-  // )
   const keyword = [
     { value: 'JavaScript', count: 10000 },
     { value: 'React', count: 30 },
@@ -34,32 +25,40 @@ export default function ProfileMain() {
     { value: 'MongoDB', count: 18 },
     { value: 'CSS3', count: 20 },
   ]
-  const userId = email
-  profileTest(
-    userId,
-    (res) => {
-      setInputs({
-        ...inputs,
-        image: res.data.image,
-        name: res.data.name,
-        position: res.data.position,
-        stack: res.data.stack,
-        email: res.data.email,
-      })
-    },
-    (error) => console.log(error)
+  const id = 1
+  useEffect(
+    () =>
+      profileTest(
+        id,
+        (res) => {
+          setInputs({
+            ...inputs,
+            image: res.data.image,
+            name: res.data.name,
+            position: res.data.position,
+            stack: res.data.stack,
+            email: res.data.email,
+          })
+        },
+        (error) => console.log(error)
+      ),
+    []
   )
-  profileUpdate(
-    [email, { params: { position: position, stack: stack } }],
-    (res) => {
-      setInputs({
-        ...inputs,
-        position: res.data.position,
-        stack: res.data.stack,
-        edit: !edit,
-      })
-    },
-    (error) => console.log(error)
+  useEffect(
+    () =>
+      profileUpdate(
+        [id, { params: { position: position, stack: stack } }],
+        (res) => {
+          setInputs({
+            ...inputs,
+            position: res.data.position,
+            stack: res.data.stack,
+            edit: !edit,
+          })
+        },
+        (error) => console.log(error)
+      ),
+    []
   )
   function onEdit() {
     setInputs({
@@ -74,13 +73,7 @@ export default function ProfileMain() {
       [name]: value,
     })
   }
-  // function plusKeyword(e) {
-  //   const { value, name } = e.target
-  //   setKeyword({
-  //     ...keyword,
-  //     [name]:value
-  //   })
-  // }
+
   return (
     <div>
       <h3>프로필 메인페이지입니다</h3>
@@ -91,7 +84,11 @@ export default function ProfileMain() {
         <p>
           직무 : &nbsp;
           {edit ? (
-            <input onChange={onSave} name="position" value={position}></input>
+            <input
+              onChange={onSave}
+              name="position"
+              value={position || ''}
+            ></input>
           ) : (
             position
           )}
@@ -99,7 +96,7 @@ export default function ProfileMain() {
         <p>
           스택 : &nbsp;
           {edit ? (
-            <input onChange={onSave} name="stack" value={stack}></input>
+            <input onChange={onSave} name="stack" value={stack || ''}></input>
           ) : (
             stack
           )}
