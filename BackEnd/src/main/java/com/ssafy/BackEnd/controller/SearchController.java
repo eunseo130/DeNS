@@ -29,6 +29,7 @@ public class SearchController {
     public ResponseEntity<List<Profile>> findSearchedUsers(String keyword){
         HttpStatus status;
         List<Profile> userList = profileService.showFindTeamList(keyword);
+        System.out.println("전달 받은 값 : "+keyword);
         if(userList != null) {
             status = HttpStatus.OK;
             System.out.println("success\n"+userList.get(0).getName());
