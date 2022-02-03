@@ -12,7 +12,7 @@ import Back from './component/commonComponent/Back'
 import Team from './component/TeamComponent/Team'
 import Teamsetting from './component/TeamComponent/Teamsetting'
 
-import Dashboard from './component/dashboard/Dashboard'
+import Dashboard from './component/dashboardComponent/Dashboard'
 import Messanger from './component/MessangerComponent/Messanger'
 
 import Search from './component/SearchComponent/Search'
