@@ -24,7 +24,7 @@ function Login() {
       console.log("오류가 됨.", (error));
   });
   }, []);;
-
+    
     return (
       <LoginBox>
         <H3>로그인</H3>
