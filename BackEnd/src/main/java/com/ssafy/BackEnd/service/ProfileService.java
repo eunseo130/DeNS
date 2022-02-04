@@ -20,6 +20,7 @@ public interface ProfileService {
 
     List<Profile> showFindUserList(String keyword);
 
+<<<<<<< HEAD
     Optional<Profile> findById(Long profile_id) throws NotFoundException;
 
     void deleteUser(Long profile_id);
@@ -27,4 +28,6 @@ public interface ProfileService {
     List<Profile> showFindTeamList(String keyword);
 
     User findUserById(Long profile_id);
+=======
+>>>>>>> 81c03c13c7088d0b9919f0354c5bff75eca153a7
 }

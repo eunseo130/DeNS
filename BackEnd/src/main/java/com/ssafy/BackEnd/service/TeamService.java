@@ -19,6 +19,7 @@ public interface TeamService {
 
     //List<Team> showTeamList();
     List<Team> showFindTeamList(String keyword);
+<<<<<<< HEAD
 
     List<Team> showTeamList();
 
@@ -26,4 +27,6 @@ public interface TeamService {
 
     TeamMember setTeamLeader(Team team, String email);
 
+=======
+>>>>>>> 81c03c13c7088d0b9919f0354c5bff75eca153a7
 }

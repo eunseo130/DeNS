@@ -52,11 +52,12 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public List<Team> showFindTeamList(String keyword) {
-        List<Team> teams = teamRespository.findAll();
-        System.out.println(teams.toString());
-        return teams;
+            List<Team> teams = teamRespository.findAll();
+            System.out.println(teams.toString());
+            return teams;
     }
 
+<<<<<<< HEAD
     @Override
     public List<Team> showTeamList() {
         List<Team> teams = new ArrayList<>();
@@ -85,6 +86,8 @@ public class TeamServiceImpl implements TeamService{
         return teamMember;
     }
 
+=======
+ 
+>>>>>>> 81c03c13c7088d0b9919f0354c5bff75eca153a7
 
 }
-

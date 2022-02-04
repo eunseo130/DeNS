@@ -46,6 +46,7 @@ public class ProfileServiceImpl implements ProfileService{
         return findProfile;
     }
 
+<<<<<<< HEAD
     @Override
     public User findUserById(Long profile_id) {
         Profile profile = profileRepository.findById(profile_id).get();
@@ -54,6 +55,8 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
+=======
+>>>>>>> 81c03c13c7088d0b9919f0354c5bff75eca153a7
     public List<Profile> showFindTeamList(String keyword){
         List<Profile> profiles = profileRepository.findByNameContaining(keyword);
         if(profiles == null) System.out.println("에러염");
@@ -81,6 +84,7 @@ public class ProfileServiceImpl implements ProfileService{
         return profiles;
     }
 
+<<<<<<< HEAD
     @Override
     public void deleteUser(Long profile_id) {
         Profile findProfile = profileRepository.findById(profile_id).get();
@@ -89,4 +93,6 @@ public class ProfileServiceImpl implements ProfileService{
         profileRepository.delete(findProfile);
     }
 
+=======
+>>>>>>> 81c03c13c7088d0b9919f0354c5bff75eca153a7
 }

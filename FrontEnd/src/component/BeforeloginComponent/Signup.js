@@ -1,89 +1,91 @@
-import React, { useState } from 'react';
-import { signup, login } from '../../api/test';
-import styled from 'styled-components';
+import React, { useState, useEffect }from 'react';
+import { profile, signup, test22,insertTeam, searchTeam ,searchUser, searchTeamkeyword, searchUserkeyword} from '../axios/api';
+// import TeamList from './TeamList';
+// import UserList from './UserList';
 
-export default function Signup() {
+export default function Signup() { 
+    const [input, setInput] = useState({
+        email: '',
+        name: '',
+        password: '',
+    });    
+    useEffect(() => { console.log(input) }, [input]);
 
-
-    const data = {
-        email: "ehcke@testnnmse.wasera",
-        name: "윤설1212",
-        password: "12312123132", 
-    };
-    const data2 = {
-        email: "ehcke@testnnmse.wasera",
-        password: "12312123132", 
-    };
-
-    const data3 = {
-        email: "junu@testnnmse.wasera",
-        name: "윤설1212",
-        password: "12312123132", 
-    };
-    const data32 = {
-        email: "junu@testnnmse.wasera",
-        password: "12312123132", 
-    };
-    
-    const data4 = {
-        email: "hj@testnnmse.wasera",
-        name: "윤설1211232",
-        password: "12312123132", 
-    };
-    
-    const data42 = {
-        email: "hj@testnnmse.wasera",
-        password: "12312123132", 
-    };
-
-
-    const signupTest = () => {
-        signup(data, (response) => { console.log("success check", JSON.stringify(response.data)) }, (error) => { console.log("fail Check", error) });
+    const changeCheck = (e) => {
+        const { name, value } = e.target;
+        setInput({
+            ...input,
+            [name]: value,
+        }); 
     }
-    const signupTest2 = () => {
-        signup(data3, (response) => { console.log("success check", JSON.stringify(response.data)) }, (error) => { console.log("fail Check", error) });
-    }
-    const signupTest3 = () => {
-        signup(data4, (response) => { console.log("success check", JSON.stringify(response.data)) }, (error) => { console.log("fail Check", error) });
-    }
-
-    const signin = () => {
-        login(data2, (response) => { console.log("success check22222222222", response) }, (error) => { console.log("fail Check", error) });
-    }
-
-    const signin2 = () => {
-        login(data32, (response) => { console.log("success check22222222222", response) }, (error) => { console.log("fail Check", error) });
+    const join = () => {
+        signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
     }
     
-    const signin3 = () => {
-        login(data42, (response) => {
-            console.log("success check22222222222", response)
-            
-    
-        }, (error) => { console.log("fail Check", error) });
+    const profilesearch = () => {
+        profile("1", (response) => { console.log(response) }, (error) => { console.log(error) });
     }
+    
+    //유저프로필
+
+    const check = () => {
+        test22("", (response) => { console.log(response) }, (error) => { console.log(error) });
+    }
+    const Team = () => {
+        insertTeam({title: "example2",content:"테스트용 컨텐트"}, (response) => { console.log(response) }, (error) => { console.log(error) });
+    }
+
+
+    //클라 -> 서버
+    //요청하는 것 = 유저의 아이디
+    //받는 것 = 랜덤한 팀 5개 정보(간략한 정보)
+
+    //클라 -> 서버
+    //요청하는 것 = 유저의 아이디
+    //받는 것 = 랜덤한 사람 5명 정보(간략한 정보)
+    const [teamList, setTeamList] = useState([]);
+    const [userList, setUserList] = useState([]);
+
+    useEffect(() => {
+        searchTeam({team_id:1}, (response) => { setTeamList(response.data) }, (error) => { console.log(error) });
+        searchUser({team_id:1}, (response) => { setUserList(response.data) }, (error) => { console.log(error) });
+    },[])
+    const searchTeamKeywordf = (e) => {
+        searchTeamkeyword(e.target.value, (response) => {
+            setTeamList(response.data);
+            console.log(response.data);
+        }, (error) => { console.log(error) });
+    }
+    
+    const searchUserKeywordf = (e) => {
+        if (!e.target.value) {
+            console.log("check");
+        }
+
+        searchUserkeyword(e.target.value, (response) => {
+            setUserList(response.data);
+            console.log(response.data);
+        }, (error) => { console.log(error) });
+    }
+    
 
     return (
         <>
-            <h3>Signup 페이지입니다.</h3>
-            <IconWrapper>
-                <button onClick={signupTest}>ㅅㄷㄴㅅ</button>
-                <button onClick={signupTest2}>ㅅㄷㄴㅅ222</button>
-                <button onClick={signupTest3}>ㅅㄷㄴㅅ333</button>
-
-                <button onClick={signin}>loginTest</button>
-                <button onClick={signin2}>loginTest2222</button>
-                <button onClick={signin3}>loginTest3333333</button>
-                
-            </IconWrapper>
+            <button onClick={check}>test확인하기</button>
+            <input name='email' onChange={changeCheck}></input>
+            <input name='password' onChange={changeCheck}></input>
+            <input name='name' onChange={changeCheck}></input>
+            <button onClick={profilesearch}>가입하기</button>
+            <button onClick={Team}>팀만들기</button><br></br>
+            팀 검색<input name='name' onChange={searchTeamKeywordf}></input><br></br>
+            이름 검색<input onChange={searchUserKeywordf}></input><br></br>
+            <input name='name' onChange={searchTeamKeywordf}></input><br></br>
+            {/* <TeamList teamlist={ teamList}/>
+            <UserList userlist={ userList}/> */}
         </>
 
-    )
+
+)
 
 
 }
-
-const IconWrapper = styled.div`
-  display: flex;
-  flex-direction: column;
-`;

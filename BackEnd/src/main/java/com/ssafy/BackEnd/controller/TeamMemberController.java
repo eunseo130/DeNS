@@ -3,8 +3,11 @@ package com.ssafy.BackEnd.controller;
 import com.ssafy.BackEnd.dto.TeamDto;
 import com.ssafy.BackEnd.entity.Response;
 import com.ssafy.BackEnd.entity.Team;
+<<<<<<< HEAD
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.User;
+=======
+>>>>>>> 81c03c13c7088d0b9919f0354c5bff75eca153a7
 import com.ssafy.BackEnd.repository.TeamRespository;
 import com.ssafy.BackEnd.service.TeamMemberService;
 import com.ssafy.BackEnd.service.TeamService;
@@ -23,8 +26,9 @@ public class TeamMemberController {
     private final TeamMemberService teamMemberService;
 
     @PostMapping
-    public ResponseEntity<TeamMember> createTeamMember(@RequestParam String email, @RequestParam String teamName) {
+    public ResponseEntity<Team> createTeamMember(@RequestParam String email, @RequestParam String teamName) {
         System.out.println("cont "+email+" "+teamName);
+<<<<<<< HEAD
         TeamMember teamMember = teamMemberService.addTeamMember(email, teamName);
         if (teamMember == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
@@ -60,4 +64,17 @@ public class TeamMemberController {
 //
 //        return new ResponseEntity<Team>(team, HttpStatus.OK);
 //    }
+=======
+        Team team = teamMemberService.addTeamMember(email, teamName);
+
+        return new ResponseEntity<Team>(team, HttpStatus.OK);
+    }
+
+    @PutMapping
+    public ResponseEntity<Team> addTeamMember(@RequestParam String email, @RequestParam String teamName) {
+        Team team = teamMemberService.addTeamMember(email, teamName);
+
+        return new ResponseEntity<Team>(team, HttpStatus.OK);
+    }
+>>>>>>> 81c03c13c7088d0b9919f0354c5bff75eca153a7
 }

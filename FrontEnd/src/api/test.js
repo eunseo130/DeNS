@@ -1,9 +1,10 @@
+
 import { apiInstance } from './index.js';
 
-const api = apiInstance();
+const api = apiInstance()
 //localhost:8080/test22 -> 를 가져오고싶다.
 function test22(param, success, fail) {
-    api.get(`/test22`,param).then(success).catch(fail);
+  api.get(`/test22`, param).then(success).catch(fail)
 }
 
 function team(success, fail) {
@@ -11,19 +12,21 @@ function team(success, fail) {
 }
 
 function signup(param, success, fail) {
-    api.post(`/signup`,param).then(success).catch(fail);
+  api.post(`/signup`, param).then(success).catch(fail)
 }
 
 function login(param, success, fail) {
-    api.post(`/signin`,JSON.stringify(param)).then(success).catch(fail);
+  api.post(`/signin`, JSON.stringify(param)).then(success).catch(fail)
 }
 
 function profileTest(param, success, fail) {
+  console.log('profile get')
   api.get(`/profile/${param}`).then(success).catch(fail)
 }
-function profileUpdate({ url, data }, success, fail) {
+function profileUpdate({ id, param }, success, fail) {
   console.log('profile update')
-  api.put(`/profile/${url}`, JSON.stringify(data)).then(success).catch(fail)
+  console.log(param)
+  api.put(`/profile/${id}`,param).then(success).catch(fail)
 }
 function dummytest(param, success, fail) {
   console.log('check keyword' + param)

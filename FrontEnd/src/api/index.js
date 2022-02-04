@@ -6,7 +6,7 @@ function apiInstance() {
         baseURL: API_BASE_URL,
         headers: {
             "Content-type": "application/json",
-            "Access-Control-Allow-Origin":"*",
+            "Access-Control-Allow-Origin": "*",
         }
     });
     return instance;
