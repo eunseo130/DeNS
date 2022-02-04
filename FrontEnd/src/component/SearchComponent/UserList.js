@@ -1,16 +1,14 @@
 import React, { useEffect, useState } from 'react';
-
+import UserCard from './UserCard';
 export default function UserList(props) {
     const [temp, setTemp] = useState([]);
     
     useEffect(() => {
         setTemp(props.userlist);
     });
-
-    const userinfo = temp.map((data) => (<p key={data.email}>{data.name }</p> ))
     return (
         <ul>
-            {userinfo }
+            {temp.map((data) => {return <UserCard check= {data.profile_id} data={data}/>}) }
         </ul>
     )
 }
