@@ -55,13 +55,13 @@ const App = () => {
         { path: '/afterlogin/dashboard', element: <Dashboard /> },
         { path: '/afterlogin/messanger', element: <Messanger /> },
         {
-          path: '/afterlogin/profile',
+          path: '/afterlogin/profile/:id',
           element: <ProfileMain />,
           children: [
             //  { index: true, element:<ProfileMain />},
-            { path: '/afterlogin/profile/info', element: <ProfileInfo /> },
+            { path: '/afterlogin/profile/:id/info', element: <ProfileInfo /> },
             {
-              path: '/afterlogin/profile/keyword',
+              path: '/afterlogin/profile/:id/keyword',
               element: <ProfileKeyword />,
             },
           ],
