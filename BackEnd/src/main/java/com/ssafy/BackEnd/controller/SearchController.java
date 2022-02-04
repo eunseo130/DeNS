@@ -43,9 +43,10 @@ public class SearchController {
     }
 
     @GetMapping("/team")
-    public ResponseEntity<List<Team>> findSearchedTeams(@RequestParam String keyword){
+    public ResponseEntity<List<Team>> findSearchedTeams(@RequestParam(value = "param") String keyword){
         HttpStatus status;
         List<Team> teamList = teamService.showFindTeamList(keyword);
+        System.out.println("keyword : "+keyword);
         if(teamList != null) {
             status = HttpStatus.OK;
             System.out.println("success\n"+teamList.get(0).getTeam_id());
