@@ -1,25 +1,47 @@
-import React, { Component } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
+import Slider from "react-slick";
+import TeamLinkBox from "./TeamLinkBox";
+import { team } from '../../api/test';
 
 function TeamLink(props) {
-  const TeamData = () => [
-      // {"팀 이름":"ZOI", "최근 메세지 내용":"hello", "프로필":"image", "팀원정보":"sazin"},
-      // {"팀 이름":"ZOI", "최근 메세지 내용":"hello", "프로필":"image", "팀원정보":"sazin"},
-      {"name":"홍길동", "age":"125"},
-      {"name":"홍길동", "age":"125"},
-    ]
-  // console.log(TeamData)
-
+  const [link, setLink] = useState('');
+  useEffect(() => {
+    team(
+        (response) => {
+            setLink(response.data);
+            // console.log(response.data[0].title);
+    },  
+    (error) => {
+        console.log("오류가 됨.", (error));
+    });
+  });
+  
+    const settings = {
+      dots: true,
+      infinite: false,
+      speed: 200,
+      slidesToShow: 4,
+      slidesToScroll: 4
+    };
+    const SliderStyle = {
+      display: "flex",
+    }
   return (
-    <Container {...props}>
+
+    <Container>
+
       <LinkTitle>팀 링크</LinkTitle>
-      <RectRow>
-        
-        <Rect></Rect>
-        <Rect></Rect>
-        <Rect></Rect>
-        <Rect></Rect>
-      </RectRow>
+
+      <Slider {...settings} style={SliderStyle}>
+        <TeamLinkBox title={"내 프로필"}/>
+          {link ? link.map((el, key) => {
+                      return (
+                          <TeamLinkBox title={el.title} key={key}/>
+                      )})
+          : null }
+      </Slider>
+
     </Container>
   );
 }
@@ -27,17 +49,6 @@ function TeamLink(props) {
 const Container = styled.div`
   display: flex;
   flex-direction: column;
-`;
-
-const RectRow = styled.div`
-  display: flex;
-  justify-content: space-between;
-`;
-
-const Rect = styled.div`
-  width: 217px;
-  height: 192px;
-  box-shadow: 3px 3px 5px;
 `;
 
 const LinkTitle = styled.h3`

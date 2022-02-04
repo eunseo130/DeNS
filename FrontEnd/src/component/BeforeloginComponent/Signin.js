@@ -32,13 +32,11 @@ function Login() {
           <Name>이름</Name>
           <InputSquare  placeholder="이름을 입력해주세요." onChange={onChangeId} value={name}/>
           {/* <input placeholder="이름을 입력해주세요." onChange={(e) => Setname(e.target.value)}/>      */}
-          {/* <input placeholder="이름을 입력해주세요." onChange={onChangeId} value={name}/>      */}
         </Container>
 
         <Container>
           <Name>비밀번호</Name>
           <InputSquare  placeholder="비밀번호" onChange={onChangePw} value={password}/>
-          {/* <input placeholder="비밀번호" onChange={onChangePw} value={password}/> */}
         </Container>
         <Btn onClick={LoginConsole}>로그인</Btn>
         <SignUpBtn>회원가입</SignUpBtn>

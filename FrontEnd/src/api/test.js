@@ -11,6 +11,11 @@ function team(success, fail) {
     api.get(`/team`).then(success).catch(fail);
 }
 
+function myteam(param, success, fail) {
+    api.get(`/team/myteam`, param).then(success).catch(fail);
+    console.log('데이터 넘어간다', param)
+}
+
 function signup(param, success, fail) {
   api.post(`/signup`, param).then(success).catch(fail)
 }
@@ -56,4 +61,5 @@ export {
   profileTest,
   profileUpdate,
   team,
+  myteam,
 }
