@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Route, Routes, useRoutes } from 'react-router-dom'
 
 import Signin from './component/BeforeloginComponent/Signin'
-import Signup from './component/BeforeloginComponent/Signup'
+// import Signup from './component/BeforeloginComponent/Signup'
 import Password from './component/BeforeloginComponent/Password'
 
 import BeforeLogin from './component/commonComponent/BeforeLogin'
@@ -12,7 +12,7 @@ import Back from './component/commonComponent/Back'
 import Team from './component/TeamComponent/Team'
 import Teamsetting from './component/TeamComponent/Teamsetting'
 
-import Dashboard from './component/dashboard/Dashboard'
+import Dashboard from './component/dashboardComponent/Dashboard'
 import Messanger from './component/MessangerComponent/Messanger'
 
 import Search from './component/SearchComponent/Search'
@@ -41,7 +41,7 @@ const App = () => {
       children: [
         { index: true, element: <Firstpage /> },
         { path: '/beforeLogin/signin', element: <Signin /> },
-        { path: '/beforeLogin/signup', element: <Signup /> },
+        // { path: '/beforeLogin/signup', element: <Signup /> },
         { path: '/beforeLogin/password', element: <Password /> },
       ],
     },
