@@ -52,7 +52,7 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public List<Team> showFindTeamList(String keyword) {
-        List<Team> teams = teamRespository.findAll();
+        List<Team> teams = teamRespository.findByTitleContaining(keyword);
         System.out.println(teams.toString());
         return teams;
     }
