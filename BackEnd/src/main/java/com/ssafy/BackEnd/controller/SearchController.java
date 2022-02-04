@@ -43,7 +43,7 @@ public class SearchController {
     }
 
     @GetMapping("/team")
-    public ResponseEntity<List<Team>> findSearchedTeams(String keyword){
+    public ResponseEntity<List<Team>> findSearchedTeams(@RequestParam String keyword){
         HttpStatus status;
         List<Team> teamList = teamService.showFindTeamList(keyword);
         if(teamList != null) {
