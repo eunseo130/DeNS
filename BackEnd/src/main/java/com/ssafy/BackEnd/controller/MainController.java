@@ -9,11 +9,7 @@ import com.ssafy.BackEnd.entity.Response;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.entity.dummy;
-import com.ssafy.BackEnd.service.AuthService;
-import com.ssafy.BackEnd.service.JwtServiceImpl;
-import com.ssafy.BackEnd.service.ProfileService;
-import com.ssafy.BackEnd.service.TeamService;
-import com.ssafy.BackEnd.service.dummyService;
+import com.ssafy.BackEnd.service.*;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
@@ -21,6 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
@@ -35,6 +32,8 @@ import java.util.Map;
 public class MainController {
 
     private final JwtServiceImpl jwtService;
+    private final CookieService cookieService;
+    private final RedisUtil redisUtil;
     
     private final AuthService authService;
 
@@ -104,40 +103,6 @@ public class MainController {
             response.setData(null);
             return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
         }
-    }
-
-    @GetMapping("main/search/team")
-    public ResponseEntity<List<Team>> findSearchedTeams(@RequestParam String keyword) {
-        HttpStatus status;
-        List<Team> teamList = teamService.showFindTeamList(keyword);
-        //  System.out.println(keyword+"###############################################################");
-        if(teamList.size()!= 0) {
-            status = HttpStatus.OK;
-
-        } else {
-            status = HttpStatus.NO_CONTENT;
-            // System.out.println("fail");
-        }
-
-        return new ResponseEntity<>(teamList, status);
-    }
-    @GetMapping("main/search/user")
-    public ResponseEntity<List<Profile>> searchUser(@RequestParam String keyword) {
-        HttpStatus status;
-        List<Profile> teamList = profileService.showFindUserList(keyword);
-        //  System.out.println(keyword+"###############################################################");
-        if(teamList.size()!= 0) {
-            // System.out.println(keyword+"###############################################################");
-            status = HttpStatus.OK;
-            // System.out.println("success\n"+teamList.get(0).getTeam_id());
-            
-        } else {
-            // System.out.println(keyword+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@###############################################################");
-            status = HttpStatus.NO_CONTENT;
-            // System.out.println("fail");
-        }
-
-        return new ResponseEntity<>(teamList, status);
     }
 
     @GetMapping("/search/keyword/{param}")
@@ -224,10 +189,22 @@ public class MainController {
             //System.out.println(user.getEmail()+" "+user.getPassword());
             //System.out.println("user null ? "+user);
             if(user != null) {
-                //System.out.println("1pass");
-                String token = jwtService.create("email", user.getEmail(), "access-token");
-                System.out.println("tk : "+token);
-                resultMap.put("access-token", token);
+                System.out.println("1pass");
+                final String Token = jwtService.generateToken(user);
+                final String refreshJwt = jwtService.generateRefershToken(user);
+
+                System.out.println("accessToken : "+Token);
+                System.out.println("refreshToken : "+refreshJwt);
+
+                Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
+                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
+
+                response.addCookie(accessToken);
+                response.addCookie(refreshToken);
+
+                redisUtil.setDataExpire(refreshJwt, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
+
+                resultMap.put("access-token", Token);
                 resultMap.put("message", "success");
                 status = HttpStatus.ACCEPTED;
             } else {
