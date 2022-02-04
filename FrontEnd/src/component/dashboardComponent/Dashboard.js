@@ -7,7 +7,7 @@ import { myteam } from "../../api/test";
 
 export default function Dashboard() {
     // 배경 스타일
-    // const colors = d
+    // const colors = asd
       useEffect(() => {
         myteam("안녕하세여",
             (response) => {
