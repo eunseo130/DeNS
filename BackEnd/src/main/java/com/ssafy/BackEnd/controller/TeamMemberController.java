@@ -23,9 +23,9 @@ public class TeamMemberController {
     private final TeamMemberService teamMemberService;
 
     @PostMapping
-    public ResponseEntity<TeamMember> createTeamMember(@RequestParam String email, @RequestParam String teamName) {
-        System.out.println("cont "+email+" "+teamName);
-        TeamMember teamMember = teamMemberService.addTeamMember(email, teamName);
+    public ResponseEntity<TeamMember> createTeamMember(@RequestParam String email, @RequestParam Long teamId) {
+        System.out.println("cont "+email+" "+teamId);
+        TeamMember teamMember = teamMemberService.addTeamMember(email, teamId);
         if (teamMember == null) return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
     }
