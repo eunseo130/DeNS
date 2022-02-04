@@ -26,14 +26,14 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     private final TeamMemberRepository teamMemberRepository;
 
     @Override
-    public TeamMember addTeamMember(String email, String teamName) { //팀에 팀원 추가하는 기능
+    public TeamMember addTeamMember(String email, Long teamId) { //팀에 팀원 추가하는 기능
         System.out.println("add " + email);
         User user = userRepository.findByEmail(email); //해당 유저정보 가져오기
 //        for(User u : user){
 //            System.out.println(u.getEmail()+" hihi");
 //        }
         //System.out.println(user.getEmail()+" "+teamName+" hihi");
-        Team team = teamRespository.findByTitle(teamName); //팀이름으로 해당 팀정보 가
+        Team team = teamRespository.findById(teamId).get(); //팀이름으로 해당 팀정보 가
         List<TeamMember> findTeamMember = team.getTeam_member();
         for (TeamMember member : findTeamMember) {
             if (member.getUser().getEmail().equals(email)) {
@@ -69,18 +69,24 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     @Override
     public Team mergeTeam(Long teamId1, Long teamId2) {
         Team team1 = teamRespository.findById(teamId1).get();
+        System.out.println(team1.getTitle());
         Team team2 = teamRespository.findById(teamId2).get();
+        System.out.println(team2.getTitle());
         List<TeamMember> teamMembers2 = team2.getTeam_member();
         for (TeamMember member : teamMembers2) {
-            if (member.getTeam_identity().equals(TeamMemberIdentity.LEADER)) {
-                member.setTeam_identity(TeamMemberIdentity.MEMBER);
-                addTeamMember(member.getUser().getEmail(), team1.getTitle());
-            } else {
-                addTeamMember(member.getUser().getEmail(), team1.getTitle());
-            }
+            System.out.println(member.getUser().getEmail());
+            member.setTeam(team1);
+            member.setTeam_identity(TeamMemberIdentity.MEMBER);
+//            if (member.getTeam_identity().equals(TeamMemberIdentity.LEADER)) {
+//                member.setTeam_identity(TeamMemberIdentity.MEMBER);
+//                addTeamMember(member.getUser().getEmail(), team1.getTitle());
+//            } else {
+//                addTeamMember(member.getUser().getEmail(), team1.getTitle());
+//            }
         }
         teamRespository.save(team1);
         teamRespository.delete(team2);
+//        teamRespository.deleteById(team2.getTeam_id());
         return team1;
 
     }

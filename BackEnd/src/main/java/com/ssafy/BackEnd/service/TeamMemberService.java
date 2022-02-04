@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface TeamMemberService{
 
-    TeamMember addTeamMember(String email, String teamName);
+    TeamMember addTeamMember(String email, Long teamId);
 
     TeamMember deleteTeamMember(String email, String teamName);
 

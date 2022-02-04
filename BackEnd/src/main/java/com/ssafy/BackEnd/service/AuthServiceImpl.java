@@ -127,7 +127,7 @@ public class AuthServiceImpl implements AuthService{
     }
 
     public void sendVerificationMail(User user) throws NotFoundException {
-        String VERIFICATION_LINK = "http://localhost:8080/user/verify/";
+        String VERIFICATION_LINK = "http://localhost:8080/verify/";
         if(user==null) throw new NotFoundException("멤버가 조회되지 않음");
         UUID uuid = UUID.randomUUID();
         System.out.println("key : " + uuid);

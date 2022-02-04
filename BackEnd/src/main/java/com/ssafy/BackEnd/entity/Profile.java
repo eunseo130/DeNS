@@ -33,6 +33,9 @@ public class Profile extends BaseTimeEntity{
 //    @JoinColumn(name = "image_id")
 //    Image image;
 
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.MERGE)
     List<UserFeed> user_feed = new ArrayList<>();
+
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
+    List<ProfileKeyword> profile_keyword = new ArrayList<>();
 }

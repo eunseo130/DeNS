@@ -93,15 +93,18 @@ public class UserFeedController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @PostMapping("/post")
-    public String post(Long profile_id, @Validated @ModelAttribute UserFeedAddForm userFeedAddForm, BindingResult bindingResult) throws IOException, NotFoundException {
+    @PostMapping("/post/{profile_id}")
+    public String post(@PathVariable Long profile_id, @Validated @ModelAttribute UserFeedAddForm userFeedAddForm, BindingResult bindingResult) throws IOException, NotFoundException {
         if (bindingResult.hasErrors()) {
             log.info("bindingResult : {}", bindingResult.getFieldError());
             return "post";
         }
         Profile profile = profileService.findById(profile_id).get();
+        System.out.println(profile.getEmail());
         UserFeedDto userFeedDto = userFeedAddForm.createUserFeedDto(profile);
+        System.out.println(userFeedDto.getContent());
         UserFeed post = userFeedService.post(userFeedDto);
+        System.out.println(post.getContent());
         return "redirect:/main/board" + post.getProfile();
     }
 

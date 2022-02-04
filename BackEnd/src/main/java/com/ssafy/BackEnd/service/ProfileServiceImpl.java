@@ -1,6 +1,7 @@
 package com.ssafy.BackEnd.service;
 
 
+import com.ssafy.BackEnd.entity.Keyword;
 import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile1;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.DeleteMapping;
 
 import javax.swing.text.html.Option;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -65,6 +67,8 @@ public class ProfileServiceImpl implements ProfileService{
     public Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException {
 
         User user = userRepository.findByName(findProfile.getName());
+        System.out.println(requestModifyProfile2.getPosition());
+        System.out.println(requestModifyProfile2.getStack());
         findProfile.setPosition(requestModifyProfile2.getPosition());
         findProfile.setStack(requestModifyProfile2.getStack());
 
@@ -89,4 +93,19 @@ public class ProfileServiceImpl implements ProfileService{
         profileRepository.delete(findProfile);
     }
 
+    @Override
+    public List<String> addKeyword(Profile profile, String content) {
+        List<String> strlist = new ArrayList<>();
+        String[] strArr = content.split(" ");
+        for (String s : strArr){
+            if(s.charAt(0) == '#') {
+                String key = s.substring(1);
+                strlist.add(key);
+            }
+        }
+        for (String word : strlist) {
+            System.out.println(word);
+        }
+        return strlist;
+    }
 }
