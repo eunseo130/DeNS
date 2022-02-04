@@ -16,9 +16,15 @@ public interface TeamRespository extends JpaRepository<Team, Long> {
 
     List<Team> findByTitleContaining(String keyword);
 
+
     Team findByTitle(String title);
+
 
     @Query(value = "select distinct team.team_id, team.title, team.content, team.created_date from team inner join teammember on team.team_id = teammember.team_id "
             + "inner join user on teammember.email = user.email and user.profile_id = :profile_id ", nativeQuery = true)
     List<Team> showMyTeamList(@Param("profile_id") Long profile_id);
+
+    @Override
+    void deleteById(Long aLong);
+
 }

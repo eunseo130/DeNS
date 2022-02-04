@@ -13,6 +13,4 @@ public interface TeamFeedService {
 
     List<TeamFeed> showFindTeamFeedList();
 
-
-
 }
