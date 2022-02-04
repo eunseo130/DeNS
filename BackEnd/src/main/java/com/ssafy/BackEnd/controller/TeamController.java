@@ -12,6 +12,7 @@ import com.ssafy.BackEnd.service.TeamService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -48,10 +49,28 @@ public class TeamController {
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @GetMapping
     @ApiOperation(value = "팀 목록 가져오기")
-    public ResponseEntity<List<Team>> getAllTeams() {
+    public ResponseEntity<List<Team>> getAllTeams() throws NotFoundException {
         List<Team> teams = teamService.showTeamList();
 
+        if (teams.isEmpty()) {
+            System.out.println("전체 팀 목록이 없습니다");
+            throw new CustomException("전체 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
+        }
+
         return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
+    }
+
+    @GetMapping("/myteam") //프로필아이디로 내 팀 목록 가져오기
+    @ApiOperation(value = "내 팀 목록 가져오기")
+    public ResponseEntity<List<Team>> getMyTeams(@RequestParam Long profile_id) throws NotFoundException {
+        List<Team> my_teams = teamService.showMyTeamList(profile_id);
+
+        if (my_teams.isEmpty()) {
+            System.out.println("내 팀 목록이 없습니다");
+            throw new CustomException("내 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<List<Team>>(my_teams, HttpStatus.OK);
     }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})

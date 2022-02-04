@@ -66,6 +66,14 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
+    public List<Team> showMyTeamList(Long profile_id) {
+        List<Team> my_teams = new ArrayList<>();
+        teamRespository.showMyTeamList(profile_id).forEach(myteam -> my_teams.add(myteam));
+
+        return my_teams;
+    }
+
+    @Override
     public void modifyTeamProfile(long team_id, Team team) {
         Team old_team = teamRespository.findByTeam(team_id);
         old_team.setContent(team.getContent()); //content(팀 프로필)만 수정
