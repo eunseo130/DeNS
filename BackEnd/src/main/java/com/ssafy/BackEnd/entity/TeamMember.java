@@ -1,6 +1,7 @@
 package com.ssafy.BackEnd.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -22,12 +23,13 @@ public class TeamMember {
     @Enumerated(EnumType.STRING)
     TeamMemberIdentity team_identity = TeamMemberIdentity.LEADER;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     Team team;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "email")
+    @JsonIgnore
     User user;
 
 }

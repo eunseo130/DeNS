@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 import React, { useState, useEffect }from 'react';
 import { profile, signup, test22,insertTeam, searchTeam ,searchUser, searchTeamkeyword, searchUserkeyword} from '../axios/api';
 // import TeamList from './TeamList';
@@ -89,3 +90,5 @@ export default function Signup() {
 
 
 }
+=======
+>>>>>>> 692230be2b6430ead20fc0d0990a5baffe8c0318
