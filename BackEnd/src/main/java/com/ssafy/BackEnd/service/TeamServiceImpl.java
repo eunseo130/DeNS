@@ -69,9 +69,12 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public List<Team> showMyTeamList(long profile_id) {
-        //List<Team> teams =
-        return null;
+    public List<Team> showMyTeamList(Long profile_id) {
+        List<Team> my_teams = new ArrayList<>();
+        teamRespository.showMyTeamList(profile_id).forEach(myteam -> my_teams.add(myteam));
+
+        return my_teams;
+
     }
 
     @Override

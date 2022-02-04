@@ -22,7 +22,7 @@ public interface TeamService {
 
     List<Team> showTeamList();
 
-    List<Team> showMyTeamList(long profile_id);
+    List<Team> showMyTeamList(Long profile_id);
 
     void modifyTeamProfile(long team_id, Team team);
 
