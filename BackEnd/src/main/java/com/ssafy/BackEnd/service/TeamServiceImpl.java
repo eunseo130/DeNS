@@ -1,6 +1,7 @@
 package com.ssafy.BackEnd.service;
 
 import com.ssafy.BackEnd.entity.*;
+import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.TeamMemberRepository;
 import com.ssafy.BackEnd.repository.TeamRespository;
 import com.ssafy.BackEnd.repository.UserRepository;
@@ -22,6 +23,8 @@ public class TeamServiceImpl implements TeamService{
     private final TeamMemberRepository teamMemberRepository;
 
     private final UserRepository userRepository;
+
+    private final ProfileRepository profileRepository;
 
     @Override
     public Team findByTeam(Long team_id) throws NotFoundException {
@@ -63,6 +66,12 @@ public class TeamServiceImpl implements TeamService{
         teamRespository.findAll().forEach(team -> teams.add(team));
 
         return teams;
+    }
+
+    @Override
+    public List<Team> showMyTeamList(long profile_id) {
+        //List<Team> teams =
+        return null;
     }
 
     @Override
