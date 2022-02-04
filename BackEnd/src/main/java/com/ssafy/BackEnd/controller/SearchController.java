@@ -26,7 +26,7 @@ public class SearchController {
     private final TeamService teamService;
 
     @GetMapping("/user")
-    public ResponseEntity<List<Profile>> findSearchedUsers(String keyword){
+    public ResponseEntity<List<Profile>> findSearchedUsers(String keyword) throws NotFoundException{
         HttpStatus status;
         List<Profile> userList = profileService.showFindTeamList(keyword);
         System.out.println("전달 받은 값 : "+keyword);
@@ -37,12 +37,25 @@ public class SearchController {
         } else {
             status = HttpStatus.NO_CONTENT;
             System.out.println("노데이터");
+            throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(userList, status);
     }
 
-    @GetMapping("/user/{team_id}")
+    @GetMapping("/user/{profile_id}")
+    public ResponseEntity<Profile> findSearchOneProfile(@PathVariable Long profile_id) throws NotFoundException {
+        Profile profile = profileService.findById(profile_id).get();
+        if(profile == null)
+        {
+            System.out.println("error");
+            throw new CustomException("error", ErrorCode.INTERNER_SERVER_ERROR);
+
+        }
+        return new ResponseEntity<>(profile, HttpStatus.OK);
+    }
+
+    @GetMapping("/team/{team_id}")
     public ResponseEntity<Team> findSearchOneTeam(@PathVariable Long team_id) throws NotFoundException {
         Team team = teamService.findByTeam(team_id);
         if(team == null){
@@ -54,7 +67,7 @@ public class SearchController {
     }
 
     @GetMapping("/team")
-    public ResponseEntity<List<Team>> findSearchedTeams(String keyword){
+    public ResponseEntity<List<Team>> findSearchedTeams(String keyword) throws NotFoundException{
         HttpStatus status;
         List<Team> teamList = teamService.showFindTeamList(keyword);
         System.out.println("keyword : "+keyword);
@@ -65,8 +78,12 @@ public class SearchController {
         } else {
             status = HttpStatus.NO_CONTENT;
             System.out.println("fail");
+            throw new CustomException("error", ErrorCode.INTERNER_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(teamList, status);
     }
+
+
+
 }
