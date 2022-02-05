@@ -37,6 +37,7 @@ dependencies {
 
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'it.ozimov:embedded-redis:0.7.2'
 
 	// https://mvnrepository.com/artifact/io.springfox/springfox-swagger-ui
 	implementation 'io.springfox:springfox-swagger-ui:2.9.2'
