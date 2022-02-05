@@ -55,13 +55,6 @@ public class ProfileServiceImpl implements ProfileService{
         return user;
     }
 
-    @Override
-    public List<Profile> showFindTeamList(String keyword){
-        List<Profile> profiles = profileRepository.findByNameContaining(keyword);
-        if(profiles == null) System.out.println("에러염");
-        return profiles;
-    }
-
     // 이름, 이메일 수정 x, user 번호로 조회하기
     @Override
     public Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException {
@@ -96,6 +89,7 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public List<String> addKeyword(Profile profile, String content) {
         List<String> strlist = new ArrayList<>();
+
         String[] strArr = content.split(" ");
         for (String s : strArr){
             if(s.charAt(0) == '#') {
@@ -106,6 +100,7 @@ public class ProfileServiceImpl implements ProfileService{
         for (String word : strlist) {
             System.out.println(word);
         }
+
         return strlist;
     }
 }

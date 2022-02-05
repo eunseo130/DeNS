@@ -11,6 +11,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,18 +63,18 @@ public class TeamFeedController {
         return new ResponseEntity<List<TeamFeed>>(teamfeeds, HttpStatus.OK);
     }
 
-    @PutMapping("/teamfeed_id")
+    @PutMapping("/{teamfeed_id}")
     @ApiOperation(value = "팀 피드 수정")
-    public ResponseEntity<TeamFeed> modifyUserFeed(@RequestBody TeamFeed teamFeed) {
+    public ResponseEntity<TeamFeed> modifyUserFeed(@PathVariable long teamfeed_id, @RequestBody TeamFeed teamFeed) {
         teamFeedService.modifyTeamFeed(teamFeed.getTeamfeed_id(), teamFeed);
 
         return new ResponseEntity<TeamFeed>(teamFeed, HttpStatus.OK);
     }
 
-    @DeleteMapping("/teamfeed_id")
+    @DeleteMapping("/{teamfeed_id}")
     @ApiOperation(value = "팀 피드 삭제")
-    public ResponseEntity<Void>deleteUserFeed(@RequestBody TeamFeed teamFeed) {
-        teamFeedService.deleteTeamFeed(teamFeed.getTeamfeed_id());
+    public ResponseEntity<Void>deleteUserFeed(@PathVariable long teamfeed_id) {
+        teamFeedService.deleteTeamFeed(teamfeed_id);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
