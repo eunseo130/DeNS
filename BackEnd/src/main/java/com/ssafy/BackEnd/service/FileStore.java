@@ -1,6 +1,7 @@
 package com.ssafy.BackEnd.service;
 
 import com.ssafy.BackEnd.entity.FileType;
+import com.ssafy.BackEnd.entity.TeamFeedFile;
 import com.ssafy.BackEnd.entity.UserFeed;
 import com.ssafy.BackEnd.entity.UserFeedFile;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,17 +20,27 @@ public class FileStore {
     @Value("${file.dir}/")
     private String fileDirPath;
 
-    public List<UserFeedFile> storeFiles(List<MultipartFile> multipartFiles, FileType fileType) throws IOException {
+    public List<UserFeedFile> storeUserFeedFiles(List<MultipartFile> multipartFiles, FileType fileType) throws IOException {
         List<UserFeedFile> userFeedFiles = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
-                userFeedFiles.add(storeFile(multipartFile, fileType));
+                userFeedFiles.add(storeUserFeedFile(multipartFile, fileType));
             }
         }
         return userFeedFiles;
     }
 
-    public UserFeedFile storeFile(MultipartFile multipartFile, FileType fileType) throws IOException {
+    public List<TeamFeedFile> storeTeamFeedFiles(List<MultipartFile> multipartFiles, FileType fileType) throws IOException {
+        List<TeamFeedFile> teamFeedFiles = new ArrayList<>();
+        for (MultipartFile multipartFile : multipartFiles) {
+            if (!multipartFile.isEmpty()) {
+                teamFeedFiles.add(storeTeamFeedFile(multipartFile, fileType));
+            }
+        }
+        return teamFeedFiles;
+    }
+
+    public UserFeedFile storeUserFeedFile(MultipartFile multipartFile, FileType fileType) throws IOException {
         if(multipartFile.isEmpty()) {
             return null;
         }
@@ -39,6 +50,22 @@ public class FileStore {
         multipartFile.transferTo(new File(createPath(fileName, fileType)));
 
         return UserFeedFile.builder()
+                .originalFileName(originalFileName)
+                .storePath(fileName)
+                .fileType(fileType)
+                .build();
+    }
+
+    public TeamFeedFile storeTeamFeedFile(MultipartFile multipartFile, FileType fileType) throws IOException {
+        if(multipartFile.isEmpty()) {
+            return null;
+        }
+
+        String originalFileName = multipartFile.getOriginalFilename();
+        String fileName = createFilename(originalFileName);
+        multipartFile.transferTo(new File(createPath(fileName, fileType)));
+
+        return TeamFeedFile.builder()
                 .originalFileName(originalFileName)
                 .storePath(fileName)
                 .fileType(fileType)

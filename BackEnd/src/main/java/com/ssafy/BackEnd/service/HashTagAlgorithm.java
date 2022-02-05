@@ -9,9 +9,11 @@ public class HashTagAlgorithm {
         List<String> strlist = new ArrayList<>();
         String[] strArr = content.split(" ");
         for (String s : strArr){
-            if(s.charAt(0) == '#') strlist.add(s);
+            if(s.charAt(0) == '#') {
+                String key = s.substring(1);
+                strlist.add(key);
+            }
         }
-
         return strlist;
     }
 }

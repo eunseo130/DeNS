@@ -1,5 +1,8 @@
 package com.ssafy.BackEnd.entity;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -10,6 +13,7 @@ import javax.persistence.*;
 @RequiredArgsConstructor
 @Table(name = "teamfeedkeyword")
 @Getter @Setter
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
 public class TeamFeedKeyword {
 
     @Id @GeneratedValue
@@ -17,10 +21,12 @@ public class TeamFeedKeyword {
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "keyword_id")
+    @JsonIgnore
     Keyword keyword;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "teamfeed_id")
+    @JsonIgnore
     TeamFeed team_feed;
 
 }

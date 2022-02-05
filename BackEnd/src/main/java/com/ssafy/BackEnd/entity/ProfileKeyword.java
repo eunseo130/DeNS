@@ -24,7 +24,7 @@ public class ProfileKeyword {
     @JsonIgnore
     private Profile profile;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
     @JoinColumn(name = "keyword_id")
     private Keyword keyword;
 }
