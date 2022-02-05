@@ -23,7 +23,7 @@ public class TeamFeedFile {
     @Enumerated(EnumType.STRING)
     private FileType fileType;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teamfeed_id")
     TeamFeed team_feed;
 

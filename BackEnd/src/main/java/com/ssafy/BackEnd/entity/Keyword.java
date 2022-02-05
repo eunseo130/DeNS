@@ -21,16 +21,16 @@ public class Keyword {
 
     int count;
 
-    @OneToMany(mappedBy = "keyword")
+    @OneToMany(mappedBy = "keyword", cascade = CascadeType.ALL)
     List<TeamKeyword> team_keyword = new ArrayList<>();
 
-    @OneToMany(mappedBy = "keyword")
+    @OneToMany(mappedBy = "keyword",  cascade = CascadeType.ALL)
     List<TeamFeedKeyword> team_feed_keyword = new ArrayList<>();
 
-    @OneToMany(mappedBy = "keyword")
+    @OneToMany(mappedBy = "keyword",  cascade = CascadeType.ALL)
     List<UserFeedKeyword> user_feed_keyword = new ArrayList<>();
 
-    @OneToMany(mappedBy = "keyword")
+    @OneToMany(mappedBy = "keyword",  cascade = CascadeType.ALL)
     List<ProfileKeyword> profile_keyword = new ArrayList<>();
 
 //    @OneToMany(mappedBy = "keyword")

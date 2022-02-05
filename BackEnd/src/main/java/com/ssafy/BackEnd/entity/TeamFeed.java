@@ -31,15 +31,15 @@ public class TeamFeed extends BaseTimeEntity{
 //    @LastModifiedDate
 //    LocalDateTime modify_time;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "team_id")
     @JsonIgnore
     Team team;
 
-    @OneToMany(mappedBy = "team_feed") // many로 끝날때 fetch nono
+    @OneToMany(mappedBy = "team_feed", cascade = CascadeType.ALL) // many로 끝날때 fetch nono
     List<TeamFeedFile> teamFeedFiles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "team_feed")
+    @OneToMany(mappedBy = "team_feed", cascade = CascadeType.ALL)
 //    @JsonIgnore
     List<TeamFeedKeyword> teamFeedKeywords = new ArrayList<>();
 
