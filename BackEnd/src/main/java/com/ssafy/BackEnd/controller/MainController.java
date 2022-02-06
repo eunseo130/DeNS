@@ -261,7 +261,7 @@ public class MainController {
         }
     }
 
-    @GetMapping("/header")
+    @GetMapping("/headertest")
     public ResponseEntity<Map<String, Object>> checkHeader(@RequestBody String header){
         System.out.println("header : "+header);
         HttpStatus status;
