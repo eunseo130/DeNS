@@ -44,7 +44,8 @@ public class MainController {
 
     @GetMapping("/test22")
     @ApiOperation(value = "테스트페이지 ")
-    public void test22() {
+    public void test22(@RequestBody String header) {
+        System.out.println("header : "+header);
         System.out.println("###########################################테스트페이지 확인용");
     }
 
@@ -262,7 +263,7 @@ public class MainController {
     }
 
     @GetMapping("/headertest")
-    public ResponseEntity<Map<String, Object>> checkHeader(@RequestBody String header){
+    public ResponseEntity<Map<String, Object>> checkHeader(@@RequestHeader Map<String, Object> header){
         System.out.println("header : "+header);
         HttpStatus status;
         Map<String, Object> map = new HashMap<>();
