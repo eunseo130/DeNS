@@ -260,4 +260,23 @@ public class MainController {
             return new ResponseEntity<User>((User) null, HttpStatus.UNAUTHORIZED);
         }
     }
+
+    @GetMapping("/header")
+    public ResponseEntity<Map<String, Object>> checkHeader(@RequestBody String header){
+        System.out.println("header : "+header);
+        HttpStatus status;
+        Map<String, Object> map = new HashMap<>();
+
+        if(header == null){
+            map.put("message", "fail");
+            map.put("test", "데이터가 없습니다");
+            status = HttpStatus.OK;
+        } else {
+            map.put("message", "success");
+            map.put("test", "데이터 받기 성공");
+            status = HttpStatus.OK;
+        }
+
+        return new ResponseEntity<>(map, status);
+    }
 }
