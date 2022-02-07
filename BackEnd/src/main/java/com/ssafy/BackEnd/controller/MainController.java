@@ -262,11 +262,11 @@ public class MainController {
     @GetMapping("/headertest")
     public ResponseEntity<Map<String, Object>> checkHeader(HttpServletRequest request) {
         System.out.println("header : "+request.getHeader("Authorization"));
-        System.out.println(request.getHeader("Authorization").getClass());
-        System.out.println(request.getAttribute("check").getClass());
+//        System.out.println(request.getHeader("Authorization").getClass());
+//        System.out.println(request.getAttribute("check").getClass());
 
-        String validationCheck = request.getAttribute("check").toString();
-        System.out.println(validationCheck);
+//        String validationCheck = request.getAttribute("check").toString();
+//        System.out.println(validationCheck);
         //System.out.println(request.getAttribute());
 //        for(Cookie cookie : request.getCookies()){
 //            System.out.println(cookie.getValue());
@@ -275,7 +275,7 @@ public class MainController {
         HttpStatus status;
         Map<String, Object> map = new HashMap<>();
 
-        if(validationCheck.equals("true")){
+        if(true){
             map.put("message", "fail");
             map.put("test", "데이터가 없습니다");
             status = HttpStatus.OK;

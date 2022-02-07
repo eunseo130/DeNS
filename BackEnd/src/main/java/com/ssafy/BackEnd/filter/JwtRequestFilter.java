@@ -42,59 +42,69 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         //final Cookie jwtToken = cookieService.getCookie(request, JwtServiceImpl.ACCESS_TOKEN_NAME);
-        try {
-
-        String getauth = request.getHeader("Authorization");
-        final String jwtToken = getauth.substring(8, getauth.length()-1);
-        //System.out.println("token"+jwtToken.getValue());
-        System.out.println("jwt token : "+jwtToken);
-
+        final String jwtToken;
+        // = jwt;
         String userEmail = null;
-        String jwt = null;
+        //String jwt = null;
         String refreshJwt = null;
         String refreshUserEmail = null;
         String meessage = null;
 
+        String jwt = null;
 
         try {
-            if(jwtToken != null){
-                jwt = jwtToken;
-                System.out.println("try jwt : "+jwt);
-                userEmail = jwtService.getUserEmail(jwt);
-                System.out.println("try useremail : "+userEmail);
-            }
-            if(userEmail != null) {
-                User user = userService.findByEmail(userEmail);
-                System.out.println("try user : "+user.getEmail());
-                UserIdentity userAuth = userService.findUserAuth(userEmail);
-                System.out.println("try auth : "+userAuth.name());
-                List<GrantedAuthority> roles = new ArrayList<>();
+            final String getauth = request.getHeader("Authorization");
+            jwt = getauth.substring(8, getauth.length() - 1);
+            //System.out.println("token"+jwtToken.getValue());
+            //System.out.println("jwt token : "+jwtToken);
+            jwtToken = jwt;
 
-                meessage = "success";
-                System.out.println("auth : "+userAuth);
-                if(userAuth == UserIdentity.UNAUTH) roles.add(new SimpleGrantedAuthority("UNATH"));
-                else roles.add(new SimpleGrantedAuthority("USER"));
-
-                System.out.println("vali : "+jwtService.validateToken(jwt, user));
-                if(jwtService.validateToken(jwt, user)){
-                    UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, roles);
-                    usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-                    SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                    //request.setAttribute("check", Boolean.FALSE);
-                    response.setStatus(HttpServletResponse.SC_OK);
+            try {
+                if (jwtToken != null) {
+                    jwt = jwtToken;
+                    System.out.println("try jwt : " + jwt);
+                    userEmail = jwtService.getUserEmail(jwt);
+                    System.out.println("try useremail : " + userEmail);
                 }
+                if (userEmail != null) {
+                    User user = userService.findByEmail(userEmail);
+                    System.out.println("try user : " + user.getEmail());
+                    UserIdentity userAuth = userService.findUserAuth(userEmail);
+                    System.out.println("try auth : " + userAuth.name());
+                    List<GrantedAuthority> roles = new ArrayList<>();
 
-            }
-        } catch (ExpiredJwtException e){
-            //System.out.println("error : "+e.getMessage());
-            response.addHeader("error", e.getMessage());
-            //request.setAttribute("check", Boolean.TRUE);
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+                    meessage = "success";
+                    System.out.println("auth : " + userAuth);
+                    if (userAuth == UserIdentity.UNAUTH) roles.add(new SimpleGrantedAuthority("UNATH"));
+                    else roles.add(new SimpleGrantedAuthority("USER"));
 
-            //Cookie refreshToken = cookieService.getCookie(request, JwtServiceImpl.REFRESH_TOKEN_NAME);
+                    System.out.println("vali : " + jwtService.validateToken(jwt, user));
+                    if (jwtService.validateToken(jwt, user)) {
+                        UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, roles);
+                        usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                        SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+                        //request.setAttribute("check", Boolean.FALSE);
+                        response.setStatus(HttpServletResponse.SC_OK);
+                    }
+
+                }
+            } catch (ExpiredJwtException e) {
+                //System.out.println("error : "+e.getMessage());
+                response.addHeader("error", e.getMessage());
+                //request.setAttribute("check", Boolean.TRUE);
+                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+
+                //Cookie refreshToken = cookieService.getCookie(request, JwtServiceImpl.REFRESH_TOKEN_NAME);
 //            if(refreshToken != null){
 //                refreshJwt = refreshToken.getValue();
             }
+
+        } catch (NullPointerException e){
+            System.out.println("null");
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+        } finally{
+            filterChain.doFilter(request, response);
+        }
 //        } catch (Exception e) {}
 //
 //        try{
@@ -124,14 +134,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //        } catch (ExpiredJwtException e) {}
 //
 //        filterChain.doFilter(request, response);
-        } catch (NullPointerException e){
-            System.out.println("error : "+e.getMessage());
-            //request.setAttribute("check", Boolean.TRUE);
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
-        } finally {
-            filterChain.doFilter(request, response);
-        }
 
 
 

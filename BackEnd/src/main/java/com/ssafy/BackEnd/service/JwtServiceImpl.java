@@ -71,7 +71,6 @@ public class JwtServiceImpl { //implements JwtService {
     }
 
     public String getUserEmail(String token){
-        System.out.println("getUsereamil :"+extractAllClaims(token).get("email", String.class));
         return extractAllClaims(token).get("email", String.class);
     }
 

@@ -20,7 +20,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .authorizeRequests()
                 .antMatchers("/signin", "/signup").permitAll()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/profile/*").permitAll()
-                .anyRequest().permitAll();
+                .antMatchers("/team/*").hasRole("USER")
+                .antMatchers("/profile/*").permitAll();
     }
 }
