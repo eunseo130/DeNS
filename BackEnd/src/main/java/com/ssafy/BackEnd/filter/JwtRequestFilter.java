@@ -41,6 +41,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
         //final Cookie jwtToken = cookieService.getCookie(request, JwtServiceImpl.ACCESS_TOKEN_NAME);
+        try {
+
         String getauth = request.getHeader("Authorization");
         final String jwtToken = getauth.substring(8, getauth.length()-1);
         //System.out.println("token"+jwtToken.getValue());
@@ -90,10 +92,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
             //Cookie refreshToken = cookieService.getCookie(request, JwtServiceImpl.REFRESH_TOKEN_NAME);
 //            if(refreshToken != null){
 //                refreshJwt = refreshToken.getValue();
-            } finally {
-
-
-        }
+            }
 //        } catch (Exception e) {}
 //
 //        try{
@@ -123,6 +122,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //        } catch (ExpiredJwtException e) {}
 //
 //        filterChain.doFilter(request, response);
+        } catch (NullPointerException e){
+            System.out.println("error : "+e.getMessage());
+        }
         filterChain.doFilter(request, response);
 
     }
