@@ -23,7 +23,7 @@ public class ProfileKeyword {
 
     String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "profile_id")
     @JsonIgnore
     private Profile profile;

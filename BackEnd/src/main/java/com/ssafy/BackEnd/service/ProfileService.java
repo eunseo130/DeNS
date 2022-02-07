@@ -26,7 +26,11 @@ public interface ProfileService {
 
     List<Profile> showFindTeamList(String keyword);
 
+    List<Profile> findUserByKeyword(String keyword);
+
     User findUserById(Long profile_id);
 
     List<String> addKeyword(Profile profile, String content);
+
+
 }

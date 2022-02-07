@@ -29,13 +29,17 @@ public class Profile extends BaseTimeEntity{
 
     private String image;
 
+    private String git;
+
+    private String git_id;
+
 //    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
 //    @JoinColumn(name = "image_id")
 //    Image image;
 
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
     List<UserFeed> user_feed = new ArrayList<>();
 
-    @OneToMany(mappedBy = "profile", cascade = CascadeType.MERGE)
+    @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
     List<ProfileKeyword> profile_keyword = new ArrayList<>();
 }

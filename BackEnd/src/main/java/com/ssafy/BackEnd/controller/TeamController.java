@@ -70,59 +70,26 @@ public class TeamController {
         return new ResponseEntity<List<Team>>(my_teams, HttpStatus.OK);
     }
 
-    //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
-//    @PostMapping(value="/create/{profileId}")
-//    @ApiOperation(value = "팀 만들기")
-//    public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamDto, @PathVariable Long profileId) throws NotFoundException {
-//        Team team = teamDto.createTeam();
-//        if (team == null) {
-//            System.out.println("error");
-//            throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
-//        }
-//        Team newTeam = teamService.createTeam(team);
-//        List<String> keywords = hashTagAlgorithm.strList(newTeam.getContent());
-//        List<Keyword> keywordList = new ArrayList<>();
-//        List<TeamKeyword> teamKeywordList = new ArrayList<>();
-//        for (String keyword : keywords) {
-//            if (keywordRepository.findByName(keyword) == null) {
-//                Keyword newKeyword = new Keyword();
-//                newKeyword.setName(keyword);
-//                keywordList.add(newKeyword);
-//                TeamKeyword newTeamKeyword = new TeamKeyword();
-//                newTeamKeyword.setKeyword(newKeyword);
-//                newTeamKeyword.setCount(1);
-//                newTeamKeyword.setTeam(newTeam);
-//                teamKeywordRepository.save(newTeamKeyword);
-//                teamKeywordList.add(newTeamKeyword);
-//            } else {
-//                Keyword findKeyword = keywordRepository.findByName(keyword);
-////                keywordRepository.save(findKeyword);
-//                keywordList.add(findKeyword);
-//
-//                if (teamKeywordRepository.findTeamKeyword(findKeyword.getKeyword_id(), newTeam.getTeam_id()) == null) {
-//                    TeamKeyword newTeamKeyword = new TeamKeyword();
-//                    newTeamKeyword.setKeyword(findKeyword);
-//                    newTeamKeyword.setTeam(newTeam);
-//                    newTeamKeyword.setCount(1);
-//                    teamKeywordRepository.save(newTeamKeyword);
-//                    teamKeywordList.add(newTeamKeyword);
-//                } else {
-//                    TeamKeyword findTeamKeyword = teamKeywordRepository.findTeamKeyword(findKeyword.getKeyword_id(), newTeam.getTeam_id());
-//                    findTeamKeyword.setCount(findTeamKeyword.getCount()+1);
-//                }
-//            }
-//        }
-//        newTeam.setTeam_keyword(teamKeywordList);
-//        Profile findProfile = profileService.findById(profileId).get();
-//        TeamMember teamMember = teamMemberService.addTeamLeader(findProfile.getEmail(), newTeam);
-//        return new ResponseEntity<Team>(newTeam, HttpStatus.OK);
-//
-//    }
+    @ExceptionHandler({NotFoundException.class, NullPointerException.class})
+    @PostMapping(value="/create/{profileId}")
+    @ApiOperation(value = "팀 만들기")
+    public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamDto, @PathVariable Long profileId) throws NotFoundException {
+        Team team = teamDto.createTeam();
+        if (team == null) {
+            System.out.println("error");
+            throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
+        }
+        Team newTeam = teamService.createTeam(team);
+        Profile findProfile = profileService.findById(profileId).get();
+        TeamMember teamMember = teamMemberService.addTeamLeader(findProfile.getEmail(), newTeam);
+        return new ResponseEntity<Team>(newTeam, HttpStatus.OK);
+
+    }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @GetMapping("/{team_id}")
     @ApiOperation(value = "팀 조회")
-    public ResponseEntity<Team> findTeam(@RequestParam Long team_id) throws NotFoundException {
+    public ResponseEntity<Team> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
         return new ResponseEntity<Team>(teamService.findByTeam(team_id), HttpStatus.OK);
     }
@@ -130,7 +97,7 @@ public class TeamController {
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @PutMapping("/{team_id}")
     @ApiOperation(value = "팀 수정") //팀 수정이 무엇에 대한 수정인가(name과 content에 대한 수정??)
-    public ResponseEntity<Team> modifyTeam(@RequestParam Long team_id, @RequestBody TeamDto teamDto) throws NotFoundException {
+    public ResponseEntity<Team> modifyTeam(@PathVariable long team_id, @RequestBody TeamDto teamDto) throws NotFoundException {
         Team findTeam = teamService.findByTeam(team_id);
         Team team = teamService.modifyTeam(findTeam, teamDto);
         return new ResponseEntity<Team>(team, HttpStatus.OK);
