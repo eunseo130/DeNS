@@ -40,8 +40,16 @@ public class TeamFeedFileServiceImpl implements TeamFeedFileService {
         return result;
     }
 
+
     @Override
     public void save(TeamFeedFile file) {
         teamFeedFileRepository.save(file);
+    }
+
+    @Override
+    public void deleteFile(String filename) {
+        TeamFeedFile file = teamFeedFileRepository.findByFileName(filename);
+        file.setTeam_feed(null);
+        teamFeedFileRepository.delete(file);
     }
 }

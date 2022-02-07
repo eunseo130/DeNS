@@ -1,14 +1,13 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.dto.TeamDto;
 import com.ssafy.BackEnd.entity.*;
-import com.ssafy.BackEnd.repository.ProfileRepository;
-import com.ssafy.BackEnd.repository.TeamMemberRepository;
-import com.ssafy.BackEnd.repository.TeamRespository;
-import com.ssafy.BackEnd.repository.UserRepository;
+import com.ssafy.BackEnd.repository.*;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -18,7 +17,7 @@ import com.ssafy.BackEnd.entity.Team;
 @RequiredArgsConstructor
 public class TeamServiceImpl implements TeamService{
 
-    private final TeamRespository teamRespository;
+    private final TeamRepository teamRepository;
 
     private final TeamMemberRepository teamMemberRepository;
 
@@ -26,9 +25,14 @@ public class TeamServiceImpl implements TeamService{
 
     private final ProfileRepository profileRepository;
 
+    private final TeamKeywordRepository teamKeywordRepository;
+
+
+    private HashTagAlgorithm hashTagAlgorithm = new HashTagAlgorithm();
+
     @Override
     public Team findByTeam(Long team_id) throws NotFoundException {
-        Team findTeam = teamRespository.findByTeam(team_id);
+        Team findTeam = teamRepository.findByTeam(team_id);
         if(findTeam == null) throw new NotFoundException("팀을 찾을 수 없습니다");
 
         return findTeam;
@@ -36,26 +40,103 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public Team createTeam(Team team) {
-        teamRespository.save(team);
+        teamRepository.save(team);
         return team;
     }
 
     @Override
-    public void modifyTeam(long team_id, Team team){
-        Team old_team = teamRespository.findByTeam(team_id);
-        old_team.setTitle(team.getTitle()); //팀 이름만 수정
+    public Team modifyTeam(Team team, TeamDto teamDto){
+        team.setTitle(teamDto.getTitle());
+        team.setContent(teamDto.getContent());
+        List<TeamKeyword> teamKeywords = team.getTeam_keyword();
+        List<String> keywords = hashTagAlgorithm.strList(team.getContent());
+        List<TeamKeyword> deleteKeywords = new ArrayList<>();
+        for (TeamKeyword teamKeyword : teamKeywords) {
+            if (keywords.contains(teamKeyword.getKeyword().getName()) == false) {
+                System.out.println(teamKeyword.getKeyword().getName());
+                System.out.println("==============if");
+                teamKeyword.setCount(teamKeyword.getCount() - 1);
+                deleteKeywords.add(teamKeyword);
+//                keywords.remove(teamFeedKeyword.getKeyword().getName());
+//                teamFeedKeywords.remove(teamFeedKeyword);
+            } else if (keywords.contains(teamKeyword.getKeyword().getName())) {
+                System.out.println(teamKeyword.getKeyword().getName());
+                System.out.println("=============else");
+                keywords.remove(teamKeyword.getKeyword().getName());
+            }
+        }
+        for (TeamKeyword deleteKeyword : deleteKeywords) {
+//            teamFeedKeywords.remove(deleteKeyword);
+            if (deleteKeyword.getCount() <= 0) {
 
-        teamRespository.save(team);
+//                deleteKeyword.setTeam_feed(null);
+//                deleteKeyword.setKeyword(null);
+//                teamFeedKeywordRepository.deleteById(deleteKeyword.getTeamfeedkeyword_id());
+//                System.out.println(deleteKeyword.getKeyword().getKeyword_id());
+                System.out.println("=======remove");
+                teamKeywords.remove(deleteKeyword);
+                System.out.println("==========delete");
+                teamKeywordRepository.delete(deleteKeyword);
+//                teamFeedKeywordRepository.deleteById(deleteKeyword.getTeamfeedkeyword_id());
+//                keywordRepository.deleteById(deleteKeyword.getKeyword().getKeyword_id());
+
+//                teamFeedKeywords.remove(deleteKeyword);
+            }
+        }
+        for (String key : keywords) System.out.println(key.getBytes(StandardCharsets.UTF_8));
+        List<Keyword> keywordList = new ArrayList<>();
+        for (String keyword : keywords) {
+            if (keywordRepository.findByName(keyword) == null) {
+                Keyword newKeyword = new Keyword();
+                newKeyword.setName(keyword);
+                keywordList.add(newKeyword);
+                TeamKeyword newTeamKeyword = new TeamKeyword();
+                newTeamKeyword.setKeyword(newKeyword);
+                newTeamKeyword.setTeam(team);
+                newTeamKeyword.setCount(1);
+                teamKeywordRepository.save(newTeamKeyword);
+                teamKeywords.add(newTeamKeyword);
+            } else {
+                Keyword findKeyword = keywordRepository.findByName(keyword);
+                keywordList.add(findKeyword);
+                if (teamKeywordRepository.findTeamKeyword(findKeyword.getKeyword_id(), team.getTeam_id()) == null) {
+                    TeamKeyword newTeamKeyword = new TeamKeyword();
+                    newTeamKeyword.setKeyword(findKeyword);
+                    newTeamKeyword.setTeam(team);
+                    newTeamKeyword.setCount(1);
+//                    teamFeedKeywordRepository.save(newTeamFeedKeyword);
+                    teamKeywords.add(newTeamKeyword);
+                } else {
+                    TeamKeyword findTeamKeyword = teamKeywordRepository.findTeamKeyword(findKeyword.getKeyword_id(), team.getTeam_id());
+                    findTeamKeyword.setCount(findTeamKeyword.getCount() + 1);
+                }
+            }
+            team.setTeam_keyword(teamKeywords);
+            teamRepository.save(team);
+        }
+        return team;
+
     }
 
     @Override
     public void deleteTeam(long team_id) {
-        teamRespository.deleteById(team_id);
+        Team team = teamRepository.findByTeam(team_id);
+        List<TeamKeyword> teamKeywordList = team.getTeam_keyword();
+        for (TeamKeyword teamKeyword : teamKeywordList) {
+//            teamFeedKeyword.getKeyword().setCount(teamFeedKeyword.getKeyword().getCount() - 1);
+            teamKeyword.getKeyword().setTeam_keyword(null);
+            teamKeywordRepository.delete(teamKeyword);
+            System.out.println("=======================");
+//            teamFeedKeywords.remove(teamFeedKeyword);
+//            System.out.println(teamFeedKeyword.getKeyword().getName());
+        }
+        teamRepository.delete(team);
+        System.out.println("=====remove");
     }
 
     @Override
     public List<Team> showFindTeamList(String keyword) {
-        List<Team> teams = teamRespository.findByTitleContaining(keyword);
+        List<Team> teams = teamRepository.findByTitleContaining(keyword);
         System.out.println(teams.toString());
         return teams;
     }
@@ -63,7 +144,7 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public List<Team> showTeamList() {
         List<Team> teams = new ArrayList<>();
-        teamRespository.findAll().forEach(team -> teams.add(team));
+        teamRepository.findAll().forEach(team -> teams.add(team));
 
         return teams;
     }
@@ -71,7 +152,7 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public List<Team> showMyTeamList(Long profile_id) {
         List<Team> my_teams = new ArrayList<>();
-        teamRespository.showMyTeamList(profile_id).forEach(myteam -> my_teams.add(myteam));
+        teamRepository.showMyTeamList(profile_id).forEach(myteam -> my_teams.add(myteam));
 
         return my_teams;
 
@@ -79,10 +160,10 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public void modifyTeamProfile(long team_id, Team team) {
-        Team old_team = teamRespository.findByTeam(team_id);
+        Team old_team = teamRepository.findByTeam(team_id);
         old_team.setContent(team.getContent()); //content(팀 프로필)만 수정
 
-        teamRespository.save(team);
+        teamRepository.save(team);
     }
 
     @Override
