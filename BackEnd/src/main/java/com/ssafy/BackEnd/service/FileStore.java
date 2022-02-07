@@ -1,6 +1,7 @@
 package com.ssafy.BackEnd.service;
 
 import com.ssafy.BackEnd.entity.FileType;
+import com.ssafy.BackEnd.entity.TeamFeedFile;
 import com.ssafy.BackEnd.entity.UserFeed;
 import com.ssafy.BackEnd.entity.UserFeedFile;
 import org.springframework.beans.factory.annotation.Value;
@@ -39,6 +40,32 @@ public class FileStore {
         multipartFile.transferTo(new File(createPath(fileName, fileType)));
 
         return UserFeedFile.builder()
+                .originalFileName(originalFileName)
+                .storePath(fileName)
+                .fileType(fileType)
+                .build();
+    }
+
+    public List<TeamFeedFile> storeTeamFiles(List<MultipartFile> multipartFiles, FileType fileType) throws IOException {
+        List<TeamFeedFile> teamFeedFiles = new ArrayList<>();
+        for (MultipartFile multipartFile : multipartFiles) {
+            if (!multipartFile.isEmpty()) {
+                teamFeedFiles.add(storeTeamFile(multipartFile, fileType));
+            }
+        }
+        return teamFeedFiles;
+    }
+
+    public TeamFeedFile storeTeamFile(MultipartFile multipartFile, FileType fileType) throws IOException {
+        if(multipartFile.isEmpty()) {
+            return null;
+        }
+
+        String originalFileName = multipartFile.getOriginalFilename();
+        String fileName = createFilename(originalFileName);
+        multipartFile.transferTo(new File(createPath(fileName, fileType)));
+
+        return TeamFeedFile.builder()
                 .originalFileName(originalFileName)
                 .storePath(fileName)
                 .fileType(fileType)

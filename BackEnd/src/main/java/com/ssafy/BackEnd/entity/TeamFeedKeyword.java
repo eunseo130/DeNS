@@ -15,12 +15,13 @@ public class TeamFeedKeyword {
     @Id @GeneratedValue
     long teamfeedkeyword_id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "keyword_id")
-    Keyword keyword;
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "keyword_id")
+//    Keyword keyword;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "teamfeed_id")
     TeamFeed team_feed;
 
+    String teamfeed_keyword;
 }

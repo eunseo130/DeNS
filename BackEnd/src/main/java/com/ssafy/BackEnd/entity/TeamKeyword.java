@@ -20,7 +20,7 @@ public class TeamKeyword {
     @JoinColumn(name = "team_id")
     Team team;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "keyword_id")
-    Keyword keyword;
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "keyword_id")
+//    Keyword keyword;
 }

@@ -1,7 +1,9 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.dto.TeamFeedDto;
 import com.ssafy.BackEnd.entity.TeamFeed;
 
+import java.io.IOException;
 import java.util.List;
 
 public interface TeamFeedService {
@@ -13,4 +15,5 @@ public interface TeamFeedService {
 
     List<TeamFeed> showFindTeamFeedList();
 
+    TeamFeed post(TeamFeedDto teamFeedDto) throws IOException;
 }

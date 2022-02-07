@@ -54,7 +54,7 @@ public class TeamController {
 
         if (teams.isEmpty()) {
             System.out.println("전체 팀 목록이 없습니다");
-            throw new CustomException("전체 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
+            throw new CustomException("전체 팀 목록이 없습니다", ErrorCode.NO_VALUE_ERROR);
         }
 
         return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
@@ -67,7 +67,7 @@ public class TeamController {
 
         if (my_teams.isEmpty()) {
             System.out.println("내 팀 목록이 없습니다");
-            throw new CustomException("내 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
+            throw new CustomException("내 팀 목록이 없습니다", ErrorCode.NO_VALUE_ERROR);
         }
 
         return new ResponseEntity<List<Team>>(my_teams, HttpStatus.OK);
@@ -80,7 +80,7 @@ public class TeamController {
         Team team = teamDto.createTeam();
         if (team == null) {
             System.out.println("error");
-            throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
+            throw new CustomException("팀 정보가 없습니다", ErrorCode.NO_VALUE_ERROR);
         }
         Team newTeam = teamService.createTeam(team);
         Profile findProfile = profileService.findById(profileId).get();
@@ -92,17 +92,21 @@ public class TeamController {
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @GetMapping("/{team_id}")
     @ApiOperation(value = "팀 조회")
-    public ResponseEntity<Team> findTeam(@RequestParam Long team_id) throws NotFoundException {
+    public ResponseEntity<Team> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
         return new ResponseEntity<Team>(teamService.findByTeam(team_id), HttpStatus.OK);
     }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @PutMapping("/{team_id}")
-    @ApiOperation(value = "팀 수정") //팀 수정이 무엇에 대한 수정인가(name과 content에 대한 수정??)
-    public ResponseEntity<Team> modifyTeam(@RequestBody TeamDto teamDto) {
+    @ApiOperation(value = "팀 수정") //팀 제목 수정
+    public ResponseEntity<Team> modifyTeam(@RequestBody TeamDto teamDto, @PathVariable Long team_id) {
         Team team = teamDto.createTeam();
-        teamService.modifyTeam(team.getTeam_id(), team);
+        if (team == null) {
+            throw new CustomException("팀 정보가 없음", ErrorCode.NO_VALUE_ERROR);
+        }
+
+        teamService.modifyTeam(team_id, team);
 
         return new ResponseEntity<Team>(team, HttpStatus.OK);
     }
@@ -110,10 +114,10 @@ public class TeamController {
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @DeleteMapping("/{team_id}")
     @ApiOperation(value = "팀 삭제")
-    public ResponseEntity<Void> deleteTeam(@PathVariable Long team_id) {
+    public ResponseEntity<String> deleteTeam(@PathVariable Long team_id) {
 
         teamService.deleteTeam(team_id);
-        return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
+        return new ResponseEntity<String>("팀 삭제 완료", HttpStatus.NO_CONTENT);
     }
 
     // ------ team manage
@@ -121,19 +125,19 @@ public class TeamController {
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @PutMapping("/profile/{team_id}")
     @ApiOperation(value = "팀 프로필 수정")
-    public ResponseEntity<Team> modifyTeamProfile(@RequestBody TeamDto teamDto) {
+    public ResponseEntity<Team> modifyTeamProfile(@RequestBody TeamDto teamDto, @PathVariable Long team_id) {
         Team team = teamDto.createTeam();
-        teamService.modifyTeamProfile(team.getTeam_id(), team);
+        teamService.modifyTeamProfile(team_id, team);
 
         return new ResponseEntity<Team>(team, HttpStatus.OK);
     }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
-    @GetMapping("/search") //팀 키워드도 검색 가능하게 해야함 !!!
-    public ResponseEntity<List<Team>> searchTeam(@RequestParam String keyword) {
-        List<Team> search_teams = teamService.showFindTeamList(keyword);
-
-        return new ResponseEntity<List<Team>>(search_teams, HttpStatus.OK);
-
-    }
+//    @GetMapping("/search") //팀 키워드도 검색 가능하게 해야함 !!!
+//    public ResponseEntity<List<Team>> searchTeam(@RequestParam String keyword) {
+//        List<Team> search_teams = teamService.showFindTeamList(keyword);
+//
+//        return new ResponseEntity<List<Team>>(search_teams, HttpStatus.OK);
+//
+//    }
 }

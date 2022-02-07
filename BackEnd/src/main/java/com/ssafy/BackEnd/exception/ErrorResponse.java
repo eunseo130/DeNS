@@ -2,11 +2,14 @@ package com.ssafy.BackEnd.exception;
 
 import com.ssafy.BackEnd.exception.ErrorCode;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
 
-@Getter @Setter
+@Getter
+@Setter
+@NoArgsConstructor
 public class ErrorResponse {
 
 //    private final LocalDateTime timestamp = LocalDateTime.now();

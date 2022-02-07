@@ -37,7 +37,10 @@ public enum ErrorCode implements EnumModel{
     RESOURCE_NOT_FOUND(204, "C002", "Resource not found"),
     EXPIRED_CODE(400, "C003", "Expired Code"),
     AWS_ERROR(400, "A001", "aws client error"),
-    INTERNER_SERVER_ERROR(500, "A005", "interner server error");
+    INTERNAL_SERVER_ERROR(500, "A005", "interner server error"),
+    TEMPORARY_SERVER_ERROR(400, "T001", "오류 발생"),
+    INVALID_ID(400, "C201", "아이디가 없음"),
+    NO_VALUE_ERROR(400, "NO VALUE", "들어오는 데이터 확인"); //변수에 값이 없을 때
 
     private int status;
     private String code;

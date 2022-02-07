@@ -52,9 +52,6 @@ public class User extends BaseTimeEntity {
     @JsonIgnore
     private List<TeamMember> team_member = new ArrayList<>( );
 
-//    @CreatedDate
-//    private LocalDateTime create_time;
-
     @Builder
     public User(String email, String name, String password) {
         this.email = email;

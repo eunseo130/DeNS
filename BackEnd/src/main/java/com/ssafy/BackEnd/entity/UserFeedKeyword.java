@@ -15,9 +15,9 @@ public class UserFeedKeyword {
     @Id @GeneratedValue
     long userfeedkeyword_id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "keyword_id")
-    Keyword keyword;
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+//    @JoinColumn(name = "keyword_id")
+//    Keyword keyword;
 
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "userfeed_id")

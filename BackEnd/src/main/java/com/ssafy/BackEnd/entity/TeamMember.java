@@ -27,7 +27,7 @@ public class TeamMember {
     @JoinColumn(name = "team_id")
     Team team;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST) //cascade 수정
     @JoinColumn(name = "email")
     @JsonIgnore
     User user;

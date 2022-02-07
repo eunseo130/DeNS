@@ -37,7 +37,7 @@ public class SearchController {
         } else {
             status = HttpStatus.NO_CONTENT;
             System.out.println("노데이터");
-            throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
+            throw new CustomException("Error", ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(userList, status);
@@ -49,7 +49,7 @@ public class SearchController {
         if(profile == null)
         {
             System.out.println("error");
-            throw new CustomException("error", ErrorCode.INTERNER_SERVER_ERROR);
+            throw new CustomException("error", ErrorCode.INTERNAL_SERVER_ERROR);
 
         }
         return new ResponseEntity<>(profile, HttpStatus.OK);
@@ -60,7 +60,7 @@ public class SearchController {
         Team team = teamService.findByTeam(team_id);
         if(team == null){
             System.out.println("team error");
-            throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
+            throw new CustomException("Error", ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(team, HttpStatus.OK);
@@ -78,7 +78,7 @@ public class SearchController {
         } else {
             status = HttpStatus.NO_CONTENT;
             System.out.println("fail");
-            throw new CustomException("error", ErrorCode.INTERNER_SERVER_ERROR);
+            throw new CustomException("error", ErrorCode.INTERNAL_SERVER_ERROR);
         }
 
         return new ResponseEntity<>(teamList, status);

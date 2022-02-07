@@ -21,12 +21,6 @@ public class UserFeed extends BaseTimeEntity{
 
     String content;
 
-//    @CreatedDate
-//    LocalDateTime create_time;
-//
-//    @LastModifiedDate
-//    LocalDateTime modify_time;
-
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id")
     Profile profile;

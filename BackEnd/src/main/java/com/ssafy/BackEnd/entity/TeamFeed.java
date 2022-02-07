@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -17,17 +18,11 @@ import java.util.List;
 @RequiredArgsConstructor
 @Getter @Setter
 
-public class TeamFeed {
+public class TeamFeed extends BaseTimeEntity{
     @Id @GeneratedValue
     long teamfeed_id;
 
     String content;
-
-    @CreatedDate
-    LocalDateTime create_time;
-
-    @LastModifiedDate
-    LocalDateTime modify_time;
 
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
@@ -38,4 +33,11 @@ public class TeamFeed {
 
     @OneToMany(mappedBy = "team_feed", cascade = CascadeType.ALL)
     List<TeamFeedKeyword> teamfeed_keyword = new ArrayList<>();
+
+    @Builder
+    public TeamFeed(Team team, String content, List<TeamFeedFile> teamfeed_file) {
+        this.team = team;
+        this.content = content;
+        this.teamfeed_file = teamfeed_file;
+    }
 }
