@@ -262,9 +262,10 @@ public class MainController {
     @GetMapping("/headertest")
     public ResponseEntity<Map<String, Object>> checkHeader(HttpServletRequest request){
         System.out.println("header : "+request.getHeader("Authorization"));
-        for(Cookie cookie : request.getCookies()){
-            System.out.println(cookie.getValue());
-        }
+//        for(Cookie cookie : request.getCookies()){
+//            System.out.println(cookie.getValue());
+//        }
+
         HttpStatus status;
         Map<String, Object> map = new HashMap<>();
 
