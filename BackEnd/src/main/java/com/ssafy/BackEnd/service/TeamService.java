@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.dto.TeamDto;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.User;
@@ -13,7 +14,7 @@ public interface TeamService {
 
     Team createTeam(Team team);
 
-    void modifyTeam(long team_id, Team team);
+    Team modifyTeam(Team team, TeamDto teamDto);
 
     void deleteTeam(long team_id);
 

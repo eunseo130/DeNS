@@ -1,13 +1,9 @@
 package com.ssafy.BackEnd.controller;
 
-import com.ssafy.BackEnd.dto.TeamDto;
-import com.ssafy.BackEnd.entity.Response;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.User;
-import com.ssafy.BackEnd.repository.TeamRespository;
 import com.ssafy.BackEnd.service.TeamMemberService;
-import com.ssafy.BackEnd.service.TeamService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface TeamRespository extends JpaRepository<Team, Long> {
+public interface TeamRepository extends JpaRepository<Team, Long> {
     //Optional<Team> findByTeam(Long team_id);
 
     @Query("select t from Team t where team_id = :team_id")

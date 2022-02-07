@@ -22,8 +22,8 @@ public class UserFeedFileServiceImpl implements UserFeedFileService {
 
     @Override
     public List<UserFeedFile> saveUserFeedFiles(Map<FileType, List<MultipartFile>> multipartFileListMap) throws IOException {
-        List<UserFeedFile> imageFiles = fileStore.storeFiles(multipartFileListMap.get(FileType.IMAGE), FileType.IMAGE);
-        List<UserFeedFile> generalFiles = fileStore.storeFiles(multipartFileListMap.get(FileType.GENERAL), FileType.GENERAL);
+        List<UserFeedFile> imageFiles = fileStore.storeUserFeedFiles(multipartFileListMap.get(FileType.IMAGE), FileType.IMAGE);
+        List<UserFeedFile> generalFiles = fileStore.storeUserFeedFiles(multipartFileListMap.get(FileType.GENERAL), FileType.GENERAL);
         List<UserFeedFile> result = Stream.of(imageFiles, generalFiles)
                 .flatMap(f -> f.stream())
                 .collect(Collectors.toList());

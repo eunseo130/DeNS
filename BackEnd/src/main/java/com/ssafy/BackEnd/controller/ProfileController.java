@@ -1,14 +1,13 @@
 package com.ssafy.BackEnd.controller;
 
 ////
-import com.ssafy.BackEnd.entity.Keyword;
 import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.ProfileKeyword;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
 import com.ssafy.BackEnd.entity.Response;
-import com.ssafy.BackEnd.repository.KeywordRepository;
 import com.ssafy.BackEnd.repository.ProfileKeywordRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
+import com.ssafy.BackEnd.service.HashTagAlgorithm;
 import com.ssafy.BackEnd.service.ImageService;
 import com.ssafy.BackEnd.service.ProfileService;
 import io.swagger.annotations.Api;
@@ -39,11 +38,13 @@ public class ProfileController {
     @Autowired
     private ImageService imageService;
 
-    @Autowired
-    private KeywordRepository keywordRepository;
+
 
     @Autowired
     private ProfileKeywordRepository profileKeywordRepository;
+
+    private HashTagAlgorithm hashTagAlgorithm = new HashTagAlgorithm();
+
 
     @GetMapping("/{profile_id}")
     @ApiOperation(value = "유저 프로필 조회")
@@ -105,35 +106,43 @@ public class ProfileController {
         profileService.deleteUser(profile_id);
     }
 
-    @PostMapping("/keyword/{profile_id}")
-    public ResponseEntity<List<Keyword>> addKeyword(@PathVariable Long profile_id, @RequestParam String content) throws NotFoundException {
-        Profile profile = profileService.findById(profile_id).get();
-        List<String> keywords = profileService.addKeyword(profile, content);
-        List<Keyword> keywordList = new ArrayList<>();
-        for (String keyword : keywords) {
-            if (keywordRepository.findByName(keyword) == null) {
-                Keyword newKeyword = new Keyword();
-                newKeyword.setName(keyword);
-                newKeyword.setCount(1);
-                keywordList.add(newKeyword);
-                ProfileKeyword newProfileKeyword = new ProfileKeyword();
-                newProfileKeyword.setKeyword(newKeyword);
-                newProfileKeyword.setProfile(profile);
-                profileKeywordRepository.save(newProfileKeyword);
-            } else {
-                Keyword findKeyword = keywordRepository.findByName(keyword);
-                findKeyword.setCount(findKeyword.getCount() + 1);
-                keywordRepository.save(findKeyword);
-                keywordList.add(findKeyword);
-                if (profileKeywordRepository.findByKeywordId(findKeyword.getKeyword_id()) == null) {
-                    ProfileKeyword newProfileKeyword = new ProfileKeyword();
-                    newProfileKeyword.setKeyword(findKeyword);
-                    newProfileKeyword.setProfile(profile);
-                    profileKeywordRepository.save(newProfileKeyword);
-                }
-            }
-        }
-        return new ResponseEntity<List<Keyword>>(keywordList, HttpStatus.OK);
+//    @PostMapping("/keyword/{profile_id}")
+//    public ResponseEntity<List<Keyword>> addKeyword(@PathVariable Long profile_id, @RequestParam String content) throws NotFoundException {
+//        Profile profile = profileService.findById(profile_id).get();
+//        List<String> keywords = hashTagAlgorithm.strList(content);
+//        List<Keyword> keywordList = new ArrayList<>();
+//        List<ProfileKeyword> profileKeywordList = new ArrayList<>();
+//        for (String keyword : keywords) {
+//            if (keywordRepository.findByName(keyword) == null) {
+//                Keyword newKeyword = new Keyword();
+//                newKeyword.setName(keyword);
+//                keywordList.add(newKeyword);
+//                ProfileKeyword newProfileKeyword = new ProfileKeyword();
+//                newProfileKeyword.setKeyword(newKeyword);
+//                newProfileKeyword.setCount(1);
+//                newProfileKeyword.setProfile(profile);
+//                profileKeywordRepository.save(newProfileKeyword);
+//                profileKeywordList.add(newProfileKeyword);
+//            } else {
+//                Keyword findKeyword = keywordRepository.findByName(keyword);
+////                keywordRepository.save(findKeyword);
+//                keywordList.add(findKeyword);
+//
+//                if (profileKeywordRepository.findProfileKeyword(findKeyword.getKeyword_id(), profile_id) == null) {
+//                    ProfileKeyword newProfileKeyword = new ProfileKeyword();
+//                    newProfileKeyword.setKeyword(findKeyword);
+//                    newProfileKeyword.setProfile(profile);
+//                    newProfileKeyword.setCount(1);
+//                    profileKeywordRepository.save(newProfileKeyword);
+//                    profileKeywordList.add(newProfileKeyword);
+//                } else {
+//                    ProfileKeyword findProfileKeyword = profileKeywordRepository.findProfileKeyword(findKeyword.getKeyword_id(), profile_id);
+//                    findProfileKeyword.setCount(findProfileKeyword.getCount()+1);
+//                }
+//            }
+//        }
+//        profile.setProfile_keyword(profileKeywordList);
+//        return new ResponseEntity<List<Keyword>>(keywordList, HttpStatus.OK);
 
-    }
+//    }
 }
