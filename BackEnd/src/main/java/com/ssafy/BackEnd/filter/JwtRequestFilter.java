@@ -9,6 +9,7 @@ import com.ssafy.BackEnd.service.UserService;
 import io.jsonwebtoken.ExpiredJwtException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -46,7 +47,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String getauth = request.getHeader("Authorization");
         final String jwtToken = getauth.substring(8, getauth.length()-1);
         //System.out.println("token"+jwtToken.getValue());
-        //System.out.println("jwt token : "+jwtToken);
+        System.out.println("jwt token : "+jwtToken);
 
         String userEmail = null;
         String jwt = null;
@@ -58,36 +59,37 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         try {
             if(jwtToken != null){
                 jwt = jwtToken;
-                //System.out.println("try jwt : "+jwt);
+                System.out.println("try jwt : "+jwt);
                 userEmail = jwtService.getUserEmail(jwt);
-                //System.out.println("try useremail : "+userEmail);
+                System.out.println("try useremail : "+userEmail);
             }
             if(userEmail != null) {
                 User user = userService.findByEmail(userEmail);
-                //System.out.println("try user : "+user.getEmail());
+                System.out.println("try user : "+user.getEmail());
                 UserIdentity userAuth = userService.findUserAuth(userEmail);
-                //System.out.println("try auth : "+userAuth.name());
+                System.out.println("try auth : "+userAuth.name());
                 List<GrantedAuthority> roles = new ArrayList<>();
 
                 meessage = "success";
-                //System.out.println("auth : "+userAuth);
+                System.out.println("auth : "+userAuth);
                 if(userAuth == UserIdentity.UNAUTH) roles.add(new SimpleGrantedAuthority("UNATH"));
                 else roles.add(new SimpleGrantedAuthority("USER"));
 
-                //System.out.println("vali : "+jwtService.validateToken(jwt, user));
+                System.out.println("vali : "+jwtService.validateToken(jwt, user));
                 if(jwtService.validateToken(jwt, user)){
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, roles);
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
-                    request.setAttribute("check", Boolean.FALSE);
+                    //request.setAttribute("check", Boolean.FALSE);
+                    response.setStatus(HttpServletResponse.SC_OK);
                 }
 
             }
         } catch (ExpiredJwtException e){
             //System.out.println("error : "+e.getMessage());
             response.addHeader("error", e.getMessage());
-            request.setAttribute("check", Boolean.TRUE);
-            meessage = "fail";
+            //request.setAttribute("check", Boolean.TRUE);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
 
             //Cookie refreshToken = cookieService.getCookie(request, JwtServiceImpl.REFRESH_TOKEN_NAME);
 //            if(refreshToken != null){
@@ -124,8 +126,14 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //        filterChain.doFilter(request, response);
         } catch (NullPointerException e){
             System.out.println("error : "+e.getMessage());
+            //request.setAttribute("check", Boolean.TRUE);
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+
+        } finally {
+            filterChain.doFilter(request, response);
         }
-        filterChain.doFilter(request, response);
+
+
 
     }
 }
