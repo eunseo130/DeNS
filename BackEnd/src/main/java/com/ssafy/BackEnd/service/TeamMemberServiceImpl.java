@@ -5,11 +5,10 @@ import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.TeamMemberIdentity;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.repository.TeamMemberRepository;
-import com.ssafy.BackEnd.repository.TeamRespository;
+import com.ssafy.BackEnd.repository.TeamRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
@@ -21,7 +20,7 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 
     private final UserRepository userRepository;
 
-    private final TeamRespository teamRespository;
+    private final TeamRepository teamRespository;
 
     private final TeamMemberRepository teamMemberRepository;
 
@@ -128,6 +127,8 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 
         return teammembers_infos;
     }
+
+
 }
 
 

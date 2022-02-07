@@ -1,7 +1,6 @@
 package com.ssafy.BackEnd.service;
 
 
-import com.ssafy.BackEnd.entity.Keyword;
 import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile1;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;

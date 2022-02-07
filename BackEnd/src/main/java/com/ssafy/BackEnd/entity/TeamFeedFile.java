@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -22,7 +23,14 @@ public class TeamFeedFile {
     @Enumerated(EnumType.STRING)
     private FileType fileType;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teamfeed_id")
     TeamFeed team_feed;
+
+    @Builder
+    public TeamFeedFile(String originalFileName, String storePath, FileType fileType) {
+        this.originalFileName = originalFileName;
+        this.fileName = storePath;
+        this.fileType = fileType;
+    }
 }

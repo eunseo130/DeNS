@@ -1,8 +1,9 @@
 package com.ssafy.BackEnd.entity;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.*;
 import org.apache.tomcat.jni.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -14,28 +15,38 @@ import java.util.List;
 
 @Entity
 @Table(name = "teamfeed")
-@RequiredArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter @Setter
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class)
+public class TeamFeed extends BaseTimeEntity{
 
-public class TeamFeed {
     @Id @GeneratedValue
     long teamfeed_id;
 
     String content;
 
-    @CreatedDate
-    LocalDateTime create_time;
+//    @CreatedDate
+//    LocalDateTime create_time;
+//
+//    @LastModifiedDate
+//    LocalDateTime modify_time;
 
-    @LastModifiedDate
-    LocalDateTime modify_time;
-
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "team_id")
+    @JsonIgnore
     Team team;
 
     @OneToMany(mappedBy = "team_feed", cascade = CascadeType.ALL) // many로 끝날때 fetch nono
-    List<TeamFeedFile> teamfeed_file = new ArrayList<>();
+    List<TeamFeedFile> teamFeedFiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "team_feed", cascade = CascadeType.ALL)
-    List<TeamFeedKeyword> teamfeed_keyword = new ArrayList<>();
+//    @JsonIgnore
+    List<TeamFeedKeyword> teamFeedKeywords = new ArrayList<>();
+
+    @Builder
+    public TeamFeed(Team team, String content, List<TeamFeedFile> teamFeedFiles) {
+        this.team = team;
+        this.content = content;
+        this.teamFeedFiles = teamFeedFiles;
+    }
 }
