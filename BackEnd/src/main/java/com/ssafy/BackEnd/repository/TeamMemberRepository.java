@@ -13,4 +13,5 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
     @Query("select t from TeamMember t where team_id = :team_id")
     List<TeamMember> showTeamMemberList(Long team_id);
 
+
 }

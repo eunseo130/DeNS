@@ -29,4 +29,6 @@ public interface TeamService {
 
     TeamMember setTeamLeader(Team team, String email);
 
+    List<Team> findTeamByKeyword(String keyword);
+
 }

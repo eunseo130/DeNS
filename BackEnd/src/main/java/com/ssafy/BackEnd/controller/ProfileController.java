@@ -106,43 +106,32 @@ public class ProfileController {
         profileService.deleteUser(profile_id);
     }
 
-//    @PostMapping("/keyword/{profile_id}")
-//    public ResponseEntity<List<Keyword>> addKeyword(@PathVariable Long profile_id, @RequestParam String content) throws NotFoundException {
-//        Profile profile = profileService.findById(profile_id).get();
-//        List<String> keywords = hashTagAlgorithm.strList(content);
-//        List<Keyword> keywordList = new ArrayList<>();
-//        List<ProfileKeyword> profileKeywordList = new ArrayList<>();
-//        for (String keyword : keywords) {
-//            if (keywordRepository.findByName(keyword) == null) {
-//                Keyword newKeyword = new Keyword();
-//                newKeyword.setName(keyword);
-//                keywordList.add(newKeyword);
-//                ProfileKeyword newProfileKeyword = new ProfileKeyword();
-//                newProfileKeyword.setKeyword(newKeyword);
-//                newProfileKeyword.setCount(1);
-//                newProfileKeyword.setProfile(profile);
-//                profileKeywordRepository.save(newProfileKeyword);
-//                profileKeywordList.add(newProfileKeyword);
-//            } else {
-//                Keyword findKeyword = keywordRepository.findByName(keyword);
-////                keywordRepository.save(findKeyword);
-//                keywordList.add(findKeyword);
-//
-//                if (profileKeywordRepository.findProfileKeyword(findKeyword.getKeyword_id(), profile_id) == null) {
-//                    ProfileKeyword newProfileKeyword = new ProfileKeyword();
-//                    newProfileKeyword.setKeyword(findKeyword);
-//                    newProfileKeyword.setProfile(profile);
-//                    newProfileKeyword.setCount(1);
-//                    profileKeywordRepository.save(newProfileKeyword);
-//                    profileKeywordList.add(newProfileKeyword);
-//                } else {
-//                    ProfileKeyword findProfileKeyword = profileKeywordRepository.findProfileKeyword(findKeyword.getKeyword_id(), profile_id);
-//                    findProfileKeyword.setCount(findProfileKeyword.getCount()+1);
-//                }
-//            }
-//        }
-//        profile.setProfile_keyword(profileKeywordList);
-//        return new ResponseEntity<List<Keyword>>(keywordList, HttpStatus.OK);
+    @PostMapping("/keyword/{profile_id}")
+    public ResponseEntity<List<ProfileKeyword>> addKeyword(@PathVariable Long profile_id, @RequestParam String content) throws NotFoundException {
+        Profile profile = profileService.findById(profile_id).get();
+        List<String> keywords = hashTagAlgorithm.strList(content);
+        List<ProfileKeyword> profileKeywords = profile.getProfile_keyword();
+        for (String keyword : keywords) {
+            if (profileKeywordRepository.findProfileKeyword(keyword, profile_id) == null) {
+                ProfileKeyword newProfileKeyword = new ProfileKeyword();
+                newProfileKeyword.setName(keyword);
+                newProfileKeyword.setCount(1);
+                newProfileKeyword.setProfile(profile);
+                profileKeywordRepository.save(newProfileKeyword);
+                profileKeywords.add(newProfileKeyword);
+            } else {
+                ProfileKeyword profileKeyword = profileKeywordRepository.findProfileKeyword(keyword, profile_id);
+                profileKeyword.setCount(profileKeyword.getCount()+1);
+            }
+        }
+        profile.setProfile_keyword(profileKeywords);
+        return new ResponseEntity<List<ProfileKeyword>>(profileKeywords, HttpStatus.OK);
 
-//    }
+    }
+
+    @GetMapping("/keyword/{profile_id}")
+    public void getKeywords(@PathVariable Long profile_id) throws NotFoundException {
+        Profile profile = profileService.findById(profile_id).get();
+        List<ProfileKeyword> profileKeywords = profile.getProfile_keyword();
+    }
 }
