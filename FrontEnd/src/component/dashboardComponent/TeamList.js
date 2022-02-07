@@ -16,7 +16,7 @@ export default function TeamList() {
     };
 
     const [info, setInfo] = useState('');
-
+    
     useEffect(() => {
         team(
             (response) => {

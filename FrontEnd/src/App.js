@@ -11,6 +11,7 @@ import Back from './component/commonComponent/Back'
 
 import Team from './component/TeamComponent/Team'
 import Teamsetting from './component/TeamComponent/Teamsetting'
+import MakeTeam from './component/TeamComponent/MakeTeam'
 
 import Dashboard from './component/dashboardComponent/Dashboard'
 import Messanger from './component/MessangerComponent/Messanger'
@@ -64,6 +65,13 @@ const App = () => {
               path: '/afterlogin/profile/:id/keyword',
               element: <ProfileKeyword />,
             },
+          ],
+        },
+        {
+          path: '/afterlogin/maketeam',
+          element: <MakeTeam />,
+          children: [
+            { path: '/afterlogin/maketeam', element: <MakeTeam /> },
           ],
         },
         {

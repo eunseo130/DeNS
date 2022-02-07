@@ -5,17 +5,17 @@ import TeamLinkBox from "./TeamLinkBox";
 import { team } from '../../api/test';
 
 function TeamLink(props) {
-  const [link, setLink] = useState('');
-  useEffect(() => {
-    team(
-        (response) => {
-            setLink(response.data);
-            // console.log(response.data[0].title);
-    },  
-    (error) => {
-        console.log("오류가 됨.", (error));
+    const [link, setLink] = useState('');
+    useEffect(() => {
+      team(
+          (response) => {
+              setLink(response.data);
+              // console.log(response.data[0].title);
+      },  
+      (error) => {
+          console.log("오류가 됨.", (error));
+      });
     });
-  });
   
     const settings = {
       dots: true,
@@ -26,7 +26,8 @@ function TeamLink(props) {
     };
     const SliderStyle = {
       display: "flex",
-    }
+    };
+    
   return (
 
     <Container>
