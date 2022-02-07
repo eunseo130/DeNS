@@ -1,11 +1,17 @@
 import React, { useState, useEffect } from 'react'
-import { Outlet, useParams } from 'react-router-dom'
-// import ProfileInfo from './ProfileInfo'
-// import ProfileKeyword from './ProfileKeyword.js'
-import { TagCloud } from 'react-tagcloud'
-import { profileTest, profileUpdate, putKeyword } from '../../api/test'
+import { Outlet, useParams, Link } from 'react-router-dom'
+import { profileTest, profileUpdate, putKeyword } from '../../api/profile'
+import ProfileTagCloud from './ProfileTagCloud'
 
 export default function ProfileMain() {
+  function componentDidMount() {
+    if (!document.getElementById('KakaoJSSDK')) {
+      const scriptKakaoJS = document.createElement('script')
+      scriptKakaoJS.src = '//developers.kakao.com/sdk/js/kakao.min.js'
+      document.body.appendChild(scriptKakaoJS)
+    }
+  }
+
   const [inputs, setInputs] = useState({
     image: '',
     namecosn: '',
@@ -14,8 +20,11 @@ export default function ProfileMain() {
     email: '',
     keyword: '',
     edit: false,
+    gitId: '',
+    git: true,
   })
-  const { image, name, position, stack, email, edit, keyword } = inputs
+  const { image, name, position, stack, email, edit, keyword, gitId, git } =
+    inputs
   const [keywords, setKeywords] = useState([
     { value: position, count: 10000 },
     { value: stack, count: 10000 },
@@ -36,6 +45,8 @@ export default function ProfileMain() {
             position: res.data.position,
             stack: res.data.stack,
             email: res.data.email,
+            git: !git,
+            gitId: res.data.gitId,
           })
           setKeywords([
             { value: res.data.position, count: 10000 },
@@ -60,6 +71,8 @@ export default function ProfileMain() {
           position: res.data.position,
           stack: res.data.stack,
           email: res.data.email,
+          gitId: res.data.gitId,
+          git: !git,
           edit: !edit,
         })
         setKeywords([
@@ -90,12 +103,15 @@ export default function ProfileMain() {
     putKeyword(
       [id, keyword],
       (res) => {
-        const keywordObj = {
-          value: res.data.keyword,
-          count: res.data.count,
-        }
-        setKeywords(keywords.concat(keywordObj))
+        console.log(res.data)
+        const keywordObjs = res.data
+        keywordObjs.map((keywordObj) => {
+          console.log(keywordObj.name, keywordObj.count)
+          setKeywords(keywords.concat(keywordObj))
+        })
+        console.log(keywords)
       },
+
       (error) => console.log(error)
     )
   }
@@ -103,7 +119,12 @@ export default function ProfileMain() {
   return (
     <div>
       <h3>프로필 메인페이지입니다</h3>
-      <TagCloud minSize={1} maxSize={100} tags={keywords} />
+      <ProfileTagCloud keywords={keywords} />
+      {git ? (
+        <img src={`https://ghchart.rshah.org/${gitId} `} />
+      ) : (
+        <input onChange={onSave} name="gitId" value={gitId}></input>
+      )}
       <div>
         <img src={image} alt={name} />
         <p>이름:&nbsp; {name}</p>
@@ -129,6 +150,10 @@ export default function ProfileMain() {
         ) : (
           <button onClick={onEdit}>편집</button>
         )}
+
+        <button>
+          <Link to={`/afterlogin/messenger/${id}`}>메세지</Link>
+        </button>
       </div>
       키워드를 입력해 주세요.
       <br />

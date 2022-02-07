@@ -13,7 +13,7 @@ import Team from './component/TeamComponent/Team'
 import Teamsetting from './component/TeamComponent/Teamsetting'
 
 import Dashboard from './component/dashboard/Dashboard'
-import Messanger from './component/MessangerComponent/Messanger'
+import Messanger from './component/MessengerComponent/Messenger'
 
 import Search from './component/SearchComponent/Search'
 import Searchid from './component/SearchComponent/Searchid'
@@ -27,10 +27,13 @@ import Groupstart from './component/GroupComponent/Groupstart'
 import Groupchannel from './component/GroupComponent/Groupchannel'
 import Grouplink from './component/GroupComponent/Grouplink'
 
+import Messenger from './component/MessengerComponent/Messenger'
+import Message from './component/MessengerComponent/Message'
 import Error from './component/Error'
 import Page404 from './component/Page404'
 import HeaderBox from './component/commonComponent/HeaderBox'
 
+import 'bootstrap/dist/css/bootstrap.min.css'
 const App = () => {
   const routes = useRoutes([
     //로그인하기전 페이지 관리
@@ -89,6 +92,14 @@ const App = () => {
             { path: '/afterlogin/group/start', element: <Groupstart /> },
             { path: '/afterlogin/group/channel', element: <Groupchannel /> },
             { path: '/afterlogin/group/link', element: <Grouplink /> },
+          ],
+        },
+        {
+          path: '/afterlogin/messenger',
+          element: <Messenger />,
+          children: [
+            { index: true, elelment: <Messenger /> },
+            { path: '/afterlogin/messenger/:id', element: <Message /> },
           ],
         },
         {
