@@ -27,9 +27,6 @@ public class TeamServiceImpl implements TeamService{
 
     private final TeamKeywordRepository teamKeywordRepository;
 
-    private final TeamFeedKeywordRepository teamFeedKeywordRepository;
-
-
 
     private HashTagAlgorithm hashTagAlgorithm = new HashTagAlgorithm();
 
@@ -52,23 +49,25 @@ public class TeamServiceImpl implements TeamService{
                 //newTeamKeyword.setKeyword(newKeyword);
                 newTeamKeyword.setCount(1);
                 newTeamKeyword.setTeam(team);
+                newTeamKeyword.setName(keyword);
                 teamKeywordRepository.save(newTeamKeyword);
                 teamKeywordList.add(newTeamKeyword);
             } else {
-                TeamKeyword findKeyword = teamKeywordRepository.findByName(keyword);
+                TeamKeyword findTeamKeyword = teamKeywordRepository.findTeamKeyword(keyword, team);
 //                keywordRepository.save(findKeyword);
-                findKeyword.setCount(findKeyword.getCount() + 1);
+                findTeamKeyword.setCount(findTeamKeyword.getCount() + 1);
 
-                if (teamKeywordRepository.findTeamKeyword(findKeyword.getTeamkeyword_id(), team.getTeam_id()) == null) {
+                if (findTeamKeyword == null) {
                     TeamKeyword newTeamKeyword = new TeamKeyword();
                     //newTeamKeyword.setKeyword(findKeyword);
                     newTeamKeyword.setTeam(team);
                     newTeamKeyword.setCount(1);
+                    newTeamKeyword.setName(keyword);
                     teamKeywordRepository.save(newTeamKeyword);
                     teamKeywordList.add(newTeamKeyword);
                 }
 //                else {
-//                    TeamKeyword findTeamKeyword = teamKeywordRepository.findTeamKeyword(findKeyword.getTeamkeyword_id(), team.getTeam_id());
+////                    TeamKeyword findTeamKeyword = teamKeywordRepository.findTeamKeyword(findKeyword.getTeamkeyword_id(), team.getTeam_id());
 //                    findTeamKeyword.setCount(findTeamKeyword.getCount()+1);
 //                }
             }
@@ -120,12 +119,8 @@ public class TeamServiceImpl implements TeamService{
             }
         }
         for (String key : keywords) System.out.println(key.getBytes(StandardCharsets.UTF_8));
-        List<TeamKeyword> keywordList = new ArrayList<>();
         for (String keyword : keywords) {
-            if (teamKeywordRepository.findByName(keyword) == null) {
-                TeamKeyword newKeyword = new TeamKeyword();
-                newKeyword.setName(keyword);
-                keywordList.add(newKeyword);
+            if (teamKeywordRepository.findTeamKeyword(keyword, team) == null) {
                 TeamKeyword newTeamKeyword = new TeamKeyword();
                 //newTeamKeyword.setKeyword(newKeyword);
                 newTeamKeyword.setTeam(team);
@@ -133,19 +128,8 @@ public class TeamServiceImpl implements TeamService{
                 teamKeywordRepository.save(newTeamKeyword);
                 teamKeywords.add(newTeamKeyword);
             } else {
-                TeamKeyword findKeyword = teamKeywordRepository.findByName(keyword);
-                keywordList.add(findKeyword);
-                if (teamKeywordRepository.findTeamKeyword(findKeyword.getTeamkeyword_id(), team.getTeam_id()) == null) {
-                    TeamKeyword newTeamKeyword = new TeamKeyword();
-                    //newTeamKeyword.setKeyword(findKeyword);
-                    newTeamKeyword.setTeam(team);
-                    newTeamKeyword.setCount(1);
-//                    teamFeedKeywordRepository.save(newTeamFeedKeyword);
-                    teamKeywords.add(newTeamKeyword);
-                } else {
-                    TeamKeyword findTeamKeyword = teamKeywordRepository.findTeamKeyword(findKeyword.getTeamkeyword_id(), team.getTeam_id());
-                    findTeamKeyword.setCount(findTeamKeyword.getCount() + 1);
-                }
+                TeamKeyword teamKeyword = teamKeywordRepository.findTeamKeyword(keyword, team);
+                teamKeyword.setCount(teamKeyword.getCount()+1);
             }
             team.setTeam_keyword(teamKeywords);
             teamRepository.save(team);
@@ -160,7 +144,6 @@ public class TeamServiceImpl implements TeamService{
         List<TeamKeyword> teamKeywordList = team.getTeam_keyword();
         for (TeamKeyword teamKeyword : teamKeywordList) {
 //            teamFeedKeyword.getKeyword().setCount(teamFeedKeyword.getKeyword().getCount() - 1);
-            //teamKeyword.getKeyword().setTeam_keyword(null);
             teamKeywordRepository.delete(teamKeyword);
             System.out.println("=======================");
 //            teamFeedKeywords.remove(teamFeedKeyword);
@@ -214,6 +197,17 @@ public class TeamServiceImpl implements TeamService{
         return teamMember;
     }
 
-
+    @Override
+    public List<Team> findTeamByKeyword(String keyword) {
+        List<TeamKeyword> findTeamKeywords = teamKeywordRepository.findByNameContaining(keyword);
+        List<Team> findTeams = new ArrayList<>();
+        for (TeamKeyword teamKeyword : findTeamKeywords) {
+            System.out.println(teamKeyword.getName());
+            if (!findTeams.contains(teamKeyword.getTeam())) {
+                findTeams.add(teamKeyword.getTeam());
+            }
+        }
+        return findTeams;
+    }
 }
 

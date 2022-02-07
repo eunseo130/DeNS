@@ -41,28 +41,34 @@ public class TeamFeedServiceImpl implements TeamFeedService{
             teamFeedFile.setTeam_feed(teamFeed);
         }
         List<String> keywords = hashTagAlgorithm.strList(teamFeed.getContent());
+        List<TeamFeedKeyword> teamFeedKeywords = new ArrayList<>();
         for (String keyword : keywords) {
-            if (teamKeywordRepository.findByName(keyword) == null) {
+            if (teamKeywordRepository.findTeamKeyword(keyword, teamFeed.getTeam()) == null) {
                 TeamKeyword newTeamKeyword = new TeamKeyword();
                 newTeamKeyword.setName(keyword);
                 newTeamKeyword.setCount(1);
                 newTeamKeyword.setTeam(teamFeed.getTeam());
+                teamKeywordRepository.save(newTeamKeyword);
                 TeamFeedKeyword newTeamFeedKeyword = new TeamFeedKeyword();
                 newTeamFeedKeyword.setName(keyword);
                 newTeamFeedKeyword.setTeam_feed(teamFeed);
                 teamFeedKeywordRepository.save(newTeamFeedKeyword);
-
+                teamFeedKeywords.add(newTeamFeedKeyword);
             } else {
-                TeamKeyword findTeamKeyword = teamKeywordRepository.findByName(keyword);
+                TeamKeyword findTeamKeyword = teamKeywordRepository.findTeamKeyword(keyword, teamFeed.getTeam());
                 findTeamKeyword.setCount(findTeamKeyword.getCount()+1);
-
-                if (teamFeedKeywordRepository.findTeamFeedKeyword(keyword, teamFeed.getTeamfeed_id()) == null) {
+                TeamFeedKeyword findTeamFeedKeyword = teamFeedKeywordRepository.findTeamFeedKeyword(keyword, teamFeed.getTeamfeed_id());
+                if (findTeamFeedKeyword == null) {
                     TeamFeedKeyword newTeamFeedKeyword = new TeamFeedKeyword();
                     newTeamFeedKeyword.setName(keyword);
                     newTeamFeedKeyword.setTeam_feed(teamFeed);
+                    teamFeedKeywords.add(newTeamFeedKeyword);
+                } else {
+                    teamFeedKeywords.add(findTeamFeedKeyword);
                 }
             }
         }
+        teamFeed.setTeamFeedKeywords(teamFeedKeywords);
         teamFeed.setTeamFeedFiles(teamFeedFiles);
         return teamFeedRepository.save(teamFeed);
     }
@@ -73,67 +79,64 @@ public class TeamFeedServiceImpl implements TeamFeedService{
         teamFeed.setContent(teamFeedDto.getContent());
 
         List<TeamFeedKeyword> teamFeedKeywords = teamFeed.getTeamFeedKeywords();
+        List<TeamKeyword> teamKeywords = teamFeed.getTeam().getTeam_keyword();
         List<String> keywords = hashTagAlgorithm.strList(teamFeed.getContent());
-        List<TeamFeedKeyword> deleteKeywords = new ArrayList<>();
-        for (TeamFeedKeyword teamFeedKeyword : teamFeedKeywords) {
-            if (!keywords.contains(teamFeedKeyword.getName())) {
-                System.out.println(teamFeedKeyword.getName());
+        List<TeamKeyword> deleteKeywords = new ArrayList<>();
+        for (TeamKeyword teamKeyword : teamKeywords) {
+            if (!keywords.contains(teamKeyword.getName())) {
+                System.out.println(teamKeyword.getName());
                 System.out.println("==============if");
-                teamFeedKeyword.setCount(teamFeedKeyword.getCount() - 1);
-                deleteKeywords.add(teamFeedKeyword);
-//                keywords.remove(teamFeedKeyword.getKeyword().getName());
+                teamKeyword.setCount(teamKeyword.getCount() - 1);
+                deleteKeywords.add(teamKeyword);
+////                keywords.remove(teamFeedKeyword.getKeyword().getName());
 //                teamFeedKeywords.remove(teamFeedKeyword);
-            } else if (keywords.contains(teamFeedKeyword.getKeyword().getName())) {
-                System.out.println(teamFeedKeyword.getKeyword().getName());
+            } else if (keywords.contains(teamKeyword.getName())) {
+                System.out.println(teamKeyword.getName());
                 System.out.println("=============else");
-                keywords.remove(teamFeedKeyword.getKeyword().getName());
+                keywords.remove(teamKeyword.getName());
             }
         }
-        for (TeamFeedKeyword deleteKeyword : deleteKeywords) {
+        for (TeamKeyword deleteKeyword : deleteKeywords) {
 //            teamFeedKeywords.remove(deleteKeyword);
             if (deleteKeyword.getCount() <= 0) {
 
 //                deleteKeyword.setTeam_feed(null);
 //                deleteKeyword.setKeyword(null);
 //                teamFeedKeywordRepository.deleteById(deleteKeyword.getTeamfeedkeyword_id());
-                System.out.println(deleteKeyword.getKeyword().getKeyword_id());
                 System.out.println("=======remove");
                 teamFeedKeywords.remove(deleteKeyword);
                 System.out.println("==========delete");
-//                teamFeedKeywordRepository.delete(deleteKeyword);
+                teamKeywordRepository.delete(deleteKeyword);
 //                teamFeedKeywordRepository.deleteById(deleteKeyword.getTeamfeedkeyword_id());
 //                keywordRepository.deleteById(deleteKeyword.getKeyword().getKeyword_id());
 
 //                teamFeedKeywords.remove(deleteKeyword);
             }
         }
+
         for (String key : keywords) System.out.println(key.getBytes(StandardCharsets.UTF_8));
-        List<Keyword> keywordList = new ArrayList<>();
         for (String keyword : keywords) {
-            if (keywordRepository.findByName(keyword) == null) {
-                Keyword newKeyword = new Keyword();
-                newKeyword.setName(keyword);
-                keywordList.add(newKeyword);
+            if (teamKeywordRepository.findTeamKeyword(keyword, teamFeed.getTeam()) == null) {
+                TeamKeyword newTeamKeyword = new TeamKeyword();
+                newTeamKeyword.setName(keyword);
+                newTeamKeyword.setCount(1);
+                newTeamKeyword.setTeam(teamFeed.getTeam());
+                teamKeywordRepository.save(newTeamKeyword);
                 TeamFeedKeyword newTeamFeedKeyword = new TeamFeedKeyword();
-                newTeamFeedKeyword.setKeyword(newKeyword);
+                newTeamFeedKeyword.setName(keyword);
                 newTeamFeedKeyword.setTeam_feed(teamFeed);
-                newTeamFeedKeyword.setCount(1);
                 teamFeedKeywordRepository.save(newTeamFeedKeyword);
                 teamFeedKeywords.add(newTeamFeedKeyword);
             } else {
-                Keyword findKeyword = keywordRepository.findByName(keyword);
-                keywordList.add(findKeyword);
-                if (teamFeedKeywordRepository.findTeamFeedKeyword(findKeyword.getKeyword_id(), teamFeed.getTeamfeed_id()) == null) {
+                TeamKeyword findTeamKeyword = teamKeywordRepository.findTeamKeyword(keyword, teamFeed.getTeam());
+                findTeamKeyword.setCount(findTeamKeyword.getCount()+1);
+
+                if (teamFeedKeywordRepository.findTeamFeedKeyword(keyword, teamFeed.getTeamfeed_id()) == null) {
                     TeamFeedKeyword newTeamFeedKeyword = new TeamFeedKeyword();
-                    newTeamFeedKeyword.setKeyword(findKeyword);
+                    newTeamFeedKeyword.setName(keyword);
                     newTeamFeedKeyword.setTeam_feed(teamFeed);
-                    newTeamFeedKeyword.setCount(1);
-//                    teamFeedKeywordRepository.save(newTeamFeedKeyword);
-                    teamFeedKeywords.add(newTeamFeedKeyword);
-                } else {
-                    TeamFeedKeyword findTeamFeedKeyword = teamFeedKeywordRepository.findTeamFeedKeyword(findKeyword.getKeyword_id(), teamFeed.getTeamfeed_id());
-                    findTeamFeedKeyword.setCount(findTeamFeedKeyword.getCount() + 1);
                 }
+            }
             }
             teamFeed.setTeamFeedKeywords(teamFeedKeywords);
 
@@ -169,7 +172,6 @@ public class TeamFeedServiceImpl implements TeamFeedService{
 //            ;
 
             teamFeedRepository.save(teamFeed);
-        }
             return teamFeed;
 
     }
@@ -180,9 +182,15 @@ public class TeamFeedServiceImpl implements TeamFeedService{
         TeamFeed teamFeed = teamFeedRepository.findByFeedId(teamfeed_id);
 //        Team team = teamFeed.getTeam();
         List<TeamFeedKeyword> teamFeedKeywordList = teamFeed.getTeamFeedKeywords();
+        List<TeamKeyword> deleteKeywordList = new ArrayList<>();
         for (TeamFeedKeyword teamFeedKeyword : teamFeedKeywordList) {
 //            teamFeedKeyword.getKeyword().setCount(teamFeedKeyword.getKeyword().getCount() - 1);
 //            teamFeedKeyword.getKeyword().setTeam_feed_keyword(null);
+            TeamKeyword teamKeyword = teamKeywordRepository.findTeamKeyword(teamFeedKeyword.getName(), teamFeed.getTeam());
+            teamKeyword.setCount(teamKeyword.getCount()-1);
+            if (teamKeyword.getCount() <= 0) {
+                teamKeywordRepository.delete(teamKeyword);
+            }
             teamFeedKeywordRepository.delete(teamFeedKeyword);
             System.out.println("=======================");
 //            teamFeedKeywords.remove(teamFeedKeyword);
@@ -199,7 +207,6 @@ public class TeamFeedServiceImpl implements TeamFeedService{
 //        teamFeed.setTeamFeedKeywords(null);
 //        teamFeedRepository.deleteById(teamfeed_id);
     }
-
 
 
     @Override

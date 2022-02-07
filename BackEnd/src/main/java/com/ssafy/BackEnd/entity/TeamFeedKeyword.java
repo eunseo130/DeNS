@@ -21,6 +21,8 @@ public class TeamFeedKeyword {
 
     String name;
 
+    int count;
+
 //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 //    @JoinColumn(name = "keyword_id")
 //    @JsonIgnore

@@ -70,7 +70,7 @@ public class TeamController {
         return new ResponseEntity<List<Team>>(my_teams, HttpStatus.OK);
     }
 
-    //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
+    @ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @PostMapping(value="/create/{profileId}")
     @ApiOperation(value = "팀 만들기")
     public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamDto, @PathVariable Long profileId) throws NotFoundException {
@@ -80,7 +80,6 @@ public class TeamController {
             throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
         }
         Team newTeam = teamService.createTeam(team);
-
         Profile findProfile = profileService.findById(profileId).get();
         TeamMember teamMember = teamMemberService.addTeamLeader(findProfile.getEmail(), newTeam);
         return new ResponseEntity<Team>(newTeam, HttpStatus.OK);
@@ -89,7 +88,7 @@ public class TeamController {
 
     @GetMapping("/{team_id}")
     @ApiOperation(value = "팀 조회")
-    public ResponseEntity<Team> findTeam(@RequestParam Long team_id) throws NotFoundException {
+    public ResponseEntity<Team> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
         return new ResponseEntity<Team>(teamService.findByTeam(team_id), HttpStatus.OK);
     }
@@ -97,7 +96,7 @@ public class TeamController {
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @PutMapping("/{team_id}")
     @ApiOperation(value = "팀 수정") //팀 수정이 무엇에 대한 수정인가(name과 content에 대한 수정??)
-    public ResponseEntity<Team> modifyTeam(@RequestParam Long team_id, @RequestBody TeamDto teamDto) throws NotFoundException {
+    public ResponseEntity<Team> modifyTeam(@PathVariable long team_id, @RequestBody TeamDto teamDto) throws NotFoundException {
         Team findTeam = teamService.findByTeam(team_id);
         Team team = teamService.modifyTeam(findTeam, teamDto);
         return new ResponseEntity<Team>(team, HttpStatus.OK);
@@ -111,8 +110,6 @@ public class TeamController {
         teamService.deleteTeam(team_id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
-
-
 
     @PutMapping("/profile/{team_id}")
     @ApiOperation(value = "팀 프로필 수정")

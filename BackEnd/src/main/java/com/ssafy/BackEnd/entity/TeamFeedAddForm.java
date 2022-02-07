@@ -34,7 +34,7 @@ public class TeamFeedAddForm {
         return TeamFeedDto.builder()
                 .team(team)
                 .content(content)
-                .teamfeed_file(teamfeed_file)
+                .teamFeedFiles(teamfeed_file)
                 .build();
     }
     private Map<FileType, List<MultipartFile>> getFileTypeListMap() {
