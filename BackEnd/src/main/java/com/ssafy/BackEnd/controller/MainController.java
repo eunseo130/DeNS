@@ -194,12 +194,12 @@ public class MainController {
                 System.out.println("accessToken : "+Token);
                 System.out.println("refreshToken : "+refreshJwt);
 
-                Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
-                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
+//                Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
+//                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
 
                 System.out.println("pass 2");
-                response.addCookie(accessToken);
-                response.addCookie(refreshToken);
+//                response.addCookie(accessToken);
+//                response.addCookie(refreshToken);
 
                 System.out.println("pass 3");
                 redisUtil.setDataExpire(refreshJwt, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
