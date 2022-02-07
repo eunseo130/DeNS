@@ -60,8 +60,8 @@ public class ProfileServiceImpl implements ProfileService{
     public Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException {
 
         User user = userRepository.findByName(findProfile.getName());
-        System.out.println(requestModifyProfile2.getPosition());
-        System.out.println(requestModifyProfile2.getStack());
+        System.out.println("position : "+requestModifyProfile2.getPosition());
+        System.out.println("stakc : "+requestModifyProfile2.getStack());
         findProfile.setPosition(requestModifyProfile2.getPosition());
         findProfile.setStack(requestModifyProfile2.getStack());
 
@@ -98,7 +98,7 @@ public class ProfileServiceImpl implements ProfileService{
             }
         }
         for (String word : strlist) {
-            System.out.println(word);
+            System.out.println("word : "+word);
         }
 
         return strlist;

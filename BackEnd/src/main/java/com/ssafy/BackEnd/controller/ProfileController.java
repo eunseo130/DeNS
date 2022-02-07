@@ -52,7 +52,7 @@ public class ProfileController {
         try {
             Optional<Profile> profile = profileService.findById(profile_id);
             if (profile != null) {
-                System.out.println(profile.get().getEmail());
+                System.out.println("profile : "+profile.get().getEmail());
                 return new ResponseEntity<Profile>(profile.get(), HttpStatus.OK);
             }
 //            response.setResponse("success");

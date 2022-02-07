@@ -57,7 +57,7 @@ public class TeamMemberServiceImpl implements TeamMemberService {
         List<TeamMember> findTeamMember = findTeam.getTeam_member();
         for (TeamMember member : findTeamMember) {
             if (member.getUser().getEmail().equals(email)) {
-                System.out.println(member.getUser().getEmail().equals(email));
+                System.out.println("member email : "+member.getUser().getEmail().equals(email));
                 teamMemberRepository.delete(member);
                 findTeamMember.remove(member);
                 return member;
@@ -69,12 +69,12 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     @Override
     public Team mergeTeam(Long teamId1, Long teamId2) {
         Team team1 = teamRespository.findById(teamId1).get();
-        System.out.println(team1.getTitle());
+        System.out.println("team 1 : "+team1.getTitle());
         Team team2 = teamRespository.findById(teamId2).get();
-        System.out.println(team2.getTitle());
+        System.out.println("team 2 : "+team2.getTitle());
         List<TeamMember> teamMembers2 = team2.getTeam_member();
         for (TeamMember member : teamMembers2) {
-            System.out.println(member.getUser().getEmail());
+            System.out.println("member email : "+member.getUser().getEmail());
             member.setTeam(team1);
             member.setTeam_identity(TeamMemberIdentity.MEMBER);
 //            if (member.getTeam_identity().equals(TeamMemberIdentity.LEADER)) {
@@ -116,7 +116,7 @@ public class TeamMemberServiceImpl implements TeamMemberService {
         List<User> teammembers_infos = new ArrayList<>();
 
         for (TeamMember teammember_info: teammembers) {
-            System.out.println(teammember_info.getUser().getName());
+            System.out.println("teammember : "+ teammember_info.getUser().getName());
 
             teammembers_infos.add(teammember_info.getUser());
 

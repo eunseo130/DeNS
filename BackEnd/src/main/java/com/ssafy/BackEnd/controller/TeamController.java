@@ -50,7 +50,9 @@ public class TeamController {
     @GetMapping
     @ApiOperation(value = "팀 목록 가져오기")
     public ResponseEntity<List<Team>> getAllTeams() throws NotFoundException {
+
         List<Team> teams = teamService.showTeamList();
+
 
         if (teams.isEmpty()) {
             System.out.println("전체 팀 목록이 없습니다");

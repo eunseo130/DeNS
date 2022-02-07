@@ -56,7 +56,7 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public List<Team> showFindTeamList(String keyword) {
         List<Team> teams = teamRespository.findByTitleContaining(keyword);
-        System.out.println(teams.toString());
+        System.out.println("team : "+teams.toString());
         return teams;
     }
 

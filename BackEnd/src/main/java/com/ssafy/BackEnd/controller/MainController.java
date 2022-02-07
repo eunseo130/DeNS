@@ -64,7 +64,7 @@ public class MainController {
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
             authService.signUp(user);
-            System.out.println(user.getPassword());
+            System.out.println("userpwd : "+user.getPassword());
             response.setResponse("success");
             response.setMessage("회원가입을 성공적으로 완료했습니다.");
             response.setData(null);
@@ -109,7 +109,7 @@ public class MainController {
     @GetMapping("/search/keyword/{param}")
     public ResponseEntity<List<dummy>> searchKeyword(@PathVariable String param) {
 
-        System.out.println(param);
+        System.out.println("param : "+param);
 
         if (param == null) {
             dummy temp = new dummy();
@@ -181,7 +181,7 @@ public class MainController {
                                                       HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
-        System.out.println(users.getEmail()+" "+users.getPassword());
+        System.out.println("email pwd : "+users.getEmail()+" "+users.getPassword());
         try {
             final User user = authService.signIn(users.getEmail(), users.getPassword());
             //System.out.println(user.getEmail()+" "+user.getPassword());
@@ -260,8 +260,14 @@ public class MainController {
     }
 
     @GetMapping("/headertest")
-    public ResponseEntity<Map<String, Object>> checkHeader(HttpServletRequest request){
+    public ResponseEntity<Map<String, Object>> checkHeader(HttpServletRequest request) {
         System.out.println("header : "+request.getHeader("Authorization"));
+        System.out.println(request.getHeader("Authorization").getClass());
+        System.out.println(request.getAttribute("check").getClass());
+
+        String validationCheck = request.getAttribute("check").toString();
+        System.out.println(validationCheck);
+        //System.out.println(request.getAttribute());
 //        for(Cookie cookie : request.getCookies()){
 //            System.out.println(cookie.getValue());
 //        }
@@ -269,7 +275,7 @@ public class MainController {
         HttpStatus status;
         Map<String, Object> map = new HashMap<>();
 
-        if(request == null){
+        if(validationCheck.equals("true")){
             map.put("message", "fail");
             map.put("test", "데이터가 없습니다");
             status = HttpStatus.OK;

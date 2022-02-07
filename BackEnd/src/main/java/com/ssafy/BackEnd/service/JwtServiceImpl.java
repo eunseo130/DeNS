@@ -25,8 +25,8 @@ public class JwtServiceImpl { //implements JwtService {
 
     public static final Logger logger = LoggerFactory.getLogger(JwtServiceImpl.class);
 
-    public final static long TOKEN_VALIDATION_SECOND = 1000L * 30;
-    public final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 45;
+    public final static long TOKEN_VALIDATION_SECOND = 1000L * 60 * 2;
+    public final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 60 * 5;
 
     final static public String ACCESS_TOKEN_NAME = "accessToken";
     final static public String REFRESH_TOKEN_NAME = "refreshToken";
@@ -71,6 +71,7 @@ public class JwtServiceImpl { //implements JwtService {
     }
 
     public String getUserEmail(String token){
+        System.out.println("getUsereamil :"+extractAllClaims(token).get("email", String.class));
         return extractAllClaims(token).get("email", String.class);
     }
 
