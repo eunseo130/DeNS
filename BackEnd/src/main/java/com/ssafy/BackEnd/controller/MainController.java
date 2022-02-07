@@ -124,9 +124,6 @@ public class MainController {
         }
     }
 
-
-
-
     @PostMapping("/password")
     @ApiOperation(value = "사용자 비밀번호 변경요청", response = String.class)
     public ResponseEntity<Response> requestChangePassword(@RequestParam String email) {
@@ -197,12 +194,12 @@ public class MainController {
                 System.out.println("accessToken : "+Token);
                 System.out.println("refreshToken : "+refreshJwt);
 
-                Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
-                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
+//                Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
+//                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
 
                 System.out.println("pass 2");
-                response.addCookie(accessToken);
-                response.addCookie(refreshToken);
+//                response.addCookie(accessToken);
+//                response.addCookie(refreshToken);
 
                 System.out.println("pass 3");
                 redisUtil.setDataExpire(refreshJwt, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
@@ -263,12 +260,15 @@ public class MainController {
     }
 
     @GetMapping("/headertest")
-    public ResponseEntity<Map<String, Object>> checkHeader(@RequestBody String header){
-        System.out.println("header : "+header);
+    public ResponseEntity<Map<String, Object>> checkHeader(HttpServletRequest request){
+        System.out.println("header : "+request.getHeader("Authorization"));
+        for(Cookie cookie : request.getCookies()){
+            System.out.println(cookie.getValue());
+        }
         HttpStatus status;
         Map<String, Object> map = new HashMap<>();
 
-        if(header == null){
+        if(request == null){
             map.put("message", "fail");
             map.put("test", "데이터가 없습니다");
             status = HttpStatus.OK;

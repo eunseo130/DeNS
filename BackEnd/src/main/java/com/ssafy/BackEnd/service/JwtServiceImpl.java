@@ -26,7 +26,7 @@ public class JwtServiceImpl { //implements JwtService {
     public static final Logger logger = LoggerFactory.getLogger(JwtServiceImpl.class);
 
     public final static long TOKEN_VALIDATION_SECOND = 1000L * 30;
-    public final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 60 * 24 * 2;
+    public final static long REFRESH_TOKEN_VALIDATION_SECOND = 1000L * 45;
 
     final static public String ACCESS_TOKEN_NAME = "accessToken";
     final static public String REFRESH_TOKEN_NAME = "refreshToken";

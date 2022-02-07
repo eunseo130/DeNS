@@ -42,6 +42,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         final Cookie jwtToken = cookieService.getCookie(request, JwtServiceImpl.ACCESS_TOKEN_NAME);
 
+        System.out.println("token"+jwtToken.getValue());
+
         String userEmail = null;
         String jwt = null;
         String refreshJwt = null;
