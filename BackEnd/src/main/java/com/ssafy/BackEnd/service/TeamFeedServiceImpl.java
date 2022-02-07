@@ -32,9 +32,11 @@ public class TeamFeedServiceImpl implements TeamFeedService{
     @Override
     public TeamFeed createTeamFeed(TeamFeedDto teamFeedDto) throws IOException {
         List<TeamFeedFile> teamFeedFiles = teamFeedFileService.saveTeamFeedFiles(teamFeedDto.getTeamFeedFiles());
+
         for(TeamFeedFile teamFeedFile : teamFeedFiles) {
             log.info(teamFeedFile.getOriginalFileName());
         }
+
         TeamFeed teamFeed = teamFeedDto.createTeamFeed(teamFeedDto);
         List<String> keywords = hashTagAlgorithm.strList(teamFeed.getContent());
         List<Keyword> keywordList = new ArrayList<>();
