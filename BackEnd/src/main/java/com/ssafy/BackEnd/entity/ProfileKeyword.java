@@ -19,12 +19,16 @@ public class ProfileKeyword {
     @Id @GeneratedValue
     private Long profilekeyword_id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    int count;
+
+    String name;
+
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "profile_id")
     @JsonIgnore
     private Profile profile;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    @JoinColumn(name = "keyword_id")
-    private Keyword keyword;
+//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
+//    @JoinColumn(name = "keyword_id")
+//    private Keyword keyword;
 }

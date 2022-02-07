@@ -33,14 +33,16 @@ public class Team extends CreateTimeEntity {
 
     String content;
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "team")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "team", cascade = CascadeType.ALL)
+    @JsonIgnore
     List<TeamKeyword> team_keyword = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
     @JsonIgnore
     List<TeamMember> team_member = new ArrayList<>(); //타입을 TeamMember에서 User로 바꿈
 
-    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "team", cascade = CascadeType.ALL)
+    @JsonIgnore
     List<TeamFeed> team_feed = new ArrayList<>();
 
 //    @CreatedDate

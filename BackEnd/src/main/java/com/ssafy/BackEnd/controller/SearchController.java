@@ -84,6 +84,23 @@ public class SearchController {
         return new ResponseEntity<>(teamList, status);
     }
 
+    @GetMapping("/keyword/user")
+    public ResponseEntity<List<Profile>> findSearchedUserByKeyword(@RequestParam String keyword) {
+        List<Profile> searchedUsers = profileService.findUserByKeyword(keyword);
+        if (searchedUsers.isEmpty()) {
+            System.out.println("유저없음");
+            return new ResponseEntity<List<Profile>>((List<Profile>) null, HttpStatus.NOT_FOUND);
+        }
 
+        return new ResponseEntity<List<Profile>>(searchedUsers, HttpStatus.OK);
+    }
 
+    @GetMapping("/keyword/team")
+    public ResponseEntity<List<Team>> findSearchedTeamByKeyword(@RequestParam String keyword) {
+        List<Team> searchedTeams = teamService.findTeamByKeyword(keyword);
+        if (searchedTeams == null) {
+            return new ResponseEntity<List<Team>>((List<Team>) null, HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<List<Team>>(searchedTeams, HttpStatus.OK);
+    }
 }

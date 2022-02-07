@@ -23,11 +23,11 @@ public class TeamMember {
     @Enumerated(EnumType.STRING)
     TeamMemberIdentity team_identity = TeamMemberIdentity.LEADER;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "team_id")
     Team team;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "email")
     @JsonIgnore
     User user;

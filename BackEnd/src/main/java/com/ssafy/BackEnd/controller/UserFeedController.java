@@ -40,29 +40,7 @@ public class UserFeedController {
     private final ProfileService profileService;
     private final FileStore fileStore;
 
-    // Create
-    @PostMapping
-    @ApiOperation(value = "유저 피드 생성")
-    public ResponseEntity<String> createUserFeed(@RequestBody UserFeed userFeed) {
-        String message = "";
-        HttpStatus status;
 
-        try{
-            UserFeed feed = userFeedService.createUserFeed(userFeed);
-            if(feed != null){
-                message = "success";
-                status = HttpStatus.ACCEPTED;
-            } else {
-                message = "fail";
-                status = HttpStatus.ACCEPTED;
-            }
-        } catch (Exception e) {
-            message = e.getMessage();
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
-        }
-
-        return new ResponseEntity<String>(message, status);
-    }
 
     // Read
     @ApiOperation(value = "유저 피드 조회")
@@ -93,8 +71,8 @@ public class UserFeedController {
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
-    @PostMapping("/post/{profile_id}")
-    public String post(@PathVariable Long profile_id, @Validated @ModelAttribute UserFeedAddForm userFeedAddForm, BindingResult bindingResult) throws IOException, NotFoundException {
+    @PostMapping("/{profile_id}")
+    public String createUserFeed(@PathVariable Long profile_id, @Validated @ModelAttribute UserFeedAddForm userFeedAddForm, BindingResult bindingResult) throws IOException, NotFoundException {
         if (bindingResult.hasErrors()) {
             log.info("bindingResult : {}", bindingResult.getFieldError());
             return "post";

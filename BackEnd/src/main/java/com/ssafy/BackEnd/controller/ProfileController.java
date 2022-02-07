@@ -1,14 +1,13 @@
 package com.ssafy.BackEnd.controller;
 
 ////
-import com.ssafy.BackEnd.entity.Keyword;
 import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.ProfileKeyword;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
 import com.ssafy.BackEnd.entity.Response;
-import com.ssafy.BackEnd.repository.KeywordRepository;
 import com.ssafy.BackEnd.repository.ProfileKeywordRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
+import com.ssafy.BackEnd.service.HashTagAlgorithm;
 import com.ssafy.BackEnd.service.ImageService;
 import com.ssafy.BackEnd.service.ProfileService;
 import io.swagger.annotations.Api;
@@ -39,11 +38,13 @@ public class ProfileController {
     @Autowired
     private ImageService imageService;
 
-    @Autowired
-    private KeywordRepository keywordRepository;
+
 
     @Autowired
     private ProfileKeywordRepository profileKeywordRepository;
+
+    private HashTagAlgorithm hashTagAlgorithm = new HashTagAlgorithm();
+
 
     @GetMapping("/{profile_id}")
     @ApiOperation(value = "유저 프로필 조회")
@@ -106,34 +107,31 @@ public class ProfileController {
     }
 
     @PostMapping("/keyword/{profile_id}")
-    public ResponseEntity<List<Keyword>> addKeyword(@PathVariable Long profile_id, @RequestParam String content) throws NotFoundException {
+    public ResponseEntity<List<ProfileKeyword>> addKeyword(@PathVariable Long profile_id, @RequestParam String content) throws NotFoundException {
         Profile profile = profileService.findById(profile_id).get();
-        List<String> keywords = profileService.addKeyword(profile, content);
-        List<Keyword> keywordList = new ArrayList<>();
+        List<String> keywords = hashTagAlgorithm.strList(content);
+        List<ProfileKeyword> profileKeywords = profile.getProfile_keyword();
         for (String keyword : keywords) {
-            if (keywordRepository.findByName(keyword) == null) {
-                Keyword newKeyword = new Keyword();
-                newKeyword.setName(keyword);
-                newKeyword.setCount(1);
-                keywordList.add(newKeyword);
+            if (profileKeywordRepository.findProfileKeyword(keyword, profile_id) == null) {
                 ProfileKeyword newProfileKeyword = new ProfileKeyword();
-                newProfileKeyword.setKeyword(newKeyword);
+                newProfileKeyword.setName(keyword);
+                newProfileKeyword.setCount(1);
                 newProfileKeyword.setProfile(profile);
                 profileKeywordRepository.save(newProfileKeyword);
+                profileKeywords.add(newProfileKeyword);
             } else {
-                Keyword findKeyword = keywordRepository.findByName(keyword);
-                findKeyword.setCount(findKeyword.getCount() + 1);
-                keywordRepository.save(findKeyword);
-                keywordList.add(findKeyword);
-                if (profileKeywordRepository.findByKeywordId(findKeyword.getKeyword_id()) == null) {
-                    ProfileKeyword newProfileKeyword = new ProfileKeyword();
-                    newProfileKeyword.setKeyword(findKeyword);
-                    newProfileKeyword.setProfile(profile);
-                    profileKeywordRepository.save(newProfileKeyword);
-                }
+                ProfileKeyword profileKeyword = profileKeywordRepository.findProfileKeyword(keyword, profile_id);
+                profileKeyword.setCount(profileKeyword.getCount()+1);
             }
         }
-        return new ResponseEntity<List<Keyword>>(keywordList, HttpStatus.OK);
+        profile.setProfile_keyword(profileKeywords);
+        return new ResponseEntity<List<ProfileKeyword>>(profileKeywords, HttpStatus.OK);
 
+    }
+
+    @GetMapping("/keyword/{profile_id}")
+    public void getKeywords(@PathVariable Long profile_id) throws NotFoundException {
+        Profile profile = profileService.findById(profile_id).get();
+        List<ProfileKeyword> profileKeywords = profile.getProfile_keyword();
     }
 }
