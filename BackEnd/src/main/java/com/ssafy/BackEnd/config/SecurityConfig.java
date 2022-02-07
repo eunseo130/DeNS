@@ -18,9 +18,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.httpBasic()
                 .and()
                 .authorizeRequests()
-                .antMatchers("/signin", "/signup").permitAll()
-                .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("/team/*").hasRole("USER")
-                .antMatchers("/profile/*").permitAll();
+                .antMatchers("/*").permitAll();
+//                .antMatchers("/signin", "/signup").permitAll()
+//                .antMatchers("/admin/**").hasRole("ADMIN")
+//                .antMatchers("/team/*").hasRole("USER")
+//                .antMatchers("/profile/*").permitAll();
     }
 }
