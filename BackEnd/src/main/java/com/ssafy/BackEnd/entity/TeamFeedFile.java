@@ -1,22 +1,20 @@
 package com.ssafy.BackEnd.entity;
 
-import lombok.*;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.Setter;
 
 import javax.persistence.*;
 
 @Entity
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-@SequenceGenerator(
-        name = "File_SEQ_GENERATOR",
-        sequenceName = "FILE_SEQ"
-)
+@RequiredArgsConstructor
 @Table(name = "teamfeedfile")
 @Getter @Setter
 public class TeamFeedFile {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
-    private long teamfeedfile_id;
+    @Id @GeneratedValue
+    long teamfeedfile_id;
 
     private String originalFileName;
 
@@ -25,7 +23,7 @@ public class TeamFeedFile {
     @Enumerated(EnumType.STRING)
     private FileType fileType;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "teamfeed_id")
     TeamFeed team_feed;
 

@@ -1,6 +1,8 @@
-package com.ssafy.BackEnd.entity;
+package com.ssafy.BackEnd.dto;
 
-import com.ssafy.BackEnd.dto.UserFeedDto;
+import com.ssafy.BackEnd.entity.FileType;
+import com.ssafy.BackEnd.entity.Profile;
+import com.ssafy.BackEnd.entity.Team;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,8 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Data
 @NoArgsConstructor
-public class UserFeedAddForm {
-
+public class TeamFeedAddForm {
     @NotBlank
     private String content;
 
@@ -23,18 +24,18 @@ public class UserFeedAddForm {
     private List<MultipartFile> generalFiles;
 
     @Builder
-    private UserFeedAddForm(String content, List<MultipartFile> imageFiles, List<MultipartFile> generalFiles) {
+    private TeamFeedAddForm(String content, List<MultipartFile> imageFiles, List<MultipartFile> generalFiles) {
         this.content = content;
         this.imageFiles = (imageFiles != null) ? imageFiles : new ArrayList<>();
         this.generalFiles = (generalFiles != null) ? generalFiles : new ArrayList<>();
     }
 
-    public UserFeedDto createUserFeedDto(Profile profile) {
-        Map<FileType, List<MultipartFile>> userFeedFiles = getFileTypeListMap();
-        return UserFeedDto.builder()
-                .profile(profile)
+    public TeamFeedDto createTeamFeedDto(Team team) {
+        Map<FileType, List<MultipartFile>> teamFeedFiles = getFileTypeListMap();
+        return TeamFeedDto.builder()
+                .team(team)
                 .content(content)
-                .userFeedFiles(userFeedFiles)
+                .teamFeedFiles(teamFeedFiles)
                 .build();
     }
 

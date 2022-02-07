@@ -9,6 +9,7 @@ import com.ssafy.BackEnd.entity.Response;
 import com.ssafy.BackEnd.repository.KeywordRepository;
 import com.ssafy.BackEnd.repository.ProfileKeywordRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
+import com.ssafy.BackEnd.service.HashTagAlgorithm;
 import com.ssafy.BackEnd.service.ImageService;
 import com.ssafy.BackEnd.service.ProfileService;
 import io.swagger.annotations.Api;
@@ -44,6 +45,7 @@ public class ProfileController {
 
     @Autowired
     private ProfileKeywordRepository profileKeywordRepository;
+
 
     @GetMapping("/{profile_id}")
     @ApiOperation(value = "유저 프로필 조회")

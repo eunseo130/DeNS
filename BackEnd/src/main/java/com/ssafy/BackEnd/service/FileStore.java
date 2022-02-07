@@ -20,17 +20,27 @@ public class FileStore {
     @Value("${file.dir}/")
     private String fileDirPath;
 
-    public List<UserFeedFile> storeFiles(List<MultipartFile> multipartFiles, FileType fileType) throws IOException {
+    public List<UserFeedFile> storeUserFeedFiles(List<MultipartFile> multipartFiles, FileType fileType) throws IOException {
         List<UserFeedFile> userFeedFiles = new ArrayList<>();
         for (MultipartFile multipartFile : multipartFiles) {
             if (!multipartFile.isEmpty()) {
-                userFeedFiles.add(storeFile(multipartFile, fileType));
+                userFeedFiles.add(storeUserFeedFile(multipartFile, fileType));
             }
         }
         return userFeedFiles;
     }
 
-    public UserFeedFile storeFile(MultipartFile multipartFile, FileType fileType) throws IOException {
+    public List<TeamFeedFile> storeTeamFeedFiles(List<MultipartFile> multipartFiles, FileType fileType) throws IOException {
+        List<TeamFeedFile> teamFeedFiles = new ArrayList<>();
+        for (MultipartFile multipartFile : multipartFiles) {
+            if (!multipartFile.isEmpty()) {
+                teamFeedFiles.add(storeTeamFeedFile(multipartFile, fileType));
+            }
+        }
+        return teamFeedFiles;
+    }
+
+    public UserFeedFile storeUserFeedFile(MultipartFile multipartFile, FileType fileType) throws IOException {
         if(multipartFile.isEmpty()) {
             return null;
         }
@@ -46,17 +56,7 @@ public class FileStore {
                 .build();
     }
 
-    public List<TeamFeedFile> storeTeamFiles(List<MultipartFile> multipartFiles, FileType fileType) throws IOException {
-        List<TeamFeedFile> teamFeedFiles = new ArrayList<>();
-        for (MultipartFile multipartFile : multipartFiles) {
-            if (!multipartFile.isEmpty()) {
-                teamFeedFiles.add(storeTeamFile(multipartFile, fileType));
-            }
-        }
-        return teamFeedFiles;
-    }
-
-    public TeamFeedFile storeTeamFile(MultipartFile multipartFile, FileType fileType) throws IOException {
+    public TeamFeedFile storeTeamFeedFile(MultipartFile multipartFile, FileType fileType) throws IOException {
         if(multipartFile.isEmpty()) {
             return null;
         }

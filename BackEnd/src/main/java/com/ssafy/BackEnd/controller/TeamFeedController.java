@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.controller;
 
+import com.ssafy.BackEnd.dto.TeamFeedAddForm;
 import com.ssafy.BackEnd.dto.TeamFeedDto;
 import com.ssafy.BackEnd.dto.UserFeedDto;
 import com.ssafy.BackEnd.entity.*;
@@ -7,6 +8,7 @@ import com.ssafy.BackEnd.repository.TeamFeedRepository;
 import com.ssafy.BackEnd.service.FileStore;
 import com.ssafy.BackEnd.service.TeamFeedService;
 import com.ssafy.BackEnd.service.TeamService;
+import com.ssafy.BackEnd.util.UserFeedAddForm;
 import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -43,31 +45,23 @@ public class TeamFeedController {
     private final TeamService teamService;
     private final FileStore fileStore;
 
-    @PostMapping
+
     @ApiOperation(value = "팀 피드 생성")
-    public ResponseEntity<String> createTeamFeed(@RequestBody TeamFeed teamFeed) {
-        String message = "";
-        HttpStatus status;
-
-        try{
-            TeamFeed feed = teamFeedService.createTeamFeed(teamFeed);
-            if(feed != null){
-                message = "success";
-                status = HttpStatus.ACCEPTED;
-            } else {
-                message = "fail";
-                status = HttpStatus.ACCEPTED;
-            }
-        } catch (Exception e) {
-            message = e.getMessage();
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
+    @PostMapping("/{team_id}")
+    public ResponseEntity<TeamFeed> createTeamFeed(@PathVariable Long team_id, @Validated @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) throws IOException, NotFoundException {
+        if (bindingResult.hasErrors()) {
+            log.info("bindingResult : {}", bindingResult.getFieldError());
+            return new ResponseEntity<TeamFeed>((TeamFeed) null, HttpStatus.NOT_FOUND);
         }
-
-        return new ResponseEntity<String>(message, status);
+        Team team = teamService.findByTeam(team_id);
+        TeamFeedDto teamFeedDto = teamFeedAddForm.createTeamFeedDto(team);
+        TeamFeed teamFeed = teamFeedService.createTeamFeed(teamFeedDto);
+        return new ResponseEntity<TeamFeed>(teamFeed, HttpStatus.OK);
     }
 
+
     @ApiOperation(value = "팀 피드 조회")
-    @GetMapping
+    @GetMapping("/{teamfeed_id}")
     public ResponseEntity<List<TeamFeed>> findAllTeamFeed() {
         List<TeamFeed> teamfeeds = teamFeedService.showFindTeamFeedList();
 
@@ -76,36 +70,19 @@ public class TeamFeedController {
 
     @PutMapping("/{teamfeed_id}")
     @ApiOperation(value = "팀 피드 수정")
-    public ResponseEntity<TeamFeed> modifyUserFeed(@RequestBody TeamFeedDto teamFeedDto, @PathVariable Long teamfeed_id) {
-        TeamFeed teamFeed = teamFeedDto.createTeamFeed();
-
-        teamFeedService.modifyTeamFeed(teamfeed_id, teamFeed);
+    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id, @RequestParam String content) {
+//        TeamFeed teamFeed = teamFeedDto.createTeamFeed(teamFeedDto);
+        TeamFeed teamFeed = teamFeedService.modifyTeamFeed(teamfeed_id, content);
 
         return new ResponseEntity<TeamFeed>(teamFeed, HttpStatus.OK);
     }
 
     @DeleteMapping("/{teamfeed_id}")
     @ApiOperation(value = "팀 피드 삭제")
-    public ResponseEntity<Void>deleteUserFeed(@PathVariable Long teamfeed_id) {
+    public ResponseEntity<Void>deleteTeamFeed(@PathVariable Long teamfeed_id) {
         teamFeedService.deleteTeamFeed(teamfeed_id);
 
         return new ResponseEntity<Void>(HttpStatus.OK);
-    }
-
-    @PostMapping("/post/{team_id}")
-    public String post(@PathVariable Long team_id, @Validated @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) throws NotFoundException, IOException {
-        if (bindingResult.hasErrors()) {
-            log.info("bindingResult : {}", bindingResult.getFieldError());
-            return "post";
-        }
-        Team team = teamService.findByTeam(team_id);
-        System.out.println("팀제목" + team.getTitle());
-        TeamFeedDto teamFeedDto = teamFeedAddForm.createTeamFeedDto(team);
-        System.out.println("팀피드 내용" + teamFeedDto.getContent());
-        TeamFeed post = teamFeedService.post(teamFeedDto);
-        System.out.println("포스트내용" + post.getContent());
-
-        return "redirect:/main/board" + post.getTeam();
     }
 
     @ResponseBody
@@ -124,5 +101,4 @@ public class TeamFeedController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(urlResource);
     }
-
 }

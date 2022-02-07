@@ -28,7 +28,7 @@ public class UserFeed extends BaseTimeEntity{
     @OneToMany(mappedBy = "user_feed", cascade = CascadeType.ALL)
     List<UserFeedFile> userFeedFiles = new ArrayList<>();
 
-    @OneToMany(mappedBy = "user_feed", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user_feed", cascade = CascadeType.MERGE)
     List<UserFeedKeyword> userfeed_keyword = new ArrayList<>();
 
     @Builder

@@ -1,8 +1,6 @@
 package com.ssafy.BackEnd.dto;
 
-import com.ssafy.BackEnd.entity.FileType;
-import com.ssafy.BackEnd.entity.Team;
-import com.ssafy.BackEnd.entity.TeamFeed;
+import com.ssafy.BackEnd.entity.*;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -23,20 +21,20 @@ public class TeamFeedDto {
     @NotBlank
     private String content;
 
-    private Map<FileType, List<MultipartFile>> teamfeed_file = new ConcurrentHashMap<>();
+    private Map<FileType, List<MultipartFile>> teamFeedFiles = new ConcurrentHashMap<>();
 
     @Builder
-    public TeamFeedDto(Team team, String content, Map<FileType, List<MultipartFile>> teamfeed_file) {
+    public TeamFeedDto(Team team, String content, Map<FileType, List<MultipartFile>> teamFeedFiles) {
         this.team = team;
         this.content = content;
-        this.teamfeed_file = teamfeed_file;
+        this.teamFeedFiles = teamFeedFiles;
     }
 
-    public TeamFeed createTeamFeed() {
+    public TeamFeed createTeamFeed(TeamFeedDto teamFeedDto) {
         return TeamFeed.builder()
                 .team(team)
                 .content(content)
-                .teamfeed_file(new ArrayList<>())
+                .teamFeedFiles(new ArrayList<>())
                 .build();
     }
 }

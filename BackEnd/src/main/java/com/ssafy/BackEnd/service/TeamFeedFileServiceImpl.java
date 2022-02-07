@@ -4,6 +4,7 @@ import com.ssafy.BackEnd.entity.FileType;
 import com.ssafy.BackEnd.entity.TeamFeedFile;
 import com.ssafy.BackEnd.entity.UserFeedFile;
 import com.ssafy.BackEnd.repository.TeamFeedFileRepository;
+import com.ssafy.BackEnd.repository.UserFeedFileRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,24 +17,27 @@ import java.util.stream.Stream;
 
 @Service
 @RequiredArgsConstructor
-public class TeamFeedFileServiceImpl implements TeamFeedFileService{
+public class TeamFeedFileServiceImpl implements TeamFeedFileService {
+
     private final TeamFeedFileRepository teamFeedFileRepository;
     private final FileStore fileStore;
 
     @Override
     public List<TeamFeedFile> saveTeamFeedFiles(Map<FileType, List<MultipartFile>> multipartFileListMap) throws IOException {
-        List<TeamFeedFile> imageFiles = fileStore.storeTeamFiles(multipartFileListMap.get(FileType.IMAGE), FileType.IMAGE);
-        List<TeamFeedFile> generalFiles = fileStore.storeTeamFiles(multipartFileListMap.get(FileType.GENERAL), FileType.GENERAL);
+        List<TeamFeedFile> imageFiles = fileStore.storeTeamFeedFiles(multipartFileListMap.get(FileType.IMAGE), FileType.IMAGE);
+        List<TeamFeedFile> generalFiles = fileStore.storeTeamFeedFiles(multipartFileListMap.get(FileType.GENERAL), FileType.GENERAL);
         List<TeamFeedFile> result = Stream.of(imageFiles, generalFiles)
                 .flatMap(f -> f.stream())
                 .collect(Collectors.toList());
-
         return result;
     }
 
     @Override
     public Map<FileType, List<TeamFeedFile>> findTeamFeedFiles() {
-        return null;
+        List<TeamFeedFile> teamFeedFiles = teamFeedFileRepository.findAll();
+        Map<FileType, List<TeamFeedFile>> result = teamFeedFiles.stream()
+                .collect(Collectors.groupingBy(TeamFeedFile::getFileType));
+        return result;
     }
 
     @Override
