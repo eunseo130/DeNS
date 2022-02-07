@@ -56,23 +56,23 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         try {
             if(jwtToken != null){
                 jwt = jwtToken;
-                System.out.println("try jwt : "+jwt);
+                //System.out.println("try jwt : "+jwt);
                 userEmail = jwtService.getUserEmail(jwt);
-                System.out.println("try useremail : "+userEmail);
+                //System.out.println("try useremail : "+userEmail);
             }
             if(userEmail != null) {
                 User user = userService.findByEmail(userEmail);
-                System.out.println("try user : "+user.getEmail());
+                //System.out.println("try user : "+user.getEmail());
                 UserIdentity userAuth = userService.findUserAuth(userEmail);
-                System.out.println("try auth : "+userAuth.name());
+                //System.out.println("try auth : "+userAuth.name());
                 List<GrantedAuthority> roles = new ArrayList<>();
 
                 meessage = "success";
-                System.out.println("auth : "+userAuth);
+                //System.out.println("auth : "+userAuth);
                 if(userAuth == UserIdentity.UNAUTH) roles.add(new SimpleGrantedAuthority("UNATH"));
                 else roles.add(new SimpleGrantedAuthority("USER"));
 
-                System.out.println("vali : "+jwtService.validateToken(jwt, user));
+                //System.out.println("vali : "+jwtService.validateToken(jwt, user));
                 if(jwtService.validateToken(jwt, user)){
                     UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken = new UsernamePasswordAuthenticationToken(user, null, roles);
                     usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
@@ -82,7 +82,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
             }
         } catch (ExpiredJwtException e){
-            System.out.println("error : "+e.getMessage());
+            //System.out.println("error : "+e.getMessage());
             response.addHeader("error", e.getMessage());
             request.setAttribute("check", Boolean.TRUE);
             meessage = "fail";
