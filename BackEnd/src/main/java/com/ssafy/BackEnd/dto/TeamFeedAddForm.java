@@ -7,6 +7,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.springframework.web.multipart.MultipartFile;
+import reactor.util.annotation.Nullable;
 
 import javax.validation.constraints.NotBlank;
 import java.util.ArrayList;
@@ -20,7 +21,9 @@ public class TeamFeedAddForm {
     @NotBlank
     private String content;
 
+    @Nullable
     private List<MultipartFile> imageFiles;
+    @Nullable
     private List<MultipartFile> generalFiles;
 
     @Builder

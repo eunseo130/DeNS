@@ -19,7 +19,7 @@ public class TeamFeedKeyword {
     @Id @GeneratedValue
     long teamfeedkeyword_id;
 
-    String keyword;
+    String name;
 
 //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
 //    @JoinColumn(name = "keyword_id")

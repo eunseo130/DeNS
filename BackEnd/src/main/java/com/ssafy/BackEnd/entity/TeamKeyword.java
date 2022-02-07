@@ -16,6 +16,10 @@ public class TeamKeyword {
     @Column(name="teamkeyword_id")
     long teamkeyword_id;
 
+    int count;
+
+    String name;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     Team team;

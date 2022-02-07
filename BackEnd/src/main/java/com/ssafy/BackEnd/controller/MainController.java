@@ -46,7 +46,8 @@ public class MainController {
 
     @GetMapping("/test22")
     @ApiOperation(value = "테스트페이지 ")
-    public void test22() {
+    public void test22(@RequestBody String header) {
+        System.out.println("header : "+header);
         System.out.println("###########################################테스트페이지 확인용");
     }
 
@@ -194,9 +195,11 @@ public class MainController {
                 Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
                 Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
 
+                System.out.println("pass 2");
                 response.addCookie(accessToken);
                 response.addCookie(refreshToken);
 
+                System.out.println("pass 3");
                 redisUtil.setDataExpire(refreshJwt, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
 
                 resultMap.put("access-token", Token);
@@ -253,5 +256,24 @@ public class MainController {
             response = new Response("error", "인증메일을 확인하는데 실패했습니다.", null);
             return new ResponseEntity<User>((User) null, HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @GetMapping("/headertest")
+    public ResponseEntity<Map<String, Object>> checkHeader(@RequestBody String header){
+        System.out.println("header : "+header);
+        HttpStatus status;
+        Map<String, Object> map = new HashMap<>();
+
+        if(header == null){
+            map.put("message", "fail");
+            map.put("test", "데이터가 없습니다");
+            status = HttpStatus.OK;
+        } else {
+            map.put("message", "success");
+            map.put("test", "데이터 받기 성공");
+            status = HttpStatus.OK;
+        }
+
+        return new ResponseEntity<>(map, status);
     }
 }

@@ -19,6 +19,10 @@ public class ProfileKeyword {
     @Id @GeneratedValue
     private Long profilekeyword_id;
 
+    int count;
+
+    String name;
+
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "profile_id")
     @JsonIgnore

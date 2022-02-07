@@ -1,13 +1,11 @@
 package com.ssafy.BackEnd.service;
 
-import com.ssafy.BackEnd.dto.TeamFeedDto;
+import com.ssafy.BackEnd.dto.TeamDto;
 import com.ssafy.BackEnd.entity.Team;
-import com.ssafy.BackEnd.entity.TeamFeed;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.User;
 import javassist.NotFoundException;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface TeamService {
@@ -16,7 +14,7 @@ public interface TeamService {
 
     Team createTeam(Team team);
 
-    void modifyTeam(long team_id, Team team);
+    Team modifyTeam(Team team, TeamDto teamDto);
 
     void deleteTeam(long team_id);
 

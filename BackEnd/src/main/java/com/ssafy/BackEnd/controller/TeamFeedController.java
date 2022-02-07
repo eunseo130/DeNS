@@ -6,6 +6,7 @@ import com.ssafy.BackEnd.dto.UserFeedDto;
 import com.ssafy.BackEnd.entity.*;
 import com.ssafy.BackEnd.repository.TeamFeedRepository;
 import com.ssafy.BackEnd.service.FileStore;
+import com.ssafy.BackEnd.service.TeamFeedFileServiceImpl;
 import com.ssafy.BackEnd.service.TeamFeedService;
 import com.ssafy.BackEnd.service.TeamService;
 import com.ssafy.BackEnd.util.UserFeedAddForm;
@@ -17,6 +18,7 @@ import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.parameters.P;
 import org.springframework.stereotype.Service;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.annotation.Validated;
@@ -31,6 +33,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriUtils;
 
 
@@ -42,13 +45,14 @@ public class TeamFeedController {
 
     private final TeamFeedRepository teamFeedRepository;
     private final TeamFeedService teamFeedService;
+    private final TeamFeedFileServiceImpl teamFeedFileService;
     private final TeamService teamService;
     private final FileStore fileStore;
 
 
     @ApiOperation(value = "팀 피드 생성")
     @PostMapping("/{team_id}")
-    public ResponseEntity<TeamFeed> createTeamFeed(@PathVariable Long team_id, @Validated @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) throws IOException, NotFoundException {
+    public ResponseEntity<TeamFeed> createTeamFeed(@PathVariable Long team_id, @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) throws IOException, NotFoundException {
         if (bindingResult.hasErrors()) {
             log.info("bindingResult : {}", bindingResult.getFieldError());
             return new ResponseEntity<TeamFeed>((TeamFeed) null, HttpStatus.NOT_FOUND);
@@ -70,9 +74,15 @@ public class TeamFeedController {
 
     @PutMapping("/{teamfeed_id}")
     @ApiOperation(value = "팀 피드 수정")
-    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id, @RequestParam String content) {
+    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id,  @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) {
 //        TeamFeed teamFeed = teamFeedDto.createTeamFeed(teamFeedDto);
-        TeamFeed teamFeed = teamFeedService.modifyTeamFeed(teamfeed_id, content);
+        if (bindingResult.hasErrors()) {
+            log.info("bindingResult : {}", bindingResult.getFieldError());
+            return new ResponseEntity<TeamFeed>((TeamFeed) null, HttpStatus.NOT_FOUND);
+        }
+        TeamFeed teamFeed = teamFeedRepository.findByFeedId(teamfeed_id);
+        TeamFeedDto teamFeedDto = teamFeedAddForm.createTeamFeedDto(teamFeed.getTeam());
+        TeamFeed newTeamFeed = teamFeedService.modifyTeamFeed(teamFeed, teamFeedDto);
 
         return new ResponseEntity<TeamFeed>(teamFeed, HttpStatus.OK);
     }
@@ -101,4 +111,10 @@ public class TeamFeedController {
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(urlResource);
     }
+
+    @DeleteMapping("/files/{filename}")
+    public void deleteFiles(@PathVariable String filename) {
+        teamFeedFileService.deleteFile(filename);
+    }
+
 }

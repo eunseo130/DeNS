@@ -15,6 +15,10 @@ public class UserFeedKeyword {
     @Id @GeneratedValue
     long userfeedkeyword_id;
 
+    int count;
+
+    String name;
+
 //    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
 //    @JoinColumn(name = "keyword_id")
 //    Keyword keyword;

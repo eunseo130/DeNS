@@ -10,7 +10,7 @@ import java.util.List;
 public interface TeamFeedService {
     TeamFeed createTeamFeed(TeamFeedDto teamFeeddto) throws IOException;
 
-    TeamFeed modifyTeamFeed(long teamfeed_id, String content);
+    TeamFeed modifyTeamFeed(TeamFeed teamFeed, TeamFeedDto teamFeedDto);
 
     void deleteTeamFeed(long teamfeed_id);
 

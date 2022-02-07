@@ -16,4 +16,6 @@ public interface TeamFeedFileService {
     Map<FileType, List<TeamFeedFile>> findTeamFeedFiles();
 
     void save(TeamFeedFile file);
+
+    void deleteFile(String filename);
 }
