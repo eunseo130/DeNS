@@ -116,5 +116,4 @@ public class TeamFeedController {
     public void deleteFiles(@PathVariable String filename) {
         teamFeedFileService.deleteFile(filename);
     }
-
 }

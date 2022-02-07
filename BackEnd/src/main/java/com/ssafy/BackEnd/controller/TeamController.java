@@ -108,7 +108,8 @@ public class TeamController {
 
         if (my_teams.isEmpty()) {
             System.out.println("내 팀 목록이 없습니다");
-            throw new CustomException("내 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
+            return new ResponseEntity<List<Team>>(my_teams, HttpStatus.OK);
+            //throw new CustomException("내 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
         }
 
         return new ResponseEntity<List<Team>>(my_teams, HttpStatus.OK);
