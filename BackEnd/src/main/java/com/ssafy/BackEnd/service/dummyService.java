@@ -24,8 +24,8 @@ public class dummyService {
     @Transactional
     public List<dummy> searchTestCheck(String keyword) {
         List<dummy> result = test.findByNameContaining(keyword);
-        System.out.println(keyword);
-        System.out.println(result.size());
+        System.out.println("key : "+keyword);
+        System.out.println("size : "+result.size());
         return result;
     }
 }

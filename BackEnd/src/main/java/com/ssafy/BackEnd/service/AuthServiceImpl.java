@@ -40,7 +40,7 @@ public class AuthServiceImpl implements AuthService{
     public void signUp(User user) {
         String password = user.getPassword();
         user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-        System.out.println(user.getPassword());
+        System.out.println("auth pwd : "+user.getPassword());
 //        String salt = saltUtil.genSalt();
 //        user.setSalt(new Salt(salt));
 //        user.setPassword(saltUtil.encodePassword(salt, password));

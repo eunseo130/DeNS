@@ -4,6 +4,7 @@ import com.ssafy.BackEnd.dto.TeamFeedAddForm;
 import com.ssafy.BackEnd.dto.TeamFeedDto;
 import com.ssafy.BackEnd.dto.UserFeedDto;
 import com.ssafy.BackEnd.entity.*;
+import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.TeamFeedRepository;
 import com.ssafy.BackEnd.service.FileStore;
 import com.ssafy.BackEnd.service.TeamFeedFileServiceImpl;
@@ -46,6 +47,7 @@ public class TeamFeedController {
     private final TeamFeedRepository teamFeedRepository;
     private final TeamFeedService teamFeedService;
     private final TeamFeedFileServiceImpl teamFeedFileService;
+    private final ProfileRepository profileRepository;
     private final TeamService teamService;
     private final FileStore fileStore;
 
@@ -72,17 +74,17 @@ public class TeamFeedController {
         return new ResponseEntity<List<TeamFeed>>(teamfeeds, HttpStatus.OK);
     }
 
-    @PutMapping("/{teamfeed_id}")
+    @PutMapping("/{teamfeed_id}/{profile_id}")
     @ApiOperation(value = "팀 피드 수정")
-    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id,  @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) {
-//        TeamFeed teamFeed = teamFeedDto.createTeamFeed(teamFeedDto);
+    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id, @PathVariable Long profile_id, @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) {
+        //        TeamFeed teamFeed = teamFeedDto.createTeamFeed(teamFeedDto);
         if (bindingResult.hasErrors()) {
             log.info("bindingResult : {}", bindingResult.getFieldError());
             return new ResponseEntity<TeamFeed>((TeamFeed) null, HttpStatus.NOT_FOUND);
         }
         TeamFeed teamFeed = teamFeedRepository.findByFeedId(teamfeed_id);
         TeamFeedDto teamFeedDto = teamFeedAddForm.createTeamFeedDto(teamFeed.getTeam());
-        TeamFeed newTeamFeed = teamFeedService.modifyTeamFeed(teamFeed, teamFeedDto);
+        TeamFeed newTeamFeed = teamFeedService.modifyTeamFeed(teamFeed, profile_id, teamFeedDto);
 
         return new ResponseEntity<TeamFeed>(teamFeed, HttpStatus.OK);
     }
@@ -116,5 +118,4 @@ public class TeamFeedController {
     public void deleteFiles(@PathVariable String filename) {
         teamFeedFileService.deleteFile(filename);
     }
-
 }

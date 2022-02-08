@@ -20,5 +20,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByName (String name);
 
-    //    User findByProfileId (Long profile_id);
+    @Query(value = "select u from User u where profile_id = :profile_id")
+    User findByProfileId (Long profile_id);
 }

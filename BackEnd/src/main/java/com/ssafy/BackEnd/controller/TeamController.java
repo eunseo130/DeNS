@@ -47,7 +47,9 @@ public class TeamController {
     @GetMapping
     @ApiOperation(value = "팀 목록 가져오기")
     public ResponseEntity<List<Team>> getAllTeams() throws NotFoundException {
+
         List<Team> teams = teamService.showTeamList();
+
 
         if (teams.isEmpty()) {
             System.out.println("전체 팀 목록이 없습니다");
@@ -94,20 +96,20 @@ public class TeamController {
     }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
-    @PutMapping("/{team_id}")
+    @PutMapping("/{profile_id}/{team_id}")
     @ApiOperation(value = "팀 수정") //팀 수정이 무엇에 대한 수정인가(name과 content에 대한 수정??)
-    public ResponseEntity<Team> modifyTeam(@PathVariable long team_id, @RequestBody TeamDto teamDto) throws NotFoundException {
+    public ResponseEntity<Team> modifyTeam(@PathVariable long profile_id, @PathVariable long team_id, @RequestBody TeamDto teamDto) throws NotFoundException {
         Team findTeam = teamService.findByTeam(team_id);
-        Team team = teamService.modifyTeam(findTeam, teamDto);
+        Team team = teamService.modifyTeam(profile_id, findTeam, teamDto);
         return new ResponseEntity<Team>(team, HttpStatus.OK);
     }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @DeleteMapping("/{team_id}")
     @ApiOperation(value = "팀 삭제")
-    public ResponseEntity<Void> deleteTeam(@PathVariable Long team_id) {
+    public ResponseEntity<Void> deleteTeam(@PathVariable long profile_id, @PathVariable Long team_id) {
 
-        teamService.deleteTeam(team_id);
+        teamService.deleteTeam(profile_id, team_id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 

@@ -1,13 +1,12 @@
 package com.ssafy.BackEnd.service;
 
 
-import com.ssafy.BackEnd.entity.Profile;
-import com.ssafy.BackEnd.entity.ProfileKeyword;
+import com.ssafy.BackEnd.entity.*;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile1;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
-import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.repository.ProfileKeywordRepository;
 import com.ssafy.BackEnd.repository.ProfileRepository;
+import com.ssafy.BackEnd.repository.TeamMemberRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -36,6 +35,8 @@ public class ProfileServiceImpl implements ProfileService{
 
     private final ProfileKeywordRepository profileKeywordRepository;
 
+    private final TeamMemberRepository teamMemberRepository;
+
     @Override
     public Optional<Profile> findProfile(Long user_id) throws NotFoundException{
         User findUser = userRepository.findById(user_id).get();
@@ -63,10 +64,12 @@ public class ProfileServiceImpl implements ProfileService{
     public Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException {
 
         User user = userRepository.findByName(findProfile.getName());
-        System.out.println(requestModifyProfile2.getPosition());
-        System.out.println(requestModifyProfile2.getStack());
+        System.out.println("position : "+requestModifyProfile2.getPosition());
+        System.out.println("stakc : "+requestModifyProfile2.getStack());
         findProfile.setPosition(requestModifyProfile2.getPosition());
         findProfile.setStack(requestModifyProfile2.getStack());
+        findProfile.setGit(requestModifyProfile2.getGit());
+        findProfile.setGit_id(requestModifyProfile2.getGit_id());
 
         profileRepository.save(findProfile);
         userRepository.save(user);
@@ -77,7 +80,6 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public List<Profile> showFindUserList(String keyword){
         List<Profile> profiles = profileRepository.findByNameContaining(keyword);
-        if(profiles == null) System.out.println("에러염");
         return profiles;
     }
 
@@ -101,7 +103,7 @@ public class ProfileServiceImpl implements ProfileService{
             }
         }
         for (String word : strlist) {
-            System.out.println(word);
+            System.out.println("word : "+word);
         }
 
         return strlist;
@@ -131,6 +133,30 @@ public class ProfileServiceImpl implements ProfileService{
 //        }
 
         return searchedUsers;
+    }
+
+    @Override
+    public List<ProfileKeyword> getProfileKeywords(Long profile_id) {
+        Profile profile = profileRepository.findById(profile_id).get();
+        List<ProfileKeyword> profileKeywordList = profile.getProfile_keyword();
+        return profileKeywordList;
+    }
+
+    @Override
+    public List<TeamKeyword> getTeamKeywords(Long profile_id) {
+        Profile profile = profileRepository.findById(profile_id).get();
+        List<TeamMember> teamMembers = teamMemberRepository.findByEmail(profile.getEmail());
+        List<TeamKeyword> teamKeywordList = new ArrayList<>();
+        for (TeamMember teamMember : teamMembers) {
+            List<TeamKeyword> teamKeywords = teamMember.getTeam().getTeam_keyword();
+            for (TeamKeyword teamKeyword : teamKeywords) {
+                if (!teamKeywordList.contains(teamKeyword)) {
+                    teamKeywordList.add(teamKeyword);
+                }
+
+            }
+        }
+        return teamKeywordList;
     }
 
 }
