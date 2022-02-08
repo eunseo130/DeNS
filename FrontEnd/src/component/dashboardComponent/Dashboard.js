@@ -1,22 +1,11 @@
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import TeamLink from "./TeamLink";
 import Message from "./Message";
 import TeamList from "./TeamList"
-import { myteam } from "../../api/test";
 import { useState } from "react";
 
 export default function Dashboard() {
-    // 배경 스타일
-      useEffect(() => {
-        myteam("안녕하세여",
-            (response) => {
-                console.log(response);
-        },  
-        (error) => {
-            console.log("오류가 됨.", (error));
-        });
-    });
 
     // 팀 페이지로 들어가서 setItem하고.. TeamList에서 getItem하고...
     const jsonLocalStorage = {
@@ -33,8 +22,6 @@ export default function Dashboard() {
     jsonLocalStorage.setItem(Hello, 'hey')
     // console.log(jsonLocalStorage.getItem(Hello))
 
-    // table 예시
-    
     return (
       <DashBoardBox>
         {/* 팀 링크 */}

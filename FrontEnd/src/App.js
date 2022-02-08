@@ -9,9 +9,9 @@ import BeforeLogin from './component/commonComponent/BeforeLogin'
 import Firstpage from './component/BeforeloginComponent/Firstpage'
 import Back from './component/commonComponent/Back'
 
-import Team from './component/TeamComponent/Team'
+import TeamDetail from './component/TeamComponent/TeamDetail'
 import Teamsetting from './component/TeamComponent/Teamsetting'
-import MakeTeam from './component/TeamComponent/MakeTeam'
+import CreateTeam from './component/TeamComponent/CreateTeam'
 
 import Dashboard from './component/dashboardComponent/Dashboard'
 import Messanger from './component/MessangerComponent/Messanger'
@@ -68,15 +68,15 @@ const App = () => {
           ],
         },
         {
-          path: '/afterlogin/maketeam',
-          element: <MakeTeam />,
+          path: '/afterlogin/createteam',
+          element: <CreateTeam />,
           children: [
-            { path: '/afterlogin/maketeam', element: <MakeTeam /> },
+            { path: '/afterlogin/createteam', element: <CreateTeam /> },
           ],
         },
         {
           path: '/afterlogin/team/:id',
-          element: <Team number={'팀아이디 부분'} />,
+          element: <TeamDetail/>,
           children: [
             { path: '/afterlogin/team/:id/setting', element: <Teamsetting /> },
           ],

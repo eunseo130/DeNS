@@ -2,21 +2,19 @@ import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import Slider from "react-slick";
 import TeamLinkBox from "./TeamLinkBox";
-import { team } from '../../api/test';
+import { team } from '../../api/team';
 
-function TeamLink(props) {
+function TeamLink() {
     const [link, setLink] = useState('');
     useEffect(() => {
       team(
           (response) => {
               setLink(response.data);
-              // console.log(response.data[0].title);
       },  
       (error) => {
           console.log("오류가 됨.", (error));
       });
     });
-  
     const settings = {
       dots: true,
       infinite: false,
@@ -38,7 +36,10 @@ function TeamLink(props) {
         <TeamLinkBox title={"내 프로필"}/>
           {link ? link.map((el, key) => {
                       return (
-                          <TeamLinkBox title={el.title} key={key}/>
+                          <TeamLinkBox 
+                            title={el.title}
+                            team_id={el.team_id}
+                            key={key}/>
                       )})
           : null }
       </Slider>

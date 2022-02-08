@@ -2,8 +2,18 @@ import { apiInstance } from "./index";
 
 const api = apiInstance();
 
-function makeMyTeam(param, success, fail){
-    api.delete(`/team/create/${param}`).then(success).catch(fail);
+function makeMyTeam(param, data, success, fail){
+    api.post(`/team/create/${param}`, JSON.stringify(data)).then(success).catch(fail);
+}
+function team(success, fail) {
+    api.get(`/team`).then(success).catch(fail);
+}
+function detail(param, success, fail) {
+    api.get(`/team/${param}`).then(success).catch(fail);
+}
+function myteam(param, success, fail) {
+    api.get(`/team/myteam/${param}`).then(success).catch(fail);
+    console.log('데이터 넘어간다', param)
 }
 
 function teamBreakup(param, success, fail){
@@ -14,5 +24,5 @@ function searchMyteam(param, success, fail){
 }
 
 export {
-    teamBreakup,searchMyteam, makeMyTeam
+    teamBreakup,searchMyteam, makeMyTeam, team, myteam, detail
 }
