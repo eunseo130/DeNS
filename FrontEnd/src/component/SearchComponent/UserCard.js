@@ -3,13 +3,10 @@ import styled from "styled-components";
 import { searchprofileID } from "../../api/search";
 
 export default function UserCard(props){
-    console.log(props.data);
-    
     const check = () => {
-        // console.log(props.check);
+        props.click(props.data.name,props.data.email,props.data.profile_keyword);
         searchprofileID(props.check,(response) => {console.log(response.data)}, (error)=> {console.log(error)});
     }
-
 
     return(
         <UserCarddg onClick={check}>
@@ -17,16 +14,13 @@ export default function UserCard(props){
             <p>{props.data.name}</p>
             <p>{props.data.position}</p>
             <p>{props.data.stack}</p>
-            <hr/>
+            {/* <p>{props.data.}</p> */}
         </UserCarddg>
-
-
-
     )
-
-
 }
 const UserCarddg = styled.div`
+width: 500px;
+border: 1px solid black;
     &:hover{
         background: black;
     }
