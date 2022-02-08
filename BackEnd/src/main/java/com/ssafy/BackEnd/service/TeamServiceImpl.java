@@ -194,6 +194,13 @@ public class TeamServiceImpl implements TeamService{
         List<Team> my_teams = new ArrayList<>();
         teamRepository.showMyTeamList(profile_id).forEach(myteam -> my_teams.add(myteam));
 
+        System.out.println("DFSDF");
+        System.out.println(my_teams.size());
+
+        for (Team team : my_teams) {
+          System.out.println("팀제목" + team.getTitle());
+        }
+
         return my_teams;
 
     }

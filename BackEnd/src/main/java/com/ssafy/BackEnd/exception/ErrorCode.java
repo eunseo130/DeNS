@@ -39,7 +39,8 @@ public enum ErrorCode implements EnumModel{
     AWS_ERROR(400, "A001", "aws client error"),
     INTERNER_SERVER_ERROR(500, "A005", "interner server error"),
     TEMPORARY_SERVER_ERROR(400, "T001", "오류 발생"),
-    UNAUTH_USER_ERROR(400, "U00", "허가되지 않는 기능입니다");
+    UNAUTH_USER_ERROR(400, "U00", "허가되지 않는 기능입니다"),
+    INVALID_ID(400, "E00", "없는 아이디입니다");
 
     private int status;
     private String code;

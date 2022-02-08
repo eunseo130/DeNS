@@ -113,20 +113,6 @@ public class TeamController {
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
-    @GetMapping("/myteam") //프로필아이디로 내 팀 목록 가져오기
-    @ApiOperation(value = "내 팀 목록 가져오기")
-    public ResponseEntity<List<Team>> getMyTeams(@RequestParam Long profile_id) throws NotFoundException {
-        List<Team> my_teams = teamService.showMyTeamList(profile_id);
-
-        if (my_teams.isEmpty()) {
-            System.out.println("내 팀 목록이 없습니다");
-            return new ResponseEntity<List<Team>>(my_teams, HttpStatus.OK);
-            //throw new CustomException("내 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
-        }
-
-        return new ResponseEntity<List<Team>>(my_teams, HttpStatus.OK);
-    }
-
     @PutMapping("/profile/{team_id}")
     @ApiOperation(value = "팀 프로필 수정")
     public ResponseEntity<Team> modifyTeamProfile(@RequestBody TeamDto teamDto) {
