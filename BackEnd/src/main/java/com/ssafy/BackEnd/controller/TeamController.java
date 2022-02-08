@@ -57,9 +57,9 @@ public class TeamController {
         return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
     }
 
-    @GetMapping("/myteam") //프로필아이디로 내 팀 목록 가져오기
+    @GetMapping("/myteam/{profile_id}") //프로필아이디로 내 팀 목록 가져오기
     @ApiOperation(value = "내 팀 목록 가져오기")
-    public ResponseEntity<List<Team>> getMyTeams(@RequestParam Long profile_id) throws NotFoundException {
+    public ResponseEntity<List<Team>> getMyTeams(@PathVariable Long profile_id) throws NotFoundException {
         List<Team> my_teams = teamService.showMyTeamList(profile_id);
 
         if (my_teams.isEmpty()) {
