@@ -189,10 +189,10 @@ public class MainController {
             if(user != null) {
                 System.out.println("1pass");
                 final String Token = jwtService.generateToken(user);
-                final String refreshJwt = jwtService.generateRefershToken(user);
+                //final String refreshJwt = jwtService.generateRefershToken(user);
 
                 System.out.println("accessToken : "+Token);
-                System.out.println("refreshToken : "+refreshJwt);
+                //System.out.println("refreshToken : "+refreshJwt);
 
 //                Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
 //                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
@@ -202,7 +202,7 @@ public class MainController {
 //                response.addCookie(refreshToken);
 
                 System.out.println("pass 3");
-                redisUtil.setDataExpire(refreshJwt, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
+                //redisUtil.setDataExpire(refreshJwt, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
 
                 resultMap.put("access-token", Token);
                 resultMap.put("message", "success");
