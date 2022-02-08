@@ -54,7 +54,7 @@ public class ProfileController {
         try {
             Optional<Profile> profile = profileService.findById(profile_id);
             if (profile != null) {
-                System.out.println(profile.get().getEmail());
+                System.out.println("profile : "+profile.get().getEmail());
                 return new ResponseEntity<Profile>(profile.get(), HttpStatus.OK);
             }
             else {
@@ -88,7 +88,7 @@ public class ProfileController {
         return new ResponseEntity<String>(imagePath, HttpStatus.OK);
     }
 
-    @DeleteMapping("/delete/{profile_id}")
+    @DeleteMapping("/{profile_id}")
     public void deleteUser(@PathVariable Long profile_id) throws NotFoundException {
 
         Optional<Profile> findProfile = profileService.findById(profile_id);

@@ -44,7 +44,8 @@ public class MainController {
 
     @GetMapping("/test22")
     @ApiOperation(value = "테스트페이지 ")
-    public void test22() {
+    public void test22(@RequestBody String header) {
+        System.out.println("header : "+header);
         System.out.println("###########################################테스트페이지 확인용");
     }
 
@@ -63,7 +64,7 @@ public class MainController {
                 return new ResponseEntity<Map<String, Object>>(resultMap, status);
             }
             authService.signUp(user);
-            System.out.println(user.getPassword());
+            System.out.println("userpwd : "+user.getPassword());
             response.setResponse("success");
             response.setMessage("회원가입을 성공적으로 완료했습니다.");
             response.setData(null);
@@ -108,7 +109,7 @@ public class MainController {
     @GetMapping("/search/keyword/{param}")
     public ResponseEntity<List<dummy>> searchKeyword(@PathVariable String param) {
 
-        System.out.println(param);
+        System.out.println("param : "+param);
 
         if (param == null) {
             dummy temp = new dummy();
@@ -122,9 +123,6 @@ public class MainController {
             return new ResponseEntity<List<dummy>>(search_teams, HttpStatus.OK);
         }
     }
-
-
-
 
     @PostMapping("/password")
     @ApiOperation(value = "사용자 비밀번호 변경요청", response = String.class)
@@ -183,7 +181,7 @@ public class MainController {
                                                       HttpServletRequest request, HttpServletResponse response) {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
-        System.out.println(users.getEmail()+" "+users.getPassword());
+        System.out.println("email pwd : "+users.getEmail()+" "+users.getPassword());
         try {
             final User user = authService.signIn(users.getEmail(), users.getPassword());
             //System.out.println(user.getEmail()+" "+user.getPassword());
@@ -191,18 +189,20 @@ public class MainController {
             if(user != null) {
                 System.out.println("1pass");
                 final String Token = jwtService.generateToken(user);
-                final String refreshJwt = jwtService.generateRefershToken(user);
+                //final String refreshJwt = jwtService.generateRefershToken(user);
 
                 System.out.println("accessToken : "+Token);
-                System.out.println("refreshToken : "+refreshJwt);
+                //System.out.println("refreshToken : "+refreshJwt);
 
-                Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
-                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
+//                Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
+//                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
 
-                response.addCookie(accessToken);
-                response.addCookie(refreshToken);
+                System.out.println("pass 2");
+//                response.addCookie(accessToken);
+//                response.addCookie(refreshToken);
 
-                redisUtil.setDataExpire(refreshJwt, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
+                System.out.println("pass 3");
+                //redisUtil.setDataExpire(refreshJwt, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
 
                 resultMap.put("access-token", Token);
                 resultMap.put("message", "success");
@@ -257,5 +257,34 @@ public class MainController {
             response = new Response("error", "인증메일을 확인하는데 실패했습니다.", null);
             return new ResponseEntity<User>((User) null, HttpStatus.UNAUTHORIZED);
         }
+    }
+
+    @GetMapping("/headertest")
+    public ResponseEntity<Map<String, Object>> checkHeader(HttpServletRequest request) {
+        System.out.println("header : "+request.getHeader("Authorization"));
+//        System.out.println(request.getHeader("Authorization").getClass());
+//        System.out.println(request.getAttribute("check").getClass());
+
+//        String validationCheck = request.getAttribute("check").toString();
+//        System.out.println(validationCheck);
+        //System.out.println(request.getAttribute());
+//        for(Cookie cookie : request.getCookies()){
+//            System.out.println(cookie.getValue());
+//        }
+
+        HttpStatus status;
+        Map<String, Object> map = new HashMap<>();
+
+        if(true){
+            map.put("message", "fail");
+            map.put("test", "데이터가 없습니다");
+            status = HttpStatus.OK;
+        } else {
+            map.put("message", "success");
+            map.put("test", "데이터 받기 성공");
+            status = HttpStatus.OK;
+        }
+
+        return new ResponseEntity<>(map, status);
     }
 }

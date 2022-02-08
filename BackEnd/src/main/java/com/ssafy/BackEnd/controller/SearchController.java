@@ -28,7 +28,7 @@ public class SearchController {
     @GetMapping("/user")
     public ResponseEntity<List<Profile>> findSearchedUsers(String keyword) throws NotFoundException{
         HttpStatus status;
-        List<Profile> userList = profileService.showFindTeamList(keyword);
+        List<Profile> userList = profileService.showFindUserList(keyword);
         System.out.println("전달 받은 값 : "+keyword);
         if(userList != null) {
             status = HttpStatus.OK;

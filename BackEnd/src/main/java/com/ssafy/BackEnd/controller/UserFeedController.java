@@ -78,11 +78,11 @@ public class UserFeedController {
             return "post";
         }
         Profile profile = profileService.findById(profile_id).get();
-        System.out.println(profile.getEmail());
+        System.out.println("profile email : "+profile.getEmail());
         UserFeedDto userFeedDto = userFeedAddForm.createUserFeedDto(profile);
-        System.out.println(userFeedDto.getContent());
+        System.out.println("content : "+userFeedDto.getContent());
         UserFeed post = userFeedService.post(userFeedDto);
-        System.out.println(post.getContent());
+        System.out.println("po content : "+post.getContent());
         return "redirect:/main/board" + post.getProfile();
     }
 

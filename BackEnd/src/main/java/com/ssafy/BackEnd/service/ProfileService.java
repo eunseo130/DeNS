@@ -26,7 +26,6 @@ public interface ProfileService {
 
     void deleteUser(Long profile_id);
 
-    List<Profile> showFindTeamList(String keyword);
 
     List<Profile> findUserByKeyword(String keyword);
 
