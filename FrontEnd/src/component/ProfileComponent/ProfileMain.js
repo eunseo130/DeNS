@@ -1,22 +1,14 @@
 import React, { useState, useEffect } from 'react'
 import { Outlet, useParams, Link } from 'react-router-dom'
 import { profileTest, profileUpdate, putKeyword } from '../../api/profile'
-import ProfileTagCloud from './ProfileTagCloud'
-
+import { TagCloud } from 'react-tagcloud'
+import { Container, Row, Col } from 'react-bootstrap'
 export default function ProfileMain() {
-  function componentDidMount() {
-    if (!document.getElementById('KakaoJSSDK')) {
-      const scriptKakaoJS = document.createElement('script')
-      scriptKakaoJS.src = '//developers.kakao.com/sdk/js/kakao.min.js'
-      document.body.appendChild(scriptKakaoJS)
-    }
-  }
-
   const [inputs, setInputs] = useState({
     image: '',
     namecosn: '',
-    position: '',
-    stack: ' ',
+    position: ' ',
+    stack: '',
     email: '',
     keyword: '',
     edit: false,
@@ -25,19 +17,13 @@ export default function ProfileMain() {
   })
   const { image, name, position, stack, email, edit, keyword, gitId, git } =
     inputs
-  const [keywords, setKeywords] = useState([
-    { value: position, count: 10000 },
-    { value: stack, count: 10000 },
-  ])
-
+  const [keywords, setKeywords] = useState([])
   const { id } = useParams()
   useEffect(
     () =>
       profileTest(
         id,
         (res) => {
-          console.log('가져오기')
-          console.log(res)
           setInputs({
             ...inputs,
             image: res.data.image,
@@ -48,10 +34,20 @@ export default function ProfileMain() {
             git: !git,
             gitId: res.data.gitId,
           })
-          setKeywords([
+          let words = [
             { value: res.data.position, count: 10000 },
             { value: res.data.stack, count: 10000 },
-          ])
+          ]
+          const keywordObjs = res.data.profile_keyword
+          console.log(keywordObjs)
+          keywordObjs.map((keywordObj) => {
+            const word = {
+              value: keywordObj.name,
+              count: keywordObj.count,
+            }
+            words.push(word)
+          })
+          setKeywords(words)
         },
         (error) => console.log(error)
       ),
@@ -62,8 +58,6 @@ export default function ProfileMain() {
     profileUpdate(
       [id, position, stack],
       (res) => {
-        console.log('업데이트')
-        console.log(res)
         setInputs({
           ...inputs,
           image: res.data.image,
@@ -91,7 +85,6 @@ export default function ProfileMain() {
     })
   }
   function onSave(e) {
-    console.log('save')
     const { value, name } = e.target
     setInputs({
       ...inputs,
@@ -103,15 +96,22 @@ export default function ProfileMain() {
     putKeyword(
       [id, keyword],
       (res) => {
-        console.log(res.data)
         const keywordObjs = res.data
+        setKeywords([])
+        let words = [
+          { value: position, count: 10000 },
+          { value: stack, count: 10000 },
+        ]
         keywordObjs.map((keywordObj) => {
-          console.log(keywordObj.name, keywordObj.count)
-          setKeywords(keywords.concat(keywordObj))
+          const word = {
+            value: keywordObj.name,
+            count: keywordObj.count,
+          }
+          words.push(word)
         })
-        console.log(keywords)
+        setKeywords(words)
+        setInputs({ ...inputs, keyword: '' })
       },
-
       (error) => console.log(error)
     )
   }
@@ -119,47 +119,70 @@ export default function ProfileMain() {
   return (
     <div>
       <h3>프로필 메인페이지입니다</h3>
-      <ProfileTagCloud keywords={keywords} />
-      {git ? (
-        <img src={`https://ghchart.rshah.org/${gitId} `} />
-      ) : (
-        <input onChange={onSave} name="gitId" value={gitId}></input>
-      )}
-      <div>
-        <img src={image} alt={name} />
-        <p>이름:&nbsp; {name}</p>
-        <p>
-          직무 : &nbsp;
-          {edit ? (
-            <input onChange={onSave} name="position" value={position}></input>
-          ) : (
-            position
-          )}
-        </p>
-        <p>
-          스택 : &nbsp;
-          {edit ? (
-            <input onChange={onSave} name="stack" value={stack}></input>
-          ) : (
-            stack
-          )}
-        </p>
-        <p>이메일:&nbsp; {email}</p>
-        {edit ? (
-          <button onClick={update}>확인</button>
-        ) : (
-          <button onClick={onEdit}>편집</button>
-        )}
+      <Container>
+        <Row>
+          <TagCloud
+            minSize={1}
+            maxSize={100}
+            tags={keywords}
+            key={keywords.profilekeyword_id}
+          />
+        </Row>
+        <Row>
+          <Col>
+            <div>
+              <img src={image} alt={name} />
+              <p>이름:&nbsp; {name}</p>
+              <p>
+                직무 : &nbsp;
+                {edit ? (
+                  <input
+                    onChange={onSave}
+                    name="position"
+                    value={position}
+                  ></input>
+                ) : (
+                  position
+                )}
+              </p>
+              <p>
+                스택 : &nbsp;
+                {edit ? (
+                  <input onChange={onSave} name="stack" value={stack}></input>
+                ) : (
+                  stack
+                )}
+              </p>
+              <p>이메일:&nbsp; {email}</p>
+              {edit ? (
+                <button onClick={update}>확인</button>
+              ) : (
+                <button onClick={onEdit}>편집</button>
+              )}
 
-        <button>
-          <Link to={`/afterlogin/messenger/${id}`}>메세지</Link>
-        </button>
-      </div>
-      키워드를 입력해 주세요.
-      <br />
-      <input name="keyword" value={keyword} onChange={onSave}></input>
-      <button onClick={putKeywords}>전송</button>
-      <Outlet />
+              <button>
+                <Link to={`/afterlogin/messenger/${id}`}>메세지</Link>
+              </button>
+            </div>
+          </Col>
+          <Col>
+            {git&&!edit ? (
+              <img src={`https://ghchart.rshah.org/${gitId} `} />
+            ) : (
+              <input onChange={onSave} name="gitId" value={gitId}></input>
+            )}
+          </Col>
+        </Row>
+        <Row>
+          <Col>
+            <input name="keyword" value={keyword} onChange={onSave}></input>
+          </Col>
+          <Col>
+            <button onClick={putKeywords}>전송</button>
+          </Col>
+        </Row>
+        <Outlet />
+      </Container>
     </div>
   )
 }
