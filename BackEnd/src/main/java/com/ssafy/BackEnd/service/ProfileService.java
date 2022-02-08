@@ -2,8 +2,10 @@ package com.ssafy.BackEnd.service;
 
 
 import com.ssafy.BackEnd.entity.Profile;
+import com.ssafy.BackEnd.entity.ProfileKeyword;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile1;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
+import com.ssafy.BackEnd.entity.TeamKeyword;
 import com.ssafy.BackEnd.entity.User;
 import javassist.NotFoundException;
 import org.apache.coyote.Request;
@@ -32,5 +34,8 @@ public interface ProfileService {
 
     List<String> addKeyword(Profile profile, String content);
 
+    List<ProfileKeyword> getProfileKeywords(Long profile_id);
+
+    List<TeamKeyword> getTeamKeywords(Long profile_id);
 
 }

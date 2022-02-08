@@ -2,9 +2,11 @@ package com.ssafy.BackEnd.service;
 
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
+import com.ssafy.BackEnd.entity.TeamMemberIdentity;
 import com.ssafy.BackEnd.entity.User;
 
 import java.util.List;
+import java.util.Map;
 
 public interface TeamMemberService{
 
@@ -16,6 +18,6 @@ public interface TeamMemberService{
 
     TeamMember addTeamLeader(String email, Team team);
 
-    List<User> showTeamMemberList(Long team_id);
+    Map<String, TeamMemberIdentity> showTeamMemberList(Long team_id);
 
 }

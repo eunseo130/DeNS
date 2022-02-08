@@ -5,6 +5,7 @@ import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.ProfileKeyword;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
 import com.ssafy.BackEnd.entity.Response;
+import com.ssafy.BackEnd.entity.TeamKeyword;
 import com.ssafy.BackEnd.repository.ProfileKeywordRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.HashTagAlgorithm;
@@ -56,17 +57,11 @@ public class ProfileController {
                 System.out.println(profile.get().getEmail());
                 return new ResponseEntity<Profile>(profile.get(), HttpStatus.OK);
             }
-//            response.setResponse("success");
-//            response.setMessage("사용자의 프로필을 성공적으로 조회했습니다.");
-//            response.setData(null);
             else {
                 return new ResponseEntity<Profile>((Profile) null, HttpStatus.NOT_FOUND);
             }
 
         } catch (Exception e) {
-//            response.setResponse("error");
-//            response.setMessage("사용자의 프로필을 조회할 수 없습니다.");
-//            response.setData(null);
             return new ResponseEntity<Profile>((Profile) null, HttpStatus.NOT_FOUND);
         }
     }
@@ -79,15 +74,9 @@ public class ProfileController {
 
             Profile findProfile = profileService.findById(profile_id).get();
             Profile newProfile = profileService.modifyProfile(findProfile, requestModifyProfile2);
-//            response.setResponse("success");
-//            response.setMessage("사용자의 프로필을 성공적으로 수정했습니다.");
-//            response.setData(null);
             log.info("수정완료");
             return new ResponseEntity<Profile>(newProfile, HttpStatus.OK);
         } catch (Exception e) {
-//            response.setResponse("error");
-//            response.setMessage("사용자의 프로필을 조회할 수 없습니다.");
-//            response.setData(null);
             log.info(e.toString());
             return new ResponseEntity<Profile>((Profile) null, HttpStatus.NOT_FOUND);
         }
@@ -122,6 +111,7 @@ public class ProfileController {
             } else {
                 ProfileKeyword profileKeyword = profileKeywordRepository.findProfileKeyword(keyword, profile_id);
                 profileKeyword.setCount(profileKeyword.getCount()+1);
+                profileKeywordRepository.save(profileKeyword);
             }
         }
         profile.setProfile_keyword(profileKeywords);
@@ -130,8 +120,45 @@ public class ProfileController {
     }
 
     @GetMapping("/keyword/{profile_id}")
-    public void getKeywords(@PathVariable Long profile_id) throws NotFoundException {
+    public List<ProfileKeyword> getKeywords(@PathVariable Long profile_id) throws NotFoundException {
         Profile profile = profileService.findById(profile_id).get();
-        List<ProfileKeyword> profileKeywords = profile.getProfile_keyword();
+        List<ProfileKeyword> profileKeywords = profileService.getProfileKeywords(profile_id);
+        List<TeamKeyword> teamKeywords = profileService.getTeamKeywords(profile_id);
+        List<ProfileKeyword> finalKeywords = new ArrayList<>();
+
+        for (ProfileKeyword profileKeyword: profileKeywords) {
+            finalKeywords.add(profileKeyword);
+        }
+
+        List<TeamKeyword> deleteKeywords = new ArrayList<>();
+
+        for (TeamKeyword teamKeyword : teamKeywords) {
+            for (ProfileKeyword profileKeyword : finalKeywords) {
+                if (teamKeyword.getName().equals(profileKeyword.getName())){
+                    profileKeyword.setCount(profileKeyword.getCount()+ teamKeyword.getCount());
+                    deleteKeywords.add(teamKeyword);
+                }
+            }
+        }
+
+        for (TeamKeyword deleteKeyword : deleteKeywords) {
+            teamKeywords.remove(deleteKeyword);
+        }
+
+        for (TeamKeyword keyword : teamKeywords) {
+            ProfileKeyword newProfileKeyword = new ProfileKeyword();
+            newProfileKeyword.setProfile(profile);
+            newProfileKeyword.setCount(keyword.getCount());
+            newProfileKeyword.setName(keyword.getName());
+            finalKeywords.add(newProfileKeyword);
+        }
+
+        System.out.println("==============");
+        for (ProfileKeyword profileKeyword : finalKeywords) {
+            System.out.println(profileKeyword.getName());
+            System.out.println(profileKeyword.getCount());
+        }
+
+        return finalKeywords;
     }
 }

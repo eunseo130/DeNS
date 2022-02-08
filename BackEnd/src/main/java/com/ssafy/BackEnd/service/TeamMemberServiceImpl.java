@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -108,24 +110,23 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     }
 
     @Override
-    public List<User> showTeamMemberList(Long team_id) {
-        List<TeamMember> teammembers = new ArrayList<>();
-        teammembers = teamMemberRepository.showTeamMemberList(team_id);
+    public Map<String, TeamMemberIdentity> showTeamMemberList(Long team_id) {
+        Team team = teamRespository.findByTeam(team_id);
+        System.out.println(team.getTitle());
+        List<TeamMember> teamMembers = team.getTeam_member();
+//        List<User> teammembers_infos = new ArrayList<>();
+        Map<String, TeamMemberIdentity> teamMemberList = new HashMap<>();
 
-        List<User> teammembers_infos = new ArrayList<>();
 
-        for (TeamMember teammember_info: teammembers) {
-            System.out.println(teammember_info.getUser().getName());
-
-            teammembers_infos.add(teammember_info.getUser());
+        for (TeamMember teamMember: teamMembers) {
+            System.out.println(teamMember.getUser().getName());
+            teamMemberList.put(teamMember.getUser().getName(), teamMember.getTeam_identity());
+//            teammembers_infos.add(teammember_info.getUser());
 
         }
 
-        for (User info : teammembers_infos) {
-            System.out.println("이거 제발 나와라" + info.getName());
-        }
 
-        return teammembers_infos;
+        return teamMemberList;
     }
 
 

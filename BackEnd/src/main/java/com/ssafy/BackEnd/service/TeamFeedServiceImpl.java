@@ -2,9 +2,9 @@ package com.ssafy.BackEnd.service;
 
 import com.ssafy.BackEnd.dto.TeamFeedDto;
 import com.ssafy.BackEnd.entity.*;
-import com.ssafy.BackEnd.repository.TeamFeedKeywordRepository;
-import com.ssafy.BackEnd.repository.TeamFeedRepository;
-import com.ssafy.BackEnd.repository.TeamKeywordRepository;
+import com.ssafy.BackEnd.exception.CustomException;
+import com.ssafy.BackEnd.exception.ErrorCode;
+import com.ssafy.BackEnd.repository.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -31,6 +31,12 @@ public class TeamFeedServiceImpl implements TeamFeedService{
     private final TeamFeedKeywordRepository teamFeedKeywordRepository;
 
     private HashTagAlgorithm hashTagAlgorithm = new HashTagAlgorithm();
+
+    private final TeamMemberRepository teamMemberRepository;
+
+    private final UserRepository userRepository;
+
+
 
     @Override
     public TeamFeed createTeamFeed(TeamFeedDto teamFeedDto) throws IOException {
@@ -75,7 +81,19 @@ public class TeamFeedServiceImpl implements TeamFeedService{
 
 
     @Override
-    public TeamFeed modifyTeamFeed(TeamFeed teamFeed, TeamFeedDto teamFeedDto){
+    public TeamFeed modifyTeamFeed(TeamFeed teamFeed, Long profile_id, TeamFeedDto teamFeedDto){
+        User isuser = new User();
+        isuser = userRepository.findByProfileId(profile_id);
+
+        TeamMember isleader = new TeamMember();
+        isleader = teamMemberRepository.findTeamLeader2(teamFeed.getTeam().getTeam_id(), isuser.getEmail());
+
+        if (!isleader.getTeam_identity().equals("LEADER") && isleader.getTeam().getTeam_id() != teamFeed.getTeam().getTeam_id()) { //리더가 아니고 && 팀 멤버의 일원이 아니라면
+            System.out.println("권한이 없습니다");
+            throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
+        }
+
+
         teamFeed.setContent(teamFeedDto.getContent());
 
         List<TeamFeedKeyword> teamFeedKeywords = teamFeed.getTeamFeedKeywords();
