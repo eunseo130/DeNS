@@ -59,10 +59,6 @@ const App = () => {
           path: '/afterlogin/profile/:id',
           element: <ProfileMain />,
           children: [
-<<<<<<< HEAD
-=======
-            //  { index: true, element:<ProfileMain />},
->>>>>>> 692230be2b6430ead20fc0d0990a5baffe8c0318
             { path: '/afterlogin/profile/:id/info', element: <ProfileInfo /> },
             {
               path: '/afterlogin/profile/:id/keyword',
