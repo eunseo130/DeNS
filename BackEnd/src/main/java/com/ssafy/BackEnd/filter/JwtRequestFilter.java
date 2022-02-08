@@ -51,17 +51,18 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String meessage = null;
 
         String jwt = null;
-
-        try {
+        //final String getauth = jwtService.resolveToken(request);
+        //if(getauth != null) {
+            try {
             final String getauth = request.getHeader("Authorization");
             jwt = getauth.substring(8, getauth.length() - 1);
             //System.out.println("token"+jwtToken.getValue());
             //System.out.println("jwt token : "+jwtToken);
-            jwtToken = jwt;
+            //jwtToken = jwt;
 
             try {
-                if (jwtToken != null) {
-                    jwt = jwtToken;
+                if (jwt != null) {
+                    //jwt = jwtToken;
                     System.out.println("try jwt : " + jwt);
                     userEmail = jwtService.getUserEmail(jwt);
                     System.out.println("try useremail : " + userEmail);
@@ -75,8 +76,10 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
                     meessage = "success";
                     System.out.println("auth : " + userAuth);
-                    if (userAuth == UserIdentity.UNAUTH) roles.add(new SimpleGrantedAuthority("UNATH"));
-                    else roles.add(new SimpleGrantedAuthority("USER"));
+                    if (userAuth == UserIdentity.USER) roles.add(new SimpleGrantedAuthority("USER"));
+                    //else roles.add(new SimpleGrantedAuthority("USER"));
+//                    if (userAuth == UserIdentity.UNAUTH) roles.add(new SimpleGrantedAuthority("UNATH"));
+//                    else roles.add(new SimpleGrantedAuthority("USER"));
 
                     System.out.println("vali : " + jwtService.validateToken(jwt, user));
                     if (jwtService.validateToken(jwt, user)) {
@@ -86,25 +89,31 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         //request.setAttribute("check", Boolean.FALSE);
                         response.setStatus(HttpServletResponse.SC_OK);
                     }
-
                 }
+
             } catch (ExpiredJwtException e) {
-                //System.out.println("error : "+e.getMessage());
+                System.out.println("error : "+e.getMessage());
                 response.addHeader("error", e.getMessage());
                 //request.setAttribute("check", Boolean.TRUE);
                 response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-
+                //response.sendError(HttpServletResponse.SC_FORBIDDEN, "토큰 만료");
                 //Cookie refreshToken = cookieService.getCookie(request, JwtServiceImpl.REFRESH_TOKEN_NAME);
 //            if(refreshToken != null){
 //                refreshJwt = refreshToken.getValue();
             }
-
-        } catch (NullPointerException e){
-            System.out.println("null");
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
-        } finally{
-            filterChain.doFilter(request, response);
         }
+        catch (NullPointerException e){
+            System.out.println("token null");
+            System.out.println(e.getMessage());
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            //response.sendError(HttpServletResponse.SC_FORBIDDEN, "권한없음");
+        }
+//        finally{
+        //}
+        System.out.println(response.getStatus());
+        System.out.println(response.getHeader("Authorization"));
+            filterChain.doFilter(request, response);
+        //}
 //        } catch (Exception e) {}
 //
 //        try{
@@ -134,9 +143,6 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //        } catch (ExpiredJwtException e) {}
 //
 //        filterChain.doFilter(request, response);
-
-
-
 
     }
 }

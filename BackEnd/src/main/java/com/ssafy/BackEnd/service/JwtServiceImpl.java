@@ -70,6 +70,10 @@ public class JwtServiceImpl { //implements JwtService {
         return jwt;
     }
 
+    public String resolveToken(HttpServletRequest req) {
+        return req.getHeader("Authorization");
+    }
+
     public String getUserEmail(String token){
         return extractAllClaims(token).get("email", String.class);
     }
