@@ -18,4 +18,6 @@ public interface ProfileKeywordRepository extends JpaRepository<ProfileKeyword, 
     ProfileKeyword findProfileKeyword(String name, Long profile_id);
 
     List<ProfileKeyword> findByNameContaining(String keyword);
+
+
 }

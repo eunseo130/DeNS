@@ -59,6 +59,18 @@ public class TeamController {
         return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
     }
 
+    @GetMapping("/myteam/{profile_id}") //프로필아이디로 내 팀 목록 가져오기
+    @ApiOperation(value = "내 팀 목록 가져오기")
+    public ResponseEntity<List<Team>> getMyTeams(@PathVariable Long profile_id) throws NotFoundException {
+        List<Team> my_teams = teamService.showMyTeamList(profile_id);
+
+        if (my_teams.isEmpty()) {
+            System.out.println("내 팀 목록이 없습니다");
+            throw new CustomException("내 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
+        }
+
+        return new ResponseEntity<List<Team>>(my_teams, HttpStatus.OK);
+    }
 
     @ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @PostMapping(value="/create/{profileId}")
@@ -84,20 +96,20 @@ public class TeamController {
     }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
-    @PutMapping("/{team_id}")
+    @PutMapping("/{profile_id}/{team_id}")
     @ApiOperation(value = "팀 수정") //팀 수정이 무엇에 대한 수정인가(name과 content에 대한 수정??)
-    public ResponseEntity<Team> modifyTeam(@PathVariable long team_id, @RequestBody TeamDto teamDto) throws NotFoundException {
+    public ResponseEntity<Team> modifyTeam(@PathVariable long profile_id, @PathVariable long team_id, @RequestBody TeamDto teamDto) throws NotFoundException {
         Team findTeam = teamService.findByTeam(team_id);
-        Team team = teamService.modifyTeam(findTeam, teamDto);
+        Team team = teamService.modifyTeam(profile_id, findTeam, teamDto);
         return new ResponseEntity<Team>(team, HttpStatus.OK);
     }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @DeleteMapping("/{team_id}")
     @ApiOperation(value = "팀 삭제")
-    public ResponseEntity<Void> deleteTeam(@PathVariable Long team_id) {
+    public ResponseEntity<Void> deleteTeam(@PathVariable long profile_id, @PathVariable Long team_id) {
 
-        teamService.deleteTeam(team_id);
+        teamService.deleteTeam(profile_id, team_id);
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 

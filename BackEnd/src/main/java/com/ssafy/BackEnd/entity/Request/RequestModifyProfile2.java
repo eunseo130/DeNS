@@ -7,4 +7,6 @@ import lombok.Setter;
 public class RequestModifyProfile2 {
     private String position;
     private String stack;
+    private String git;
+    private String git_id;
 }

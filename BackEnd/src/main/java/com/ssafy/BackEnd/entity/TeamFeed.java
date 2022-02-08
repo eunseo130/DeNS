@@ -31,6 +31,8 @@ public class TeamFeed extends BaseTimeEntity{
 //    @LastModifiedDate
 //    LocalDateTime modify_time;
 
+    String writer;
+
     @ManyToOne
     @JoinColumn(name = "team_id")
     @JsonIgnore
