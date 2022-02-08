@@ -1,0 +1,9 @@
+.searchBig{
+    display: flex;
+    width:auto;
+    flex-direction: column;
+    /* gri */
+}
+.searchSmall{
+    display: flex;
+}

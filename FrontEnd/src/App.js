@@ -2,15 +2,16 @@ import React from 'react'
 import { BrowserRouter, Route, Routes, useRoutes } from 'react-router-dom'
 
 import Signin from './component/BeforeloginComponent/Signin'
-import Signup from './component/BeforeloginComponent/Signup'
+// import Signup from './component/BeforeloginComponent/Signup'
 import Password from './component/BeforeloginComponent/Password'
 
 import BeforeLogin from './component/commonComponent/BeforeLogin'
 import Firstpage from './component/BeforeloginComponent/Firstpage'
 import Back from './component/commonComponent/Back'
 
-import Team from './component/TeamComponent/Team'
+import TeamDetail from './component/TeamComponent/TeamDetail'
 import Teamsetting from './component/TeamComponent/Teamsetting'
+import CreateTeam from './component/TeamComponent/CreateTeam'
 
 import Dashboard from './component/dashboard/Dashboard'
 import Messanger from './component/MessengerComponent/Messenger'
@@ -44,7 +45,7 @@ const App = () => {
       children: [
         { index: true, element: <Firstpage /> },
         { path: '/beforeLogin/signin', element: <Signin /> },
-        { path: '/beforeLogin/signup', element: <Signup /> },
+        // { path: '/beforeLogin/signup', element: <Signup /> },
         { path: '/beforeLogin/password', element: <Password /> },
       ],
     },
@@ -61,7 +62,6 @@ const App = () => {
           path: '/afterlogin/profile/:id',
           element: <ProfileMain />,
           children: [
-            //  { index: true, element:<ProfileMain />},
             { path: '/afterlogin/profile/:id/info', element: <ProfileInfo /> },
             {
               path: '/afterlogin/profile/:id/keyword',
@@ -70,8 +70,15 @@ const App = () => {
           ],
         },
         {
+          path: '/afterlogin/createteam',
+          element: <CreateTeam />,
+          children: [
+            { path: '/afterlogin/createteam', element: <CreateTeam /> },
+          ],
+        },
+        {
           path: '/afterlogin/team/:id',
-          element: <Team number={'팀아이디 부분'} />,
+          element: <TeamDetail/>,
           children: [
             { path: '/afterlogin/team/:id/setting', element: <Teamsetting /> },
           ],

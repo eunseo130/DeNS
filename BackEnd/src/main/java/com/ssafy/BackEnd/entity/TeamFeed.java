@@ -29,7 +29,7 @@ public class TeamFeed {
     @LastModifiedDate
     LocalDateTime modify_time;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "team_id")
     Team team;
 

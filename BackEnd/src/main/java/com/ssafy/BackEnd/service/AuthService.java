@@ -12,7 +12,7 @@ public interface AuthService {
 
     void signUp(User user);
 
-    void validateDuplicateUser(User user);
+    boolean validateDuplicateUser(User user);
 
     ResponseEntity<Profile> createProfile(User user);
 
@@ -30,7 +30,7 @@ public interface AuthService {
 
     void requestChangePassword(User user) throws NotFoundException;
 
-    void changePassword(User user, String password) throws NotFoundException;
+    User changePassword(User user, String password) throws NotFoundException;
 
     boolean isPasswordUuidValidate(String key);
 }
