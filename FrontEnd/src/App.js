@@ -10,10 +10,10 @@ import Firstpage from './component/BeforeloginComponent/Firstpage'
 import Back from './component/commonComponent/Back'
 
 import TeamDetail from './component/TeamComponent/TeamDetail'
-import Teamsetting from './component/TeamComponent/Teamsetting'
+import TeamSettings from './component/TeamComponent/TeamSettings'
 import CreateTeam from './component/TeamComponent/CreateTeam'
 
-import Dashboard from './component/dashboard/Dashboard'
+import Dashboard from './component/dashboardComponent/Dashboard'
 import Messanger from './component/MessengerComponent/Messenger'
 
 import Search from './component/SearchComponent/Search'
@@ -55,7 +55,7 @@ const App = () => {
       path: '/afterlogin',
       element: <Back />,
       children: [
-        { index: true, elelment: <Dashboard /> },
+        { index: true, element: <Dashboard /> },
         { path: '/afterlogin/dashboard', element: <Dashboard /> },
         { path: '/afterlogin/messanger', element: <Messanger /> },
         {
@@ -80,7 +80,7 @@ const App = () => {
           path: '/afterlogin/team/:id',
           element: <TeamDetail/>,
           children: [
-            { path: '/afterlogin/team/:id/setting', element: <Teamsetting /> },
+            { path: '/afterlogin/team/:id/setting', element: <TeamSettings /> },
           ],
         },
         {

@@ -3,18 +3,18 @@ import styled from "styled-components";
 import { Link, Navigate, Router } from "react-router-dom";
 
 export default function TeamLinkBox(props) {
-
+    // user가 URL에 직접 쳐서 들어간다면?
+    // 1. Path
+    //    URL/JWT로부터 가져와야
     return (
         <Box>
             <Link to={{
-                pathname:`/afterlogin/team/${props.team_id}`,
-                hash: "helloasd",
-                search: "helloasd",
-                state: {
-                    title: props.title,
-                    content: "hello",
-                }
-            }}>
+                pathname:`/afterlogin/team/${props.team_id}`,                
+            }}
+            state={{
+                team_id: props.team_id,
+            }}
+            >
                 <Title>{props.title}</Title>
             </Link>
         </Box>

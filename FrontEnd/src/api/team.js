@@ -9,7 +9,8 @@ function team(success, fail) {
     api.get(`/team`).then(success).catch(fail);
 }
 function detail(param, success, fail) {
-    api.get(`/team/${param}`).then(success).catch(fail);
+    api.get(`/team/showteam/${param}`).then(success).catch(fail);
+    // console.log(`/team/${param}`)
 }
 function myteam(param, success, fail) {
     api.get(`/team/myteam/${param}`).then(success).catch(fail);
