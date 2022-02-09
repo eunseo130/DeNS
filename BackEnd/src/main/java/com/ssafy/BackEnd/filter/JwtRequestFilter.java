@@ -87,15 +87,15 @@ public class JwtRequestFilter extends OncePerRequestFilter {
                         usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
                         SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
                         //request.setAttribute("check", Boolean.FALSE);
-                        response.setStatus(HttpServletResponse.SC_OK);
+//                        response.setStatus(HttpServletResponse.SC_OK);
                     }
                 }
 
             } catch (ExpiredJwtException e) {
                 System.out.println("error : "+e.getMessage());
-                response.addHeader("error", e.getMessage());
+//                response.addHeader("error", e.getMessage());
                 //request.setAttribute("check", Boolean.TRUE);
-                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//                response.setStatus(HttpServletResponse.SC_FORBIDDEN);
                 //response.sendError(HttpServletResponse.SC_FORBIDDEN, "토큰 만료");
                 //Cookie refreshToken = cookieService.getCookie(request, JwtServiceImpl.REFRESH_TOKEN_NAME);
 //            if(refreshToken != null){
@@ -105,7 +105,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         catch (NullPointerException e){
             System.out.println("token null");
             System.out.println(e.getMessage());
-            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+//            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             //response.sendError(HttpServletResponse.SC_FORBIDDEN, "권한없음");
         }
 //        finally{
