@@ -91,15 +91,12 @@ public class TeamController {
     @ApiOperation(value = "팀 조회")
     public ResponseEntity<Team> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
-<<<<<<< HEAD
-        System.out.println("왜안돼");
-        return new ResponseEntity<Team>(teamService.findByTeam(team_id), HttpStatus.OK);
-=======
+
          Team team = teamService.findByTeam(team_id);
         System.out.println("team id : "+team.getTeam_id());
 
         return new ResponseEntity<Team>(team, HttpStatus.OK);
->>>>>>> 63b3a84519f8c1a7e379060da9718b146bd3ff1a
+
     }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
