@@ -38,7 +38,6 @@ public class TeamController {
     @Autowired
     TeamMemberService teamMemberService;
 
-
     @Autowired
     TeamKeywordRepository teamKeywordRepository;
 
@@ -88,10 +87,11 @@ public class TeamController {
 
     }
 
-    @GetMapping("/{team_id}")
+    @GetMapping("/showteam/{team_id}")
     @ApiOperation(value = "팀 조회")
     public ResponseEntity<Team> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
+        System.out.println("왜안돼");
         return new ResponseEntity<Team>(teamService.findByTeam(team_id), HttpStatus.OK);
     }
 
