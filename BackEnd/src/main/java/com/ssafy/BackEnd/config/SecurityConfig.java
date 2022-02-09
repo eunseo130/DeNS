@@ -14,35 +14,39 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        CharacterEncodingFilter filter = new CharacterEncodingFilter();
-        filter.setEncoding("UTF-8");
-        filter.setForceEncoding(true);
-
 
         http.csrf().disable().formLogin().loginPage("/aaaaa"); // 페이지를 못가게 하는
 
-        http.httpBasic().disable();
-        http.csrf()
-                .disable()
-                .headers()
-                .frameOptions()
-                .disable();
-
-        http.authorizeRequests()
+        http.httpBasic()
+                .and()
+                .authorizeRequests()
                 .antMatchers("/signin").permitAll()
                 .antMatchers("/signup").permitAll()
-                .antMatchers("/team/*").hasRole("USER");
-//                .and()
-//                .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
+                .antMatchers("/admin/**").hasRole("ADMIN");
+                //.antMatchers("/team/*").hasRole("USER")
+                //.antMatchers("/*").permitAll();
+
+//                .antMatchers("/profile/*").permitAll();
+
+        //        CharacterEncodingFilter filter = new CharacterEncodingFilter();
+//        filter.setEncoding("UTF-8");
+//        filter.setForceEncoding(true);
+//
+//
 //        http.csrf().disable().formLogin().loginPage("/aaaaa"); // 페이지를 못가게 하는
 //
-//        http.httpBasic()
-//                .and()
-//                .authorizeRequests()
-//                .antMatchers("/*").permitAll();
-////                .antMatchers("/signin", "/signup").permitAll()
-////                .antMatchers("/admin/**").hasRole("ADMIN")
-////                .antMatchers("/team/*").hasRole("USER")
-////                .antMatchers("/profile/*").permitAll();
+//        http.httpBasic().disable();
+//        http.csrf()
+//                .disable()
+//                .headers()
+//                .frameOptions()
+//                .disable();
+//
+//        http.authorizeRequests()
+//                .antMatchers("/signin").permitAll()
+//                .antMatchers("/signup").permitAll()
+//                .antMatchers("/team/*").hasRole("USER");
+////                .and()
+//                .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
     }
 }
