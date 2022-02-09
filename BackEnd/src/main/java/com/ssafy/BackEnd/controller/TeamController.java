@@ -76,7 +76,7 @@ public class TeamController {
 
     }
 
-    @GetMapping("/showteam/{team_id}")
+    @GetMapping("/{team_id}")
     @ApiOperation(value = "팀 조회")
     public ResponseEntity<Team> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
