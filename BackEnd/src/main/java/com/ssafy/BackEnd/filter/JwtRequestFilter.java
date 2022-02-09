@@ -105,6 +105,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         catch (NullPointerException e){
             System.out.println("token null");
             System.out.println(e.getMessage());
+            logger.error("ERROR Logging : {} "+e.getMessage());
             //response.setStatus(HttpServletResponse.SC_FORBIDDEN);
             //response.sendError(HttpServletResponse.SC_FORBIDDEN, "권한없음");
         }

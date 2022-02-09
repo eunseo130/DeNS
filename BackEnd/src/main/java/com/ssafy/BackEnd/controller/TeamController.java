@@ -9,6 +9,9 @@ import com.ssafy.BackEnd.service.*;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
+import lombok.extern.log4j.Log4j2;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,7 +28,10 @@ import com.ssafy.BackEnd.entity.Team;
 @RestController
 @Api(tags = "팀 컨트롤러 API")
 @RequestMapping("/team")
+@Log4j2
 public class TeamController {
+    private static final Logger logger = LogManager.getLogger(TeamController.class);
+
     @Autowired
     TeamService teamService;
 
@@ -47,13 +53,16 @@ public class TeamController {
     @GetMapping
     @ApiOperation(value = "팀 목록 가져오기")
     public ResponseEntity<List<Team>> getAllTeams() throws NotFoundException {
+        logger.info("INFO SUCCESS");
+        logger.debug("DEBUG SUCCESS");
+        logger.error("ERROR SUCCESS");
 
         List<Team> teams = teamService.showTeamList();
 
-
         if (teams.isEmpty()) {
             System.out.println("전체 팀 목록이 없습니다");
-            throw new CustomException("전체 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
+            return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
+            //throw new CustomException("전체 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
         }
 
         return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
@@ -62,6 +71,10 @@ public class TeamController {
     @GetMapping("/myteam/{profile_id}") //프로필아이디로 내 팀 목록 가져오기
     @ApiOperation(value = "내 팀 목록 가져오기")
     public ResponseEntity<List<Team>> getMyTeams(@PathVariable Long profile_id) throws NotFoundException {
+        logger.info("INFO SUCCESS");
+        logger.debug("DEBUG SUCCESS");
+        logger.error("ERROR SUCCESS");
+
         List<Team> my_teams = teamService.showMyTeamList(profile_id);
 
         if (my_teams.isEmpty()) {
@@ -93,6 +106,7 @@ public class TeamController {
     public ResponseEntity<Team> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
          Team team = teamService.findByTeam(team_id);
+         if(team == null) return new ResponseEntity<Team>(team, HttpStatus.OK);
         System.out.println("team id : "+team.getTeam_id());
 
         return new ResponseEntity<Team>(team, HttpStatus.OK);
