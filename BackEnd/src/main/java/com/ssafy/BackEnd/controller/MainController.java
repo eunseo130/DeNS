@@ -9,6 +9,8 @@ import com.ssafy.BackEnd.entity.Response;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.entity.dummy;
+import com.ssafy.BackEnd.exception.CustomException;
+import com.ssafy.BackEnd.exception.ErrorCode;
 import com.ssafy.BackEnd.service.*;
 
 import io.swagger.annotations.ApiOperation;
@@ -168,13 +170,6 @@ public class MainController {
         }
     }
 
-
-    @GetMapping("/signin")
-    @ApiOperation(value = "로그인 페이지")
-    public void signinPage() {
-        System.out.println("sign in hi");
-    }
-
     @PostMapping("/signin") // 스켈레톤이랑 연결할땐 signin 지우고 '/' 상태에서
     @ApiOperation(value = "로그인 환경", response = Map.class)
     public ResponseEntity<Map<String, Object>> signin(@RequestBody User users,
@@ -210,11 +205,12 @@ public class MainController {
             } else {
                 //System.out.println("error");
                 resultMap.put("message", "fail");
-                status = HttpStatus.ACCEPTED;
+                status = HttpStatus.UNAUTHORIZED;
             }
         } catch (Exception e) {
-            resultMap.put("message", e.getMessage());
-            status = HttpStatus.INTERNAL_SERVER_ERROR;
+//            resultMap.put("message", e.getMessage());
+//            status = HttpStatus.INTERNAL_SERVER_ERROR;
+            throw new CustomException(ErrorCode.INVALID_ID);
         }
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);

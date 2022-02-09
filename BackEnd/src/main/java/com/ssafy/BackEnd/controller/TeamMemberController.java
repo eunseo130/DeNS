@@ -2,6 +2,7 @@ package com.ssafy.BackEnd.controller;
 
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
+import com.ssafy.BackEnd.entity.TeamMemberIdentity;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.service.TeamMemberService;
 import lombok.RequiredArgsConstructor;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/teammember")
@@ -39,15 +41,16 @@ public class TeamMemberController {
         return new ResponseEntity<Team>(newTeam, HttpStatus.OK);
     }
 
-    @GetMapping //팀 아이디로 팀별 멤버 목록 반환
-    public ResponseEntity<List<User>> showTeamMemberList(@RequestParam Long team_id) {
-        List<User> teammembers = teamMemberService.showTeamMemberList(team_id);
+    @GetMapping("/{team_id}") //팀 아이디로 팀별 멤버 목록 반환
+    public ResponseEntity<Map<String, TeamMemberIdentity>> showTeamMemberList(@PathVariable Long team_id) {
+        Map<String, TeamMemberIdentity> stringTeamMemberIdentityMap = teamMemberService.showTeamMemberList(team_id);
 
-        for (User u : teammembers){
-            System.out.println("여기야 "+u.getName());
-        }
+//        for (User u : teammembers){
+//            System.out.println("여기야 "+u.getName());
+//        }
+        System.out.println(stringTeamMemberIdentityMap);
 
-        return new ResponseEntity<List<User>>(teammembers, HttpStatus.OK);
+        return new ResponseEntity<Map<String, TeamMemberIdentity>>(stringTeamMemberIdentityMap, HttpStatus.OK);
     }
 
 //    @PutMapping

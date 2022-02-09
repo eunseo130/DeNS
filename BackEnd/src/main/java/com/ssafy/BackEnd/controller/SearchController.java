@@ -67,7 +67,7 @@ public class SearchController {
     }
 
     @GetMapping("/team")
-    public ResponseEntity<List<Team>> findSearchedTeams(String keyword) throws NotFoundException{
+    public ResponseEntity<List<Team>> findSearchedTeams(@RequestParam String keyword) throws NotFoundException{
         HttpStatus status;
         List<Team> teamList = teamService.showFindTeamList(keyword);
         System.out.println("keyword : "+keyword);

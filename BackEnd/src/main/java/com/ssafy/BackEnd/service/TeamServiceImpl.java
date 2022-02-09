@@ -79,78 +79,98 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public Team modifyTeam(Team team, TeamDto teamDto) {
-        team.setTitle(teamDto.getTitle());
-        team.setContent(teamDto.getContent());
+    public Team modifyTeam(Long profile_id, Team team, TeamDto teamDto) {
+        Profile profile = profileRepository.findById(profile_id).get();
+        User user = userRepository.findByEmail(profile.getEmail());
+        List<TeamMember> teamMembers = team.getTeam_member();
+        for (TeamMember teamMember : teamMembers) {
+            if (teamMember.getTeam_identity().equals(TeamMemberIdentity.LEADER) && teamMember.getUser().equals(user)) {
 
-        List<TeamKeyword> teamKeywords = team.getTeam_keyword(); //기존 팀소개 키워드
-        List<String> keywords = hashTagAlgorithm.strList(team.getContent()); //새로운 팀소개 키워드 추출
-        List<TeamKeyword> deleteKeywords = new ArrayList<>();
-        for (TeamKeyword teamKeyword : teamKeywords) {
-            if (keywords.contains(teamKeyword.getName()) == false) { //기존 키워드 안 가지고 있으면 수 감소
-                System.out.println(teamKeyword.getName());
-                System.out.println("==============if");
-                teamKeyword.setCount(teamKeyword.getCount() - 1);
-                deleteKeywords.add(teamKeyword);
-//                keywords.remove(teamFeedKeyword.getKeyword().getName());
-//                teamFeedKeywords.remove(teamFeedKeyword);
-            } else if (keywords.contains(teamKeyword.getName())) { //기존키워드에 새로운 키워드가 있으면
-                System.out.println(teamKeyword.getName());
-                System.out.println("=============else");
-                keywords.remove(teamKeyword.getName());
-            }
-        }
-        for (TeamKeyword deleteKeyword : deleteKeywords) {
-//            teamFeedKeywords.remove(deleteKeyword);
-            if (deleteKeyword.getCount() <= 0) {
+                team.setTitle(teamDto.getTitle());
+                team.setContent(teamDto.getContent());
 
-//                deleteKeyword.setTeam_feed(null);
-//                deleteKeyword.setKeyword(null);
-//                teamFeedKeywordRepository.deleteById(deleteKeyword.getTeamfeedkeyword_id());
-//                System.out.println(deleteKeyword.getKeyword().getKeyword_id());
-                System.out.println("=======remove");
-                teamKeywords.remove(deleteKeyword);
-                System.out.println("==========delete");
-                teamKeywordRepository.delete(deleteKeyword);
-//                teamFeedKeywordRepository.deleteById(deleteKeyword.getTeamfeedkeyword_id());
-//                keywordRepository.deleteById(deleteKeyword.getKeyword().getKeyword_id());
+                List<TeamKeyword> teamKeywords = team.getTeam_keyword(); //기존 팀소개 키워드
+                List<String> keywords = hashTagAlgorithm.strList(team.getContent()); //새로운 팀소개 키워드 추출
+                List<TeamKeyword> deleteKeywords = new ArrayList<>();
+                for (TeamKeyword teamKeyword : teamKeywords) {
+                    if (keywords.contains(teamKeyword.getName()) == false) { //기존 키워드 안 가지고 있으면 수 감소
+                        System.out.println(teamKeyword.getName());
+                        System.out.println("==============if");
+                        teamKeyword.setCount(teamKeyword.getCount() - 1);
+                        deleteKeywords.add(teamKeyword);
+        //                keywords.remove(teamFeedKeyword.getKeyword().getName());
+        //                teamFeedKeywords.remove(teamFeedKeyword);
+                    } else if (keywords.contains(teamKeyword.getName())) { //기존키워드에 새로운 키워드가 있으면
+                        System.out.println(teamKeyword.getName());
+                        System.out.println("=============else");
+                        keywords.remove(teamKeyword.getName());
+                    }
+                }
+                for (TeamKeyword deleteKeyword : deleteKeywords) {
+        //            teamFeedKeywords.remove(deleteKeyword);
+                    if (deleteKeyword.getCount() <= 0) {
 
-//                teamFeedKeywords.remove(deleteKeyword);
+        //                deleteKeyword.setTeam_feed(null);
+        //                deleteKeyword.setKeyword(null);
+        //                teamFeedKeywordRepository.deleteById(deleteKeyword.getTeamfeedkeyword_id());
+        //                System.out.println(deleteKeyword.getKeyword().getKeyword_id());
+                        System.out.println("=======remove");
+                        teamKeywords.remove(deleteKeyword);
+                        System.out.println("==========delete");
+                        teamKeywordRepository.delete(deleteKeyword);
+        //                teamFeedKeywordRepository.deleteById(deleteKeyword.getTeamfeedkeyword_id());
+        //                keywordRepository.deleteById(deleteKeyword.getKeyword().getKeyword_id());
+
+        //                teamFeedKeywords.remove(deleteKeyword);
+                    }
+                }
+                for (String key : keywords) System.out.println(key.getBytes(StandardCharsets.UTF_8));
+                for (String keyword : keywords) {
+                    if (teamKeywordRepository.findTeamKeyword(keyword, team) == null) {
+                        TeamKeyword newTeamKeyword = new TeamKeyword();
+                        //newTeamKeyword.setKeyword(newKeyword);
+                        newTeamKeyword.setTeam(team);
+                        newTeamKeyword.setCount(1);
+                        teamKeywordRepository.save(newTeamKeyword);
+                        teamKeywords.add(newTeamKeyword);
+                    } else {
+                        TeamKeyword teamKeyword = teamKeywordRepository.findTeamKeyword(keyword, team);
+                        teamKeyword.setCount(teamKeyword.getCount()+1);
+                    }
+                    team.setTeam_keyword(teamKeywords);
+                    teamRepository.save(team);
+                }
             }
-        }
-        for (String key : keywords) System.out.println(key.getBytes(StandardCharsets.UTF_8));
-        for (String keyword : keywords) {
-            if (teamKeywordRepository.findTeamKeyword(keyword, team) == null) {
-                TeamKeyword newTeamKeyword = new TeamKeyword();
-                //newTeamKeyword.setKeyword(newKeyword);
-                newTeamKeyword.setTeam(team);
-                newTeamKeyword.setCount(1);
-                teamKeywordRepository.save(newTeamKeyword);
-                teamKeywords.add(newTeamKeyword);
-            } else {
-                TeamKeyword teamKeyword = teamKeywordRepository.findTeamKeyword(keyword, team);
-                teamKeyword.setCount(teamKeyword.getCount()+1);
+            else {
+                System.out.println("권한이 없습니다.");
             }
-            team.setTeam_keyword(teamKeywords);
-            teamRepository.save(team);
         }
         return team;
 
     }
 
     @Override
-    public void deleteTeam(long team_id) {
+    public void deleteTeam(long profile_id, long team_id) {
         Team team = teamRepository.findByTeam(team_id);
-        List<TeamKeyword> teamKeywordList = team.getTeam_keyword();
-        for (TeamKeyword teamKeyword : teamKeywordList) {
-//            teamFeedKeyword.getKeyword().setCount(teamFeedKeyword.getKeyword().getCount() - 1);
-            teamKeywordRepository.delete(teamKeyword);
-            System.out.println("=======================");
-//            teamFeedKeywords.remove(teamFeedKeyword);
-//            System.out.println(teamFeedKeyword.getKeyword().getName());
+        Profile profile = profileRepository.findById(profile_id).get();
+        User user = userRepository.findByEmail(profile.getEmail());
+        List<TeamMember> teamMembers = team.getTeam_member();
+        for (TeamMember teamMember : teamMembers) {
+            if (teamMember.getTeam_identity().equals(TeamMemberIdentity.LEADER) && teamMember.getUser().equals(user)) {
+                List<TeamKeyword> teamKeywordList = team.getTeam_keyword();
+                for (TeamKeyword teamKeyword : teamKeywordList) {
+                    //            teamFeedKeyword.getKeyword().setCount(teamFeedKeyword.getKeyword().getCount() - 1);
+                    teamKeywordRepository.delete(teamKeyword);
+                    System.out.println("=======================");
+                    //            teamFeedKeywords.remove(teamFeedKeyword);
+                    //            System.out.println(teamFeedKeyword.getKeyword().getName());
+                }
+                teamRepository.delete(team);
+                System.out.println("=====remove");
+            } else {
+                System.out.println("권한이 없습니다.");
+            }
         }
-        teamRepository.delete(team);
-        System.out.println("=====remove");
     }
 
     @Override
@@ -173,6 +193,13 @@ public class TeamServiceImpl implements TeamService{
     public List<Team> showMyTeamList(Long profile_id) {
         List<Team> my_teams = new ArrayList<>();
         teamRepository.showMyTeamList(profile_id).forEach(myteam -> my_teams.add(myteam));
+
+        System.out.println("DFSDF");
+        System.out.println(my_teams.size());
+
+        for (Team team : my_teams) {
+          System.out.println("팀제목" + team.getTitle());
+        }
 
         return my_teams;
 
