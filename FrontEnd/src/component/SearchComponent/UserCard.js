@@ -4,8 +4,10 @@ import { searchprofileID } from "../../api/search";
 
 export default function UserCard(props){
     const check = () => {
-        props.click(props.data.name,props.data.email,props.data.profile_keyword);
-        searchprofileID(props.check,(response) => {console.log(response.data)}, (error)=> {console.log(error)});
+        console.log(props);
+        //props.data.profile_keyword
+        props.click(props.data.name,props.data.email);
+        //searchprofileID(props.check,(response) => {console.log(response.data)}, (error)=> {console.log(error)});
     }
 
     return(

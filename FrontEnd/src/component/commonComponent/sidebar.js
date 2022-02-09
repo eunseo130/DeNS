@@ -12,10 +12,10 @@ export default function Sidebar() {
 
     return(
         <Container>
-            <Link to="/afterlogin/dashboard"><Pos>대시보드</Pos></Link>
-            <Link to="/afterlogin/team/3"><Pos>팀페이지</Pos></Link>
-            <Link to="/afterlogin/search"><Pos>검색</Pos></Link>
-            <Link to="/afterlogin/messanger"><Pos>메신저</Pos></Link>
+            <Link to="/auth/dashboard"><Pos>대시보드</Pos></Link>
+            <Link to="/auth/team/3"><Pos>팀페이지</Pos></Link>
+            <Link to="/auth/search"><Pos>검색</Pos></Link>
+            <Link to="/auth/messanger"><Pos>메신저</Pos></Link>
         </Container>
     )
 }

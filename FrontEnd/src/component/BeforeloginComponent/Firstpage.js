@@ -1,12 +1,12 @@
 import React from 'react';
+import { Outlet } from 'react-router-dom';
 
 
 
 export default function Firstpage() {
     return (
         <>
-            <h3>첫페이지</h3>
-            
+            <Outlet/>
         </>
 
 

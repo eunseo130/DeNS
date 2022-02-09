@@ -1,30 +1,39 @@
 import React, { useEffect, useState } from "react";
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import { test22 } from "../../api/test";
+import { useDispatch, useSelector } from 'react-redux';
+import { loginUser } from '../../redux/userreduce';
 
 function Login() {
-    const [name, setName] = useState('');
-    const [password, setPassword] = useState('');
-    const onChangeId = (e) => {
-      setName(e.target.value);
-    };
-    const onChangePw = (e) => {
-      setPassword(e.target.value)
-    };
-    const LoginConsole = () => {
-      console.log([name, password])
-    };
-    
-    useEffect(() => {
-      test22("가세요",
-          (response) => {
-          console.log(response);
-      },  
-      (error) => {
-      console.log("오류가 됨.", (error));
-  });
-  }, []);;
-    
+  const [name, setName] = useState('');
+  
+  const dispatch = useDispatch();
+
+  const [password, setPassword] = useState('');
+
+  let navigate = useNavigate();
+  
+  const onChangeId = (e) => {
+    setName(e.target.value);
+  };
+  
+  const onChangePw = (e) => {
+    setPassword(e.target.value)
+  };
+
+  const LoginConsole = () => {
+    console.log([name, password]);
+    //dispatch의 매개변수는 action creater를 집어넣어 준다!!@!
+    //action creater의 type에 따라서 reducer에서 제어가 된다.
+    dispatch(loginUser());
+    //일정시간동안 유지하는것.
+    //클라이언트가 getCookie setCookie -> X
+    //쿠키를 건들여줘야됨.
+    //클라이언트쪽에선 서버가 쿠키를 건들 수 있게
+    navigate('/auth');
+  };
+  
     return (
       <LoginBox>
         <H3>로그인</H3>

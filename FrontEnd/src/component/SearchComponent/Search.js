@@ -24,7 +24,10 @@ export default function Search() {
 
     //초기화
     useEffect(() => {
-        searchTeamkeyword("", (response) => { setTeamList(response.data) }, (error) => { console.log(error) });
+        searchTeamkeyword("", (response) => {
+            console.log(response);
+            setTeamList(response.data)
+        }, (error) => { console.log(error) });
         searchUserkeyword("", (response) => { setUserList(response.data) }, (error) => { console.log(error) });
     }, []);
     
@@ -33,8 +36,10 @@ export default function Search() {
         setNullSearch(true);
         searchTeamkeyword(e.target.value, (response) => { setTeamList(response.data) }, (error) => { initList(1) });
         searchUserkeyword(e.target.value, (response) => { setUserList(response.data) }, (error) => { initList(2) });
-        setTotalList(...teamList, ...userList);
-        
+       // setTotalList(...teamList, ...userList);
+        //title, content, profile_id
+        //teammember(사람)
+        //keyword
     }
     
     return (

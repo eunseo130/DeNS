@@ -4,9 +4,7 @@ import { TagCloud } from 'react-tagcloud';
 
 export default function Modal(props) {
     const { open, close, header,content,gomessanger,profile_keyword } = props;
-    
     useEffect(() => {
-        console.log(profile_keyword);
     }, []);
     
     return (

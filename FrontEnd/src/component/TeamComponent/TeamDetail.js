@@ -1,13 +1,14 @@
 import React, { useEffect, useState } from 'react';
 // import { detail } from '../../api/team';
 import styled from "styled-components";
-import { useLocation } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 
 export default function TeamDetail(props) {
     // const [teamInfo, setTeamInfo] = useState('');
     const hello = useLocation();
+    const params = useParams();
+    console.log(params.id);
     // const title = 
-    console.log(hello)
     // console.log(props)
     // useEffect(() => {
     //     detail(

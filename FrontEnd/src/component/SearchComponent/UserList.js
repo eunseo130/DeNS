@@ -23,13 +23,13 @@ export default function UserList(props) {
         // console.log(tags[0].name);
         // console.log(tags[0].count);
         let test = [];
-        setModalprofilekeyword([]);
-        tags.map((data) => {
-            test.push({
-                value: data.name,
-                count:data.count
-            });
-        })
+        // setModalprofilekeyword([]);
+        // tags.map((data) => {
+        //     test.push({
+        //         value: data.name,
+        //         count:data.count
+        //     });
+        // })
         
         setModalprofilekeyword(test);
 
@@ -42,7 +42,7 @@ export default function UserList(props) {
     return (
         <>
             <>
-                {modalppen ? <Modal open={modalppen} close={closeModal} profile_keyword={modalprofilekeyword} content={modalcontent} header={modaltitle}>{modaltitle}</Modal> : ``}
+                {/* {modalppen ? <Modal open={modalppen} close={closeModal} profile_keyword={modalprofilekeyword} content={modalcontent} header={modaltitle}>{modaltitle}</Modal> : ``} */}
             </>
             <ul>
                 {temp.map((data) => {return <UserCard  click={openModal} check= {data.profile_id} data={data}/>}) }

@@ -13,7 +13,7 @@ import TeamDetail from './component/TeamComponent/TeamDetail'
 import Teamsetting from './component/TeamComponent/Teamsetting'
 import CreateTeam from './component/TeamComponent/CreateTeam'
 
-import Dashboard from './component/dashboard/Dashboard'
+import Dashboard from './component/dashboardComponent/Dashboard' 
 import Messanger from './component/MessengerComponent/Messenger'
 
 import Search from './component/SearchComponent/Search'
@@ -35,86 +35,87 @@ import Page404 from './component/Page404'
 import HeaderBox from './component/commonComponent/HeaderBox'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
+import LoginTest from './component/BeforeloginComponent/LoginTest'
+// import auth from './component/hoc/auth'
 const App = () => {
   const routes = useRoutes([
     //로그인하기전 페이지 관리
     //이전엔 상단하단에 페이지만 표시된다.
     {
-      path: '/beforeLogin',
-      element: <BeforeLogin />,
+      path: '/',
+      element: <Firstpage />,
       children: [
         { index: true, element: <Firstpage /> },
-        { path: '/beforeLogin/signin', element: <Signin /> },
+        { path: '/signin', element: <Signin /> },
         // { path: '/beforeLogin/signup', element: <Signup /> },
-        { path: '/beforeLogin/password', element: <Password /> },
+        { path: '/password', element: <Password /> },
       ],
     },
     //로그인후 페이지 관리
     //공통내용으로 header와 sidebar가 생긴다.
     {
-      path: '/afterlogin',
+      path: '/auth',
       element: <Back />,
       children: [
         { index: true, elelment: <Dashboard /> },
-        { path: '/afterlogin/dashboard', element: <Dashboard /> },
-        { path: '/afterlogin/messanger', element: <Messanger /> },
+        { path: '/auth/dashboard', element: <Dashboard /> },
+        { path: '/auth/messanger', element: <Messanger /> },
         {
-          path: '/afterlogin/profile/:id',
+          path: '/auth/profile/:id',
           element: <ProfileMain />,
           children: [
-            { path: '/afterlogin/profile/:id/info', element: <ProfileInfo /> },
+            { path: '/auth/profile/:id/info', element: <ProfileInfo /> },
             {
-              path: '/afterlogin/profile/:id/keyword',
+              path: '/auth/profile/:id/keyword',
               element: <ProfileKeyword />,
             },
           ],
         },
         {
-          path: '/afterlogin/createteam',
+          path: '/auth/createteam',
           element: <CreateTeam />,
           children: [
-            { path: '/afterlogin/createteam', element: <CreateTeam /> },
+            { path: '/auth/createteam', element: <CreateTeam /> },
           ],
         },
         {
-          path: '/afterlogin/team/:id',
+          path: '/auth/team/:id',
           element: <TeamDetail/>,
           children: [
-            { path: '/afterlogin/team/:id/setting', element: <Teamsetting /> },
+            { path: '/auth/team/:id/setting', element: <Teamsetting /> },
           ],
         },
         {
-          path: '/afterlogin/search',
+          path: '/auth/search',
           element: <Search />,
           children: [
             { index: true, elelment: <Search /> },
-            { path: '/afterlogin/search/:teamid', element: <Searchid /> },
+            { path: '/auth/search/:teamid', element: <Searchid /> },
           ],
         },
         {
-          path: '/afterlogin/group',
+          path: '/auth/group',
           element: <Group />,
           children: [
             { index: true, elelment: <Group /> },
-            { path: '/afterlogin/group/start', element: <Groupstart /> },
-            { path: '/afterlogin/group/channel', element: <Groupchannel /> },
-            { path: '/afterlogin/group/link', element: <Grouplink /> },
+            { path: '/auth/group/start', element: <Groupstart /> },
+            { path: '/auth/group/channel', element: <Groupchannel /> },
+            { path: '/auth/group/link', element: <Grouplink /> },
           ],
         },
         {
-          path: '/afterlogin/messenger',
+          path: '/auth/messenger',
           element: <Messenger />,
           children: [
             { index: true, elelment: <Messenger /> },
-            { path: '/afterlogin/messenger/:id', element: <Message /> },
+            { path: '/auth/messenger/:id', element: <Message /> },
           ],
         },
-        {
-          path: 'error',
-          element: <Error />,
-          children: [{ path: '404page', element: <Page404 /> }],
-        },
       ],
+    },
+    {
+      path: '*',
+      element: <Error />
     },
   ])
 

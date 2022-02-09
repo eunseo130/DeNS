@@ -12,17 +12,18 @@ export default function TeamList( props) {
         setTemp(props.teamlist);
     });
     
-
+    
     const [modalppen, setModalppen] = useState(false);
-
+    
     const [modaltitle, setModaltitle] = useState("");
     const [modalcontent, setModalcontent] = useState("");
     const [leaderID, setleaderID] = useState("");
-
+    
     const openModal = (title,content) => {
         setModalppen(true);
         setModaltitle(title);
         setModalcontent(content);
+        console.log(props);
     }
     const closeModal = () => {
         setModalppen(false);
@@ -36,7 +37,7 @@ export default function TeamList( props) {
     return (
         <div className='searchSmall'>
             <>
-                <Modal open={modalppen}close={closeModal} content={modalcontent} gomessanger={gomessanger} header={modaltitle }>{ modaltitle}</Modal>
+                {/* <Modal open={modalppen}close={closeModal} content={modalcontent} gomessanger={gomessanger} header={modaltitle }>{ modaltitle}</Modal> */}
             </>
         <ul>
             {
