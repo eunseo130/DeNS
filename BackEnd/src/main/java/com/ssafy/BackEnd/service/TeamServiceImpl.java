@@ -33,7 +33,7 @@ public class TeamServiceImpl implements TeamService{
     @Override
     public Team findByTeam(Long team_id) throws NotFoundException {
         Team findTeam = teamRepository.findByTeam(team_id);
-        if(findTeam == null) throw new NotFoundException("팀을 찾을 수 없습니다");
+        //if(findTeam == null) throw new NotFoundException("팀을 찾을 수 없습니다");
 
         return findTeam;
     }
