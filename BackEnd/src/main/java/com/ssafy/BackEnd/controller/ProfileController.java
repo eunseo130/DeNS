@@ -21,6 +21,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
@@ -90,9 +91,9 @@ public class ProfileController {
         }
     }
 
-    @PostMapping("/update/image/{profile_id}")
-    public ResponseEntity<String> updateImage(@PathVariable Long profile_id, @RequestParam MultipartFile multipartFile) throws NotFoundException {
-        String imagePath = imageService.update(profile_id, multipartFile);
+    @PostMapping(value = "/update/image/{profile_id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE } )
+    public ResponseEntity<String> updateImage(@PathVariable Long profile_id, @RequestPart(value="file", required = true) MultipartFile file) throws NotFoundException {
+        String imagePath = imageService.update(profile_id, file);
         if (imagePath == null) {
             logger.info("NO IMAGE PATH");
             //throw new CustomException(ErrorCode.NO_DATA_ERROR);

@@ -220,7 +220,7 @@ public class TeamServiceImpl implements TeamService{
 
                 List<TeamKeyword> teamKeywords = team.getTeam_keyword(); //기존 팀소개 키워드
                 for (TeamKeyword teamKeyword : teamKeywords) {
-                    System.out.println("기존" + teamKeyword);
+                    System.out.println("기존" + teamKeyword.getName());
                 }
                 List<String> keywords = hashTagAlgorithm.strList(team.getContent()); //새로운 팀소개 키워드 추출
                 for (String keyword : keywords) {
