@@ -12,8 +12,7 @@ import Back from './component/commonComponent/Back'
 import TeamDetail from './component/TeamComponent/TeamDetail'
 import Teamsetting from './component/TeamComponent/Teamsetting'
 import CreateTeam from './component/TeamComponent/CreateTeam'
-
-import Dashboard from './component/dashboard/Dashboard'
+import Dashboard from './component/dashboardComponent/Dashboard'
 import Messanger from './component/MessengerComponent/Messenger'
 
 import Search from './component/SearchComponent/Search'
@@ -78,7 +77,7 @@ const App = () => {
         },
         {
           path: '/afterlogin/team/:id',
-          element: <TeamDetail/>,
+          element: <TeamDetail />,
           children: [
             { path: '/afterlogin/team/:id/setting', element: <Teamsetting /> },
           ],
