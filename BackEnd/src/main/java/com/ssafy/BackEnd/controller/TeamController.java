@@ -18,7 +18,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ssafy.BackEnd.service.TeamService;
 import com.ssafy.BackEnd.repository.TeamRepository;
@@ -105,11 +107,14 @@ public class TeamController {
 
     @GetMapping("/showteam/{team_id}")
     @ApiOperation(value = "팀 조회")
-    public ResponseEntity<Team> findTeam(@PathVariable Long team_id) throws NotFoundException {
+    public ResponseEntity<Map<Team, List<TeamMember>>> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
 
-         Team team = teamService.findByTeam(team_id);
-         if(team == null) {
+        Team team = teamService.findByTeam(team_id);
+        List<TeamMember> teamMembers = team.getTeam_member();
+        Map<Team, List<TeamMember>> result = new HashMap<>();
+        result.put(team, teamMembers);
+        if(team == null) {
              logger.error("NO TEAM INFO");
              throw new CustomException(ErrorCode.NO_DATA_ERROR);
              //return new ResponseEntity<Team>(team, HttpStatus.OK);
@@ -118,7 +123,7 @@ public class TeamController {
         System.out.println("team id : "+team.getTeam_id());
         logger.info("INFO SUCCESS");
 
-        return new ResponseEntity<Team>(team, HttpStatus.OK);
+        return new ResponseEntity<>(result, HttpStatus.OK);
 
     }
 
@@ -147,18 +152,18 @@ public class TeamController {
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
-    @PutMapping("/profile/{team_id}")
+    @PutMapping("/profile/{team_id}/{profile_id}")
     @ApiOperation(value = "팀 프로필 수정")
-    public ResponseEntity<Team> modifyTeamProfile(@RequestBody TeamDto teamDto) {
-
-        Team team = teamDto.createTeam();
+    public ResponseEntity<Team> modifyTeamProfile(@RequestBody TeamDto teamDto, @PathVariable long team_id, @PathVariable long profile_id) throws NotFoundException {
+        Team team = teamService.findByTeam(team_id);
         if (team == null) {
             logger.error("NO TEAM PROFILE INFO");
             throw new CustomException(ErrorCode.NO_DATA_ERROR);
         }
-        teamService.modifyTeamProfile(team.getTeam_id(), team);
+        //System.out.println("팀제목" + team.getContent());
+        Team newTeam = teamService.modifyTeamProfile(teamDto, team, profile_id);
         logger.info("INFO SUCCESS");
 
-        return new ResponseEntity<Team>(team, HttpStatus.OK);
+        return new ResponseEntity<Team>(newTeam, HttpStatus.OK);
     }
 }

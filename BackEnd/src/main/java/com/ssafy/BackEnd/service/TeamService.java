@@ -25,7 +25,7 @@ public interface TeamService {
 
     List<Team> showMyTeamList(Long profile_id);
 
-    void modifyTeamProfile(long team_id, Team team);
+    Team modifyTeamProfile(TeamDto teamDto, Team team, long profile_id);
 
     TeamMember setTeamLeader(Team team, String email);
 
