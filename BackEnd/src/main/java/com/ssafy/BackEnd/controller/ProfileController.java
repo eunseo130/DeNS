@@ -91,8 +91,8 @@ public class ProfileController {
         }
     }
 
-    @PostMapping(value = "/update/image/{profile_id}", consumes = { MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE } )
-    public ResponseEntity<String> updateImage(@PathVariable Long profile_id, @RequestPart(value="file", required = true) MultipartFile file) throws NotFoundException {
+    @PostMapping(value = "/update/image/{profile_id}")
+    public ResponseEntity<String> updateImage(@PathVariable Long profile_id, @RequestPart MultipartFile file) throws NotFoundException {
         String imagePath = imageService.update(profile_id, file);
         if (imagePath == null) {
             logger.info("NO IMAGE PATH");
