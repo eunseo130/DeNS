@@ -9,23 +9,31 @@ import com.ssafy.BackEnd.entity.TeamKeyword;
 import com.ssafy.BackEnd.exception.CustomException;
 import com.ssafy.BackEnd.exception.ErrorCode;
 import com.ssafy.BackEnd.repository.ProfileKeywordRepository;
+import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.HashTagAlgorithm;
 import com.ssafy.BackEnd.service.ImageService;
 import com.ssafy.BackEnd.service.ProfileService;
+import com.ssafy.BackEnd.util.MediaUtils;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.annotation.Resource;
+import java.io.FileInputStream;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 
 
@@ -46,11 +54,13 @@ public class ProfileController {
     private ImageService imageService;
 
 
-
     @Autowired
     private ProfileKeywordRepository profileKeywordRepository;
 
     private HashTagAlgorithm hashTagAlgorithm = new HashTagAlgorithm();
+
+    @Resource
+    private String uploadPath;
 
 
     @GetMapping("/{profile_id}")
@@ -101,6 +111,36 @@ public class ProfileController {
         logger.info("INFO SUCCESS");
 
         return new ResponseEntity<String>(imagePath, HttpStatus.OK);
+    }
+
+    @GetMapping(value = "/image/{profile_id}")
+    public ResponseEntity<byte[]> displayImage(@PathVariable Long profile_id) throws Exception {
+
+        InputStream in = null;
+        ResponseEntity<byte[]> entity = null;
+        String imageName = profileService.findById(profile_id).get().getImage();
+        try {
+            String formatName = imageName.substring(imageName.lastIndexOf(".")+1);
+            MediaType mType = MediaUtils.getMediaType(formatName);
+            HttpHeaders headers = new HttpHeaders();
+            in = new FileInputStream(uploadPath + imageName);
+
+            if (mType != null) {
+                headers.setContentType(mType);
+            } else {
+                imageName = imageName.substring(imageName.indexOf("_")+1);
+                headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+                headers.add("Content-Disposition", "attachment; filename=\"" + new String(imageName.getBytes(StandardCharsets.UTF_8), "ISO-8859-1") + "\"");
+            }
+
+            entity = new ResponseEntity<byte[]>(IOUtils.toByteArray(in), headers, HttpStatus.CREATED);
+        } catch (Exception e) {
+            e.printStackTrace();;
+            entity = new ResponseEntity<byte[]>(HttpStatus.BAD_REQUEST);
+        } finally {
+            in.close();
+        }
+        return entity;
     }
 
     @DeleteMapping("/{profile_id}")

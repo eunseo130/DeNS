@@ -7,7 +7,7 @@ import org.springframework.web.servlet.resource.PathResourceResolver;
 
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Value("C:/Users/SSAFY/Desktop/S06P12C201/BackEnd/profileImage/")
+    @Value("/home/ubuntu/profileImage/")
     private String profileUploadFolder;
 
     @Override
