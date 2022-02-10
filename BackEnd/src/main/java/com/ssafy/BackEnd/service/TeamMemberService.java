@@ -18,6 +18,6 @@ public interface TeamMemberService{
 
     TeamMember addTeamLeader(String email, Team team);
 
-    Map<String, TeamMemberIdentity> showTeamMemberList(Long team_id);
+    List<User> showTeamMemberList(Long team_id);
 
 }

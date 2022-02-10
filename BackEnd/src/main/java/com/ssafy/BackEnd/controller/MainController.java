@@ -15,6 +15,8 @@ import com.ssafy.BackEnd.service.*;
 
 import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +34,7 @@ import java.util.Map;
 @RequestMapping("/")
 @RequiredArgsConstructor
 public class MainController {
+    private static final Logger logger = LogManager.getLogger(MainController.class);
 
     private final JwtServiceImpl jwtService;
     private final CookieService cookieService;
@@ -44,12 +47,12 @@ public class MainController {
     private final ProfileService profileService;
 
 
-    @GetMapping("/test22")
-    @ApiOperation(value = "테스트페이지 ")
-    public void test22(@RequestBody String header) {
-        System.out.println("header : "+header);
-        System.out.println("###########################################테스트페이지 확인용");
-    }
+//    @GetMapping("/test22")
+//    @ApiOperation(value = "테스트페이지 ")
+//    public void test22(@RequestBody String header) {
+//        System.out.println("header : "+header);
+//        System.out.println("###########################################테스트페이지 확인용");
+//    }
 
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "사용자의 정보를 입력 받고 'success'면 회원가입 or 'fail이면 에러메세지", response = String.class)
@@ -72,12 +75,14 @@ public class MainController {
             response.setData(null);
             status = HttpStatus.ACCEPTED;
             resultMap.put("message", "success");
+            logger.info("INFO SUCCESS");
         }
         catch(Exception e) {
             response.setResponse("failed");
             response.setMessage("회원가입을 하는 도중 오류가 발생했습니다.");
             response.setData(e.toString());
             status = HttpStatus.ACCEPTED;
+            throw new CustomException(ErrorCode.SIGNUP_ERROR);
         }
         //return response;
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
@@ -93,6 +98,7 @@ public class MainController {
                 response.setResponse("success");
                 response.setMessage("정상적인 접근입니다.");
                 response.setData(null);
+                logger.info("INFO SUCCESS");
                 return new ResponseEntity<Response>(response, HttpStatus.OK);
             } else {
                 response.setResponse("error");
@@ -104,7 +110,8 @@ public class MainController {
             response.setResponse("error");
             response.setMessage("유효하지 않은 key값입니다.");
             response.setData(null);
-            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+            //return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+            throw new CustomException("invalid key", ErrorCode.PASSWORD_VERIFY_ERROR);
         }
     }
 
@@ -137,6 +144,7 @@ public class MainController {
             response.setResponse("success");
             response.setMessage("성공적으로 사용자의 비밀번호를 변경요청을 수행했습니다.");
             response.setData(null);
+            logger.info("INFO SUCCESS");
             return new ResponseEntity<Response>(response, HttpStatus.OK);
         } catch (NoSuchFieldException e) {
             response.setResponse("error");
@@ -147,7 +155,8 @@ public class MainController {
             response.setResponse("error");
             response.setMessage("비밀번호 변경 요청을 할 수 없습니다.");
             response.setData(null);
-            return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
+            throw new CustomException(ErrorCode.PASSWORD_VERIFY_ERROR);
+            //return new ResponseEntity<Response>(response, HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -161,12 +170,14 @@ public class MainController {
             response.setResponse("success");
             response.setMessage("사용자의 비밀번호를 성공적으로 변경했습니다.");
             response.setData(null);
+            logger.info("INFO SUCCESS");
             return new ResponseEntity<User>(savedUser, HttpStatus.OK);
         } catch (Exception e) {
             response.setResponse("error");
             response.setMessage("사용자의 비밀번호를 변경할 수 없습니다.");
             response.setData(null);
-            return new ResponseEntity<User>((User) null, HttpStatus.NOT_MODIFIED);
+            throw new CustomException(ErrorCode.PASSWORD_VERIFY_ERROR);
+           // return new ResponseEntity<User>((User) null, HttpStatus.NOT_MODIFIED);
         }
     }
 
@@ -202,6 +213,7 @@ public class MainController {
                 resultMap.put("access-token", Token);
                 resultMap.put("message", "success");
                 status = HttpStatus.ACCEPTED;
+                logger.info("INFO SUCCESS");
             } else {
                 //System.out.println("error");
                 resultMap.put("message", "fail");
@@ -210,7 +222,7 @@ public class MainController {
         } catch (Exception e) {
 //            resultMap.put("message", e.getMessage());
 //            status = HttpStatus.INTERNAL_SERVER_ERROR;
-            throw new CustomException(ErrorCode.INVALID_ID);
+            throw new CustomException(ErrorCode.LOGIN_ERROR);
         }
 
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
@@ -229,11 +241,13 @@ public class MainController {
             response.setResponse("success");
             response.setMessage("성공적으로 인증메일을 보냈습니다");
             response.setData(null);
+            logger.info("INFO SUCCESS");
         } catch (Exception exception) {
             //response = new Response("error", "인증메일을 보내는데 문제가 발생했습니다.", exception);
             response.setResponse("error");
             response.setMessage("인증메일을 보내는데 문제가 발생했습니다");
             response.setData(exception);
+            throw new CustomException(ErrorCode.EMAIL_ERROR);
         }
         return response;
     }
@@ -247,11 +261,13 @@ public class MainController {
             User user = userResponseEntity.getBody();
             authService.createProfile(user);
             response = new Response("success", "성공적으로 인증메일을 확인했습니다.", null);
+            logger.info("INFO SUCCESS");
             return new ResponseEntity<User>(user, HttpStatus.OK);
 
         } catch (Exception e) {
             response = new Response("error", "인증메일을 확인하는데 실패했습니다.", null);
-            return new ResponseEntity<User>((User) null, HttpStatus.UNAUTHORIZED);
+            throw new CustomException(ErrorCode.EMAIL_ERROR);
+            //return new ResponseEntity<User>((User) null, HttpStatus.UNAUTHORIZED);
         }
     }
 
@@ -275,6 +291,7 @@ public class MainController {
             map.put("message", "fail");
             map.put("test", "데이터가 없습니다");
             status = HttpStatus.OK;
+            logger.info("INFO SUCCESS");
         } else {
             map.put("message", "success");
             map.put("test", "데이터 받기 성공");

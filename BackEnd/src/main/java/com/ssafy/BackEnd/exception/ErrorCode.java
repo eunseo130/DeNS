@@ -40,7 +40,14 @@ public enum ErrorCode implements EnumModel{
     INTERNER_SERVER_ERROR(500, "A005", "interner server error"),
     TEMPORARY_SERVER_ERROR(400, "T001", "오류 발생"),
     UNAUTH_USER_ERROR(400, "U00", "허가되지 않는 기능입니다"),
-    INVALID_ID(400, "E00", "없는 아이디입니다");
+    INVALID_ID(400, "E00", "없는 아이디입니다"),
+    NO_DATA_ERROR(400, "N00", "NULL DATA"),
+    LOGIN_ERROR(400, "M01", "LOGIN ERROR"),
+    SIGNUP_ERROR(400,  "M02", "SIGNUP ERROR"),
+    EMAIL_ERROR(400, "M03", "EMAIL ERROR"),
+    PASSWORD_VERIFY_ERROR(400, "M04", "PASSWORD VERIFY ERROR"),
+    NOT_ADD_TEAMMEMBER(400, "T01", "CAN'T CREATE TEAMMEMBER");
+
 
     private int status;
     private String code;

@@ -263,5 +263,13 @@ public class TeamFeedServiceImpl implements TeamFeedService{
         return teamFeeds;
     }
 
+    @Override
+    public List<TeamFeed> showOurTeamFeedList(long team_id) {
+        List<TeamFeed> teamFeeds = new ArrayList<>();
+        teamFeeds = teamFeedRepository.findByTeam_Team_id(team_id);
+
+        return teamFeeds;
+    }
+
 
 }

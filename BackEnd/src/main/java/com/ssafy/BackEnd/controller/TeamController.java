@@ -52,17 +52,15 @@ public class TeamController {
     @GetMapping
     @ApiOperation(value = "팀 목록 가져오기")
     public ResponseEntity<List<Team>> getAllTeams() throws NotFoundException {
-        logger.info("INFO SUCCESS");
-        logger.debug("DEBUG SUCCESS");
-        logger.error("ERROR SUCCESS");
-
         List<Team> teams = teamService.showTeamList();
 
         if (teams.isEmpty()) {
+            logger.error("NO ALL TEAL LIST");
             System.out.println("전체 팀 목록이 없습니다");
             return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
-            //throw new CustomException("전체 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
+            //throw new CustomException(ErrorCode.NO_DATA_ERROR);
         }
+        logger.info("INFO SUCCESS");
 
         return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
     }
@@ -70,16 +68,14 @@ public class TeamController {
     @GetMapping("/myteam/{profile_id}") //프로필아이디로 내 팀 목록 가져오기
     @ApiOperation(value = "내 팀 목록 가져오기")
     public ResponseEntity<List<Team>> getMyTeams(@PathVariable Long profile_id) throws NotFoundException {
-        logger.info("INFO SUCCESS");
-        logger.debug("DEBUG SUCCESS");
-        logger.error("ERROR SUCCESS");
-
         List<Team> my_teams = teamService.showMyTeamList(profile_id);
 
         if (my_teams.isEmpty()) {
+            logger.error("NO MY TEAM");
             System.out.println("내 팀 목록이 없습니다");
-            throw new CustomException("내 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
+            //throw new CustomException(ErrorCode.NO_DATA_ERROR);
         }
+        logger.info("INFO SUCCESS");
 
         return new ResponseEntity<List<Team>>(my_teams, HttpStatus.OK);
     }
@@ -90,12 +86,19 @@ public class TeamController {
     public ResponseEntity<Team> createTeam(@RequestBody TeamDto teamDto, @PathVariable Long profileId) throws NotFoundException {
         Team team = teamDto.createTeam();
         if (team == null) {
-            System.out.println("error");
-            throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
+            logger.error("NO TEAM INFO");
+            throw new CustomException(ErrorCode.NO_DATA_ERROR);
         }
         Team newTeam = teamService.createTeam(team);
         Profile findProfile = profileService.findById(profileId).get();
+
+        if (findProfile == null) {
+            logger.error("NO PROFILE");
+            throw new CustomException(ErrorCode.NO_DATA_ERROR);
+        }
         TeamMember teamMember = teamMemberService.addTeamLeader(findProfile.getEmail(), newTeam);
+        logger.info("INFO SUCCESS");
+
         return new ResponseEntity<Team>(newTeam, HttpStatus.OK);
 
     }
@@ -106,8 +109,14 @@ public class TeamController {
         //Team team = teamDto.createTeam();
 
          Team team = teamService.findByTeam(team_id);
-         if(team == null) return new ResponseEntity<Team>(team, HttpStatus.OK);
+         if(team == null) {
+             logger.error("NO TEAM INFO");
+             throw new CustomException(ErrorCode.NO_DATA_ERROR);
+             //return new ResponseEntity<Team>(team, HttpStatus.OK);
+         }
+
         System.out.println("team id : "+team.getTeam_id());
+        logger.info("INFO SUCCESS");
 
         return new ResponseEntity<Team>(team, HttpStatus.OK);
 
@@ -118,7 +127,13 @@ public class TeamController {
     @ApiOperation(value = "팀 수정") //팀 수정이 무엇에 대한 수정인가(name과 content에 대한 수정??)
     public ResponseEntity<Team> modifyTeam(@PathVariable long profile_id, @PathVariable long team_id, @RequestBody TeamDto teamDto) throws NotFoundException {
         Team findTeam = teamService.findByTeam(team_id);
+        if (findTeam == null) {
+            logger.error("NO MODIFY TEAM");
+            throw new CustomException(ErrorCode.NO_DATA_ERROR);
+        }
         Team team = teamService.modifyTeam(profile_id, findTeam, teamDto);
+        logger.info("INFO SUCCESS");
+
         return new ResponseEntity<Team>(team, HttpStatus.OK);
     }
 
@@ -126,16 +141,23 @@ public class TeamController {
     @DeleteMapping("/{team_id}")
     @ApiOperation(value = "팀 삭제")
     public ResponseEntity<Void> deleteTeam(@PathVariable long profile_id, @PathVariable Long team_id) {
-
         teamService.deleteTeam(profile_id, team_id);
+        logger.info("INFO SUCCESS");
+
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
     }
 
     @PutMapping("/profile/{team_id}")
     @ApiOperation(value = "팀 프로필 수정")
     public ResponseEntity<Team> modifyTeamProfile(@RequestBody TeamDto teamDto) {
+
         Team team = teamDto.createTeam();
+        if (team == null) {
+            logger.error("NO TEAM PROFILE INFO");
+            throw new CustomException(ErrorCode.NO_DATA_ERROR);
+        }
         teamService.modifyTeamProfile(team.getTeam_id(), team);
+        logger.info("INFO SUCCESS");
 
         return new ResponseEntity<Team>(team, HttpStatus.OK);
     }

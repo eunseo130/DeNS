@@ -10,6 +10,8 @@ import com.ssafy.BackEnd.service.TeamService;
 import com.ssafy.BackEnd.service.UserService;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
@@ -22,6 +24,8 @@ import java.util.List;
 @RequestMapping("/search")
 @RequiredArgsConstructor
 public class SearchController {
+    private static final Logger logger = LogManager.getLogger(SearchController.class);
+
     private final ProfileService profileService;
     private final TeamService teamService;
 
@@ -33,11 +37,12 @@ public class SearchController {
         if(userList != null) {
             status = HttpStatus.OK;
             System.out.println("success\n"+userList.get(0).getName());
-
+            logger.info("INFO SUCCESS");
         } else {
             status = HttpStatus.NO_CONTENT;
-            System.out.println("노데이터");
-            throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
+            System.out.println("no searched userlist");
+            logger.info("SEARCHED NULL");
+            //throw new CustomException("no searched userlist", ErrorCode.NO_DATA_ERROR);
         }
 
         return new ResponseEntity<>(userList, status);
@@ -49,9 +54,10 @@ public class SearchController {
         if(profile == null)
         {
             System.out.println("error");
-            throw new CustomException("error", ErrorCode.INTERNER_SERVER_ERROR);
+            throw new CustomException("no searched profile", ErrorCode.NO_DATA_ERROR);
 
         }
+        logger.info("INFO SUCCESS");
         return new ResponseEntity<>(profile, HttpStatus.OK);
     }
 
@@ -60,9 +66,9 @@ public class SearchController {
         Team team = teamService.findByTeam(team_id);
         if(team == null){
             System.out.println("team error");
-            throw new CustomException("Error", ErrorCode.INTERNER_SERVER_ERROR);
+            throw new CustomException("no searched team", ErrorCode.NO_DATA_ERROR);
         }
-
+        logger.info("INFO SUCCESS");
         return new ResponseEntity<>(team, HttpStatus.OK);
     }
 
@@ -74,11 +80,12 @@ public class SearchController {
         if(teamList != null) {
             status = HttpStatus.OK;
             System.out.println("success\n"+teamList.get(0).getTeam_id());
-
+            logger.info("INFO SUCCESS");
         } else {
             status = HttpStatus.NO_CONTENT;
-            System.out.println("fail");
-            throw new CustomException("error", ErrorCode.INTERNER_SERVER_ERROR);
+            System.out.println("no searched teams");
+            logger.info("SEARCHED NULL");
+            //throw new CustomException("no searched teams", ErrorCode.NO_DATA_ERROR);
         }
 
         return new ResponseEntity<>(teamList, status);
@@ -89,9 +96,10 @@ public class SearchController {
         List<Profile> searchedUsers = profileService.findUserByKeyword(keyword);
         if (searchedUsers.isEmpty()) {
             System.out.println("유저없음");
+            logger.info("SEARCHED NULL");
             return new ResponseEntity<List<Profile>>((List<Profile>) null, HttpStatus.NOT_FOUND);
         }
-
+        logger.info("INFO SUCCESS");
         return new ResponseEntity<List<Profile>>(searchedUsers, HttpStatus.OK);
     }
 
@@ -99,8 +107,10 @@ public class SearchController {
     public ResponseEntity<List<Team>> findSearchedTeamByKeyword(@RequestParam String keyword) {
         List<Team> searchedTeams = teamService.findTeamByKeyword(keyword);
         if (searchedTeams == null) {
+            logger.info("SEARCHED NULL");
             return new ResponseEntity<List<Team>>((List<Team>) null, HttpStatus.NOT_FOUND);
         }
+        logger.info("INFO SUCCESS");
         return new ResponseEntity<List<Team>>(searchedTeams, HttpStatus.OK);
     }
 }

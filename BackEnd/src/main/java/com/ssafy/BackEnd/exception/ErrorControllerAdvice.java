@@ -37,4 +37,5 @@ public class ErrorControllerAdvice {
         response.setDetail(e.getMessage());
         return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
     }
+
 }
