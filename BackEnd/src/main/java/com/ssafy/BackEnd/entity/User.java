@@ -33,6 +33,7 @@ public class User extends BaseTimeEntity {
     private String name;
 
     @NotBlank
+    @JsonIgnore
     private String password;
 
     @Column(name = "identity")
