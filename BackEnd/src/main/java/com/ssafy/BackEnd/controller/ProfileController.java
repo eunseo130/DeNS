@@ -60,7 +60,7 @@ public class ProfileController {
 
     private HashTagAlgorithm hashTagAlgorithm = new HashTagAlgorithm();
 
-    @Value("${file.dir}/")
+    @Value("${profileImg.path}/")
     private String uploadPath;
 
 
