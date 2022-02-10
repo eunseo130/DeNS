@@ -6,8 +6,9 @@ import dummy from '../../db/data.json';
 import TeamList from './TeamList';
 import UserList from './UserList';
 import AllList from './AllList';
+import Slider from 'react-slick';
 import { searchTeamkeyword, searchUserkeyword } from '../../api/search';
-import '../../css/search.css';
+// import '../../css/search.css';
 export default function Search() {
 
     const [teamList, setTeamList] = useState([]);
@@ -42,21 +43,34 @@ export default function Search() {
         //keyword
     }
     
+    const settings = {
+        speed: 200,
+        infinite: false,
+        slidesToShow: 1,
+        slidesToScroll: 1
+    }
+
     return (
-        <>
-        검색창 < input name = 'name' onKeyUp = { searchKeyword } ></input ><br></br>
-        {nullSearch ? <div className = 'searchBig' >
-            <div className='searchSmall'>
-                <div >
+        <Container>
+            검색창 < input name = 'name' onKeyUp = { searchKeyword } ></input><br></br>
+            {
+                nullSearch ?
+                    <Slider {...settings} style={{display:'flex'}}>
                     <TeamList teamlist={ teamList}/>
-                </div>
-                <div >
                     <UserList userlist={userList} />
-                </div>
-            </div>
-            </div >
-                : <AllList data={totalList}/>}
-            
-        </>
+                </Slider>
+                : <AllList data={totalList} />
+            }
+        </Container>
         )
 }
+
+const Container = styled.div`
+display:flex;
+flex-direction : column;
+// background-color : #fde1e36b;
+
+`
+const SearchContainer = styled.div`
+    display: flex;
+`

@@ -15,14 +15,14 @@ export default function Sidebar() {
             <Link to="/auth/dashboard"><Pos>대시보드</Pos></Link>
             <Link to="/auth/team/3"><Pos>팀페이지</Pos></Link>
             <Link to="/auth/search"><Pos>검색</Pos></Link>
-            <Link to="/auth/messanger"><Pos>메신저</Pos></Link>
+            <Link to="/auth/messenger"><Pos>메신저</Pos></Link>
         </Container>
     )
 }
 
 
 const Container = styled.div`
-background:#F46A7243;
+background:white;
 float:left;
 height:100vh;
 width:8vw;

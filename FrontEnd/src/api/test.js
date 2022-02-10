@@ -47,8 +47,17 @@ function dummytest3(param, success, fail) {
     .then(success)
     .catch(fail)
 }
+function getMember(param, success, fail) {
+  api
+    .get(`/teammember/1`)
+    .then(success)
+    .catch(fail)
+}
+
+
 
 export {
+  getMember,
   test22,
   signup,
   login,

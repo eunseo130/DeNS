@@ -2,7 +2,7 @@ import React from 'react'
 import { BrowserRouter, Route, Routes, useRoutes } from 'react-router-dom'
 
 import Signin from './component/BeforeloginComponent/Signin'
-// import Signup from './component/BeforeloginComponent/Signup'
+import Signup from './component/BeforeloginComponent/Signup'
 import Password from './component/BeforeloginComponent/Password'
 
 import BeforeLogin from './component/commonComponent/BeforeLogin'
@@ -47,7 +47,7 @@ const App = () => {
       children: [
         { index: true, element: <Firstpage /> },
         { path: '/signin', element: <Signin /> },
-        // { path: '/beforeLogin/signup', element: <Signup /> },
+        { path: '/signup', element: <Signup /> },
         { path: '/password', element: <Password /> },
       ],
     },
@@ -59,7 +59,6 @@ const App = () => {
       children: [
         { index: true, elelment: <Dashboard /> },
         { path: '/auth/dashboard', element: <Dashboard /> },
-        { path: '/auth/messanger', element: <Messanger /> },
         {
           path: '/auth/profile/:id',
           element: <ProfileMain />,

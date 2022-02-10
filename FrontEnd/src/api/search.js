@@ -28,9 +28,9 @@ function searchprofileID(param, success, fail){
     api.get(`/search/user/${param}`).then(success).catch(fail);
 }
 
-// function keywordCheck(param, success, fail) {
-//     api.get(`/profile/${param}`).then(success).catch(fail);
-// }
+function keywordCheck(param, success, fail) {
+    api.get(`/profile/${param}`).then(success).catch(fail);
+}
 
 
-export {initTeamList, initUserList,searchTeamkeyword, searchUserkeyword,searchTeamID,searchprofileID};
+export {initTeamList,keywordCheck, initUserList,searchTeamkeyword, searchUserkeyword,searchTeamID,searchprofileID};

@@ -23,7 +23,7 @@ export default function TeamList( props) {
         setModalppen(true);
         setModaltitle(title);
         setModalcontent(content);
-        console.log(props);
+        // console.log(props);
     }
     const closeModal = () => {
         setModalppen(false);
@@ -35,16 +35,42 @@ export default function TeamList( props) {
     }
 
     return (
-        <div className='searchSmall'>
+        <ContainerT>
+        <SectionName>회원님과 연관될만한 팀리스트</SectionName>
+        <SearchBigBox >
             <>
-                {/* <Modal open={modalppen}close={closeModal} content={modalcontent} gomessanger={gomessanger} header={modaltitle }>{ modaltitle}</Modal> */}
+                    <Modal open={modalppen} close={closeModal} content={modalcontent} gomessanger={gomessanger} header={modaltitle }>{ modaltitle}</Modal>
             </>
-        <ul>
             {
                     temp.map((data) => { return <TeamCard click={ openModal} check={data.team_id} data= {data}/>})
             }
-            </ul>
-        </div>
-
+        </SearchBigBox>
+        </ContainerT>
     )
 }
+
+const ContainerT = styled.div`
+display : flex;
+flex-direction : column;
+align-items: center;
+`
+const SectionName = styled.span`
+
+`
+
+const SearchBigBox = styled.div`
+margin-left: 100px;
+    display: flex;
+    background-color: white;
+    border: 1px solid pick;
+    border-radius : 5px;
+    box-shadow : 0px 30px 40px #f18fa1;
+    flex-flow: column nowrap;
+    width: 30vw;
+    height: 60vh;
+    margin: 50px;
+    overflow: scroll;
+    &::-webkit-scrollbar{
+        display:none;
+    }
+`

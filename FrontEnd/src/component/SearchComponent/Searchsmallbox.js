@@ -5,9 +5,9 @@ import styled from 'styled-components';
 export default function Searchsmallbox() {
 
     return (
-            <ComTest>test</ComTest>
+           <></> // <se>test</ComTest>
     )
 }
-const ComTest = styled.div`
+const se = styled.div`
 color:white;
 `

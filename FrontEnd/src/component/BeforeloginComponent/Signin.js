@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
-import { test22 } from "../../api/test";
 import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/userreduce';
-
+import { store } from '../..';
+import {useCookies} from 'react-cookie';
 function Login() {
   const [name, setName] = useState('');
-  
   const dispatch = useDispatch();
+  const [cookies, setCookie, removeCookie] = useCookies(['token']);
 
   const [password, setPassword] = useState('');
 
@@ -24,13 +24,12 @@ function Login() {
 
   const LoginConsole = () => {
     console.log([name, password]);
-    //dispatch의 매개변수는 action creater를 집어넣어 준다!!@!
-    //action creater의 type에 따라서 reducer에서 제어가 된다.
     dispatch(loginUser());
-    //일정시간동안 유지하는것.
-    //클라이언트가 getCookie setCookie -> X
-    //쿠키를 건들여줘야됨.
-    //클라이언트쪽에선 서버가 쿠키를 건들 수 있게
+    const cookieCheck = store.getState().user.token;
+    let expires = new Date();
+    expires.setMinutes(expires.getMinutes() + 1);
+    removeCookie('token', { expires: 0 });
+    setCookie('token', cookieCheck, { path: '/auth', expires });
     navigate('/auth');
   };
   
@@ -48,7 +47,7 @@ function Login() {
           <InputSquare  placeholder="비밀번호" onChange={onChangePw} value={password}/>
         </Container>
         <Btn onClick={LoginConsole}>로그인</Btn>
-        <SignUpBtn>회원가입</SignUpBtn>
+        <SignUpBtn onClick={() => navigate("/signup") }>회원가입</SignUpBtn>
         <FindIdPw>아이디/비밀번호 찾기</FindIdPw>
 
       </LoginBox>
