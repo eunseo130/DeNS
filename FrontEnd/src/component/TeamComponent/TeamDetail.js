@@ -1,103 +1,104 @@
 import React, { useEffect, useState } from 'react';
-import { detail } from '../../api/team';
+import { detail, bringTeamMembers } from '../../api/team';
 import styled from "styled-components";
 import { useParams } from 'react-router-dom';
-import TeamFeedIndex from './TeamFeedIndex';
+import TeamFeedContainer from './TeamFeedContainer';
+import TeamMemberInfo from './TeamMemberInfo'
 
 export default function TeamDetail(props) {
     const [teamTitle, setTeamTitle] = useState('');
+    const [teamContent, setTeamContent] = useState('');
+    const [teamMembers, setTeamMembers] = useState('');
 
     const teamId = useParams().id;
+    // 팀 명 및 팀 소개
     useEffect(() => {
         detail(teamId,
             (response) => {
-                console.log(response)
                 setTeamTitle(response.data.title);
-            },             
+                setTeamContent(response.data.content);
+            },
             (error) => {
                 console.log("오류가 됨.", (error));
             });
         },[]);
-    console.log(teamTitle)
+
+    // 팀원 정보
+    useEffect(() => {
+        bringTeamMembers(teamId,
+            (response) => {
+                setTeamMembers(response.data);
+            },
+            (error) => {
+                console.log("오류가 됨.", (error));
+            });
+        },[]);
+    // 이름 이메일 가져오기
 
     return (
-
-        <TeamDetails>
+    <TeamDetailBox>
+        {/* 팀 Title */}
+        <TheTeamTitle>
+            {teamTitle}
+        </TheTeamTitle>
+        <TeamDetailGrid>
+            {/* 팀 피드 */}
             <TeamFeedContainer>
-                <TeamFeedTitle>팀 피드</TeamFeedTitle>
-                <TeamFeedInput placeholder="작성할 피드를 입력해주세요"/>
-                <TeamFeedIndex/>
             </TeamFeedContainer>
-
+            {/* 팀 소개 */}
             <TeamInfoContainer>
                 <TeamInfoTitle>팀 소개</TeamInfoTitle>
+                {/* 팀장/팀원 이미지 */}
                 <ImgBox>
-                    <TeamMembersImg 
+                    {teamMembers ? teamMembers.map((el, key) => {
+                        return (
+                            <TeamMemberInfo name={el.name} email={el.email} key={key}/>
+                        )
+                    }) : null}
+                    {/* <BringTeamMembersImg 
                     src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
-                    ></TeamMembersImg>
-                    <TeamMembersImg 
+                    ></BringTeamMembersImg>
+                    <BringTeamMembersImg 
                     src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
-                    ></TeamMembersImg>
-                    <TeamMembersImg 
+                    ></BringTeamMembersImg>
+                    <BringTeamMembersImg 
                     src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
-                    ></TeamMembersImg>
-                    <TeamMembersImg 
+                    ></BringTeamMembersImg>
+                    <BringTeamMembersImg 
                     src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
-                    ></TeamMembersImg>
+                    ></BringTeamMembersImg> */}
                 </ImgBox>
+                {/* 팀 Content */}
                 <TeamInfoTextBox>
                     <TextBox>
-                        github: github.com/kimhyeongjun95
+                        {teamContent}
                     </TextBox>
-                    <TextBox>
-                        notion: https://www.notion.so/2c635564feb0470a957a99d57a6991ad
-                    </TextBox>
-                    <div>
-                        우리는 스파르탄입니다.
-                    </div>
-                    <div>
-                        AI와 머신러닝을 기반으로 영화 추천 서비스를 개발합니다.
-                    </div>
                 </TeamInfoTextBox>
+                {/* 팀 소개 해쉬태그 */}
                 <TeamInfoHashtag>
                     #자바스크립트 #프론트엔드 #자바
                 </TeamInfoHashtag>
             </TeamInfoContainer>
-        </TeamDetails>
+        </TeamDetailGrid>
+    </TeamDetailBox>
     )
 }
-
-const TeamDetails = styled.div`
+const TeamDetailBox = styled.div`
+`
+const TheTeamTitle = styled.h3`
+    position: relative;
+    margin-top: 2%;
+    left: 5%;
+`
+const TeamDetailGrid = styled.div`
     position: absolute;
-    top: 40%;
+    top: 50%;
     left: 50%;
     transform:translate(-50%, -50%);
     display: grid;
     grid-template-columns: 45vw 20vw;
     // grid-template-rows: 70vh 40vh;
     grid-gap: 14%;
-`
-
-// 팀 피드
-const TeamFeedContainer = styled.div`
-    border: 1px solid;
-    // text-align: center;
-    border-radius: 5px;
-    display: flex;
-    flex-direction: column;
-    align-items: start;
-`
-const TeamFeedTitle = styled.h3`
-    position: relative;
-    margin-top: 5%;
-    left: 5%;
-    font-weight: bold;
-`
-const TeamFeedInput = styled.input`
-    position: relative;
-    margin-top: 5%;
-    width: 80%;
-    left: 5%;
 `
 
 // 팀 소개
@@ -116,7 +117,7 @@ const TeamInfoTitle = styled.h3`
     left: 5%;
     font-weight: bold;
 `
-const TeamMembersImg = styled.img`
+const BringTeamMembersImg = styled.img`
     width: 50px;
     height: 50px;
 `

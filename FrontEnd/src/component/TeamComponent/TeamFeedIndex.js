@@ -32,7 +32,7 @@ const IndexContainer = styled.div`
     position: relative;
     margin-top: 5%;
     left: 5%;
-    width:90%;
+    width: 90%;
 `
 const Feed = styled.div`
     margin-top: 20px;
