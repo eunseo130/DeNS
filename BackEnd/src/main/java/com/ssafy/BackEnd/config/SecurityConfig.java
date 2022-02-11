@@ -2,6 +2,7 @@ package com.ssafy.BackEnd.config;
 
 import com.ssafy.BackEnd.filter.JwtRequestFilter;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
@@ -20,19 +21,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         filter.setForceEncoding(true);
 
 
-        http.csrf().disable().formLogin().loginPage("/aaaaa"); // 페이지를 못가게 하는
+        http.csrf().disable(); // 페이지를 못가게 하는
 
-        http.httpBasic().disable();
-        http.csrf()
-                .disable()
-                .headers()
-                .frameOptions()
-                .disable();
-
-        http.authorizeRequests()
+        http.httpBasic()
+                .and()
+                .authorizeRequests()
                 .antMatchers("/signin").permitAll()
                 .antMatchers("/signup").permitAll()
-                .antMatchers("/team/*").hasRole("USER");
+                .antMatchers("/admin/**").hasRole("ADMIN")
+                .antMatchers("/chat/**").hasRole("USER");
+
+
+
+//        http.authorizeRequests()
+//                .antMatchers("/signin").permitAll()
+//                .antMatchers("/signup").permitAll()
+//                .antMatchers("/team/*").hasRole("USER");
+//
+        http.headers().frameOptions().sameOrigin();
 //                .and()
 //                .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
 //        http.csrf().disable().formLogin().loginPage("/aaaaa"); // 페이지를 못가게 하는
@@ -45,5 +51,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 ////                .antMatchers("/admin/**").hasRole("ADMIN")
 ////                .antMatchers("/team/*").hasRole("USER")
 ////                .antMatchers("/profile/*").permitAll();
+    }
+
+    @Override
+    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+        auth.inMemoryAuthentication()
+                .withUser("eunseo@naver.com")
+                .password("{noop}1234")
+                .roles("USER")
+            .and()
+                .withUser("eunseo1")
+                .password("{noop}1234")
+                .roles("USER")
+            .and()
+                .withUser("guest")
+                .password("{noop}1234")
+                .roles("GUEST");
     }
 }

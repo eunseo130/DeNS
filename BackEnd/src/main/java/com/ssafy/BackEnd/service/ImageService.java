@@ -65,5 +65,6 @@ public class ImageService {
             profile.setImage(imageFileName);
         }
         return imageFilePath.toString();
+
     }
 }

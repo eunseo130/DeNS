@@ -1,6 +1,7 @@
 //package com.ssafy.BackEnd.pubsub;
 //
-//import com.ssafy.BackEnd.dto.ChatMessage;
+//
+//import com.ssafy.BackEnd.entity.ChatMessage;
 //import lombok.RequiredArgsConstructor;
 //import org.springframework.data.redis.core.RedisTemplate;
 //import org.springframework.data.redis.listener.ChannelTopic;
@@ -14,6 +15,9 @@
 //
 //    public void publish(ChannelTopic topic, ChatMessage message) {
 //        redisTemplate.convertAndSend(topic.getTopic(), message);
+//        System.out.println(topic.getTopic());
 //    }
 //}
+//
+//
 //

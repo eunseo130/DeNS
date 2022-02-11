@@ -15,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.ssafy.BackEnd.service.TeamService;
 import com.ssafy.BackEnd.repository.TeamRepository;
@@ -93,7 +95,10 @@ public class TeamController {
     public ResponseEntity<Team> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
         Team team = teamService.findByTeam(team_id);
-        return new ResponseEntity<Team>(team, HttpStatus.OK);
+        Map<String, TeamMemberIdentity> teamMemberList = teamMemberService.showTeamMemberList(team_id);
+        Map<Team, Map<String, TeamMemberIdentity>> result = new HashMap<>();
+        result.put(team, teamMemberList);
+        return new ResponseEntity<>(team, HttpStatus.OK);
     }
 
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
