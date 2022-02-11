@@ -15,9 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import com.ssafy.BackEnd.service.TeamService;
 import com.ssafy.BackEnd.repository.TeamRepository;
@@ -48,26 +46,37 @@ public class TeamController {
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @GetMapping
     @ApiOperation(value = "팀 목록 가져오기")
-    public ResponseEntity<List<Team>> getAllTeams() throws NotFoundException {
+    public ResponseEntity<List<Team>> getAllTeams(HttpServletRequest req) throws NotFoundException {
+        logger.info("INFO SUCCESS");
+        logger.debug("DEBUG SUCCESS");
+        logger.error("ERROR SUCCESS");
 
         List<Team> teams = teamService.showTeamList();
 
-
+        System.out.println("secu : "+SecurityContextHolder.getContext().getAuthentication());
         if (teams.isEmpty()) {
-            System.out.println("전체 팀 목록이 없습니다");
-            throw new CustomException("전체 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
+            System.out.println("no team");
+            System.out.println("header : "+req.getHeader("Authorization"));
+            return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
+            //throw new CustomException("전체 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
         }
-
+        System.out.println("header : "+req.getHeader("Authorization"));
+        System.out.println("hi");
         return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
     }
 
     @GetMapping("/myteam/{profile_id}") //프로필아이디로 내 팀 목록 가져오기
     @ApiOperation(value = "내 팀 목록 가져오기")
     public ResponseEntity<List<Team>> getMyTeams(@PathVariable Long profile_id) throws NotFoundException {
+        logger.info("INFO SUCCESS");
+        logger.debug("DEBUG SUCCESS");
+        logger.error("ERROR SUCCESS");
+
         List<Team> my_teams = teamService.showMyTeamList(profile_id);
 
         if (my_teams.isEmpty()) {
             System.out.println("내 팀 목록이 없습니다");
+            logger.error("ERROR "+my_teams);
             throw new CustomException("내 팀 목록이 없습니다", ErrorCode.INTERNER_SERVER_ERROR);
         }
 
