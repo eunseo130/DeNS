@@ -10,10 +10,10 @@ import Firstpage from './component/BeforeloginComponent/Firstpage'
 import Back from './component/commonComponent/Back'
 
 import TeamDetail from './component/TeamComponent/TeamDetail'
-import Teamsetting from './component/TeamComponent/Teamsetting'
+import TeamSettings from './component/TeamComponent/TeamSettings'
 import CreateTeam from './component/TeamComponent/CreateTeam'
 
-import Dashboard from './component/dashboardComponent/Dashboard' 
+import Dashboard from './component/dashboardComponent/Dashboard'
 import Messanger from './component/MessengerComponent/Messenger'
 
 import Search from './component/SearchComponent/Search'

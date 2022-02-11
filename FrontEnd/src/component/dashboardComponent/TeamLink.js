@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import styled, { css } from "styled-components";
 import Slider from "react-slick";
 import TeamLinkBox from "./TeamLinkBox";
-import { team } from '../../api/team';
+import { myteam } from '../../api/team';
 
 function TeamLink() {
     const [link, setLink] = useState('');
     useEffect(() => {
-      team(
+      myteam(1,
           (response) => {
               setLink(response.data);
       },  
