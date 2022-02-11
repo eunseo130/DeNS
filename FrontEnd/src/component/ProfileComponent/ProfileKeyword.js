@@ -1,11 +1,15 @@
-import React from 'react';
+import React from 'react'
 import { TagCloud } from 'react-tagcloud'
-
-export default function ProfileKeyword() {
-    return (
-        <>
-            <h3>ProfileKeyword 페이지입니다</h3>
-        </>
-    )
-
+import { Container, Row, Button, Stack, Image } from 'react-bootstrap'
+export default function ProfileKeyword({ keyword, onSave, putKeywords }) {
+  return (
+    <>
+      <Stack direction="horizontal" gap={3}>
+        <input name="keyword" value={keyword} onChange={onSave}></input>
+        <Button onClick={putKeywords} variant="secondary">
+          전송
+        </Button>
+      </Stack>
+    </>
+  )
 }

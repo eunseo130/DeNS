@@ -1,8 +1,18 @@
 import React, { useState, useEffect } from 'react'
 import { Outlet, useParams, Link } from 'react-router-dom'
-import { profileTest, profileUpdate, putKeyword } from '../../api/profile'
+import {
+  profileTest,
+  profileUpdate,
+  putKeyword,
+  ImgUpload,
+} from '../../api/profile'
 import { TagCloud } from 'react-tagcloud'
-import { Container, Row, Col } from 'react-bootstrap'
+import { Container, Row, Button, Stack, Image } from 'react-bootstrap'
+import ProfileGit from './ProfileGit'
+import ProfileTagCloud from './ProfileTagCloud'
+import ProfileImage from './ProfileImage'
+import ProfileInfo from './ProfileInfo'
+import ProfileKeyword from './ProfileKeyword'
 export default function ProfileMain() {
   const [inputs, setInputs] = useState({
     image: '',
@@ -12,13 +22,14 @@ export default function ProfileMain() {
     email: '',
     keyword: '',
     edit: false,
-    gitId: '',
+    gitId: 'sss',
     git: true,
   })
   const { image, name, position, stack, email, edit, keyword, gitId, git } =
     inputs
   const [keywords, setKeywords] = useState([])
   const { id } = useParams()
+  const [files, setFiles] = useState('')
   useEffect(
     () =>
       profileTest(
@@ -32,15 +43,14 @@ export default function ProfileMain() {
             stack: res.data.stack,
             email: res.data.email,
             git: !git,
-            gitId: res.data.gitId,
+            gitId: res.data.git_id,
           })
           let words = [
             { value: res.data.position, count: 10000 },
             { value: res.data.stack, count: 10000 },
           ]
           const keywordObjs = res.data.profile_keyword
-          console.log(keywordObjs)
-          keywordObjs.map((keywordObj) => {
+          keywordObjs.forEach((keywordObj) => {
             const word = {
               value: keywordObj.name,
               count: keywordObj.count,
@@ -55,9 +65,11 @@ export default function ProfileMain() {
   )
 
   function update() {
+    console.log('업데이트 클릭시', gitId, inputs)
     profileUpdate(
-      [id, position, stack],
+      [id, position, stack, gitId],
       (res) => {
+        console.log('반환시', res.data.git_id, res.data)
         setInputs({
           ...inputs,
           image: res.data.image,
@@ -65,7 +77,7 @@ export default function ProfileMain() {
           position: res.data.position,
           stack: res.data.stack,
           email: res.data.email,
-          gitId: res.data.gitId,
+          gitId: res.data.git_id,
           git: !git,
           edit: !edit,
         })
@@ -90,6 +102,7 @@ export default function ProfileMain() {
       ...inputs,
       [name]: value,
     })
+    console.log(gitId)
   }
 
   function putKeywords() {
@@ -116,70 +129,68 @@ export default function ProfileMain() {
     )
   }
 
+  function onLoad(e) {
+    setFiles(e.target.files)
+    setFileImage(URL.createObjectURL(e.target.files[0]))
+  }
+  useEffect(() => {}, [files])
+
+  function ImageUpload(e) {
+    const formData = new FormData()
+    formData.append('file', files[0])
+    console.log(files[0])
+    for (var pair of formData.entries()) {
+      console.log(pair[0] + ', ' + pair[1])
+    }
+
+    ImgUpload(
+      [id, formData],
+      (res) => {
+        setInputs({ ...inputs, image: res.data })
+        setFiles('')
+      },
+      (error) => console.log(error)
+    )
+  }
+
+  const [fileImage, setFileImage] = useState('')
+
   return (
     <div>
-      <h3>프로필 메인페이지입니다</h3>
-      <Container>
-        <Row>
-          <TagCloud
-            minSize={1}
-            maxSize={100}
-            tags={keywords}
-            key={keywords.profilekeyword_id}
+      <Container fluid>
+        <Row className="justify-content-md-center">
+          <ProfileTagCloud keywords={keywords} />
+        </Row>
+        <Stack direction="horizontal" gap={3}>
+          <ProfileImage
+            id={id}
+            image={image}
+            fileImage={fileImage}
+            onLoad={onLoad}
+            ImageUpload={ImageUpload}
           />
-        </Row>
-        <Row>
-          <Col>
-            <div>
-              <img src={image} alt={name} />
-              <p>이름:&nbsp; {name}</p>
-              <p>
-                직무 : &nbsp;
-                {edit ? (
-                  <input
-                    onChange={onSave}
-                    name="position"
-                    value={position}
-                  ></input>
-                ) : (
-                  position
-                )}
-              </p>
-              <p>
-                스택 : &nbsp;
-                {edit ? (
-                  <input onChange={onSave} name="stack" value={stack}></input>
-                ) : (
-                  stack
-                )}
-              </p>
-              <p>이메일:&nbsp; {email}</p>
-              {edit ? (
-                <button onClick={update}>확인</button>
-              ) : (
-                <button onClick={onEdit}>편집</button>
-              )}
 
-              <button>
-                <Link to={`/afterlogin/messenger/${id}`}>메세지</Link>
-              </button>
-            </div>
-          </Col>
-          <Col>
-            {git&&!edit ? (
-              <img src={`https://ghchart.rshah.org/${gitId} `} />
-            ) : (
-              <input onChange={onSave} name="gitId" value={gitId}></input>
-            )}
-          </Col>
-        </Row>
+          <ProfileInfo
+            id={id}
+            name={name}
+            edit={edit}
+            position={position}
+            stack={stack}
+            email={email}
+            onSave={onSave}
+            update={update}
+            onEdit={onEdit}
+          />
+          <div className="vr" />
+          <ProfileGit edit={edit} gitId={gitId} onSave={onSave} />
+        </Stack>
+
         <Row>
-          <Col>
-            <input name="keyword" value={keyword} onChange={onSave}></input>
-          </Col>
-          <Col>
-            <button onClick={putKeywords}>전송</button>
-          </Col>
+          <ProfileKeyword
+            keyword={keyword}
+            onSave={onSave}
+            putKeywords={putKeywords}
+          />
         </Row>
         <Outlet />
       </Container>
