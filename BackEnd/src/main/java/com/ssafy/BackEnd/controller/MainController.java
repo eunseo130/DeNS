@@ -17,6 +17,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -59,14 +60,15 @@ public class MainController {
         HttpStatus status;
         System.out.println("up : "+userDto.getEmail());
         try {
-            User user = userDto.createUser();
-            if (authService.validateDuplicateUser(user)==false) {
-                status = HttpStatus.IM_USED;
-                resultMap.put("message", "이미 존재하는 회원입니다.");
-                return new ResponseEntity<Map<String, Object>>(resultMap, status);
-            }
-            authService.signUp(user);
-            System.out.println("userpwd : "+user.getPassword());
+//            User user = userDto.createUser();
+            authService.signUp(userDto);
+//            if (authService.validateDuplicateUser(user)==false) {
+//                status = HttpStatus.IM_USED;
+//                resultMap.put("message", "이미 존재하는 회원입니다.");
+//                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+//            }
+
+            System.out.println("userpwd : "+userDto.getPassword());
             response.setResponse("success");
             response.setMessage("회원가입을 성공적으로 완료했습니다.");
             response.setData(null);
@@ -177,13 +179,14 @@ public class MainController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
         System.out.println("email pwd : "+users.getEmail()+" "+users.getPassword());
+        System.out.println("secu : "+ SecurityContextHolder.getContext().getAuthentication());
         try {
             final User user = authService.signIn(users.getEmail(), users.getPassword());
             //System.out.println(user.getEmail()+" "+user.getPassword());
             //System.out.println("user null ? "+user);
-            if(user != null) {
+//            if(user != null) {
                 System.out.println("1pass");
-                final String Token = jwtService.generateToken(user);
+                final String Token = jwtService.createToken(user.getEmail(), user.getIdentity());
                 //final String refreshJwt = jwtService.generateRefershToken(user);
 
                 System.out.println("accessToken : "+Token);
@@ -202,17 +205,19 @@ public class MainController {
                 resultMap.put("access-token", Token);
                 resultMap.put("message", "success");
                 status = HttpStatus.ACCEPTED;
-            } else {
-                //System.out.println("error");
-                resultMap.put("message", "fail");
-                status = HttpStatus.UNAUTHORIZED;
-            }
+//            } else {
+//                //System.out.println("error");
+//                resultMap.put("message", "fail");
+//                status = HttpStatus.UNAUTHORIZED;
+//            }
         } catch (Exception e) {
+            status = HttpStatus.UNAUTHORIZED;
 //            resultMap.put("message", e.getMessage());
 //            status = HttpStatus.INTERNAL_SERVER_ERROR;
-            throw new CustomException(ErrorCode.INVALID_ID);
+            resultMap.put("message", "No Authorization");
+            //throw new CustomException(ErrorCode.INVALID_ID);
         }
-
+        System.out.println("status : "+status);
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 
