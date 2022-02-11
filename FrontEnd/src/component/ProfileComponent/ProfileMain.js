@@ -8,6 +8,11 @@ import {
 } from '../../api/profile'
 import { TagCloud } from 'react-tagcloud'
 import { Container, Row, Button, Stack, Image } from 'react-bootstrap'
+import ProfileGit from './ProfileGit'
+import ProfileTagCloud from './ProfileTagCloud'
+import ProfileImage from './ProfileImage'
+import ProfileInfo from './ProfileInfo'
+import ProfileKeyword from './ProfileKeyword'
 export default function ProfileMain() {
   const [inputs, setInputs] = useState({
     image: '',
@@ -147,115 +152,45 @@ export default function ProfileMain() {
       (error) => console.log(error)
     )
   }
-  const options = {
-    luminosity: 'bright',
-    hue: 'pink',
-  }
+
   const [fileImage, setFileImage] = useState('')
 
   return (
     <div>
       <Container fluid>
         <Row className="justify-content-md-center">
-          <TagCloud
-            minSize={10}
-            maxSize={40}
-            tags={keywords}
-            style={{ width: 600, textAlign: 'center' }}
-            colorOptions={options}
-          />
+          <ProfileTagCloud keywords={keywords} />
         </Row>
         <Stack direction="horizontal" gap={3}>
-          <div>
-            <Stack gap={2}>
-              <div>
-                <Image
-                  width={180}
-                  height={180}
-                  src={`http://3.36.131.59:2222/profile/image/${id}`}
-                  roundedCircle
-                />
-                {fileImage && (
-                  <Image
-                    alt="sample"
-                    src={fileImage}
-                    style={{ margin: 'auto' }}
-                    thumbnail
-                  />
-                )}
-                <div className="img-box"></div>
-                <form>
-                  <input
-                    id="imgInput"
-                    name="image"
-                    type="file"
-                    accept="image/*"
-                    style={{ display: 'none' }}
-                    onChange={onLoad}
-                  ></input>
-                  <label name="ImgBtn" htmlFor="imgInput">
-                    프로필 사진 등록
-                  </label>
-                </form>
-                <button onClick={ImageUpload}>저장하기</button>
-              </div>
-              <div>이름:&nbsp; {name}</div>
-              <div>
-                직무 : &nbsp;
-                {edit ? (
-                  <input
-                    onChange={onSave}
-                    name="position"
-                    value={position}
-                  ></input>
-                ) : (
-                  position
-                )}
-              </div>
-              <div>
-                스택 : &nbsp;
-                {edit ? (
-                  <input onChange={onSave} name="stack" value={stack}></input>
-                ) : (
-                  stack
-                )}
-              </div>
-              <div>이메일:&nbsp; {email}</div>
-              <div>
-                {edit ? (
-                  <Button onClick={update} size="sm" variant="secondary">
-                    확인
-                  </Button>
-                ) : (
-                  <Button onClick={onEdit} size="sm" variant="secondary">
-                    편집
-                  </Button>
-                )}
-              </div>
-              <div>
-                <Button variant="link">
-                  <Link to={`/afterlogin/messenger/${id}`}>메세지</Link>
-                </Button>
-              </div>
-            </Stack>
-          </div>
+          <ProfileImage
+            id={id}
+            image={image}
+            fileImage={fileImage}
+            onLoad={onLoad}
+            ImageUpload={ImageUpload}
+          />
+
+          <ProfileInfo
+            id={id}
+            name={name}
+            edit={edit}
+            position={position}
+            stack={stack}
+            email={email}
+            onSave={onSave}
+            update={update}
+            onEdit={onEdit}
+          />
           <div className="vr" />
-          <div>
-            {!edit ? (
-              <img src={`https://ghchart.rshah.org/${gitId} `} />
-            ) : (
-              <input name="gitId" value={gitId} onChange={onSave}></input>
-            )}
-          </div>
+          <ProfileGit edit={edit} gitId={gitId} onSave={onSave} />
         </Stack>
 
         <Row>
-          <Stack direction="horizontal" gap={3}>
-            <input name="keyword" value={keyword} onChange={onSave}></input>
-            <Button onClick={putKeywords} variant="secondary">
-              전송
-            </Button>
-          </Stack>
+          <ProfileKeyword
+            keyword={keyword}
+            onSave={onSave}
+            putKeywords={putKeywords}
+          />
         </Row>
         <Outlet />
       </Container>
