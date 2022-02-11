@@ -81,7 +81,7 @@ const App = () => {
           path: '/auth/team/:id',
           element: <TeamDetail/>,
           children: [
-            { path: '/auth/team/:id/setting', element: <Teamsetting /> },
+            { path: '/auth/team/:id/setting', element: <TeamSettings /> },
           ],
         },
         {
