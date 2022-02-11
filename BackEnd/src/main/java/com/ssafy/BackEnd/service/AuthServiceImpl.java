@@ -127,7 +127,7 @@ public class AuthServiceImpl implements AuthService{
     }
 
     public void sendVerificationMail(User user) throws NotFoundException {
-        String VERIFICATION_LINK = "http://localhost:8080/verify/";
+        String VERIFICATION_LINK = "http://3.36.131.59:2222/verify/"; //나중에 원격서버 포트로 바꾸기
         if(user==null) throw new NotFoundException("멤버가 조회되지 않음");
         UUID uuid = UUID.randomUUID();
         System.out.println("key : " + uuid);
