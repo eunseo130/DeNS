@@ -102,7 +102,7 @@ public class TeamFeedServiceImpl implements TeamFeedService{
     public TeamFeed modifyTeamFeed(TeamFeed teamFeed, Long profile_id, TeamFeedDto teamFeedDto){
         Profile profile = profileRepository.findById(profile_id).get();
 
-        if(!teamFeed.getWriter().equals(profile.getName())) {
+        if(!teamFeed.getWriter().equals(profile.getName())) { //피드작성자와 프로필작성자 이름이 같지 않다면
             System.out.println("권한이 없습니다");
             throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
         }
