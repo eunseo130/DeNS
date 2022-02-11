@@ -161,7 +161,7 @@ export default function ProfileMain() {
         <Row className="justify-content-md-center">
           <ProfileTagCloud keywords={keywords} />
         </Row>
-        <Stack direction="horizontal" gap={3}>
+        <Stack gap={3}>
           <ProfileImage
             id={id}
             image={image}
