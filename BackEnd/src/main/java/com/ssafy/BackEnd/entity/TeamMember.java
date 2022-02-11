@@ -29,7 +29,7 @@ public class TeamMember {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "email")
-
+    @JsonIgnore
     User user;
 
 }

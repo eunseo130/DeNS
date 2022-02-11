@@ -6,7 +6,10 @@ import com.ssafy.BackEnd.entity.ProfileKeyword;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
 import com.ssafy.BackEnd.entity.Response;
 import com.ssafy.BackEnd.entity.TeamKeyword;
+import com.ssafy.BackEnd.exception.CustomException;
+import com.ssafy.BackEnd.exception.ErrorCode;
 import com.ssafy.BackEnd.repository.ProfileKeywordRepository;
+import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.HashTagAlgorithm;
 import com.ssafy.BackEnd.service.ImageService;
@@ -17,6 +20,8 @@ import io.swagger.annotations.ApiOperation;
 import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.io.IOUtils;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
@@ -38,6 +43,7 @@ import java.util.*;
 @RequestMapping("/profile")
 @Slf4j
 public class ProfileController {
+    private static final Logger logger = LogManager.getLogger(ProfileController.class);
 
     @Autowired
     private ProfileService profileService;
@@ -48,13 +54,14 @@ public class ProfileController {
     @Autowired
     private ImageService imageService;
 
-    @Value("${file.dir}/")
-    private String uploadPath;
 
     @Autowired
     private ProfileKeywordRepository profileKeywordRepository;
 
     private HashTagAlgorithm hashTagAlgorithm = new HashTagAlgorithm();
+
+    @Value("${profileImg.path}/")
+    private String uploadPath;
 
 
     @GetMapping("/{profile_id}")
@@ -65,10 +72,12 @@ public class ProfileController {
             Optional<Profile> profile = profileService.findById(profile_id);
             if (profile != null) {
                 System.out.println("profile : "+profile.get().getEmail());
+                logger.info("INFO SUCCESS");
                 return new ResponseEntity<Profile>(profile.get(), HttpStatus.OK);
             }
             else {
-                return new ResponseEntity<Profile>((Profile) null, HttpStatus.NOT_FOUND);
+                throw new CustomException(ErrorCode.NO_DATA_ERROR);
+                //return new ResponseEntity<Profile>((Profile) null, HttpStatus.NOT_FOUND);
             }
 
         } catch (Exception e) {
@@ -81,20 +90,27 @@ public class ProfileController {
     public ResponseEntity<Profile> modifyProfile(@PathVariable Long profile_id, @RequestBody RequestModifyProfile2 requestModifyProfile2) {
         Response response = new Response();
         try {
-
             Profile findProfile = profileService.findById(profile_id).get();
             Profile newProfile = profileService.modifyProfile(findProfile, requestModifyProfile2);
             log.info("수정완료");
+            logger.info("INFO SUCCESS");
             return new ResponseEntity<Profile>(newProfile, HttpStatus.OK);
         } catch (Exception e) {
             log.info(e.toString());
-            return new ResponseEntity<Profile>((Profile) null, HttpStatus.NOT_FOUND);
+            throw new CustomException(ErrorCode.NO_DATA_ERROR);
+            //return new ResponseEntity<Profile>((Profile) null, HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping("/update/image/{profile_id}")
-    public ResponseEntity<String> updateImage(@PathVariable Long profile_id, @RequestPart MultipartFile multipartFile) throws NotFoundException {
-        String imagePath = imageService.update(profile_id, multipartFile);
+    @PostMapping(value = "/update/image/{profile_id}")
+    public ResponseEntity<String> updateImage(@PathVariable Long profile_id, @RequestPart MultipartFile file) throws NotFoundException {
+        String imagePath = imageService.update(profile_id, file);
+        if (imagePath == null) {
+            logger.info("NO IMAGE PATH");
+            //throw new CustomException(ErrorCode.NO_DATA_ERROR);
+        }
+        logger.info("INFO SUCCESS");
+
         return new ResponseEntity<String>(imagePath, HttpStatus.OK);
     }
 
@@ -130,14 +146,21 @@ public class ProfileController {
 
     @DeleteMapping("/{profile_id}")
     public void deleteUser(@PathVariable Long profile_id) throws NotFoundException {
-
         Optional<Profile> findProfile = profileService.findById(profile_id);
+        if (findProfile == null) {
+            throw new CustomException(ErrorCode.NO_DATA_ERROR);
+        }
         profileService.deleteUser(profile_id);
+        logger.info("INFO SUCCESS");
     }
 
     @PostMapping("/keyword/{profile_id}")
     public ResponseEntity<List<ProfileKeyword>> addKeyword(@PathVariable Long profile_id, @RequestParam String content) throws NotFoundException {
         Profile profile = profileService.findById(profile_id).get();
+        if (profile == null) {
+            throw new CustomException("no profile", ErrorCode.NO_DATA_ERROR);
+        }
+
         List<String> keywords = hashTagAlgorithm.strList(content);
         List<ProfileKeyword> profileKeywords = profile.getProfile_keyword();
         for (String keyword : keywords) {
@@ -155,6 +178,7 @@ public class ProfileController {
             }
         }
         profile.setProfile_keyword(profileKeywords);
+        logger.info("INFO SUCCESS");
         return new ResponseEntity<List<ProfileKeyword>>(profileKeywords, HttpStatus.OK);
 
     }
@@ -162,6 +186,10 @@ public class ProfileController {
     @GetMapping("/keyword/{profile_id}")
     public List<ProfileKeyword> getKeywords(@PathVariable Long profile_id) throws NotFoundException {
         Profile profile = profileService.findById(profile_id).get();
+        if (profile == null) {
+            throw new CustomException("no profile", ErrorCode.NO_DATA_ERROR);
+        }
+
         List<ProfileKeyword> profileKeywords = profileService.getProfileKeywords(profile_id);
         List<TeamKeyword> teamKeywords = profileService.getTeamKeywords(profile_id);
         List<ProfileKeyword> finalKeywords = new ArrayList<>();
@@ -199,6 +227,7 @@ public class ProfileController {
             System.out.println(profileKeyword.getCount());
         }
 
+        logger.info("INFO SUCCESS");
         return finalKeywords;
     }
 }

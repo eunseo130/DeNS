@@ -16,4 +16,6 @@ public interface TeamFeedService {
 
     List<TeamFeed> showFindTeamFeedList();
 
+    List<TeamFeed> showOurTeamFeedList(long team_id);
+
 }

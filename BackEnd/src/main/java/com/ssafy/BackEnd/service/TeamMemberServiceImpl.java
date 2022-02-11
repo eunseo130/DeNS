@@ -110,23 +110,22 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     }
 
     @Override
-    public Map<String, TeamMemberIdentity> showTeamMemberList(Long team_id) {
+    public List<User> showTeamMemberList(Long team_id) {
         Team team = teamRespository.findByTeam(team_id);
         System.out.println(team.getTitle());
         List<TeamMember> teamMembers = team.getTeam_member();
-//        List<User> teammembers_infos = new ArrayList<>();
-        Map<String, TeamMemberIdentity> teamMemberList = new HashMap<>();
-
+        List<User> teammembers_infos = new ArrayList<>();
+        //Map<String, TeamMemberIdentity> teamMemberList = new HashMap<>();
 
         for (TeamMember teamMember: teamMembers) {
             System.out.println(teamMember.getUser().getName());
-            teamMemberList.put(teamMember.getUser().getName(), teamMember.getTeam_identity());
-//            teammembers_infos.add(teammember_info.getUser());
+            teammembers_infos.add(teamMember.getUser());
 
+            //teamMemberList.put(teamMember.getUser().getName(), teamMember.getTeam_identity());
         }
 
 
-        return teamMemberList;
+        return teammembers_infos;
     }
 
 

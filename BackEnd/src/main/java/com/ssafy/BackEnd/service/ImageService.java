@@ -2,8 +2,10 @@ package com.ssafy.BackEnd.service;
 
 //import com.ssafy.BackEnd.dto.ImageDto;
 //import com.ssafy.BackEnd.entity.Image;
+import com.ssafy.BackEnd.entity.Image;
 import com.ssafy.BackEnd.entity.Profile;
 //import com.ssafy.BackEnd.repository.ImageRepository;
+import com.ssafy.BackEnd.repository.ImageRepository;
 import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import io.lettuce.core.ScriptOutputType;
@@ -12,6 +14,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -25,8 +28,8 @@ import java.util.Optional;
 @Service
 public class ImageService {
 
-    //@Autowired
-    //private final ImageRepository imageRepository;
+    @Autowired
+    private final ImageRepository imageRepository;
 
 //    @Autowired
 //    private final UserRepository userRepository;
@@ -34,13 +37,17 @@ public class ImageService {
     @Autowired
     private final ProfileRepository profileRepository;
 
+    @Autowired
+    private final FileHandler fileHandler;
+
     @Value("${profileImg.path}")
     private String uploadFolder;
 
-    public ImageService(ProfileRepository profileRepository) {
-//        this.imageRepository = imageRepository;
+    public ImageService(ImageRepository imageRepository, ProfileRepository profileRepository, FileHandler fileHandler) {
+        this.imageRepository = imageRepository;
 //        this.userRepository = userRepository;
         this.profileRepository = profileRepository;
+        this.fileHandler = fileHandler;
     }
 
     // 주소 같이 넘겨주기
@@ -67,4 +74,13 @@ public class ImageService {
         return imageFilePath.toString();
 
     }
+
+//    public Image addProfileImage(Long profileId, MultipartFile file) throws Exception {
+//        Image image = fileHandler.parseFileInfo(profileId, file);
+//        Profile profile = profileRepository.findById(profileId).get();
+//        profile.setImage(image);
+//        imageRepository.save(image);
+//        profileRepository.save(profile);
+//
+//    }
 }
