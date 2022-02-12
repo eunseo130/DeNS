@@ -156,27 +156,28 @@ public class TeamServiceImpl implements TeamService{
     }
 
     @Override
-    public void deleteTeam(long profile_id, long team_id) {
+    public void deleteTeam(long team_id) {
         Team team = teamRepository.findByTeam(team_id);
-        Profile profile = profileRepository.findById(profile_id).get();
-        User user = userRepository.findByEmail(profile.getEmail());
-        List<TeamMember> teamMembers = team.getTeam_member();
-        for (TeamMember teamMember : teamMembers) {
-            if (teamMember.getTeam_identity().equals(TeamMemberIdentity.LEADER) && teamMember.getUser().equals(user)) {
-                List<TeamKeyword> teamKeywordList = team.getTeam_keyword();
-                for (TeamKeyword teamKeyword : teamKeywordList) {
-                    //            teamFeedKeyword.getKeyword().setCount(teamFeedKeyword.getKeyword().getCount() - 1);
-                    teamKeywordRepository.delete(teamKeyword);
-                    System.out.println("=======================");
-                    //            teamFeedKeywords.remove(teamFeedKeyword);
-                    //            System.out.println(teamFeedKeyword.getKeyword().getName());
-                }
-                teamRepository.delete(team);
-                System.out.println("=====remove");
-            } else {
-                System.out.println("권한이 없습니다.");
-            }
-        }
+        teamRepository.delete(team);
+//        Profile profile = profileRepository.findById(profile_id).get();
+//        User user = userRepository.findByEmail(profile.getEmail());
+//        List<TeamMember> teamMembers = team.getTeam_member();
+//        for (TeamMember teamMember : teamMembers) {
+//            if (teamMember.getTeam_identity().equals(TeamMemberIdentity.LEADER) && teamMember.getUser().equals(user)) {
+//                List<TeamKeyword> teamKeywordList = team.getTeam_keyword();
+//                for (TeamKeyword teamKeyword : teamKeywordList) {
+//                    //            teamFeedKeyword.getKeyword().setCount(teamFeedKeyword.getKeyword().getCount() - 1);
+//                    teamKeywordRepository.delete(teamKeyword);
+//                    System.out.println("=======================");
+//                    //            teamFeedKeywords.remove(teamFeedKeyword);
+//                    //            System.out.println(teamFeedKeyword.getKeyword().getName());
+//                }
+//                teamRepository.delete(team);
+//                System.out.println("=====remove");
+//            } else {
+//                System.out.println("권한이 없습니다.");
+//            }
+//        }
     }
 
     @Override

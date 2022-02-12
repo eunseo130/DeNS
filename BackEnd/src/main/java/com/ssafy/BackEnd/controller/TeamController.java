@@ -144,8 +144,8 @@ public class TeamController {
     //@ExceptionHandler({NotFoundException.class, NullPointerException.class})
     @DeleteMapping("/{team_id}")
     @ApiOperation(value = "팀 삭제")
-    public ResponseEntity<Void> deleteTeam(@PathVariable long profile_id, @PathVariable Long team_id) {
-        teamService.deleteTeam(profile_id, team_id);
+    public ResponseEntity<Void> deleteTeam(@PathVariable Long team_id) {
+        teamService.deleteTeam(team_id);
         logger.info("INFO SUCCESS");
 
         return new ResponseEntity<Void>(HttpStatus.NO_CONTENT);
