@@ -17,10 +17,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import com.ssafy.BackEnd.service.TeamService;
 import com.ssafy.BackEnd.repository.TeamRepository;
@@ -107,13 +104,15 @@ public class TeamController {
 
     @GetMapping("/showteam/{team_id}")
     @ApiOperation(value = "팀 조회")
-    public ResponseEntity<Map<Team, List<TeamMember>>> findTeam(@PathVariable Long team_id) throws NotFoundException {
+    public ResponseEntity<Map<Object, Object>> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
 
         Team team = teamService.findByTeam(team_id);
+
         List<TeamMember> teamMembers = team.getTeam_member();
-        Map<Team, List<TeamMember>> result = new HashMap<>();
-        result.put(team, teamMembers);
+        Map<Object, Object> result = new HashMap<>();
+        result.put(team.getTeam_id(), teamMembers);
+        System.out.println(team);
         if(team == null) {
              logger.error("NO TEAM INFO");
              throw new CustomException(ErrorCode.NO_DATA_ERROR);
@@ -123,7 +122,7 @@ public class TeamController {
         System.out.println("team id : "+team.getTeam_id());
         logger.info("INFO SUCCESS");
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        return new ResponseEntity<Map<Object, Object>>(result, HttpStatus.OK);
 
     }
 

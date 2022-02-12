@@ -193,6 +193,7 @@ public class ChatRoomRepository {
     public ChatRoom createChatRoom(String name) {
         ChatRoom chatRoom = ChatRoom.create(name);
         opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
+
         return chatRoom;
     }
 
