@@ -59,17 +59,6 @@ public class MainController {
         return new ResponseEntity<>(map, HttpStatus.OK);
 
     }
-        @GetMapping("/test33")
-        public ResponseEntity<Map<String, Object>> test33(){
-            logger.info("test33");
-            System.out.println("teset33이에요");
-            Map<String, Object> map = new HashMap<>();
-            map.put("message", "test33");
-            map.put("success", "성공");
-
-
-        return new ResponseEntity<>(map, HttpStatus.OK);
-    }
 
 
     @PostMapping("/signup")
