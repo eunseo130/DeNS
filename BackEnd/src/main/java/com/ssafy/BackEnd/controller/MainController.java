@@ -59,6 +59,18 @@ public class MainController {
         return new ResponseEntity<>(map, HttpStatus.OK);
 
     }
+        @GetMapping("/test33")
+        public ResponseEntity<Map<String, Object>> test33(){
+            logger.info("test33");
+            System.out.println("teset33이에요");
+            Map<String, Object> map = new HashMap<>();
+            map.put("message", "test33");
+            map.put("success", "성공");
+
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
 
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "사용자의 정보를 입력 받고 'success'면 회원가입 or 'fail이면 에러메세지", response = String.class)
