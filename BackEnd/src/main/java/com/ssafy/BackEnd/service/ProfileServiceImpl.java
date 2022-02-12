@@ -65,7 +65,7 @@ public class ProfileServiceImpl implements ProfileService{
 
         User user = userRepository.findByName(findProfile.getName());
         System.out.println("position : "+requestModifyProfile2.getPosition());
-        System.out.println("stakc : "+requestModifyProfile2.getStack());
+        System.out.println("stack : "+requestModifyProfile2.getStack());
         findProfile.setPosition(requestModifyProfile2.getPosition());
         findProfile.setStack(requestModifyProfile2.getStack());
         findProfile.setGit(requestModifyProfile2.getGit());

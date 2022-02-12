@@ -64,7 +64,6 @@ public class MainController {
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "사용자의 정보를 입력 받고 'success'면 회원가입 or 'fail이면 에러메세지", response = String.class)
     public ResponseEntity<Map<String, Object>> signUp(@RequestBody UserDto userDto) {
-        Response response = new Response();
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
         System.out.println("up : "+userDto.getEmail());
@@ -78,17 +77,11 @@ public class MainController {
 //            }
 
             System.out.println("userpwd : "+userDto.getPassword());
-            response.setResponse("success");
-            response.setMessage("회원가입을 성공적으로 완료했습니다.");
-            response.setData(null);
             status = HttpStatus.ACCEPTED;
             resultMap.put("message", "success");
             logger.info("INFO SUCCESS");
         }
         catch(Exception e) {
-            response.setResponse("failed");
-            response.setMessage("회원가입을 하는 도중 오류가 발생했습니다.");
-            response.setData(e.toString());
             status = HttpStatus.ACCEPTED;
             throw new CustomException(ErrorCode.SIGNUP_ERROR);
         }
