@@ -33,6 +33,7 @@ public class ChatController {
     public void message(ChatMessage message) {
 //        String token = httpServletRequest.getHeader("Authorization");
         // 수정
+        System.out.println("센더" + message.getSender());
         message.setSender(message.getSender());
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             message.setSender("[알림]");

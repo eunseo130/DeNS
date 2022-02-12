@@ -20,4 +20,6 @@ public interface TeamMemberService{
 
     List<User> showTeamMemberList(Long team_id);
 
+    TeamMember getMyTeamIndentity(long team_id, String email);
+
 }

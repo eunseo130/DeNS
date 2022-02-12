@@ -1,6 +1,8 @@
 package com.ssafy.BackEnd.entity;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import com.fasterxml.jackson.databind.ser.Serializers;
 import lombok.*;
 import org.springframework.data.annotation.CreatedDate;
@@ -57,11 +59,11 @@ public class User implements UserDetails {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
-    @JsonIgnore
+    //@JsonIgnore
     private Profile profile;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
+    //@JsonIgnore
     private List<TeamMember> team_member = new ArrayList<>( );
 
     @Builder
