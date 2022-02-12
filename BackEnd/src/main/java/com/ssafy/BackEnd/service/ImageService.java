@@ -72,6 +72,7 @@ public class ImageService {
             profile.setImage(imageFileName);
         }
         return imageFilePath.toString();
+
     }
 
 //    public Image addProfileImage(Long profileId, MultipartFile file) throws Exception {

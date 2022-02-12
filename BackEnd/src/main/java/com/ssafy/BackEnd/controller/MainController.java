@@ -19,6 +19,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.Cookie;
@@ -47,12 +48,6 @@ public class MainController {
     private final ProfileService profileService;
 
 
-//    @GetMapping("/test22")
-//    @ApiOperation(value = "테스트페이지 ")
-//    public void test22(@RequestBody String header) {
-//        System.out.println("header : "+header);
-//        System.out.println("###########################################테스트페이지 확인용");
-//    }
 
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "사용자의 정보를 입력 받고 'success'면 회원가입 or 'fail이면 에러메세지", response = String.class)
@@ -62,14 +57,15 @@ public class MainController {
         HttpStatus status;
         System.out.println("up : "+userDto.getEmail());
         try {
-            User user = userDto.createUser();
-            if (authService.validateDuplicateUser(user)==false) {
-                status = HttpStatus.IM_USED;
-                resultMap.put("message", "이미 존재하는 회원입니다.");
-                return new ResponseEntity<Map<String, Object>>(resultMap, status);
-            }
-            authService.signUp(user);
-            System.out.println("userpwd : "+user.getPassword());
+//            User user = userDto.createUser();
+            authService.signUp(userDto);
+//            if (authService.validateDuplicateUser(user)==false) {
+//                status = HttpStatus.IM_USED;
+//                resultMap.put("message", "이미 존재하는 회원입니다.");
+//                return new ResponseEntity<Map<String, Object>>(resultMap, status);
+//            }
+
+            System.out.println("userpwd : "+userDto.getPassword());
             response.setResponse("success");
             response.setMessage("회원가입을 성공적으로 완료했습니다.");
             response.setData(null);
@@ -188,23 +184,24 @@ public class MainController {
         Map<String, Object> resultMap = new HashMap<>();
         HttpStatus status;
         System.out.println("email pwd : "+users.getEmail()+" "+users.getPassword());
+        System.out.println("secu : "+ SecurityContextHolder.getContext().getAuthentication());
         try {
             final User user = authService.signIn(users.getEmail(), users.getPassword());
             //System.out.println(user.getEmail()+" "+user.getPassword());
             //System.out.println("user null ? "+user);
-            if(user != null) {
+//            if(user != null) {
                 System.out.println("1pass");
-                final String Token = jwtService.generateToken(user);
+                final String Token = jwtService.createToken(user.getEmail(), user.getIdentity());
                 //final String refreshJwt = jwtService.generateRefershToken(user);
 
                 System.out.println("accessToken : "+Token);
                 //System.out.println("refreshToken : "+refreshJwt);
 
-//                Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
+                Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
 //                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
 
                 System.out.println("pass 2");
-//                response.addCookie(accessToken);
+                response.addCookie(accessToken);
 //                response.addCookie(refreshToken);
 
                 System.out.println("pass 3");
@@ -214,17 +211,20 @@ public class MainController {
                 resultMap.put("message", "success");
                 status = HttpStatus.ACCEPTED;
                 logger.info("INFO SUCCESS");
-            } else {
-                //System.out.println("error");
-                resultMap.put("message", "fail");
-                status = HttpStatus.UNAUTHORIZED;
             }
-        } catch (Exception e) {
+//        else {
+//                //System.out.println("error");
+//                resultMap.put("message", "fail");
+//                status = HttpStatus.UNAUTHORIZED;
+//            }
+         catch (Exception e) {
+            status = HttpStatus.UNAUTHORIZED;
 //            resultMap.put("message", e.getMessage());
 //            status = HttpStatus.INTERNAL_SERVER_ERROR;
-            throw new CustomException(ErrorCode.LOGIN_ERROR);
+            resultMap.put("message", "No Authorization");
+            //throw new CustomException(ErrorCode.INVALID_ID);
         }
-
+        System.out.println("status : "+status);
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
 

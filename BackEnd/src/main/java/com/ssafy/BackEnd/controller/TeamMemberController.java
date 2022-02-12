@@ -80,5 +80,13 @@ public class TeamMemberController {
         logger.info("INFO SUCCESS");
         return new ResponseEntity<List<User>>(teammemberlist, HttpStatus.OK);
     }
+    @GetMapping("/getidentity/{team_id}") //이메일과 팀아이디로 자신의 팀아이덴티티 확인하기
+    public ResponseEntity<TeamMember> getMyTeamIndentity(@PathVariable long team_id, @RequestParam String email) {
+
+        TeamMember teamMember = teamMemberService.getMyTeamIndentity(team_id, email);
+
+        return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
+
+    }
 
 }

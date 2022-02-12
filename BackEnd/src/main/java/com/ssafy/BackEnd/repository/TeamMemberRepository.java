@@ -18,4 +18,7 @@ public interface TeamMemberRepository extends JpaRepository<TeamMember, Long> {
 
     @Query("select m from TeamMember m where team_id = :team_id and email = :email")
     TeamMember findTeamLeader2(Long team_id, String email);
+
+    @Query("select m from TeamMember m where email = :email and team_id = :team_id")
+    TeamMember findIdentity(long team_id, String email);
 }

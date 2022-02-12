@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.dto.UserDto;
 import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.entity.UserIdentity;
@@ -10,7 +11,7 @@ public interface AuthService {
 
     final String REDIS_CHANGE_PASSWORD_PREFIX="CPW";
 
-    void signUp(User user);
+    void signUp(UserDto user);
 
     boolean validateDuplicateUser(User user);
 

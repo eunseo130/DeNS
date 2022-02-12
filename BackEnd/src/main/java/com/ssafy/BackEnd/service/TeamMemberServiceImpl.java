@@ -121,11 +121,22 @@ public class TeamMemberServiceImpl implements TeamMemberService {
             System.out.println(teamMember.getUser().getName());
             teammembers_infos.add(teamMember.getUser());
 
+            System.out.println("팀권한" + teamMember.getTeam_identity());
+
             //teamMemberList.put(teamMember.getUser().getName(), teamMember.getTeam_identity());
         }
 
 
         return teammembers_infos;
+    }
+
+    @Override
+    public TeamMember getMyTeamIndentity(long team_id, String email) {
+        System.out.println(team_id + "FFF" + email);
+        TeamMember teamMember = teamMemberRepository.findIdentity(team_id, email);
+        System.out.println(teamMember.getTeam_identity() + "왜안나와");
+
+        return teamMember;
     }
 
 
