@@ -56,19 +56,9 @@ public class MainController {
         map.put("message", "test11");
         map.put("success", "성공");
 
-    }
-        @GetMapping("/test33")
-        public ResponseEntity<Map<String, Object>> test33(){
-            logger.info("test33");
-            System.out.println("teset33이에요");
-            Map<String, Object> map = new HashMap<>();
-            map.put("message", "test33");
-            map.put("success", "성공");
-
-
         return new ResponseEntity<>(map, HttpStatus.OK);
-    }
 
+    }
 
     @PostMapping("/signup")
     @ApiOperation(value = "회원가입", notes = "사용자의 정보를 입력 받고 'success'면 회원가입 or 'fail이면 에러메세지", response = String.class)
@@ -226,8 +216,9 @@ public class MainController {
 //                response.addCookie(refreshToken);
 
                 System.out.println("pass 3");
-                //redisUtil.setDataExpire(refreshJwt, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
+                //redisUtil.setDataExpire(Token, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
 
+                redisUtil.setData(user.getEmail(), Token);
                 resultMap.put("access-token", Token);
                 resultMap.put("message", "success");
                 status = HttpStatus.ACCEPTED;
