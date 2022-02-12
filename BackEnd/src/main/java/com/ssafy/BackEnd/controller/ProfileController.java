@@ -165,10 +165,7 @@ public class ProfileController {
         List<ProfileKeyword> profileKeywords = profile.getProfile_keyword();
         for (String keyword : keywords) {
             if (profileKeywordRepository.findProfileKeyword(keyword, profile_id) == null) {
-                ProfileKeyword newProfileKeyword = new ProfileKeyword();
-                newProfileKeyword.setName(keyword);
-                newProfileKeyword.setCount(1);
-                newProfileKeyword.setProfile(profile);
+                ProfileKeyword newProfileKeyword = ProfileKeyword.builder().profile(profile).count(1).name(keyword).build();
                 profileKeywordRepository.save(newProfileKeyword);
                 profileKeywords.add(newProfileKeyword);
             } else {
@@ -214,10 +211,7 @@ public class ProfileController {
         }
 
         for (TeamKeyword keyword : teamKeywords) {
-            ProfileKeyword newProfileKeyword = new ProfileKeyword();
-            newProfileKeyword.setProfile(profile);
-            newProfileKeyword.setCount(keyword.getCount());
-            newProfileKeyword.setName(keyword.getName());
+            ProfileKeyword newProfileKeyword = ProfileKeyword.builder().profile(profile).count(keyword.getCount()).name(keyword.getName()).build();
             finalKeywords.add(newProfileKeyword);
         }
 

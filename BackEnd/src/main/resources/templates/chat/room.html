@@ -53,21 +53,22 @@
     },
     methods: {
       findAllRoom: function() {
-        axios.get('/chat/rooms').then(response => { this.chatrooms = response.data; });
+        axios.get('/chat/rooms/{profileId}').then(response => { this.chatrooms = response.data; });
       },
       createRoom: function() {
         if("" === this.room_name) {
           alert("방 제목을 입력해 주십시요.");
           return;
         } else {
-          var params = new URLSearchParams();
-          params.append("name",this.room_name);
-          axios.post('/chat/room', params)
+          // var params = new URLSearchParams();
+          // params.append("name",this.room_name);
+          axios.post('/chat/room/{profileId1}/{profileId2}')
                   .then(
                           response => {
-                            alert(response.data.name+"방 개설에 성공하였습니다.")
-                            this.room_name = '';
-                            this.findAllRoom();
+                            console.log(response.data)
+                            // alert(response.data.name+"방 개설에 성공하였습니다.")
+                            // this.room_name = '';
+                            // this.findAllRoom();
                           }
                   )
                   .catch( response => { alert("채팅방 개설에 실패하였습니다."); } );
@@ -75,6 +76,7 @@
       },
       enterRoom: function(roomId, roomName) {
         localStorage.setItem('wschat.roomId',roomId);
+        console.log(localStorage.getItem('wschat.roomId'))
         localStorage.setItem('wschat.roomName',roomName);
         location.href="/chat/room/enter/"+roomId;
       }

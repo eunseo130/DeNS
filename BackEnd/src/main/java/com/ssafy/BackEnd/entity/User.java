@@ -35,7 +35,6 @@ public class User implements UserDetails {
     private String name;
 
     @NotBlank
-    @JsonIgnore
     private String password;
 
     private LocalDateTime createDate;
