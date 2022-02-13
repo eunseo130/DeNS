@@ -40,11 +40,12 @@ public class TeamMemberController {
         return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<TeamMember> deleteTeamMember(@RequestBody TeamMemberDto teamMemberDto) {
-        TeamMemberDto teamMember = new TeamMemberDto(teamMemberDto.getEmail(), teamMemberDto.getTeamName());
-        System.out.println(teamMember.getEmail() + "DFSF" + teamMember.getTeamName());
-        TeamMember teammember = teamMemberService.deleteTeamMember(teamMember.getEmail(), teamMember.getTeamName());
+    @DeleteMapping("/{team_id}")
+    public ResponseEntity<TeamMember> deleteTeamMember(@RequestBody TeamMemberDto teamMemberDto, @PathVariable long team_id) {
+        //TeamMemberDto teamMember = new TeamMemberDto(teamMemberDto.getEmail());
+        //System.out.println(teamMember.getEmail() + "DFSF" + teamMember.getTeamName());
+        System.out.println(teamMemberDto.getEmail());
+        TeamMember teammember = teamMemberService.deleteTeamMember(teamMemberDto.getEmail(), team_id);
 
         if (teammember == null) {
             logger.error("NO DELETE TEAMMEMBER");

@@ -12,7 +12,7 @@ public interface TeamMemberService{
 
     TeamMember addTeamMember(String email, Long teamId);
 
-    TeamMember deleteTeamMember(String email, String teamName);
+    TeamMember deleteTeamMember(String email, long team_id);
 
     Team mergeTeam(Long teamId1, Long teamId2);
 

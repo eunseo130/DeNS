@@ -13,9 +13,9 @@ public class TeamMemberDto {
     private String teamName;
 
     @Builder
-    public TeamMemberDto(String email, String teamName) {
+    public TeamMemberDto(String email) {
         this.email = email;
-        this.teamName = teamName;
+        //this.teamName = teamName;
     }
 
 //    public TeamMember createTeamMmber() {
