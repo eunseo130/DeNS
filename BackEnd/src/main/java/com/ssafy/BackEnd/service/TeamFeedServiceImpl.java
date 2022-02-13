@@ -53,18 +53,17 @@ public class TeamFeedServiceImpl implements TeamFeedService{
             }
         }
         if (flag) {
+            List<TeamFeedFile> teamFeedFiles = teamFeedFileService.saveTeamFeedFiles(teamFeedDto.getTeamFeedFiles());
 
-//            List<TeamFeedFile> teamFeedFiles = teamFeedFileService.saveTeamFeedFiles(teamFeedDto.getTeamFeedFiles());
-//
-//            if (teamFeedFiles.isEmpty()) {
-//                System.out.println("파일이 없습니다");
-//            }
-//            else {
-//                for (TeamFeedFile teamFeedFile : teamFeedFiles) {
-//                    log.info(teamFeedFile.getOriginalFileName());
-//                    teamFeedFile.setTeam_feed(teamFeed);
-//                }
-//            }
+            if (teamFeedFiles.isEmpty()) {
+                System.out.println("파일이 없습니다");
+            }
+            else {
+                for (TeamFeedFile teamFeedFile : teamFeedFiles) {
+                    log.info(teamFeedFile.getOriginalFileName());
+                    teamFeedFile.setTeam_feed(teamFeed);
+                }
+            }
 
             List<String> keywords = hashTagAlgorithm.strList(teamFeed.getContent());
             List<TeamFeedKeyword> teamFeedKeywords = new ArrayList<>();
