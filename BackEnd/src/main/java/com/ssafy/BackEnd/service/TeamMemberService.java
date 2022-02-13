@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.dto.TeamMemberDto;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.TeamMemberIdentity;
@@ -12,7 +13,7 @@ public interface TeamMemberService{
 
     TeamMember addTeamMember(String email, Long teamId);
 
-    TeamMember deleteTeamMember(String email, long team_id);
+    TeamMember deleteTeamMember(TeamMemberDto teamMemberDto, long team_id);
 
     Team mergeTeam(Long teamId1, Long teamId2);
 

@@ -45,7 +45,7 @@ public class TeamMemberController {
         //TeamMemberDto teamMember = new TeamMemberDto(teamMemberDto.getEmail());
         //System.out.println(teamMember.getEmail() + "DFSF" + teamMember.getTeamName());
         System.out.println(teamMemberDto.getEmail());
-        TeamMember teammember = teamMemberService.deleteTeamMember(teamMemberDto.getEmail(), team_id);
+        TeamMember teammember = teamMemberService.deleteTeamMember(teamMemberDto, team_id);
 
         if (teammember == null) {
             logger.error("NO DELETE TEAMMEMBER");

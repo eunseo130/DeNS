@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.dto.TeamMemberDto;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.TeamMemberIdentity;
@@ -53,14 +54,14 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 
     @Override
     @Transactional
-    public TeamMember deleteTeamMember(String email, long team_id) {
+    public TeamMember deleteTeamMember(TeamMemberDto teamMemberDto, long team_id) {
         Team findTeam = teamRespository.findByTeam(team_id);
         System.out.println(findTeam.getTitle()  +"SDFSD");
         List<TeamMember> findTeamMember = findTeam.getTeam_member();
         for (TeamMember member : findTeamMember) {
-            if (member.getUser().getEmail().equals(email)) {
-                System.out.println(email + "이거다");
-                System.out.println("member email : "+member.getUser().getEmail().equals(email));
+            if (member.getUser().getEmail().equals(teamMemberDto.getEmail())) {
+                System.out.println(teamMemberDto.getEmail() + "이거다");
+                System.out.println("member email : "+member.getUser().getEmail().equals(teamMemberDto.getEmail()));
                 teamMemberRepository.delete(member);
                 findTeamMember.remove(member);
                 return member;
