@@ -3,6 +3,7 @@ package com.ssafy.BackEnd.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -31,5 +32,11 @@ public class TeamMember {
     @JoinColumn(name = "email")
     //@JsonIgnore
     User user;
+
+//    @Builder
+//    public TeamMember(String email, String teamName) {
+//        this.getUser().getEmail() = email;
+//        this.getTeam().getTitle() = teamName;
+//    }
 
 }

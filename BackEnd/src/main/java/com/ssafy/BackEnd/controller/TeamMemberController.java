@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.controller;
 
+import com.ssafy.BackEnd.dto.TeamMemberDto;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.TeamMemberIdentity;
@@ -40,8 +41,11 @@ public class TeamMemberController {
     }
 
     @DeleteMapping
-    public ResponseEntity<TeamMember> deleteTeamMember(@RequestParam String email, @RequestParam String teamName) {
-        TeamMember teammember = teamMemberService.deleteTeamMember(email, teamName);
+    public ResponseEntity<TeamMember> deleteTeamMember(@RequestBody TeamMemberDto teamMemberDto) {
+        TeamMemberDto teamMember = new TeamMemberDto(teamMemberDto.getEmail(), teamMemberDto.getTeamName());
+        System.out.println(teamMember.getEmail() + "DFSF" + teamMember.getTeamName());
+        TeamMember teammember = teamMemberService.deleteTeamMember(teamMember.getEmail(), teamMember.getTeamName());
+
         if (teammember == null) {
             logger.error("NO DELETE TEAMMEMBER");
             throw new CustomException(ErrorCode.NO_DATA_ERROR);
