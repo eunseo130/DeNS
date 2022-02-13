@@ -55,9 +55,11 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     @Transactional
     public TeamMember deleteTeamMember(String email, String teamName) {
         Team findTeam = teamRespository.findByTitle(teamName);
+        System.out.println(findTeam.getTitle()  +"SDFSD");
         List<TeamMember> findTeamMember = findTeam.getTeam_member();
         for (TeamMember member : findTeamMember) {
             if (member.getUser().getEmail().equals(email)) {
+                System.out.println(member.getUser().getEmail() + "이거다");
                 System.out.println("member email : "+member.getUser().getEmail().equals(email));
                 teamMemberRepository.delete(member);
                 findTeamMember.remove(member);
