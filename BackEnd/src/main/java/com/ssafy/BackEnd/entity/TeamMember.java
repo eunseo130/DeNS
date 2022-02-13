@@ -32,11 +32,4 @@ public class TeamMember {
     @JoinColumn(name = "email")
     //@JsonIgnore
     User user;
-
-//    @Builder
-//    public TeamMember(String email, String teamName) {
-//        this.getUser().getEmail() = email;
-//        this.getTeam().getTitle() = teamName;
-//    }
-
 }
