@@ -42,7 +42,6 @@ public class TeamFeed extends BaseTimeEntity{
     List<TeamFeedFile> teamFeedFiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "team_feed", cascade = CascadeType.ALL)
-//    @JsonIgnore
     List<TeamFeedKeyword> teamFeedKeywords = new ArrayList<>();
 
     @Builder
