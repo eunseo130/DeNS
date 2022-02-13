@@ -38,6 +38,8 @@ public class TeamFeedServiceImpl implements TeamFeedService{
 
     private final UserRepository userRepository;
 
+    private final TeamFeedFileRepository teamFeedFileRepository;
+
 
 
     @Override
@@ -46,6 +48,7 @@ public class TeamFeedServiceImpl implements TeamFeedService{
         User user = userRepository.findByProfileId(profile_id);
         List<TeamMember> teamMembers = teamFeed.getTeam().getTeam_member();
         boolean flag = false;
+
         for (TeamMember teamMember : teamMembers) {
             if (teamMember.getUser().equals(user)) {
                 flag = true;
@@ -53,11 +56,14 @@ public class TeamFeedServiceImpl implements TeamFeedService{
             }
         }
         if (flag) {
+            System.out.println("들어왔다");
             List<TeamFeedFile> teamFeedFiles = teamFeedFileService.saveTeamFeedFiles(teamFeedDto.getTeamFeedFiles());
+
 
             for (TeamFeedFile teamFeedFile : teamFeedFiles) {
                 log.info(teamFeedFile.getOriginalFileName());
                 teamFeedFile.setTeam_feed(teamFeed);
+                teamFeedFileRepository.save(teamFeedFile);
             }
 
 
