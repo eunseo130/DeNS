@@ -16,22 +16,19 @@ export default function Back(props) {
     useEffect(() => {
         const foo = store.getState().user.auth;
         const tokencheck = store.getState().user.token;
-
+        console.log(foo, tokencheck);
+        //redux에 값이 있는가
         if (foo === false) {
+            //쿠키에 token값이 잇는가
             if (cookies.token) {
+                //리덕스에 저장.
                 dispatch(loginUser(cookies.token));
-                console.log("check");
+                //param으로 검색한 사용자정보와 token에 저장된 사용자정보가 같은지 구분을 할 수 있음.
             } else {
                 alert('로그인이 필요합니다');
                 navigate('/signin')
             }
         }
-        getMember(``, (response) => {
-            console.log(response);
-        }, (error) => {
-            console.log(error);
-        })
-
     }, []);
 
     // console.log(dispatch());

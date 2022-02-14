@@ -9,7 +9,7 @@ export default function Signup() {
         name: '',
         password: '',
     });
-    useEffect(() => { console.log(input) }, [input]);
+    // useEffect(() => { console.log(input) }, [input]);
 
     const changeCheck = (e) => {
         const { name, value } = e.target;
@@ -21,6 +21,9 @@ export default function Signup() {
 
     const join = () => {
         signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
+        // signin(input,
+        //     (response) => { console.log(response) },    //success
+        //     (error) => { console.log(error) });         //fail
     }
 
 
