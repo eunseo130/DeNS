@@ -45,13 +45,8 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public void signUp(UserDto user) {
         String password = user.getPassword();
-        //user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
         String encPass = BCrypt.hashpw(password, BCrypt.gensalt());
-        //user.setIdentity(UserIdentity.UNAUTH);
         System.out.println("auth pwd : "+user.getPassword());
-//        String salt = saltUtil.genSalt();
-//        user.setSalt(new Salt(salt));
-//        user.setPassword(saltUtil.encodePassword(salt, password));
         User save = User.builder()
                 .email(user.getEmail())
                 .name(user.getName())
@@ -79,12 +74,16 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public ResponseEntity<Profile> createProfile(User user) {
-        Profile profile = new Profile();
-        profile.setName(user.getName());
-        profile.setEmail(user.getEmail());
-        profile.setPosition(null);
-        profile.setStack(null);
-        profile.setImage(null);
+        Profile profile = Profile.builder()
+                .email(user.getEmail())
+                .name(user.getName())
+                .git(null)
+                .git_id(null)
+                .position(null)
+                .stack(null)
+                .image(null)
+                .createDate(LocalDateTime.now())
+                .build();
         user.setProfile(profile);
         userRepository.save(user);
 
@@ -98,12 +97,6 @@ public class AuthServiceImpl implements AuthService{
         if(findUser == null) throw new Exception ("멤버가 조회되지 않습니다.");
         boolean checkpw = BCrypt.checkpw(password, findUser.getPassword());
         if (checkpw == false) throw new Exception("비밀번호가 틀립니다.");
-//        String salt = findUser.getSalt().getSalt();
-//        password = saltUtil.encodePassword(salt, password);
-//        System.out.println("pass : "+password);
-//        System.out.println("u pass : "+findUser.getPassword());
-//        if(!findUser.getPassword().equals(password))
-//            throw new Exception("비밀번호가 틀립니다.");
         return findUser;
     }
 
@@ -140,9 +133,6 @@ public class AuthServiceImpl implements AuthService{
     public User changePassword(User user, String password) throws NotFoundException {
         if(user==null) throw new NotFoundException("changePassword(), 멤버가 조회되지 않습니다.");
         user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-//        String salt = saltUtil.genSalt();
-//        user.setSalt(new Salt(salt));
-//        user.setPassword(saltUtil.encodePassword(salt, password));
         User savedUser = userRepository.save(user);
         return savedUser;
     }

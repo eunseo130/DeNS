@@ -109,37 +109,67 @@
 package com.ssafy.BackEnd.controller;
 
 import com.ssafy.BackEnd.entity.ChatRoom;
+import com.ssafy.BackEnd.entity.LoginInfo;
+import com.ssafy.BackEnd.entity.Profile;
+import com.ssafy.BackEnd.entity.User;
+import com.ssafy.BackEnd.repository.ChatRoomRedisRepository;
 import com.ssafy.BackEnd.repository.ChatRoomRepository;
+import com.ssafy.BackEnd.repository.ProfileRepository;
+import com.ssafy.BackEnd.repository.UserRepository;
+import com.ssafy.BackEnd.service.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RequiredArgsConstructor
 @Controller
 @CrossOrigin
-@RequestMapping("/chat")
+@RequestMapping("chat")
 public class ChatRoomController {
 
+    private final ChatRoomRedisRepository chatRoomRedisRepository;
+
     private final ChatRoomRepository chatRoomRepository;
+
+    private final ProfileRepository profileRepository;
+
 
     @GetMapping("/room")
     public String rooms(Model model) {
         return "/chat/room";
     }
 
-    @GetMapping("/rooms")
+    @GetMapping("/rooms/{profileId}")
     @ResponseBody
-    public List<ChatRoom> room() {
-        return chatRoomRepository.findAllRoom();
+    public Iterable<ChatRoom> room(@PathVariable Long profileId) {
+        Iterable<ChatRoom> chatRooms = chatRoomRedisRepository.findAll();
+        Profile profile = profileRepository.findById(profileId).get();
+        List<ChatRoom> result = new ArrayList<>();
+        for (ChatRoom chatRoom : chatRooms) {
+            if (chatRoom.getName().contains(profile.getName())) {
+                result.add(chatRoom);
+            }
+        }
+        return result;
     }
 
-    @PostMapping("/room")
+    @PostMapping("/room/{profileId1}/{profileId2}")
     @ResponseBody
-    public ChatRoom createRoom(@RequestParam String name) {
-        return chatRoomRepository.createChatRoom(name);
+    public ChatRoom createRoom(@PathVariable Long profileId1, @PathVariable Long profileId2) {
+        Profile user1 = profileRepository.findById(profileId1).get();
+        Profile user2 = profileRepository.findById(profileId2).get();
+        ChatRoom chatRoom = ChatRoom.create(user1, user2);
+        return chatRoomRedisRepository.save(chatRoom);
     }
 
     @GetMapping("/room/enter/{roomId}")
@@ -151,6 +181,13 @@ public class ChatRoomController {
     @GetMapping("/room/{roomId}")
     @ResponseBody
     public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRoomRepository.findRoomById(roomId);
+        return chatRoomRedisRepository.findByRoomId(roomId);
+    }
+
+    @GetMapping("/user")
+    @ResponseBody
+    public LoginInfo getUserInfo() {
+        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        return LoginInfo.builder().name(name).build();
     }
 }

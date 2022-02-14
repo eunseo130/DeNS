@@ -42,11 +42,8 @@ public class TeamMemberServiceImpl implements TeamMemberService {
                 return null;
             }
         }
-        TeamMember teamMember = new TeamMember();
-        teamMember.setTeam(team);
-        teamMember.setUser(user);
-        teamMember.setTeam_identity(TeamMemberIdentity.MEMBER);
 
+        TeamMember teamMember = TeamMember.builder().team(team).user(user).teamMemberIdentity(TeamMemberIdentity.MEMBER).build();
         teamMemberRepository.save(teamMember);
 
         return teamMember;
@@ -102,10 +99,7 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 //            System.out.println(u.getEmail()+" hihi");
 //        }
         //System.out.println(user.getEmail()+" "+teamName+" hihi");
-        TeamMember teamMember = new TeamMember();
-        teamMember.setTeam(team);
-        teamMember.setUser(user);
-        teamMember.setTeam_identity(TeamMemberIdentity.LEADER);
+        TeamMember teamMember = TeamMember.builder().team(team).user(user).teamMemberIdentity(TeamMemberIdentity.LEADER).build();
 
         teamMemberRepository.save(teamMember);
 

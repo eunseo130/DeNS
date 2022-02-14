@@ -45,11 +45,7 @@ public class TeamServiceImpl implements TeamService{
         List<TeamKeyword> teamKeywordList = new ArrayList<>();
         for (String keyword : keywords) {
             if (teamKeywordRepository.findByName(keyword) == null) {
-                TeamKeyword newTeamKeyword = new TeamKeyword();
-                //newTeamKeyword.setKeyword(newKeyword);
-                newTeamKeyword.setCount(1);
-                newTeamKeyword.setTeam(team);
-                newTeamKeyword.setName(keyword);
+                TeamKeyword newTeamKeyword = TeamKeyword.builder().name(keyword).count(1).team(team).build();
                 teamKeywordRepository.save(newTeamKeyword);
                 teamKeywordList.add(newTeamKeyword);
             } else {
@@ -58,11 +54,7 @@ public class TeamServiceImpl implements TeamService{
                 findTeamKeyword.setCount(findTeamKeyword.getCount() + 1);
 
                 if (findTeamKeyword == null) {
-                    TeamKeyword newTeamKeyword = new TeamKeyword();
-                    //newTeamKeyword.setKeyword(findKeyword);
-                    newTeamKeyword.setTeam(team);
-                    newTeamKeyword.setCount(1);
-                    newTeamKeyword.setName(keyword);
+                    TeamKeyword newTeamKeyword = TeamKeyword.builder().name(keyword).count(1).team(team).build();
                     teamKeywordRepository.save(newTeamKeyword);
                     teamKeywordList.add(newTeamKeyword);
                 }
@@ -83,6 +75,8 @@ public class TeamServiceImpl implements TeamService{
         Profile profile = profileRepository.findById(profile_id).get();
         User user = userRepository.findByEmail(profile.getEmail());
         List<TeamMember> teamMembers = team.getTeam_member();
+        //for (TeamMember teamMember : teamMembers) {
+          //  if (teamMember.getTeam_identity().equals(TeamMemberIdentity.LEADER) && teamMember.getUser().equals(user)) {
 
         team.setTitle(teamDto.getTitle());
         teamRepository.save(team);
@@ -153,6 +147,7 @@ public class TeamServiceImpl implements TeamService{
 //        }
 
         return team;
+
     }
 
     @Override
@@ -269,11 +264,7 @@ public class TeamServiceImpl implements TeamService{
                 for (String key : keywords) System.out.println(key.getBytes(StandardCharsets.UTF_8));
                 for (String keyword : keywords) {
                     if (teamKeywordRepository.findTeamKeyword(keyword, team) == null) {
-                        TeamKeyword newTeamKeyword = new TeamKeyword();
-                        //newTeamKeyword.setKeyword(newKeyword);
-                        newTeamKeyword.setTeam(team);
-                        newTeamKeyword.setName(keyword);
-                        newTeamKeyword.setCount(1);
+                        TeamKeyword newTeamKeyword = TeamKeyword.builder().name(keyword).count(1).team(team).build();
                         teamKeywordRepository.save(newTeamKeyword);
                         teamKeywords.add(newTeamKeyword);
                     } else {
@@ -293,10 +284,8 @@ public class TeamServiceImpl implements TeamService{
 
     @Override
     public TeamMember setTeamLeader(Team team, String email) {
-        TeamMember teamMember = new TeamMember();
-        teamMember.setTeam(team);
-        teamMember.setUser(userRepository.findByEmail(email));
-        teamMember.setTeam_identity(TeamMemberIdentity.LEADER);
+        User user = userRepository.findByEmail(email);
+        TeamMember teamMember = TeamMember.builder().team(team).user(user).teamMemberIdentity(TeamMemberIdentity.LEADER).build();
 
         teamMemberRepository.save(teamMember);
 

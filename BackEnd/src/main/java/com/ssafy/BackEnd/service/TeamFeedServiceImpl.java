@@ -71,14 +71,9 @@ public class TeamFeedServiceImpl implements TeamFeedService{
             List<TeamFeedKeyword> teamFeedKeywords = new ArrayList<>();
             for (String keyword : keywords) {
                 if (teamKeywordRepository.findTeamKeyword(keyword, teamFeed.getTeam()) == null) {
-                    TeamKeyword newTeamKeyword = new TeamKeyword();
-                    newTeamKeyword.setName(keyword);
-                    newTeamKeyword.setCount(1);
-                    newTeamKeyword.setTeam(teamFeed.getTeam());
+                    TeamKeyword newTeamKeyword = TeamKeyword.builder().team(teamFeed.getTeam()).name(keyword).count(1).build();
                     teamKeywordRepository.save(newTeamKeyword);
-                    TeamFeedKeyword newTeamFeedKeyword = new TeamFeedKeyword();
-                    newTeamFeedKeyword.setName(keyword);
-                    newTeamFeedKeyword.setTeam_feed(teamFeed);
+                    TeamFeedKeyword newTeamFeedKeyword = TeamFeedKeyword.builder().teamFeed(teamFeed).name(keyword).build();
                     teamFeedKeywordRepository.save(newTeamFeedKeyword);
                     teamFeedKeywords.add(newTeamFeedKeyword);
                 } else {
@@ -86,9 +81,7 @@ public class TeamFeedServiceImpl implements TeamFeedService{
                     findTeamKeyword.setCount(findTeamKeyword.getCount() + 1);
                     TeamFeedKeyword findTeamFeedKeyword = teamFeedKeywordRepository.findTeamFeedKeyword(keyword, teamFeed.getTeamfeed_id());
                     if (findTeamFeedKeyword == null) {
-                        TeamFeedKeyword newTeamFeedKeyword = new TeamFeedKeyword();
-                        newTeamFeedKeyword.setName(keyword);
-                        newTeamFeedKeyword.setTeam_feed(teamFeed);
+                        TeamFeedKeyword newTeamFeedKeyword = TeamFeedKeyword.builder().teamFeed(teamFeed).name(keyword).build();
                         teamFeedKeywords.add(newTeamFeedKeyword);
                     } else {
                         teamFeedKeywords.add(findTeamFeedKeyword);
@@ -156,14 +149,9 @@ public class TeamFeedServiceImpl implements TeamFeedService{
         for (String key : keywords) System.out.println(key.getBytes(StandardCharsets.UTF_8));
         for (String keyword : keywords) {
             if (teamKeywordRepository.findTeamKeyword(keyword, teamFeed.getTeam()) == null) {
-                TeamKeyword newTeamKeyword = new TeamKeyword();
-                newTeamKeyword.setName(keyword);
-                newTeamKeyword.setCount(1);
-                newTeamKeyword.setTeam(teamFeed.getTeam());
+                TeamKeyword newTeamKeyword = TeamKeyword.builder().team(teamFeed.getTeam()).name(keyword).count(1).build();
                 teamKeywordRepository.save(newTeamKeyword);
-                TeamFeedKeyword newTeamFeedKeyword = new TeamFeedKeyword();
-                newTeamFeedKeyword.setName(keyword);
-                newTeamFeedKeyword.setTeam_feed(teamFeed);
+                TeamFeedKeyword newTeamFeedKeyword = TeamFeedKeyword.builder().teamFeed(teamFeed).name(keyword).build();
                 teamFeedKeywordRepository.save(newTeamFeedKeyword);
                 teamFeedKeywords.add(newTeamFeedKeyword);
             } else {
@@ -171,9 +159,8 @@ public class TeamFeedServiceImpl implements TeamFeedService{
                 findTeamKeyword.setCount(findTeamKeyword.getCount()+1);
 
                 if (teamFeedKeywordRepository.findTeamFeedKeyword(keyword, teamFeed.getTeamfeed_id()) == null) {
-                    TeamFeedKeyword newTeamFeedKeyword = new TeamFeedKeyword();
-                    newTeamFeedKeyword.setName(keyword);
-                    newTeamFeedKeyword.setTeam_feed(teamFeed);
+                    TeamFeedKeyword newTeamFeedKeyword = TeamFeedKeyword.builder().teamFeed(teamFeed).name(keyword).build();
+                    teamFeedKeywordRepository.save(newTeamFeedKeyword);
                 }
             }
             }

@@ -150,12 +150,14 @@ package com.ssafy.BackEnd.repository;//package com.ssafy.BackEnd.repository;
 //}
 
 import com.ssafy.BackEnd.entity.ChatRoom;
+import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.pubsub.RedisSubscriber;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 
 import javax.annotation.PostConstruct;
@@ -163,7 +165,7 @@ import java.util.*;
 
 @RequiredArgsConstructor
 @Repository
-public class ChatRoomRepository {
+public class ChatRoomRepository{
 
 //    // 채팅방(topic)에 발행되는 메시지를 처리할 Listener
 //    private final RedisMessageListenerContainer redisMessageListener;
@@ -190,12 +192,14 @@ public class ChatRoomRepository {
     }
 
     // 채팅방 생성 : 서버간 채팅방 공유를 위해 redis hash에 저장한다.
-    public ChatRoom createChatRoom(String name) {
-        ChatRoom chatRoom = ChatRoom.create(name);
+    public ChatRoom createChatRoom(Profile user1, Profile user2) {
+        ChatRoom chatRoom = ChatRoom.create(user1, user2);
         opsHashChatRoom.put(CHAT_ROOMS, chatRoom.getRoomId(), chatRoom);
 
         return chatRoom;
     }
+
+
 
 //    // 채팅방 입장 : redis에 topic을 만들고 pub/sub 통신을 하기 위해 리스너를 실행한다.
 //    public void enterChatRoom(String roomId) {
