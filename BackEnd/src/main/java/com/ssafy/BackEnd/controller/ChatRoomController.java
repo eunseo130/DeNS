@@ -208,6 +208,7 @@ public class ChatRoomController {
 
     @GetMapping("/user")
     public LoginInfo getUserInfo() {
+        System.out.println("===========test===========");
         String name = SecurityContextHolder.getContext().getAuthentication().getName();
         System.out.println(name);
         return LoginInfo.builder().name(name).build();
