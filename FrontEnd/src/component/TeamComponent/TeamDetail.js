@@ -15,14 +15,15 @@ export default function TeamDetail(props) {
     useEffect(() => {
         detail(teamId,
             (response) => {
-                setTeamTitle(response.data.title);
-                setTeamContent(response.data.content);
+                setTeamTitle(response.data[teamId][0].team.content);
+                setTeamContent(response.data[teamId][0].team.title);
+                // console.log(response.data)
             },
             (error) => {
                 console.log("오류가 됨.", (error));
             });
         },[]);
-
+        
     // 팀원 정보
     useEffect(() => {
         bringTeamMembers(teamId,

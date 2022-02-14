@@ -15,16 +15,15 @@ function HeaderBox(props) {
 const Container = styled.div`
   display: flex;
   background-color: rgba(244,106,114,1);
-  width:100vw;
+  width: 100%;
 `;
 
 const HeaderchannelRow = styled.div`
-  height: 82px;
+  height: 4vh;
   display: flex;
   // flex: 1 1 0%;
   margin-right: 23px;
   margin-left: 31px;
-  margin-top: 19px;
 `;
 
 export default HeaderBox;

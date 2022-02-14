@@ -17,10 +17,10 @@ function myteam(param, success, fail) {
     api.get(`/team/myteam/${param}`).then(success).catch(fail);
 }
 // 팀 소개 가져오기
-function detail(param, success, fail) {
-    api.get(`/team/showteam/${param}`).then(success).catch(fail);
+function detail(team_id, success, fail) {
+    api.get(`/team/showteam/${team_id}`).then(success).catch(fail);
 }
-// 팀 소개 가져오기
+// 팀 멤버 가져오기
 function bringTeamMembers(param, success, fail) {
     api.get(`/teammember/${param}`).then(success).catch(fail);
 }
@@ -29,21 +29,35 @@ function teamFeed(param,success, fail) {
     api.get(`/teamfeed/ourteamfeed/${param}`).then(success).catch(fail);
 }
 // Feed 작성
-function makeTeamFeed(team_id, profile_id, [content, imgfiles, generalfiles], success, fail) {
-    api.post(`teamfeed/${team_id}/${profile_id}`,
-      { content : content, imgfiles: null, generalfiles: null})
+function makeTeamFeed([teamId, profile_id, formData], success, fail) {
+    api.post(`teamfeed/${teamId}/${profile_id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
     .then(success)
     .catch(fail);
-    console.log(team_id, profile_id, [content, imgfiles, generalfiles], success, fail)
 }
 
-function teamBreakup(param, success, fail){
-    api.delete(`/team/${param}`).then(success).catch(fail);
+// 팀 Settings
+// 팀 이름
+function titleChange(profile_id, team_id, param, success, fail) {
+    api.put(`team/${profile_id}/${team_id}`, JSON.stringify({title: param})).then(success).catch(fail);
+    console.log(param, JSON.stringify(param), JSON.stringify({title: param}))
+}
+// 팀 멤버 방출
+function dischargeMembers(team_id, param, success, fail){
+    api.delete(`/teammember/${team_id}`, JSON.stringify({email: param})).then(success).catch(fail);
+    console.log(JSON.stringify({email: param}))
+}
+// 팀 삭제
+function teamBreakup(team_id, success, fail){
+    api.delete(`/team/${team_id}`).then(success).catch(fail);
 }
 function searchMyteam(param, success, fail){
     api.delete(`/team/${param}`).then(success).catch(fail);
 }
 
 export {
-    teamBreakup,searchMyteam, makeMyTeam, team, myteam, detail, teamFeed, makeTeamFeed, bringTeamMembers
+    teamBreakup,searchMyteam, makeMyTeam, team, myteam, detail, teamFeed, makeTeamFeed, bringTeamMembers, titleChange, dischargeMembers
 }
