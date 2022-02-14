@@ -49,7 +49,7 @@ public class MainController {
     private final ProfileService profileService;
 
 
-    @GetMapping("/testgo")
+    @GetMapping("testgo")
     public ResponseEntity<Map<String, Object>> testgo() {
         //System.out.println("11 :"+header);
         logger.info("test11");
