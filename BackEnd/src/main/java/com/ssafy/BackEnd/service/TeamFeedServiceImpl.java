@@ -59,26 +59,33 @@ public class TeamFeedServiceImpl implements TeamFeedService{
             System.out.println("들어왔다");
             List<TeamFeedFile> teamFeedFiles = teamFeedFileService.saveTeamFeedFiles(teamFeedDto.getTeamFeedFiles());
 
-
             for (TeamFeedFile teamFeedFile : teamFeedFiles) {
                 log.info(teamFeedFile.getOriginalFileName());
                 teamFeedFile.setTeam_feed(teamFeed);
                 teamFeedFileRepository.save(teamFeedFile);
             }
 
-
-            List<String> keywords = hashTagAlgorithm.strList(teamFeed.getContent());
+            List<String> keywords = hashTagAlgorithm.strList(teamFeed.getContent()); //새로운 팀피드 키워드
             List<TeamFeedKeyword> teamFeedKeywords = new ArrayList<>();
+
             for (String keyword : keywords) {
                 if (teamKeywordRepository.findTeamKeyword(keyword, teamFeed.getTeam()) == null) {
-                    TeamKeyword newTeamKeyword = TeamKeyword.builder().team(teamFeed.getTeam()).name(keyword).count(1).build();
+                    System.out.println("새로운 키워드");
+                    TeamKeyword newTeamKeyword = new TeamKeyword();
+                    newTeamKeyword.setName(keyword);
+                    newTeamKeyword.setCount(1);
+                    newTeamKeyword.setTeam(teamFeed.getTeam());
                     teamKeywordRepository.save(newTeamKeyword);
+
                     TeamFeedKeyword newTeamFeedKeyword = TeamFeedKeyword.builder().teamFeed(teamFeed).name(keyword).build();
                     teamFeedKeywordRepository.save(newTeamFeedKeyword);
                     teamFeedKeywords.add(newTeamFeedKeyword);
                 } else {
                     TeamKeyword findTeamKeyword = teamKeywordRepository.findTeamKeyword(keyword, teamFeed.getTeam());
+                    System.out.println(findTeamKeyword.getName() + " 같은키워드");
+                    System.out.println(findTeamKeyword.getCount() + "기존 수");
                     findTeamKeyword.setCount(findTeamKeyword.getCount() + 1);
+                    System.out.println(findTeamKeyword.getCount() + "새로운수");
                     TeamFeedKeyword findTeamFeedKeyword = teamFeedKeywordRepository.findTeamFeedKeyword(keyword, teamFeed.getTeamfeed_id());
                     if (findTeamFeedKeyword == null) {
                         TeamFeedKeyword newTeamFeedKeyword = TeamFeedKeyword.builder().teamFeed(teamFeed).name(keyword).build();

@@ -63,7 +63,7 @@ public class User implements UserDetails {
     private Profile profile;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
+    //@JsonIgnore
     private List<TeamMember> team_member = new ArrayList<>( );
 
     @Builder
