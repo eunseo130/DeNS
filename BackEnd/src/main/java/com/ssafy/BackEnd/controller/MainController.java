@@ -51,7 +51,7 @@ public class MainController {
 
     @GetMapping("/test11")
     public ResponseEntity<Map<String, Object>> test11(@RequestHeader String header ) {
-        System.out.println(header);
+        System.out.println("11 :"+header);
         logger.info("test11");
         System.out.println("teset11이에요");
         Map<String, Object> map = new HashMap<>();
