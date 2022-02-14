@@ -50,7 +50,7 @@ public class MainController {
 
 
     @GetMapping("/test11")
-    public ResponseEntity<Map<String, Object>> test11(@RequestHeader String header ) {
+    public ResponseEntity<Map<String, Object>> test11(@RequestHeader(value = "Authorization") String header ) {
         System.out.println("11 :"+header);
         logger.info("test11");
         System.out.println("teset11이에요");
