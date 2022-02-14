@@ -20,9 +20,7 @@ function putKeyword([id, keyword], success, fail) {
     .catch(fail)
 }
 function ImgUpload([id, formData], success, fail) {
-  for (var pair of formData.entries()) {
-    console.log(pair[0] + ', ' + pair[1])
-  }
+  console.log('check0')
   api
     .post(`/profile/update/image/${id}`, formData, {
       headers: {
@@ -31,6 +29,5 @@ function ImgUpload([id, formData], success, fail) {
     })
     .then(success)
     .catch(fail)
-
 }
 export { profileTest, profileUpdate, putKeyword, ImgUpload }
