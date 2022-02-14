@@ -145,8 +145,9 @@ public class ChatRoomController {
 
 
     @GetMapping("/room")
-    public String rooms(Model model) {
-        return "/chat/room";
+    public Iterable<ChatRoom> rooms() {
+        Iterable<ChatRoom> all = chatRoomRedisRepository.findAll();
+        return all;
     }
 
     @GetMapping("/rooms/{profileId}")
@@ -157,6 +158,7 @@ public class ChatRoomController {
         List<ChatRoom> result = new ArrayList<>();
         for (ChatRoom chatRoom : chatRooms) {
             if (chatRoom.getName().contains(profile.getName())) {
+                System.out.println(chatRoom.getName());
                 result.add(chatRoom);
             }
         }
@@ -172,11 +174,11 @@ public class ChatRoomController {
         return chatRoomRedisRepository.save(chatRoom);
     }
 
-    @GetMapping("/room/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable String roomId) {
-        model.addAttribute("roomId", roomId);
-        return "/chat/roomdetail";
-    }
+//    @GetMapping("/room/enter/{roomId}")
+//    public String roomDetail(Model model, @PathVariable String roomId) {
+//        model.addAttribute("roomId", roomId);
+//        return "/chat/roomdetail";
+//    }
 
     @GetMapping("/room/{roomId}")
     @ResponseBody
