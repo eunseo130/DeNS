@@ -63,7 +63,7 @@ public class ChatController {
     }
 
 
-    @GetMapping("messages/{roomId}")
+    @GetMapping("chat/messages/{roomId}")
     @ResponseBody
     public List<ChatMessage> messages(@PathVariable String roomId) {
         return chatMessageRedisRepository.findByRoomId(roomId);
