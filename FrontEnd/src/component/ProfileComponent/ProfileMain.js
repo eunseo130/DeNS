@@ -1,28 +1,28 @@
 import React, { useState, useEffect } from 'react'
-import { Outlet, useParams, Link } from 'react-router-dom'
+import { Outlet, useParams, useNavigate } from 'react-router-dom'
 import {
   profileTest,
   profileUpdate,
   putKeyword,
   ImgUpload,
 } from '../../api/profile'
-import { TagCloud } from 'react-tagcloud'
-import { Container, Row, Button, Stack, Image } from 'react-bootstrap'
+import { Container, Row, Stack } from 'react-bootstrap'
 import ProfileGit from './ProfileGit'
 import ProfileTagCloud from './ProfileTagCloud'
 import ProfileImage from './ProfileImage'
 import ProfileInfo from './ProfileInfo'
 import ProfileKeyword from './ProfileKeyword'
+
 export default function ProfileMain() {
   const [inputs, setInputs] = useState({
     image: '',
-    namecosn: '',
+    name: '',
     position: ' ',
     stack: '',
     email: '',
     keyword: '',
     edit: false,
-    gitId: 'sss',
+    gitId: '',
     git: true,
   })
   const { image, name, position, stack, email, edit, keyword, gitId, git } =
@@ -30,6 +30,9 @@ export default function ProfileMain() {
   const [keywords, setKeywords] = useState([])
   const { id } = useParams()
   const [files, setFiles] = useState('')
+  const [fileImage, setFileImage] = useState('')
+  let navigate = useNavigate()
+  
   useEffect(
     () =>
       profileTest(
@@ -81,10 +84,10 @@ export default function ProfileMain() {
           git: !git,
           edit: !edit,
         })
-        setKeywords([
-          { value: position, count: 10000 },
-          { value: stack, count: 10000 },
-        ])
+        // setKeywords([
+        //   { value: position, count: 10000 },
+        //   { value: stack, count: 10000 },
+        // ])
       },
       (error) => console.log(error)
     )
@@ -102,7 +105,6 @@ export default function ProfileMain() {
       ...inputs,
       [name]: value,
     })
-    console.log(gitId)
   }
 
   function putKeywords() {
@@ -133,27 +135,21 @@ export default function ProfileMain() {
     setFiles(e.target.files)
     setFileImage(URL.createObjectURL(e.target.files[0]))
   }
-  useEffect(() => {}, [files])
 
   function ImageUpload(e) {
     const formData = new FormData()
     formData.append('file', files[0])
-    console.log(files[0])
-    for (var pair of formData.entries()) {
-      console.log(pair[0] + ', ' + pair[1])
-    }
 
     ImgUpload(
       [id, formData],
       (res) => {
         setInputs({ ...inputs, image: res.data })
         setFiles('')
+        window.location.replace(`/auth/profile/${id}`)
       },
       (error) => console.log(error)
     )
   }
-
-  const [fileImage, setFileImage] = useState('')
 
   return (
     <div>
@@ -161,28 +157,30 @@ export default function ProfileMain() {
         <Row className="justify-content-md-center">
           <ProfileTagCloud keywords={keywords} />
         </Row>
-        <Stack direction="horizontal" gap={3}>
-          <ProfileImage
-            id={id}
-            image={image}
-            fileImage={fileImage}
-            onLoad={onLoad}
-            ImageUpload={ImageUpload}
-          />
-
-          <ProfileInfo
-            id={id}
-            name={name}
-            edit={edit}
-            position={position}
-            stack={stack}
-            email={email}
-            onSave={onSave}
-            update={update}
-            onEdit={onEdit}
-          />
-          <div className="vr" />
-          <ProfileGit edit={edit} gitId={gitId} onSave={onSave} />
+        <Stack gap={3}>
+          <Row>
+            <ProfileImage
+              id={id}
+              image={image}
+              fileImage={fileImage}
+              onLoad={onLoad}
+              ImageUpload={ImageUpload}
+            />
+          </Row>
+          <Row className="justify-content-md-center">
+            <ProfileInfo
+              id={id}
+              name={name}
+              edit={edit}
+              position={position}
+              stack={stack}
+              email={email}
+              onSave={onSave}
+              update={update}
+              onEdit={onEdit}
+            />
+            <ProfileGit edit={edit} gitId={gitId} onSave={onSave} />
+          </Row>
         </Stack>
 
         <Row>

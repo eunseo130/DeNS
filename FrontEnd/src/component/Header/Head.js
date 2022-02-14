@@ -21,7 +21,7 @@ export default function Head() {
 }
 
 const Profileimage = styled.span`
-  position: absolute;   
+  position: absolute;
   background-color: rgba(244,106,114,1);
   left: 95vw;
 `;

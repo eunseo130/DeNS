@@ -1,6 +1,5 @@
 import React from 'react'
-import { TagCloud } from 'react-tagcloud'
-import { Container, Row, Button, Stack, Image } from 'react-bootstrap'
+import { Button, Image } from 'react-bootstrap'
 export default function ProfileImage({
   id,
   image,
@@ -10,28 +9,34 @@ export default function ProfileImage({
 }) {
   return (
     <div>
-      {!image ? (
-        <Image
-          width={180}
-          height={150}
-          src={require('./profile_default.png')}
-          roundedCircle
-        />
-      ) : (
-        <Image
-          width={180}
-          height={150}
-          src={`http://3.36.131.59:2222/profile/image/${id}`}
-          roundedCircle
-        />
-      )}
-      {fileImage && (
-        <Image
-          alt="sample"
-          src={fileImage}
-          style={{ margin: 'auto' }}
-          thumbnail
-        />
+      {fileImage?(
+        <div>
+          <Image
+            alt="sample"
+            src={fileImage}
+            width={180}
+            height={160}
+            thumbnail
+          />
+        </div>
+      )  :(
+        <div>
+          {(
+            <Image
+              width={180}
+              height={160}
+              src={`http://3.36.131.59:2222/profile/image/${id}`}
+              roundedCircle
+            />
+          ) && (
+            <Image
+              width={180}
+              height={160}
+              src={require('./profile_default.png')}
+              roundedCircle
+            />
+          )}
+        </div>
       )}
 
       <form>
