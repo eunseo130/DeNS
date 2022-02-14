@@ -155,6 +155,7 @@ public class ChatRoomController {
     public Iterable<ChatRoom> room(@PathVariable Long profileId) {
         Iterable<ChatRoom> chatRooms = chatRoomRedisRepository.findAll();
         Profile profile = profileRepository.findById(profileId).get();
+        System.out.println(profileId);
         List<ChatRoom> result = new ArrayList<>();
         for (ChatRoom chatRoom : chatRooms) {
             if (chatRoom.getName().contains(profile.getName())) {
@@ -162,6 +163,8 @@ public class ChatRoomController {
                 result.add(chatRoom);
             }
         }
+        System.out.println("============result===========");
+        System.out.println(result);
         return result;
     }
 
