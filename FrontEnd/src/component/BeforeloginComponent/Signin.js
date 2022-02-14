@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/userreduce';
 import { store } from '../..';
 import {useCookies} from 'react-cookie';
-import { login, signup } from '../../api/test';
+import { signin, signup } from '../../api/test';
 function Login() {
   const dispatch = useDispatch();
   const [cookies, setCookie] = useCookies(['token']);
@@ -37,7 +37,7 @@ function Login() {
   
   const LoginConsole = () => {
     console.log(input);
-    login(input, (response) => { console.log(response.data) }, (error) => { console.log(error) });
+    signin(input, (response) => { console.log(response.data) }, (error) => { console.log(error) });
     let data = 'testtestsetsetset';
     dispatch(loginUser(data));
     setCookie('token', data);
