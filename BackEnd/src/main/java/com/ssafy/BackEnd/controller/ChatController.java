@@ -3,7 +3,6 @@ import com.ssafy.BackEnd.entity.ChatMessage;
 
 import com.ssafy.BackEnd.repository.ChatMessageRedisRepository;
 import com.ssafy.BackEnd.repository.ChatMessageRepository;
-import com.ssafy.BackEnd.repository.ChatRoomRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.JwtService;
 import com.ssafy.BackEnd.service.JwtServiceImpl;
@@ -60,11 +59,12 @@ public class ChatController {
         redisTemplate.convertAndSend(channelTopic.getTopic(), message);
         if (!message.getSender().equals("[알림]")) {
             ChatMessage save = chatMessageRedisRepository.save(message);
+            System.out.println(save.getMessage());
         }
     }
 
 
-    @GetMapping("messages/{roomId}")
+    @GetMapping("chat/messages/{roomId}")
     @ResponseBody
     public List<ChatMessage> messages(@PathVariable String roomId) {
         return chatMessageRedisRepository.findByRoomId(roomId);

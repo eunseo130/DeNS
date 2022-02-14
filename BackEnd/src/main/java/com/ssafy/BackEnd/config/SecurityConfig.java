@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.BeanIds;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,7 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     private final JwtServiceImpl jwtService;
 
-    @Bean
+    @Bean(BeanIds.AUTHENTICATION_MANAGER)
     @Override
     public AuthenticationManager authenticationManagerBean() throws Exception {
         return super.authenticationManagerBean();
@@ -34,24 +35,24 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
         web.ignoring().antMatchers("/swagger-resources/**",
-                "/swagger-ui.html", "/webjars/**", "/swagger/**", "/signin", "/signup");
+                "/swagger-ui.html", "/webjars/**", "/swagger/**", "/signin", "/signup", "/chat/**");
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         System.out.println("여기니?");
-        http.httpBasic().disable();
+        http.cors().and().httpBasic().disable();
         //http.csrf().disable().formLogin().loginPage("/aaaaa"); // 페이지를 못가게 하는
 
         http.csrf().disable()
                 .authorizeRequests()
                 .antMatchers("/admin/**").hasRole("ADMIN")
-                .antMatchers("test33/**").hasRole("USER")
-                .antMatchers("/test11").permitAll()
-                .antMatchers("/team33").permitAll() //.hasRole("USER")
+                .antMatchers("/team/**").permitAll() //.hasRole("USER")
                 .antMatchers("/dashboard/**").permitAll()
                 .antMatchers("/signin").permitAll()
                 .antMatchers("/signup").permitAll()
+                .antMatchers("/profile").permitAll()
+                .antMatchers("/chat/**").permitAll()
                 .and()
                 .addFilterBefore(new JwtAuthenticationFilter(jwtService), UsernamePasswordAuthenticationFilter.class);
 
