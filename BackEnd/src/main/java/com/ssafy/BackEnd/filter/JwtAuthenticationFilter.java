@@ -36,7 +36,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 //        if(token != null) newToken = token.substring(8, token.length()-1);
 
         //System.out.println("new token : "+token);
-        System.out.println("secufilter : "+SecurityContextHolder.getContext().getAuthentication());
+
         // 유효한 토큰인지 확인합니다.
         if (token != null && jwtService.validateToken(token)) {
             try{
@@ -44,6 +44,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
                 System.out.println("intercept");
+                System.out.println("secufilter : "+SecurityContextHolder.getContext().getAuthentication());
                 // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
                 //Authentication authentication = jwtService.getAuthentication(token);
 //                System.out.println("auth1 : "+authentication.getName());
