@@ -5,6 +5,7 @@ import com.ssafy.BackEnd.entity.Profile;
 //import com.ssafy.BackEnd.entity.Salt;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.entity.UserIdentity;
+import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -28,16 +29,14 @@ import java.util.logging.Logger;
 public class AuthServiceImpl implements AuthService{
 
 
-    @Autowired
     private final EmailService emailService;
 
-    @Autowired
     private final RedisUtil redisUtil;
 
-    @Autowired
     private final UserRepository userRepository;
 
-    @Autowired
+    private final ProfileRepository profileRepository;
+
     private final SaltUtil saltUtil;
     private String key;
 
@@ -84,6 +83,7 @@ public class AuthServiceImpl implements AuthService{
                 .image(null)
                 .createDate(LocalDateTime.now())
                 .build();
+        profileRepository.save(profile);
         user.setProfile(profile);
         userRepository.save(user);
 

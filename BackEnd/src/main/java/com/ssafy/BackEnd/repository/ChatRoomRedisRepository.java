@@ -9,4 +9,6 @@ import java.util.List;
 public interface ChatRoomRedisRepository extends CrudRepository<ChatRoom, String> {
 
     ChatRoom findByRoomId(String roomId);
+
+    ChatRoom findByName(String name);
 }
