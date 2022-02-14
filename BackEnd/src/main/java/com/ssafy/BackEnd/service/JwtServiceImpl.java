@@ -88,6 +88,7 @@ public class JwtServiceImpl { //implements JwtService {
         int cnt = 0;
         while (!req.getHeaderNames().hasMoreElements() || cnt <10){
             System.out.println("r header : "+req.getHeaderNames().nextElement());
+            cnt++;
         }
         String token = req.getHeader("Authorization");
         String newToken = null;
