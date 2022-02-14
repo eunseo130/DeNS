@@ -177,7 +177,7 @@ public class ChatRoomController {
         System.out.println(profileId2);
         Profile user2 = profileRepository.findById(profileId2).get();
         ChatUserDto chatuser2 = new ChatUserDto();
-        ChatUserDto chatUser2 = chatuser2.builder().profileId(profileId1).name(user2.getName()).build();
+        ChatUserDto chatUser2 = chatuser2.builder().profileId(profileId2).name(user2.getName()).build();
         System.out.println(user1.getName());
         System.out.println(user2.getName());
         ChatRoom chatRoom = ChatRoom.create(chatUser1, chatUser2);
