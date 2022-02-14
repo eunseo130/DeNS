@@ -12,9 +12,10 @@ import Back from './component/commonComponent/Back'
 import TeamDetail from './component/TeamComponent/TeamDetail'
 import TeamSettings from './component/TeamComponent/TeamSettings'
 import CreateTeam from './component/TeamComponent/CreateTeam'
+import TeamIndex from './component/TeamComponent/TeamIndex'
+import TeamMain from './component/TeamComponent/TeamMain'
 
 import Dashboard from './component/dashboardComponent/Dashboard'
-import Messanger from './component/MessengerComponent/Messenger'
 
 import Search from './component/SearchComponent/Search'
 import Searchid from './component/SearchComponent/Searchid'
@@ -57,7 +58,7 @@ const App = () => {
       path: '/auth',
       element: <Back />,
       children: [
-        { index: true, elelment: <Dashboard /> },
+        { index: true, element: <Dashboard /> },
         { path: '/auth/dashboard', element: <Dashboard /> },
         {
           path: '/auth/profile/:id',
@@ -70,25 +71,22 @@ const App = () => {
             },
           ],
         },
+
         {
-          path: '/auth/createteam',
-          element: <CreateTeam />,
+          path: '/auth/team',
+          element: <TeamMain />,
           children: [
-            { path: '/auth/createteam', element: <CreateTeam /> },
-          ],
-        },
-        {
-          path: '/auth/team/:id',
-          element: <TeamDetail/>,
-          children: [
-            { path: '/auth/team/:id/setting', element: <TeamSettings /> },
+            { index: true, element: <TeamIndex /> },
+            { path: '/auth/team/maketeam', element: <CreateTeam /> },
+            { path: '/auth/team/:id', element: <TeamDetail /> },
+            { path: '/auth/team/:id/settings', element: <TeamSettings /> },
           ],
         },
         {
           path: '/auth/search',
           element: <Search />,
           children: [
-            { index: true, elelment: <Search /> },
+            { index: true, element: <Search /> },
             { path: '/auth/search/:teamid', element: <Searchid /> },
           ],
         },
@@ -96,7 +94,7 @@ const App = () => {
           path: '/auth/group',
           element: <Group />,
           children: [
-            { index: true, elelment: <Group /> },
+            { index: true, element: <Group /> },
             { path: '/auth/group/start', element: <Groupstart /> },
             { path: '/auth/group/channel', element: <Groupchannel /> },
             { path: '/auth/group/link', element: <Grouplink /> },
@@ -106,7 +104,7 @@ const App = () => {
           path: '/auth/messenger',
           element: <Messenger />,
           children: [
-            { index: true, elelment: <Messenger /> },
+            { index: true, element: <Messenger /> },
             { path: '/auth/messenger/:id', element: <Message /> },
           ],
         },

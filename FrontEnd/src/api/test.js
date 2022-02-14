@@ -10,7 +10,7 @@ function signup(param, success, fail) {
   api.post(`/signup`, param).then(success).catch(fail)
 }
 
-function login(param, success, fail) {
+function signin(param, success, fail) {
   api.post(`/signin`, JSON.stringify(param)).then(success).catch(fail)
 }
 
@@ -60,7 +60,7 @@ export {
   getMember,
   test22,
   signup,
-  login,
+  signin,
   dummytest,
   dummytest2,
   dummytest3,

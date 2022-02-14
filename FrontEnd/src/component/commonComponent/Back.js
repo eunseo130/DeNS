@@ -13,26 +13,26 @@ export default function Back(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const [cookies, setCookie] = useCookies(['token']);
-    useEffect(() => {
-        const foo = store.getState().user.auth;
-        const tokencheck = store.getState().user.token;
+    // useEffect(() => {
+    //     const foo = store.getState().user.auth;
+    //     const tokencheck = store.getState().user.token;
 
-        if (foo === false) {
-            if (cookies.token) {
-                dispatch(loginUser(cookies.token));
-                console.log("check");
-            } else {
-                alert('로그인이 필요합니다');
-                navigate('/signin')
-            }
-        }
-        getMember(``, (response) => {
-            console.log(response);
-        }, (error) => {
-            console.log(error);
-        })
+    //     if (foo === false) {
+    //         if (cookies.token) {
+    //             dispatch(loginUser(cookies.token));
+    //             console.log("check");
+    //         } else {
+    //             alert('로그인이 필요합니다');
+    //             navigate('/signin')
+    //         }
+    //     }
+    //     getMember(``, (response) => {
+    //         console.log(response);
+    //     }, (error) => {
+    //         console.log(error);
+    //     })
 
-    }, []);
+    // }, []);
 
     // console.log(dispatch());
 

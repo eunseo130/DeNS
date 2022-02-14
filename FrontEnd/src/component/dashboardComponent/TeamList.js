@@ -25,7 +25,7 @@ export default function TeamList() {
         (error) => {
             console.log("오류가 됨.", (error));
         });
-    });
+    }, []);
 
     return (
         <div>

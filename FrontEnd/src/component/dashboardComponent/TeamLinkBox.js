@@ -9,7 +9,7 @@ export default function TeamLinkBox(props) {
     return (
         <Box>
             <Link to={{
-                pathname:`/afterlogin/team/${props.team_id}`,                
+                pathname:`/auth/team/${props.team_id}`,                
             }}
             state={{
                 team_id: props.team_id,

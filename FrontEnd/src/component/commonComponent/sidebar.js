@@ -13,7 +13,7 @@ export default function Sidebar() {
     return(
         <Container>
             <Link to="/auth/dashboard"><Pos>대시보드</Pos></Link>
-            <Link to="/auth/team/3"><Pos>팀페이지</Pos></Link>
+            <Link to="/auth/team/"><Pos>팀페이지</Pos></Link>
             <Link to="/auth/search"><Pos>검색</Pos></Link>
             <Link to="/auth/messenger"><Pos>메신저</Pos></Link>
         </Container>
@@ -24,7 +24,7 @@ export default function Sidebar() {
 const Container = styled.div`
 background:white;
 float:left;
-height:100vh;
+height:100%;
 width:8vw;
 `
 

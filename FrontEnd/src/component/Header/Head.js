@@ -13,9 +13,9 @@ export default function Head() {
 
     return (
         <>
-            <span>채널명</span>
-            <Profileimage onClick={clickCheck}>check</Profileimage><br/><br/><br/>
-            {drop ? <ProfileDrop><Link to="/afterlogin/profile">프로필가기</Link></ProfileDrop> : ''}
+          <span>채널명</span>
+          <Profileimage onClick={clickCheck}>check</Profileimage><br/><br/><br/>
+          {drop ? <ProfileDrop><Link to="/afterlogin/profile">프로필가기</Link></ProfileDrop> : ''}
         </>
     );
 }

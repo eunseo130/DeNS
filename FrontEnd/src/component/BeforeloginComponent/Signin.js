@@ -5,31 +5,42 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/userreduce';
 import { store } from '../..';
 import {useCookies} from 'react-cookie';
+import { signin } from '../../api/test'
+
 function Login() {
-  const [name, setName] = useState('');
-  const dispatch = useDispatch();
+  const [inputs, setInputs] = useState({
+    email: '',
+    password: '',
+  });
   const [cookies, setCookie, removeCookie] = useCookies(['token']);
-
-  const [password, setPassword] = useState('');
-
   let navigate = useNavigate();
   
-  const onChangeId = (e) => {
-    setName(e.target.value);
-  };
+  const changeCheck = (e) => {
+    const { name, value } = e.target;
+    console.log(name, value)
+    setInputs({
+        ...inputs,
+        [name]: value,
+    });
+  }
   
-  const onChangePw = (e) => {
-    setPassword(e.target.value)
-  };
-
+  
   const LoginConsole = () => {
-    console.log([name, password]);
-    dispatch(loginUser());
-    const cookieCheck = store.getState().user.token;
-    let expires = new Date();
-    expires.setMinutes(expires.getMinutes() + 1);
-    removeCookie('token', { expires: 0 });
-    setCookie('token', cookieCheck, { path: '/auth', expires });
+    // dispatch(loginUser());
+    // const cookieCheck = store.getState().user.token;
+    // let expires = new Date();
+    // expires.setMinutes(expires.getMinutes() + 1);
+    // removeCookie('token', { expires: 0 });
+    // setCookie('token', cookieCheck, { path: '/auth', expires });
+    signin(inputs,
+      (response) => {
+        console.log(response)
+      },
+      (error) => {
+        console.log(error)
+      } 
+      )
+    
     navigate('/auth');
   };
   
@@ -37,14 +48,14 @@ function Login() {
       <LoginBox>
         <H3>로그인</H3>
         <Container>
-          <Name>이름</Name>
-          <InputSquare  placeholder="이름을 입력해주세요." onChange={onChangeId} value={name}/>
+          <Name>이메일</Name>
+          <InputSquare  name="email" placeholder="이메일을 입력해주세요."  onChange={changeCheck}/>
           {/* <input placeholder="이름을 입력해주세요." onChange={(e) => Setname(e.target.value)}/>      */}
         </Container>
 
         <Container>
           <Name>비밀번호</Name>
-          <InputSquare  placeholder="비밀번호" onChange={onChangePw} value={password}/>
+          <InputSquare name="password" placeholder="비밀번호" onChange={changeCheck}/>
         </Container>
         <Btn onClick={LoginConsole}>로그인</Btn>
         <SignUpBtn onClick={() => navigate("/signup") }>회원가입</SignUpBtn>
