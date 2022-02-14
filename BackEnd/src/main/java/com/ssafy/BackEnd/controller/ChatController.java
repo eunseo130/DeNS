@@ -59,6 +59,7 @@ public class ChatController {
         redisTemplate.convertAndSend(channelTopic.getTopic(), message);
         if (!message.getSender().equals("[알림]")) {
             ChatMessage save = chatMessageRedisRepository.save(message);
+            System.out.println(save.getMessage());
         }
     }
 
