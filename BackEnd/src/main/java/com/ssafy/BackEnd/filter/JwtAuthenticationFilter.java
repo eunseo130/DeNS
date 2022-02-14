@@ -27,7 +27,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         // 헤더에서 JWT 를 받아옵니다.
         System.out.println("------------------filter---------------------");
         System.out.println("req : "+request);
-        SecurityContextHolder.getContext().setAuthentication(null); // 로그아웃 때 사용하자
+        //SecurityContextHolder.getContext().setAuthentication(null); // 로그아웃 때 사용하자
         String token = jwtService.resolveToken((HttpServletRequest) request);
         System.out.println("filter token : "+token);
 //        String newToken = null;
