@@ -96,7 +96,7 @@ public class JwtServiceImpl { //implements JwtService {
 //            System.out.println("name : "+req.getHeaderNames().nextElement());
 //        }
 //        System.out.println("header name : "+req.getHeaderNames());
-        if(token != null) newToken = token.substring(8, token.length()-1);
+        if(token != null) newToken = token.substring(7, token.length());
         System.out.println("newtk : "+newToken);
         return newToken;
     }
