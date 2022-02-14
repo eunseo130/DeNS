@@ -49,8 +49,8 @@ export default function ProfileMain() {
             gitId: res.data.git_id,
           })
           let words = [
-            { value: res.data.position, count: 10000 },
-            { value: res.data.stack, count: 10000 },
+            { value: res.data.position, count: 3 },
+            { value: res.data.stack, count: 3 },
           ]
           const keywordObjs = res.data.profile_keyword
           keywordObjs.forEach((keywordObj) => {

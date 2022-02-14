@@ -1,9 +1,11 @@
+import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Outlet } from 'react-router-dom';
 import { store } from '../..';
-import { getMember } from '../../api/test';
+import { getMember, test11 } from '../../api/test';
+import { API_BASE_URL } from '../../config';
 import { authUser, loginUser } from '../../redux/userreduce';
 import HeaderBox from './HeaderBox';
 import Sidebar from './sidebar';
@@ -12,22 +14,19 @@ import Sidebar from './sidebar';
 export default function Back(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [cookies, setCookie] = useCookies(['token']);
+    const token = useSelector(state => state.user.token);
+    const [cookies] = useCookies(['token']);
     useEffect(() => {
-        const foo = store.getState().user.auth;
-        const tokencheck = store.getState().user.token;
-        //redux에 값이 있는가
-        if (foo === false) {
-            //쿠키에 token값이 잇는가
-            if (cookies.token) {
-                //리덕스에 저장.
-                dispatch(loginUser(cookies.token));
-                //param으로 검색한 사용자정보와 token에 저장된 사용자정보가 같은지 구분을 할 수 있음.
-            } else {
-                alert('로그인이 필요합니다');
-                navigate('/signin')
+        dispatch(loginUser(cookies));
+        // console.log(cookies.token);
+        const authAxios = axios.create({
+            baseURL: API_BASE_URL,
+            headers: {
+                Authorization: `Bearer "${cookies.token}"`,
+                withCredentials : true,
             }
-        }
+        })
+        authAxios.get(`test11`, (res) => { console.log(res) }, (error) => { console.log(error) });
     }, []);
 
     // console.log(dispatch());
@@ -35,8 +34,8 @@ export default function Back(props) {
     return (
         <>
         <HeaderBox />
-            <Sidebar />
-            <div className='tewst' style={{ backgroundColor:'#fde1e36b' }}>
+        <Sidebar />
+        <div className='tewst' style={{ backgroundColor:'#fde1e36b' }}>
                 <Outlet />
         </div>
         </>

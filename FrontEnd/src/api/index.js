@@ -1,4 +1,5 @@
 import axios from "axios";
+import { store } from '..';
 import { API_BASE_URL } from "../config";
 
 function apiInstance() {
@@ -11,4 +12,9 @@ function apiInstance() {
     });
     return instance;
 }
+
+
+
+
+
 export { apiInstance };

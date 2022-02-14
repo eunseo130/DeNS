@@ -5,11 +5,13 @@ import { useDispatch, useSelector } from 'react-redux';
 import { loginUser } from '../../redux/userreduce';
 import { store } from '../..';
 import {useCookies} from 'react-cookie';
-import { signin, signup } from '../../api/test';
+import { signin, signup, test11 } from '../../api/test';
+import axios from 'axios';
+import { apiInstance } from '../../api';
 function Login() {
   const dispatch = useDispatch();
   const [cookies, setCookie] = useCookies(['token']);
-
+  const token = useSelector(state => state);
   let navigate = useNavigate();
   
   const [input, setInput] = useState({
@@ -19,8 +21,9 @@ function Login() {
   // useEffect(() => { console.log(input) }, [input]);
 
   useEffect(() => {
-    console.log(cookies);
-    console.log(store.getState("token"));
+    // console.log("sasadfasdffads");
+    // console.log(cookies);
+    // console.log(store.getState("token"));
   },[]);
   
   
@@ -31,20 +34,23 @@ function Login() {
       [name]: value,
     });
   }
-  
-  
-  
-  
+
   const LoginConsole = () => {
-    console.log(input);
-    signin(input, (response) => { console.log(response.data) }, (error) => { console.log(error) });
-    let data = 'testtestsetsetset';
-    dispatch(loginUser(data));
-    setCookie('token', data);
-    console.log(store.getState("token"));
-    navigate(`/auth`);
+    // console.log(input);
+    signin(input, (response) => {
+    //  console.log(response.data)
+    //  console.log(response.data["access-token"])
+
+      console.log(dispatch(loginUser(response.data["access-token"])));
+      console.log(store.getState());
+      setCookie('token', store.getState().user.token);
+      // console.log(store.getState().user.token);
+      navigate(`/auth`);
+    }, (error) => {
+      console.log(error)
+    });
+    console.log(cookies);
   };
-  
     return (
       <LoginBox>
         <H3>로그인</H3>

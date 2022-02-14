@@ -6,7 +6,7 @@ const AUTH_USER = 'AUTH_USER';
 
 
 //action creater
-export const loginUser = () => ({ type:LOGIN_USER, token:"testtest"});
+export const loginUser = (data) => ({ type:LOGIN_USER, token:data, auth:true});
 
 export const logoutUser = () => ({ type: LOGOUT_USER });
 
@@ -21,19 +21,18 @@ const initState = {
 //reducer
 const user = (state = initState, action) => {
     switch (action.type) {
-        case LOGIN_USER:
-        console.log("login");
-        return {
+        case "LOGIN_USER":
+            return {
             token: action.token,
             auth : true
             };        
-        case LOGOUT_USER:
+        case "LOGOUT_USER":
             console.log("logout");
             return {
                 token: '',
                 auth: false
             };
-        case AUTH_USER:
+        case "AUTH_USER":
             return state.auth;
         default:
             console.log("default");
