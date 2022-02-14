@@ -3,7 +3,6 @@ import com.ssafy.BackEnd.entity.ChatMessage;
 
 import com.ssafy.BackEnd.repository.ChatMessageRedisRepository;
 import com.ssafy.BackEnd.repository.ChatMessageRepository;
-import com.ssafy.BackEnd.repository.ChatRoomRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.JwtService;
 import com.ssafy.BackEnd.service.JwtServiceImpl;
