@@ -46,7 +46,7 @@ public class Profile implements Serializable {
     List<UserFeed> user_feed = new ArrayList<>();
 
     @OneToMany(mappedBy = "profile", cascade = CascadeType.ALL)
-    @JsonIgnore
+//    @JsonIgnore
     List<ProfileKeyword> profile_keyword = new ArrayList<>();
 
     @Builder
