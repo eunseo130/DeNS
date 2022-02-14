@@ -26,7 +26,7 @@ const Profileimage = styled.span`
   left: 95vw;
 `;
 
-const ProfileDrop = styled.p`
+const ProfileDrop = styled.div`
   position: absolute;   
   background-color: rgba(244,106,114,1);
   left: 95vw;

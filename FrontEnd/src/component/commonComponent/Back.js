@@ -16,7 +16,6 @@ export default function Back(props) {
     useEffect(() => {
         const foo = store.getState().user.auth;
         const tokencheck = store.getState().user.token;
-        console.log(foo, tokencheck);
         //redux에 값이 있는가
         if (foo === false) {
             //쿠키에 token값이 잇는가

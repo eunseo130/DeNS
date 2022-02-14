@@ -45,7 +45,8 @@ const App = () => {
       path: '/',
       element: <Firstpage />,
       children: [
-        { index: true, element: <Firstpage /> },
+        // { index: true, element: <Firstpage /> },
+        { index: true, element: <Signin /> },
         { path: '/signin', element: <Signin /> },
         { path: '/signup', element: <Signup /> },
         { path: '/password', element: <Password /> },

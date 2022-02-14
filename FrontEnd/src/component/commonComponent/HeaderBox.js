@@ -21,7 +21,7 @@ const Container = styled.div`
 const HeaderchannelRow = styled.div`
   height: 82px;
   display: flex;
-  flex: 1 1 0%;
+  // flex: 1 1 0%;
   margin-right: 23px;
   margin-left: 31px;
   margin-top: 19px;
