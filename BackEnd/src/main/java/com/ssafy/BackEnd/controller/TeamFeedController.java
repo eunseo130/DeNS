@@ -102,7 +102,7 @@ public class TeamFeedController {
 
     @PutMapping("/{teamfeed_id}/{profile_id}")
     @ApiOperation(value = "팀 피드 수정")
-    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id, @PathVariable Long profile_id, @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) {
+    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id, @PathVariable Long profile_id, @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) throws IOException {
         //        TeamFeed teamFeed = teamFeedDto.createTeamFeed(teamFeedDto);
         if (bindingResult.hasErrors()) {
             log.info("bindingResult : {}", bindingResult.getFieldError());

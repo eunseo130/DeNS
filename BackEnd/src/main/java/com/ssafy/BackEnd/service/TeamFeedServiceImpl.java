@@ -107,12 +107,20 @@ public class TeamFeedServiceImpl implements TeamFeedService{
 
 
     @Override
-    public TeamFeed modifyTeamFeed(TeamFeed teamFeed, Long profile_id, TeamFeedDto teamFeedDto){
+    public TeamFeed modifyTeamFeed(TeamFeed teamFeed, Long profile_id, TeamFeedDto teamFeedDto) throws IOException {
         Profile profile = profileRepository.findById(profile_id).get();
 
         if(!teamFeed.getWriter().equals(profile.getName())) { //피드작성자와 프로필작성자 이름이 같지 않다면
             System.out.println("권한이 없습니다");
             throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
+        }
+
+        List<TeamFeedFile> teamFeedFiles = teamFeedFileService.saveTeamFeedFiles(teamFeedDto.getTeamFeedFiles());
+
+        for (TeamFeedFile teamFeedFile : teamFeedFiles) {
+            log.info(teamFeedFile.getOriginalFileName());
+            teamFeedFile.setTeam_feed(teamFeed);
+            teamFeedFileRepository.save(teamFeedFile);
         }
 
         teamFeed.setContent(teamFeedDto.getContent());
