@@ -7,6 +7,7 @@ import com.ssafy.BackEnd.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -27,6 +28,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         // 헤더에서 JWT 를 받아옵니다.
         System.out.println("------------------filter---------------------");
         System.out.println("req : "+request);
+        System.out.println("header : "+request);
         //SecurityContextHolder.getContext().setAuthentication(null); // 로그아웃 때 사용하자
         String token = jwtService.resolveToken((HttpServletRequest) request);
         System.out.println("filter token : "+token);

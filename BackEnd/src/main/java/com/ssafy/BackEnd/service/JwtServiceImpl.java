@@ -84,6 +84,8 @@ public class JwtServiceImpl { //implements JwtService {
 
     // Request의 Header에서 token 값을 가져옵니다.
     public String resolveToken(HttpServletRequest req) {
+        System.out.println("-------------resolvetk--------------");
+        System.out.println("req header names : "+req.getHeaderNames());
         String token = req.getHeader("Authorization");
         String newToken = null;
 //        while(req.getHeaderNames().hasMoreElements()){
@@ -91,6 +93,7 @@ public class JwtServiceImpl { //implements JwtService {
 //        }
 //        System.out.println("header name : "+req.getHeaderNames());
         if(token != null) newToken = token.substring(8, token.length()-1);
+        System.out.println("newtk : "+newToken);
         return newToken;
     }
 
