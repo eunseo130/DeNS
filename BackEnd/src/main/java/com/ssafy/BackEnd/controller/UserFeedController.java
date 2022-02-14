@@ -3,6 +3,8 @@ package com.ssafy.BackEnd.controller;
 import com.ssafy.BackEnd.dto.UserFeedDto;
 import com.ssafy.BackEnd.entity.FileType;
 import com.ssafy.BackEnd.entity.Profile;
+import com.ssafy.BackEnd.exception.CustomException;
+import com.ssafy.BackEnd.exception.ErrorCode;
 import com.ssafy.BackEnd.repository.UserFeedRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.FileStore;
@@ -14,6 +16,8 @@ import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.User;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.core.io.UrlResource;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -34,6 +38,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Slf4j
 public class UserFeedController {
+    private static final Logger logger = LogManager.getLogger(UserFeedController.class);
+
 
     private final UserFeedRepository userFeedRepository;
     private final UserFeedService userFeedService;
@@ -47,27 +53,42 @@ public class UserFeedController {
     @GetMapping
     public ResponseEntity<List<UserFeed>> findAllUserFeed() {
         List<UserFeed> userfeeds = userFeedService.showFindUserFeedList();
+        if (userfeeds.isEmpty()) {
+            logger.info("NULL USERFEEDS");
+        }
 
+        logger.info("INFO SUCCESS");
         return new ResponseEntity<List<UserFeed>>(userfeeds, HttpStatus.OK);
     }
 
     // Update
-    @PutMapping("/userfeed_id")
+    @PutMapping("/{userfeed_id}")
     @ApiOperation(value = "유저 피드 수정")
-    public ResponseEntity<UserFeed> modifyUserFeed(@RequestBody UserFeedDto userFeedDto) {
+    public ResponseEntity<UserFeed> modifyUserFeed(@RequestBody UserFeedDto userFeedDto, @PathVariable long userfeed_id) {
         UserFeed userFeed = userFeedDto.createUserFeed();
+        if (userFeed == null) {
+            logger.error("NO USERFEED INFO");
+            throw new CustomException(ErrorCode.NO_DATA_ERROR);
+        }
+
         userFeedService.modifyUserFeed(userFeed.getUserfeed_id(), userFeed);
 
+        logger.info("INFO SUCCESS");
         return new ResponseEntity<UserFeed>(userFeed, HttpStatus.OK);
     }
 
     // Delete
-    @DeleteMapping("/userfeed_id")
+    @DeleteMapping("/{userfeed_id}")
     @ApiOperation(value = "유저 피드 삭제")
-    public ResponseEntity<Void>deleteUserFeed(@RequestBody UserFeedDto userFeedDto) {
+    public ResponseEntity<Void>deleteUserFeed(@RequestBody UserFeedDto userFeedDto, @PathVariable long userfeed_id) {
         UserFeed userFeed = userFeedDto.createUserFeed();
+        if (userFeed == null) {
+            logger.error("NO DELETE USERFEED");
+            throw new CustomException(ErrorCode.NO_DATA_ERROR);
+        }
         userFeedService.deleteUserFeed(userFeed.getUserfeed_id());
 
+        logger.info("INFO SUCCESS");
         return new ResponseEntity<Void>(HttpStatus.OK);
     }
 
@@ -78,17 +99,25 @@ public class UserFeedController {
             return "post";
         }
         Profile profile = profileService.findById(profile_id).get();
-        System.out.println(profile.getEmail());
+        if (profile == null) {
+            logger.error("NO PROFILE DATA");
+            throw new CustomException(ErrorCode.NO_DATA_ERROR);
+        }
+        System.out.println("profile email : "+profile.getEmail());
         UserFeedDto userFeedDto = userFeedAddForm.createUserFeedDto(profile);
-        System.out.println(userFeedDto.getContent());
+        System.out.println("content : "+userFeedDto.getContent());
         UserFeed post = userFeedService.post(userFeedDto);
-        System.out.println(post.getContent());
+        System.out.println("po content : "+post.getContent());
+
+        logger.info("INFO SUCCESS");
         return "redirect:/main/board" + post.getProfile();
     }
 
     @ResponseBody
     @GetMapping("/images/{filename}")
     public UrlResource processImg(@PathVariable String filename) throws MalformedURLException {
+
+        logger.info("INFO SUCCESS");
         return new UrlResource("file:" + fileStore.createPath(filename, FileType.IMAGE));
     }
 
@@ -98,6 +127,7 @@ public class UserFeedController {
         String encodedUploadFileName = UriUtils.encode(originName, StandardCharsets.UTF_8);
         String contentDisposition = "files; filename=\"" + encodedUploadFileName + "\"";
 
+        logger.info("INFO SUCCESS");
         return ResponseEntity.ok()
                 .header(HttpHeaders.CONTENT_DISPOSITION, contentDisposition)
                 .body(urlResource);

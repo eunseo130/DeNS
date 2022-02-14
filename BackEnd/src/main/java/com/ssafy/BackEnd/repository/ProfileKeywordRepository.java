@@ -14,6 +14,10 @@ public interface ProfileKeywordRepository extends JpaRepository<ProfileKeyword, 
     @Query(value = "select k from ProfileKeyword k where profile_id = :profile_id")
     List<ProfileKeyword> findByProfileId(Long profile_id);
 
-    @Query(value = "select k from ProfileKeyword k where keyword_id = :keyword_id and profile_id = :profile_id")
-    ProfileKeyword findProfileKeyword(Long keyword_id, Long profile_id);
+    @Query(value = "select k from ProfileKeyword k where name = :name and profile_id = :profile_id")
+    ProfileKeyword findProfileKeyword(String name, Long profile_id);
+
+    List<ProfileKeyword> findByNameContaining(String keyword);
+
+
 }

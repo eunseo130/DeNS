@@ -3,6 +3,7 @@ package com.ssafy.BackEnd.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -23,13 +24,20 @@ public class TeamMember {
     @Enumerated(EnumType.STRING)
     TeamMemberIdentity team_identity = TeamMemberIdentity.LEADER;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "team_id")
     Team team;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "email")
     @JsonIgnore
     User user;
+
+    @Builder
+    public TeamMember(Team team, User user, TeamMemberIdentity teamMemberIdentity) {
+        this.team = team;
+        this.user = user;
+        this.team_identity = teamMemberIdentity;
+    }
 
 }

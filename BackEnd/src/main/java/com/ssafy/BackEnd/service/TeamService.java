@@ -14,9 +14,9 @@ public interface TeamService {
 
     Team createTeam(Team team);
 
-    Team modifyTeam(Team team, TeamDto teamDto);
+    Team modifyTeam(Long profile_id, Team team, TeamDto teamDto);
 
-    void deleteTeam(long team_id);
+    void deleteTeam(long profile_id, long team_id);
 
     //List<Team> showTeamList();
     List<Team> showFindTeamList(String keyword);
@@ -25,8 +25,10 @@ public interface TeamService {
 
     List<Team> showMyTeamList(Long profile_id);
 
-    void modifyTeamProfile(long team_id, Team team);
+    Team modifyTeamProfile(TeamDto teamDto, Team team, long profile_id);
 
     TeamMember setTeamLeader(Team team, String email);
+
+    List<Team> findTeamByKeyword(String keyword);
 
 }

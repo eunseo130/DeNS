@@ -8,12 +8,14 @@ import java.io.IOException;
 import java.util.List;
 
 public interface TeamFeedService {
-    TeamFeed createTeamFeed(TeamFeedDto teamFeeddto) throws IOException;
+    TeamFeed createTeamFeed(Long profile_id, TeamFeedDto teamFeeddto) throws IOException;
 
-    TeamFeed modifyTeamFeed(TeamFeed teamFeed, TeamFeedDto teamFeedDto);
+    TeamFeed modifyTeamFeed(TeamFeed teamFeed, Long profile_id, TeamFeedDto teamFeedDto);
 
-    void deleteTeamFeed(long teamfeed_id);
+    void deleteTeamFeed(long teamfeed_id, long profile_id);
 
     List<TeamFeed> showFindTeamFeedList();
+
+    List<TeamFeed> showOurTeamFeedList(long team_id);
 
 }

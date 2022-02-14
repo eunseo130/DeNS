@@ -1,11 +1,12 @@
 package com.ssafy.BackEnd.service;
 
 
-import com.ssafy.BackEnd.entity.Profile;
+import com.ssafy.BackEnd.entity.*;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile1;
 import com.ssafy.BackEnd.entity.Request.RequestModifyProfile2;
-import com.ssafy.BackEnd.entity.User;
+import com.ssafy.BackEnd.repository.ProfileKeywordRepository;
 import com.ssafy.BackEnd.repository.ProfileRepository;
+import com.ssafy.BackEnd.repository.TeamMemberRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
@@ -31,6 +32,10 @@ public class ProfileServiceImpl implements ProfileService{
 
     @Autowired
     private SaltUtil saltUtil;
+
+    private final ProfileKeywordRepository profileKeywordRepository;
+
+    private final TeamMemberRepository teamMemberRepository;
 
     @Override
     public Optional<Profile> findProfile(Long user_id) throws NotFoundException{
@@ -59,10 +64,12 @@ public class ProfileServiceImpl implements ProfileService{
     public Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException {
 
         User user = userRepository.findByName(findProfile.getName());
-        System.out.println(requestModifyProfile2.getPosition());
-        System.out.println(requestModifyProfile2.getStack());
+        System.out.println("position : "+requestModifyProfile2.getPosition());
+        System.out.println("stack : "+requestModifyProfile2.getStack());
         findProfile.setPosition(requestModifyProfile2.getPosition());
         findProfile.setStack(requestModifyProfile2.getStack());
+        findProfile.setGit(requestModifyProfile2.getGit());
+        findProfile.setGit_id(requestModifyProfile2.getGit_id());
 
         profileRepository.save(findProfile);
         userRepository.save(user);
@@ -73,7 +80,6 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public List<Profile> showFindUserList(String keyword){
         List<Profile> profiles = profileRepository.findByNameContaining(keyword);
-        if(profiles == null) System.out.println("에러염");
         return profiles;
     }
 
@@ -97,9 +103,60 @@ public class ProfileServiceImpl implements ProfileService{
             }
         }
         for (String word : strlist) {
-            System.out.println(word);
+            System.out.println("word : "+word);
         }
 
         return strlist;
     }
+
+    @Override
+    public List<Profile> findUserByKeyword(String keyword) {
+        List<ProfileKeyword> keywords = profileKeywordRepository.findByNameContaining(keyword);
+        System.out.println(keywords.size());
+        List<Profile> searchedUsers = new ArrayList<>();
+
+
+        for (ProfileKeyword profileKeyword : keywords) {
+            System.out.println(profileKeyword.getName().equals(keyword));
+            if (!searchedUsers.contains(profileKeyword.getName())) { //검색어와 유저의 키워드가 같다면
+                searchedUsers.add(profileKeyword.getProfile());
+                System.out.println("이름" + profileKeyword.getName());
+            }
+        }
+
+//        for (int i = 0; i < keywords.size(); i++) {
+//            System.out.println("왜 안 돌아가");
+//            if (keywords.get(i).getName().equals(keyword)) { //검색어와 유저의 키워드가 같다면
+//                searchedUsers.add(keywords.get(i).getProfile());
+//                System.out.println("이름" + keywords.get(i).getName());
+//            }
+//        }
+
+        return searchedUsers;
+    }
+
+    @Override
+    public List<ProfileKeyword> getProfileKeywords(Long profile_id) {
+        Profile profile = profileRepository.findById(profile_id).get();
+        List<ProfileKeyword> profileKeywordList = profile.getProfile_keyword();
+        return profileKeywordList;
+    }
+
+    @Override
+    public List<TeamKeyword> getTeamKeywords(Long profile_id) {
+        Profile profile = profileRepository.findById(profile_id).get();
+        List<TeamMember> teamMembers = teamMemberRepository.findByEmail(profile.getEmail());
+        List<TeamKeyword> teamKeywordList = new ArrayList<>();
+        for (TeamMember teamMember : teamMembers) {
+            List<TeamKeyword> teamKeywords = teamMember.getTeam().getTeam_keyword();
+            for (TeamKeyword teamKeyword : teamKeywords) {
+                if (!teamKeywordList.contains(teamKeyword)) {
+                    teamKeywordList.add(teamKeyword);
+                }
+
+            }
+        }
+        return teamKeywordList;
+    }
+
 }

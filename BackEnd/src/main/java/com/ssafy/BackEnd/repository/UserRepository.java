@@ -8,7 +8,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 import java.util.Optional;
 
-@Repository
 public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query(value = "select u from User u where email = :email and password = :password")
@@ -20,5 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     User findByName (String name);
 
-    //    User findByProfileId (Long profile_id);
+    @Query(value = "select u from User u where profile_id = :profile_id")
+    User findByProfileId (Long profile_id);
 }

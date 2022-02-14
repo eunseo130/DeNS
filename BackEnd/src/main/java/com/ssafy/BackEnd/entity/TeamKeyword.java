@@ -1,5 +1,6 @@
 package com.ssafy.BackEnd.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -20,11 +21,14 @@ public class TeamKeyword {
 
     String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "team_id")
     Team team;
 
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-//    @JoinColumn(name = "keyword_id")
-//    Keyword keyword;
+    @Builder
+    public TeamKeyword(int count, String name, Team team) {
+        this.count = count;
+        this.name = name;
+        this.team = team;
+    }
 }

@@ -3,6 +3,7 @@ package com.ssafy.BackEnd.entity;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.Setter;
@@ -23,12 +24,15 @@ public class ProfileKeyword {
 
     String name;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "profile_id")
     @JsonIgnore
     private Profile profile;
 
-//    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.PERSIST)
-//    @JoinColumn(name = "keyword_id")
-//    private Keyword keyword;
+    @Builder
+    public ProfileKeyword(int count, String name, Profile profile) {
+        this.count = count;
+        this.name = name;
+        this.profile = profile;
+    }
 }

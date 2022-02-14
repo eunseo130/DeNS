@@ -1,12 +1,14 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.dto.UserDto;
 import com.ssafy.BackEnd.entity.Profile;
-import com.ssafy.BackEnd.entity.Salt;
+//import com.ssafy.BackEnd.entity.Salt;
 import com.ssafy.BackEnd.entity.User;
 import com.ssafy.BackEnd.entity.UserIdentity;
 import com.ssafy.BackEnd.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -14,13 +16,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+import java.util.logging.Logger;
 
 
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService{
+
 
     @Autowired
     private final EmailService emailService;
@@ -37,14 +43,24 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     @Transactional
-    public void signUp(User user) {
+    public void signUp(UserDto user) {
         String password = user.getPassword();
-        user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-        System.out.println(user.getPassword());
-//        String salt = saltUtil.genSalt();
-//        user.setSalt(new Salt(salt));
-//        user.setPassword(saltUtil.encodePassword(salt, password));
-        userRepository.save(user);
+        String encPass = BCrypt.hashpw(password, BCrypt.gensalt());
+        System.out.println("auth pwd : "+user.getPassword());
+        User save = User.builder()
+                .email(user.getEmail())
+                .name(user.getName())
+                .password(encPass)
+                .createDate(LocalDateTime.now())
+                .identity(UserIdentity.ROLE_UNAUTH)
+                .build();
+        userRepository.save(save);
+        System.out.println("save : "+save.getEmail());
+        System.out.println("save : "+save.getPassword());
+        System.out.println("save : "+save.getCreateDate());
+        System.out.println("save : "+save.getIdentity());
+        System.out.println("save : "+save.getName());
+
     }
 
     @Override
@@ -58,12 +74,16 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public ResponseEntity<Profile> createProfile(User user) {
-        Profile profile = new Profile();
-        profile.setName(user.getName());
-        profile.setEmail(user.getEmail());
-        profile.setPosition(null);
-        profile.setStack(null);
-        profile.setImage(null);
+        Profile profile = Profile.builder()
+                .email(user.getEmail())
+                .name(user.getName())
+                .git(null)
+                .git_id(null)
+                .position(null)
+                .stack(null)
+                .image(null)
+                .createDate(LocalDateTime.now())
+                .build();
         user.setProfile(profile);
         userRepository.save(user);
 
@@ -77,12 +97,6 @@ public class AuthServiceImpl implements AuthService{
         if(findUser == null) throw new Exception ("멤버가 조회되지 않습니다.");
         boolean checkpw = BCrypt.checkpw(password, findUser.getPassword());
         if (checkpw == false) throw new Exception("비밀번호가 틀립니다.");
-//        String salt = findUser.getSalt().getSalt();
-//        password = saltUtil.encodePassword(salt, password);
-//        System.out.println("pass : "+password);
-//        System.out.println("u pass : "+findUser.getPassword());
-//        if(!findUser.getPassword().equals(password))
-//            throw new Exception("비밀번호가 틀립니다.");
         return findUser;
     }
 
@@ -119,9 +133,6 @@ public class AuthServiceImpl implements AuthService{
     public User changePassword(User user, String password) throws NotFoundException {
         if(user==null) throw new NotFoundException("changePassword(), 멤버가 조회되지 않습니다.");
         user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
-//        String salt = saltUtil.genSalt();
-//        user.setSalt(new Salt(salt));
-//        user.setPassword(saltUtil.encodePassword(salt, password));
         User savedUser = userRepository.save(user);
         return savedUser;
     }
@@ -139,7 +150,7 @@ public class AuthServiceImpl implements AuthService{
         String userId = redisUtil.getData(key);
         User user = userRepository.findByEmail(userId);
         if(user==null) throw new NotFoundException("멤버가 조회되지않음");
-        modifyUserRole(user, UserIdentity.USER); //enum으로 수정
+        modifyUserRole(user, UserIdentity.ROLE_USER); //enum으로 수정
         redisUtil.deleteData(key);
         return new ResponseEntity<User>(user, HttpStatus.OK);
     }
