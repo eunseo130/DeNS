@@ -24,8 +24,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     private final JwtServiceImpl jwtService;
 
     @Bean
-    @Override
-    public AuthenticationManager authenticationManager() throws Exception {
+    public AuthenticationManager getAuthenticationManager() throws Exception {
         return super.authenticationManagerBean();
     }
 
