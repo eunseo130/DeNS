@@ -1,14 +1,10 @@
 package com.ssafy.BackEnd.controller;
 
 import com.ssafy.BackEnd.dto.UserDto;
+import com.ssafy.BackEnd.entity.*;
 import com.ssafy.BackEnd.entity.Request.RequestChangePassword1;
 import com.ssafy.BackEnd.entity.Request.RequestChangePassword2;
 import com.ssafy.BackEnd.entity.Request.RequestVerifyEmail;
-import com.ssafy.BackEnd.entity.Profile;
-import com.ssafy.BackEnd.entity.Response;
-import com.ssafy.BackEnd.entity.Team;
-import com.ssafy.BackEnd.entity.User;
-import com.ssafy.BackEnd.entity.dummy;
 import com.ssafy.BackEnd.exception.CustomException;
 import com.ssafy.BackEnd.exception.ErrorCode;
 import com.ssafy.BackEnd.service.*;
@@ -220,15 +216,22 @@ public class MainController {
             //System.out.println(user.getEmail()+" "+user.getPassword());
             //System.out.println("user null ? "+user);
 //            if(user != null) {
-                System.out.println("1pass");
-                final String Token = jwtService.createToken(user.getEmail(), user.getIdentity());
-                //Profile profile = profileService.findbyEmail(user.getEmail());
-                //System.out.println("pid : "+profile.getProfile_id());
+            System.out.println("1pass");
+            final String Token = jwtService.createToken(user.getEmail(), user.getIdentity());
+            //Profile profile = profileService.findbyEmail(user.getEmail());
+            //System.out.println("pid : "+profile.getProfile_id());
+
+            if (user.getIdentity() == UserIdentity.ROLE_UNAUTH) {
+                status = HttpStatus.UNAUTHORIZED;
+                resultMap.put("status", status);
+                resultMap.put("message", "권한이 없습니다.");
+
+            } else {
                 String profileid = String.valueOf(user.getProfile().getProfile_id());
-                System.out.println("pid : "+profileid);
+                System.out.println("pid : " + profileid);
                 //final String refreshJwt = jwtService.generateRefershToken(user);
 
-                System.out.println("accessToken : "+Token);
+                System.out.println("accessToken : " + Token);
                 //System.out.println("refreshToken : "+refreshJwt);
 
                 Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
@@ -254,6 +257,7 @@ public class MainController {
                 status = HttpStatus.ACCEPTED;
                 logger.info("INFO SUCCESS");
             }
+        }
 //        else {
 //                //System.out.println("error");
 //                resultMap.put("message", "fail");
@@ -266,6 +270,7 @@ public class MainController {
             resultMap.put("message", "No Authorization");
             //throw new CustomException(ErrorCode.INVALID_ID);
         }
+
         System.out.println("status : "+status);
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }
