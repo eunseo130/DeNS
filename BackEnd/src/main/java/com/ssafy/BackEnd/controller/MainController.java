@@ -49,9 +49,9 @@ public class MainController {
     private final ProfileService profileService;
 
 
-    @GetMapping("/test11")
-    public ResponseEntity<Map<String, Object>> test11(@RequestHeader(value = "Authorization") String header ) {
-        System.out.println("11 :"+header);
+    @GetMapping("testgo")
+    public ResponseEntity<Map<String, Object>> testgo() {
+        //System.out.println("11 :"+header);
         logger.info("test11");
         System.out.println("teset11이에요");
         Map<String, Object> map = new HashMap<>();
@@ -222,16 +222,20 @@ public class MainController {
 //            if(user != null) {
                 System.out.println("1pass");
                 final String Token = jwtService.createToken(user.getEmail(), user.getIdentity());
+                Profile profile = profileService.findbyEmail(user.getEmail());
+                String profileid = String.valueOf(profile.getProfile_id());
                 //final String refreshJwt = jwtService.generateRefershToken(user);
 
                 System.out.println("accessToken : "+Token);
                 //System.out.println("refreshToken : "+refreshJwt);
 
                 Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
+                Cookie profileCookie = new Cookie("profileid", profileid);
 //                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
 
                 System.out.println("pass 2");
                 response.addCookie(accessToken);
+                response.addCookie(profileCookie);
 //                response.addCookie(refreshToken);
 
                 System.out.println("pass 3");
