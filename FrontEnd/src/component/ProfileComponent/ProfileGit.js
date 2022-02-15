@@ -7,7 +7,7 @@ export default function ProfileGit({edit,gitId,onSave}) {
         {!edit ? (
           <img src={`https://ghchart.rshah.org/${gitId} `} />
         ) : (
-          <input name="gitId" value={gitId} onChange={onSave}></input>
+          <></>
         )}
       </div>
     )

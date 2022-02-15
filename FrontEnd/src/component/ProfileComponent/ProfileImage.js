@@ -1,20 +1,28 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Image } from 'react-bootstrap'
 import { getImage } from '../../api/profile'
-export default function ProfileImage({ id, fileImage, onLoad, ImageUpload }) {
+export default function ProfileImage({
+  id,
+  fileImage,
+  onLoad,
+  ImageUpload,
+  authAxios,
+}) {
   const [image, setImage] = useState('')
+
   useEffect(() => {
-    getImage(
-      id,
-      (res) => {
+    authAxios
+      .get(`/profile/image/${id}`, {
+        responseType: 'blob',
+      })
+      .then((res) => {
         const url = window.URL.createObjectURL(
           new Blob([res.data], { type: res.headers['content-type'] })
         )
         console.log(url)
         setImage(url)
-      },
-      (error) => console.log(error)
-    )
+      })
+      .catch((error) => console.log(error))
   }, [])
   return (
     <div>
@@ -30,7 +38,9 @@ export default function ProfileImage({ id, fileImage, onLoad, ImageUpload }) {
         </div>
       ) : (
         <div>
-          {<Image width={180} height={160} src={image} roundedCircle /> || (
+          {image ? (
+            <Image width={180} height={160} src={image} roundedCircle />
+          ) : (
             <Image
               width={180}
               height={160}

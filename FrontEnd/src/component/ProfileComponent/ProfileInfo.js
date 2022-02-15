@@ -11,29 +11,38 @@ export default function ProfileInfo({
   email,
   update,
   onEdit,
+  gitId,
 }) {
   return (
     <>
       <div>
         <Stack gap={2}>
-          <div>이름:&nbsp; {name}</div>
+          <div>Name:&nbsp; {name}</div>
+          <div>E-mail:&nbsp; {email}</div>
           <div>
-            직무 : &nbsp;
+            Position : &nbsp;
             {edit ? (
-              <input onChange={onSave} name="position" value={position} ></input>
+              <input onChange={onSave} name="position" value={position}></input>
             ) : (
               position
             )}
           </div>
           <div>
-            스택 : &nbsp;
+            Stack : &nbsp;
             {edit ? (
               <input onChange={onSave} name="stack" value={stack}></input>
             ) : (
               stack
             )}
           </div>
-          <div>이메일:&nbsp; {email}</div>
+          <div>Git ID:&nbsp;{gitId}</div>
+          {edit ? (
+            <>
+              <input name="gitId" value={gitId} onChange={onSave}></input>
+            </>
+          ) : (
+            <></>
+          )}
           <div>
             {edit ? (
               <Button onClick={update} size="sm" variant="secondary">

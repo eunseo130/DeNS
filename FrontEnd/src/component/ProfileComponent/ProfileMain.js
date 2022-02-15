@@ -1,4 +1,5 @@
-import React, { useState, useEffect, useCallback } from 'react'
+import {store} from '../..'
+import React, { useState, useEffect } from 'react'
 import { Outlet, useParams, useNavigate } from 'react-router-dom'
 import {
   profileTest,
@@ -13,7 +14,8 @@ import ProfileTagCloud from './ProfileTagCloud'
 import ProfileImage from './ProfileImage'
 import ProfileInfo from './ProfileInfo'
 import ProfileKeyword from './ProfileKeyword'
-
+import axios from 'axios'
+import { useCookies } from 'react-cookie'
 export default function ProfileMain() {
   const [inputs, setInputs] = useState({
     name: '',
@@ -31,14 +33,19 @@ export default function ProfileMain() {
   const [files, setFiles] = useState('')
   const [fileImage, setFileImage] = useState('')
   const [image, setImage] = useState('')
-  const [keywordObjs, setKeywordObjs] = useState('')
-  // const [localId, setLocalId] = useState('')
-  // setLocalId(localStorage.getItem(id))
-  // console.log(localId)
+  const userId = store.getState().user.profileid
+  const [cookies] = useCookies(['token'])
+  const authAxios = axios.create({
+    baseURL: 'http://3.36.131.59:2345/',
+    headers: {
+      Authorization: `Bearer "${cookies.token}"`,
+      withCredentials: true,
+    },
+  })
   useEffect(() => {
-    profileTest(
-      id,
-      (res) => {
+    authAxios
+      .get(`/profile/${id}`)
+      .then((res) => {
         setInputs({
           ...inputs,
           name: res.data.name,
@@ -48,38 +55,17 @@ export default function ProfileMain() {
           git: !git,
           gitId: res.data.git_id,
         })
-      },
-      (error) => console.log(error)
-    )
+      })
+      .catch((error) => console.log(error))
   }, [])
   useEffect(() => {
     getKeywords()
-  }, [position,stack])
+  }, [position, stack])
 
-  function update() {
-    profileUpdate(
-      [id, position, stack, gitId],
-      (res) => {
-        console.log('반환시', res.data.git_id, res.data)
-        setInputs({
-          ...inputs,
-          name: res.data.name,
-          position: res.data.position,
-          stack: res.data.stack,
-          email: res.data.email,
-          gitId: res.data.git_id,
-          git: !git,
-          edit: !edit,
-        })
-      },
-      (error) => console.log(error)
-    )
-    getKeywords()
-  }
   function getKeywords() {
-    getKeyword(
-      id,
-      (res) => {
+    authAxios
+      .get(`/profile/keyword/${id}`)
+      .then((res) => {
         let words = []
         const keywordObjs = res.data
         keywordObjs.forEach((keywordObj) => {
@@ -96,11 +82,62 @@ export default function ProfileMain() {
         const c = 1 + value
         words.push({ value: position, count: c }, { value: stack, count: c })
         setKeywords(words)
-      },
-      (error) => console.log(error)
-    )
+      })
+      .catch((error) => console.log(error))
   }
 
+  function update() {
+    authAxios
+      .put(`/profile/${id}`, {
+        position: position,
+        stack: stack,
+        git_id: gitId,
+      })
+      .then((res) => {
+        setInputs({
+          ...inputs,
+          name: res.data.name,
+          position: res.data.position,
+          stack: res.data.stack,
+          email: res.data.email,
+          gitId: res.data.git_id,
+          git: !git,
+          edit: !edit,
+        })
+      })
+      .catch((error) => console.log(error))
+
+    getKeywords()
+  }
+
+  function putKeywords() {
+    authAxios
+      .post(`/profile/keyword/${id}`, null, { params: { content: keyword } })
+      .then((res) => {
+        setKeywords([])
+        getKeywords()
+        console.log(keywords)
+        setInputs({ ...inputs, keyword: '' })
+      })
+      .catch((error) => console.log(error))
+  }
+
+  function ImageUpload(e) {
+    const formData = new FormData()
+    formData.append('file', files[0])
+    authAxios
+      .post(`/profile/update/image/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        setImage(res.data)
+        setFiles('')
+        window.location.replace(`/auth/profile/${id}`)
+      })
+      .catch((error) => console.log(error))
+  }
   function onEdit() {
     setInputs({
       ...inputs,
@@ -114,40 +151,10 @@ export default function ProfileMain() {
       [name]: value,
     })
   }
-
-  function putKeywords() {
-    putKeyword(
-      [id, keyword],
-      (res) => {
-        setKeywords([])
-        getKeywords()
-        console.log(keywords)
-        setInputs({ ...inputs, keyword: '' })
-      },
-      (error) => console.log(error)
-    )
-  }
-
   function onLoad(e) {
     setFiles(e.target.files)
     setFileImage(URL.createObjectURL(e.target.files[0]))
   }
-
-  function ImageUpload(e) {
-    const formData = new FormData()
-    formData.append('file', files[0])
-
-    ImgUpload(
-      [id, formData],
-      (res) => {
-        setImage(res.data)
-        setFiles('')
-        window.location.replace(`/auth/profile/${id}`)
-      },
-      (error) => console.log(error)
-    )
-  }
-
   return (
     <div>
       <Container fluid>
@@ -161,6 +168,7 @@ export default function ProfileMain() {
               fileImage={fileImage}
               onLoad={onLoad}
               ImageUpload={ImageUpload}
+              authAxios={authAxios}
             />
           </Row>
           <Row className="justify-content-md-center">
@@ -174,7 +182,9 @@ export default function ProfileMain() {
               onSave={onSave}
               update={update}
               onEdit={onEdit}
+              gitId={gitId}
             />
+
             <ProfileGit edit={edit} gitId={gitId} onSave={onSave} />
           </Row>
         </Stack>
