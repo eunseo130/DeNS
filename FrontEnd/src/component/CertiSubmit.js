@@ -1,9 +1,11 @@
 import { useNavigate, useParams } from 'react-router-dom'
+import { verify22 } from '../api/test';
 
 export default function CertiSubmit() {
     const navigate = useNavigate();
     const param = useParams();
     const goHome = () => {
+        verify22(param, (response) => { console.log(response) }, (error) => { console.log(error) });
         navigate(`/signin`);
     }
     

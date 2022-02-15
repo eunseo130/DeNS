@@ -26,6 +26,11 @@ function verify(param, success, fail) {
   console.log(param);
   api.post(`/verify`,JSON.stringify(param)).then(success).catch(fail);
 }
+function verify22(param, success, fail) {
+  console.log("verify test 2222");
+  console.log(param);
+api.get(`/verify/${param}`).then(success).catch(fail);
+}
 
 
 function profileUpdate([id, position, stack], success, fail) {
@@ -83,5 +88,6 @@ export {
   profileTest,
   profileUpdate,
   putKeyword,
-  verify
+  verify,
+  verify22
 }
