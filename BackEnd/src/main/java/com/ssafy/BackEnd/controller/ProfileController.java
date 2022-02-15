@@ -120,6 +120,7 @@ public class ProfileController {
         InputStream in = null;
         ResponseEntity<byte[]> entity = null;
         String imageName = profileService.findById(profile_id).get().getImage();
+        System.out.println(imageName);
         try {
             String formatName = imageName.substring(imageName.lastIndexOf(".")+1);
             MediaType mType = MediaUtils.getMediaType(formatName);

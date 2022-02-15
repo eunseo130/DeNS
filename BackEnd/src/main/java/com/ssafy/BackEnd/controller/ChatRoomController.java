@@ -117,6 +117,8 @@ import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -138,13 +140,13 @@ import java.util.stream.Stream;
 @RequestMapping("chat")
 public class ChatRoomController {
 
-    private final ChatRoomRedisRepository chatRoomRedisRepository;
+    private static final Logger logger = LogManager.getLogger(ChatRoomController.class);
 
+    private final ChatRoomRedisRepository chatRoomRedisRepository;
 
     private final ProfileRepository profileRepository;
 
-
-    @GetMapping("/room")
+    @GetMapping("/rooms")
     public ResponseEntity<Iterable<ChatRoom>> rooms() {
         Iterable<ChatRoom> all = chatRoomRedisRepository.findAll();
         return new ResponseEntity<Iterable<ChatRoom>>(all, HttpStatus.OK);
@@ -156,14 +158,11 @@ public class ChatRoomController {
         Profile profile = profileRepository.findById(profileId).get();
         List<ChatRoom> result = new ArrayList<>();
         for (ChatRoom chatRoom : chatRooms) {
-            if (chatRoom.getName().contains(profile.getName())) {
-                System.out.println(chatRoom.getName());
+            if (chatRoom.getName().contains(profile.getName()+profileId)) {
                 result.add(chatRoom);
             }
         }
-        if (result.isEmpty()) {
-            throw new CustomException(ErrorCode.NO_CHAT_ROOM);
-        }
+        logger.info("get chatrooms success");
         return new ResponseEntity<Iterable<ChatRoom>>(result, HttpStatus.OK);
     }
 
@@ -176,31 +175,42 @@ public class ChatRoomController {
         ChatUserDto user2 = new ChatUserDto();
         ChatUserDto chatUser2 = user2.builder().profileId(profileId2).name(profile2.getName()).build();
 
-        ChatRoom findRoom1 = chatRoomRedisRepository.findByName(chatUser1.getName() + chatUser2.getName());
-        ChatRoom findRoom2 = chatRoomRedisRepository.findByName(chatUser2.getName() + chatUser1.getName());
+        ChatRoom findRoom1 = chatRoomRedisRepository.findByName(chatUser1.getName()+chatUser1.getProfileId() +"_"+ chatUser2.getName()+chatUser2.getProfileId());
+        ChatRoom findRoom2 = chatRoomRedisRepository.findByName(chatUser2.getName()+chatUser2.getProfileId() +"_"+ chatUser1.getName()+chatUser1.getProfileId());
         if (findRoom1 == null && findRoom2 == null){
             ChatRoom chatRoom = ChatRoom.create(chatUser1, chatUser2);
             ChatRoom save = chatRoomRedisRepository.save(chatRoom);
+            logger.info("CreateRoom success");
             return new ResponseEntity<ChatRoom>(save, HttpStatus.CREATED);
         } else if (findRoom1 == null && findRoom2 != null) {
-            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
+            logger.error("chatroom is already exists");
+//            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
+            return new ResponseEntity<ChatRoom>(findRoom2, HttpStatus.FOUND);
         } else if (findRoom1 != null && findRoom2 == null) {
-            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
+            logger.error("chatroom is already exists");
+//            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
+            return new ResponseEntity<ChatRoom>(findRoom1, HttpStatus.FOUND);
         } else {
+            logger.error("cannot create room");
             throw new CustomException(ErrorCode.CANNOT_CREATE_CHATROOM);
         }
     }
 
-//    @GetMapping("/room/enter/{roomId}")
-//    public String roomDetail(Model model, @PathVariable String roomId) {
-//        model.addAttribute("roomId", roomId);
-//        return "/chat/roomdetail";
-//    }
+    @GetMapping("/room/enter/{roomId}/{profileId}")
+    public ResponseEntity<ChatRoom> enterRoom(Model model, @PathVariable String roomId, @PathVariable Long profileId) {
+        Profile profile = profileRepository.findById(profileId).get();
+        ChatRoom findRoom = chatRoomRedisRepository.findByRoomId(roomId);
+        if (findRoom.getUser1().getProfileId().equals(profileId) || findRoom.getUser2().getProfileId().equals(profileId)) {
+            return new ResponseEntity<ChatRoom>(findRoom, HttpStatus.OK);
+        }
+        throw new CustomException(ErrorCode.NO_CHAT_ROOM);
+    }
 
     @GetMapping("/room/{roomId}")
     public ResponseEntity<ChatRoom> roomInfo(@PathVariable String roomId) {
         ChatRoom chatRoom = chatRoomRedisRepository.findByRoomId(roomId);
         if (chatRoom == null) {
+            logger.info("get room info success");
             throw new CustomException(ErrorCode.NO_CHAT_ROOM);
         }
         return new ResponseEntity<ChatRoom>(chatRoom, HttpStatus.OK);

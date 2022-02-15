@@ -32,7 +32,7 @@ public class ChatRoom implements Serializable {
     public static ChatRoom create(ChatUserDto user1, ChatUserDto user2) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = user1.getName() + user2.getName();
+        chatRoom.name = user1.getName()+user1.getProfileId()+ "_" + user2.getName() + user2.getProfileId();
         chatRoom.user1 = user1;
         chatRoom.user2 = user2;
         return chatRoom;
