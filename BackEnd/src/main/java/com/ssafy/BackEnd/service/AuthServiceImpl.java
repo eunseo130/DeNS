@@ -138,14 +138,14 @@ public class AuthServiceImpl implements AuthService{
     }
 
     public Map<String, Object> sendVerificationMail(User user) throws NotFoundException, MessagingException {
-        String VERIFICATION_LINK = "http://i6c201.p.ssafy.io:3040/certi";
+        String VERIFICATION_LINK = "http://i6c201.p.ssafy.io:3040/certi/";
         if(user==null) throw new NotFoundException("멤버가 조회되지 않음");
         UUID uuid = UUID.randomUUID();
         System.out.println("key : " + uuid);
         redisUtil.setDataExpire(uuid.toString(),user.getEmail(), 60 * 30L);
         String htmlStr = "<h2>안녕하세요 DeNS입니다.</h2><br>"
                 +"<h3>"+user.getName() + "님</h3>" + "<p>인증하기 버튼을 누르시면 로그인을 하실 수 있습니다. <br>"
-                +"<a href="+VERIFICATION_LINK+">인증하기</a></p>";
+                +"<a href="+VERIFICATION_LINK+uuid.toString()+">인증하기</a></p>";
         emailService.sendMail(user.getEmail(),"[DeNS] 회원가입 인증메일입니다.", htmlStr);
         Map<String, Object> result = new HashMap<>();
         result.put("key", uuid.toString());
