@@ -236,4 +236,3 @@ public class ChatRoomController {
 //        auth.getDetails()
 //        return LoginInfo.builder().name(name).token(jwtService.createToken(name)).build();
     }
-}
