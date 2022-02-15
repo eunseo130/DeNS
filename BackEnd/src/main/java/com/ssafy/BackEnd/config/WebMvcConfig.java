@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit;
 
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    @Value("/home/ubuntu/")
+    @Value("${profileImg.path}")
     private String profileUploadFolder;
 
     @Override
@@ -18,9 +18,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
         WebMvcConfigurer.super.addResourceHandlers(registry);
 
         registry
+                .addResourceHandler("/profileImg/**")
+                .addResourceLocations("file:///" + profileUploadFolder)
+                .setCachePeriod(60*10*6)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
+
+        registry
                 .addResourceHandler("/**")
                 .addResourceLocations("classpath:/templates/")
                 .setCacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES));
+
 
     }
 }
