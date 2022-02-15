@@ -14,7 +14,7 @@ public interface TeamMemberService{
 
     TeamMember addTeamMember(String email, Long teamId);
 
-    TeamMember deleteTeamMember(TeamMemberDto teamMemberDto, long team_id);
+    TeamMember deleteTeamMember(long team_id, long profile_id);
 
     Team mergeTeam(Long teamId1, Long teamId2);
 
@@ -22,6 +22,6 @@ public interface TeamMemberService{
 
     List<User> showTeamMemberList(Long team_id);
 
-    TeamMember getMyTeamIndentity(long team_id, UserDto userDto);
+    //TeamMember getMyTeamIndentity(long team_id, long profile_id);
 
 }

@@ -42,11 +42,9 @@ public class TeamMemberController {
         return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{team_id}")
-    @JsonProperty("email")
-    public ResponseEntity<TeamMember> deleteTeamMember(@RequestBody TeamMemberDto teamMemberDto, @PathVariable long team_id) {
-        System.out.println(teamMemberDto.getEmail());
-        TeamMember teammember = teamMemberService.deleteTeamMember(teamMemberDto, team_id);
+    @DeleteMapping("/{team_id}/{profile_id}")
+    public ResponseEntity<TeamMember> deleteTeamMember(@PathVariable long team_id, @PathVariable long profile_id) {
+        TeamMember teammember = teamMemberService.deleteTeamMember(team_id, profile_id);
 
         if (teammember == null) {
             logger.error("NO DELETE TEAMMEMBER");
@@ -86,14 +84,13 @@ public class TeamMemberController {
         logger.info("INFO SUCCESS");
         return new ResponseEntity<List<User>>(teammemberlist, HttpStatus.OK);
     }
-    @GetMapping("/getidentity/{team_id}") //이메일과 팀아이디로 자신의 팀아이덴티티 확인하기
-    @JsonProperty("email")
-    public ResponseEntity<TeamMember> getMyTeamIndentity(@PathVariable long team_id, @RequestBody UserDto userDto) {
-
-        TeamMember teamMember = teamMemberService.getMyTeamIndentity(team_id, userDto);
-
-        return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
-
-    }
+//    @GetMapping("/getidentity/{team_id}/{profile_id}") //이메일과 팀아이디로 자신의 팀아이덴티티 확인하기
+//    public ResponseEntity<TeamMember> getMyTeamIndentity(@PathVariable long team_id, @PathVariable long profile_id) {
+//
+//        TeamMember teamMember = teamMemberService.getMyTeamIndentity(team_id, profile_id);
+//
+//        return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
+//
+//    }
 
 }

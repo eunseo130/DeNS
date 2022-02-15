@@ -52,14 +52,16 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 
     @Override
     @Transactional
-    public TeamMember deleteTeamMember(TeamMemberDto teamMemberDto, long team_id) {
+    public TeamMember deleteTeamMember(long team_id, long profile_id) {
         Team findTeam = teamRespository.findByTeam(team_id);
-        System.out.println(findTeam.getTitle()  +"SDFSD");
+
         List<TeamMember> findTeamMember = findTeam.getTeam_member();
+        System.out.println(findTeam.getTitle());
         for (TeamMember member : findTeamMember) {
-            if (member.getUser().getEmail().equals(teamMemberDto.getEmail())) {
-                System.out.println(teamMemberDto.getEmail() + "이거다");
-                System.out.println("member email : "+member.getUser().getEmail().equals(teamMemberDto.getEmail()));
+            System.out.println("팀 프로필" + member.getUser().getProfile().getProfile_id());
+            if (member.getUser().getProfile().getProfile_id() == profile_id) {
+                System.out.println(member.getUser().getProfile().getProfile_id() + "해당 팀멤버 프로필");
+                System.out.println(profile_id + "보내보는 프로필 아이디");
                 teamMemberRepository.delete(member);
                 findTeamMember.remove(member);
                 return member;
@@ -128,14 +130,15 @@ public class TeamMemberServiceImpl implements TeamMemberService {
         return teammembers_infos;
     }
 
-    @Override
-    public TeamMember getMyTeamIndentity(long team_id, UserDto userDto) {
-        //System.out.println(team_id + "FFF" + email);
-        TeamMember teamMember = teamMemberRepository.findIdentity(team_id, userDto.getEmail());
-        System.out.println(teamMember.getTeam_identity() + "왜안나와");
-
-        return teamMember;
-    }
+//    @Override
+//    public TeamMember getMyTeamIndentity(long team_id, long profile_id) {
+//        //System.out.println(team_id + "FFF" + email);
+//
+//        TeamMember teamMember = teamMemberRepository.findByIdentity(team_id, profile_id);
+//        System.out.println(teamMember.getTeam_identity() + "왜안나와");
+//
+//        return teamMember;
+//    }
 
 
 }
