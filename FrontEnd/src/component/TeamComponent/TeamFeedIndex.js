@@ -26,7 +26,6 @@ export default function TeamFeedIndex() {
   useEffect(() => {
     teamFeed(teamId,
       (response) => {
-        console.log(response)
 				setFeedIndex(response.data);
 				// const url = window.URL.createObjectURL(
         //   new Blob([res.data], { type: res.headers['content-type'] })
