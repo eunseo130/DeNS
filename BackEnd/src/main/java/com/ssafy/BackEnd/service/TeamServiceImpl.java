@@ -219,6 +219,7 @@ public class TeamServiceImpl implements TeamService{
             if (teamMember.getTeam_identity().equals(TeamMemberIdentity.LEADER) && teamMember.getUser().equals(user)) {
 
                 team.setContent(teamDto.getContent());
+                teamRepository.save(team);
 
                 List<TeamKeyword> teamKeywords = team.getTeam_keyword(); //기존 팀소개 키워드
                 for (TeamKeyword teamKeyword : teamKeywords) {
