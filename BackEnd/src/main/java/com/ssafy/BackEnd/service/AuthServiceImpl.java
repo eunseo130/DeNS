@@ -137,7 +137,7 @@ public class AuthServiceImpl implements AuthService{
         return savedUser;
     }
 
-    public ResponseEntity<Map<String, Object>> sendVerificationMail(User user) throws NotFoundException, MessagingException {
+    public Map<String, Object> sendVerificationMail(User user) throws NotFoundException, MessagingException {
         String VERIFICATION_LINK = "http://i6c201.p.ssafy.io:3040/verify/";
         if(user==null) throw new NotFoundException("멤버가 조회되지 않음");
         UUID uuid = UUID.randomUUID();
@@ -149,7 +149,7 @@ public class AuthServiceImpl implements AuthService{
         emailService.sendMail(user.getEmail(),"[DeNS] 회원가입 인증메일입니다.", htmlStr);
         Map<String, Object> result = new HashMap<>();
         result.put("key", uuid.toString());
-        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
+        return result;
     }
 
     public ResponseEntity<User> verifyEmail(@PathVariable String key) throws NotFoundException {

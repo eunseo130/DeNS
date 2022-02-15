@@ -277,18 +277,19 @@ public class MainController {
 
     @PostMapping("/verify")
     @ApiOperation(value = "회원가입 인증", response = String.class)
-    public Response verify(@RequestBody RequestVerifyEmail requestVerifyEmail, HttpServletRequest req, HttpServletResponse res) {
+    public ResponseEntity<Map<String, Object>> verify(@RequestBody RequestVerifyEmail requestVerifyEmail, HttpServletRequest req, HttpServletResponse res) {
         Response response = new Response();
         System.out.println("ve : "+requestVerifyEmail.getEmail());
         try {
             User user = authService.findByEmail(requestVerifyEmail.getEmail());
             System.out.println("u : "+user.getName());
-            authService.sendVerificationMail(user);
+            Map<String, Object> result = authService.sendVerificationMail(user);
 
             response.setResponse("success");
             response.setMessage("성공적으로 인증메일을 보냈습니다");
             response.setData(null);
             logger.info("INFO SUCCESS");
+            return new ResponseEntity<Map<String, Object>> (result, HttpStatus.OK);
         } catch (Exception exception) {
             //response = new Response("error", "인증메일을 보내는데 문제가 발생했습니다.", exception);
             response.setResponse("error");
@@ -296,7 +297,6 @@ public class MainController {
             response.setData(exception);
             throw new CustomException(ErrorCode.EMAIL_ERROR);
         }
-        return response;
     }
 
     @GetMapping("/verify/{key}")
