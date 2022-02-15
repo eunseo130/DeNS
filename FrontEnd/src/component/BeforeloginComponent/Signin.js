@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../../redux/userreduce';
+import { getId, getTOKEN, loginUser } from '../../redux/userreduce';
 import { store } from '../..';
 import {useCookies} from 'react-cookie';
 import { signin, signup, test11 } from '../../api/test';
@@ -10,23 +10,17 @@ import axios from 'axios';
 import { apiInstance } from '../../api';
 function Login() {
   const dispatch = useDispatch();
-  const [cookies, setCookie] = useCookies(['token']);
-  const token = useSelector(state => state);
+  const [token, setToken] = useCookies(['token']);
+  const [profileid, setProfileid] = useCookies(['myID']);
+
+  const token2 = useSelector(state => state);
   let navigate = useNavigate();
   
   const [input, setInput] = useState({
     email: '',
     password: '',
   });
-  // useEffect(() => { console.log(input) }, [input]);
-
-  useEffect(() => {
-    // console.log("sasadfasdffads");
-    // console.log(cookies);
-    // console.log(store.getState("token"));
-  },[]);
-  
-  
+    
   const changeCheck = (e) => {
     const { name, value } = e.target;
     setInput({
@@ -36,20 +30,20 @@ function Login() {
   }
 
   const LoginConsole = () => {
-    // console.log(input);
+    console.log(input);
     signin(input, (response) => {
-    //  console.log(response.data)
-    //  console.log(response.data["access-token"])
+//      console.log(response.data);
+      dispatch(loginUser(response.data));
+      // dispatch(getId());
+      console.log(store.getState().user.token);
 
-      console.log(dispatch(loginUser(response.data["access-token"])));
-      console.log(store.getState());
-      setCookie('token', store.getState().user.token);
-      // console.log(store.getState().user.token);
+      setToken('token', store.getState().user.token);
+      setProfileid('myID', store.getState().user.profileid);
       navigate(`/auth`);
     }, (error) => {
       console.log(error)
     });
-    console.log(cookies);
+    // console.log(cookies);
   };
     return (
       <LoginBox>
