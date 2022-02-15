@@ -59,7 +59,7 @@ public class User implements UserDetails {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //EAGER로 바꿔야 profile_id 확인 가능
     @JoinColumn(name = "profile_id")
-    //@JsonIgnore
+    @JsonIgnore
     private Profile profile;
 
 

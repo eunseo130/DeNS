@@ -3,12 +3,13 @@ import com.ssafy.BackEnd.entity.ChatMessage;
 
 import com.ssafy.BackEnd.repository.ChatMessageRedisRepository;
 import com.ssafy.BackEnd.repository.ChatMessageRepository;
-import com.ssafy.BackEnd.repository.ChatRoomRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.JwtService;
 import com.ssafy.BackEnd.service.JwtServiceImpl;
 import com.ssafy.BackEnd.service.RedisUtil;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.data.redis.core.HashOperations;
 import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -45,6 +46,7 @@ public class ChatController {
 
     private static final String CHAT_MESSAGES = "CHAT_MESSAGES";
 
+    private static final Logger logger = LogManager.getLogger(ChatController.class);
 
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
@@ -59,12 +61,15 @@ public class ChatController {
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
         redisTemplate.convertAndSend(channelTopic.getTopic(), message);
         if (!message.getSender().equals("[알림]")) {
+
             ChatMessage save = chatMessageRedisRepository.save(message);
+            logger.info("save message success");
+            System.out.println(save.getMessage());
         }
     }
 
 
-    @GetMapping("messages/{roomId}")
+    @GetMapping("chat/messages/{roomId}")
     @ResponseBody
     public List<ChatMessage> messages(@PathVariable String roomId) {
         return chatMessageRedisRepository.findByRoomId(roomId);

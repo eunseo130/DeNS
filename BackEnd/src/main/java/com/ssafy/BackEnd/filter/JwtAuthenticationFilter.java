@@ -7,6 +7,7 @@ import com.ssafy.BackEnd.service.JwtTokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.filter.GenericFilterBean;
 
 import javax.servlet.FilterChain;
@@ -27,6 +28,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
         // 헤더에서 JWT 를 받아옵니다.
         System.out.println("------------------filter---------------------");
         System.out.println("req : "+request);
+        System.out.println("header : "+request);
         SecurityContextHolder.getContext().setAuthentication(null); // 로그아웃 때 사용하자
         String token = jwtService.resolveToken((HttpServletRequest) request);
         System.out.println("filter token : "+token);
@@ -34,7 +36,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
 //        if(token != null) newToken = token.substring(8, token.length()-1);
 
         //System.out.println("new token : "+token);
-        System.out.println("secufilter : "+SecurityContextHolder.getContext().getAuthentication());
+
         // 유효한 토큰인지 확인합니다.
         if (token != null && jwtService.validateToken(token)) {
             try{
@@ -42,6 +44,7 @@ public class JwtAuthenticationFilter extends GenericFilterBean {
                 SecurityContextHolder.getContext().setAuthentication(auth);
 
                 System.out.println("intercept");
+                System.out.println("secufilter : "+SecurityContextHolder.getContext().getAuthentication());
                 // 토큰이 유효하면 토큰으로부터 유저 정보를 받아옵니다.
                 //Authentication authentication = jwtService.getAuthentication(token);
 //                System.out.println("auth1 : "+authentication.getName());

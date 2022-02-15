@@ -53,7 +53,7 @@ public class TeamController {
     public ResponseEntity<List<Team>> getAllTeams() throws NotFoundException {
         List<Team> teams = teamService.showTeamList();
 
-        if (teams.isEmpty()) {
+        if (teams == null) {
             logger.error("NO ALL TEAL LIST");
             System.out.println("전체 팀 목록이 없습니다");
             return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);

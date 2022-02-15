@@ -64,7 +64,7 @@
             this.roomId = localStorage.getItem('wschat.roomId');
             this.roomName = localStorage.getItem('wschat.roomName');
             var _this = this;
-            axios.get('/messages/'+this.roomId).then(response => {
+            axios.get('/chat/messages/'+this.roomId).then(response => {
                 this.messages = response.data;
             })
             axios.get('/chat/user').then(response => {

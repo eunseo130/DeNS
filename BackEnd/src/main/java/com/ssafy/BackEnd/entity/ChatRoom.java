@@ -1,5 +1,7 @@
 package com.ssafy.BackEnd.entity;
 
+import com.ssafy.BackEnd.dto.ChatUserDto;
+import com.ssafy.BackEnd.dto.UserDto;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.data.redis.core.RedisHash;
@@ -23,14 +25,14 @@ public class ChatRoom implements Serializable {
     @Indexed
     private String name;
     @Indexed
-    private Profile user1;
+    private ChatUserDto user1;
     @Indexed
-    private Profile user2;
+    private ChatUserDto user2;
 
-    public static ChatRoom create(Profile user1, Profile user2) {
+    public static ChatRoom create(ChatUserDto user1, ChatUserDto user2) {
         ChatRoom chatRoom = new ChatRoom();
         chatRoom.roomId = UUID.randomUUID().toString();
-        chatRoom.name = user1.getName() + user2.getName();
+        chatRoom.name = user1.getName()+user1.getProfileId()+ "_" + user2.getName() + user2.getProfileId();
         chatRoom.user1 = user1;
         chatRoom.user2 = user2;
         return chatRoom;

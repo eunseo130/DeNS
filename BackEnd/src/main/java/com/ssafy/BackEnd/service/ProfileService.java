@@ -9,6 +9,7 @@ import com.ssafy.BackEnd.entity.TeamKeyword;
 import com.ssafy.BackEnd.entity.User;
 import javassist.NotFoundException;
 import org.apache.coyote.Request;
+import org.aspectj.weaver.ast.Not;
 import org.springframework.web.client.HttpClientErrorException;
 
 import java.util.List;
@@ -23,6 +24,8 @@ public interface ProfileService {
     List<Profile> showFindUserList(String keyword);
 
     Optional<Profile> findById(Long profile_id) throws NotFoundException;
+
+    Profile findbyEmail(String email) throws NotFoundException;
 
     void deleteUser(Long profile_id);
 

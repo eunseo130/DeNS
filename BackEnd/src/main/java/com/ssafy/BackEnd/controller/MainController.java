@@ -1,14 +1,10 @@
 package com.ssafy.BackEnd.controller;
 
 import com.ssafy.BackEnd.dto.UserDto;
+import com.ssafy.BackEnd.entity.*;
 import com.ssafy.BackEnd.entity.Request.RequestChangePassword1;
 import com.ssafy.BackEnd.entity.Request.RequestChangePassword2;
 import com.ssafy.BackEnd.entity.Request.RequestVerifyEmail;
-import com.ssafy.BackEnd.entity.Profile;
-import com.ssafy.BackEnd.entity.Response;
-import com.ssafy.BackEnd.entity.Team;
-import com.ssafy.BackEnd.entity.User;
-import com.ssafy.BackEnd.entity.dummy;
 import com.ssafy.BackEnd.exception.CustomException;
 import com.ssafy.BackEnd.exception.ErrorCode;
 import com.ssafy.BackEnd.service.*;
@@ -19,6 +15,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -48,8 +45,9 @@ public class MainController {
     private final ProfileService profileService;
 
 
-    @GetMapping("/test11")
-    public ResponseEntity<Map<String, Object>> test11() {
+    @GetMapping("testgo")
+    public ResponseEntity<Map<String, Object>> testgo() {
+        //System.out.println("11 :"+header);
         logger.info("test11");
         System.out.println("teset11이에요");
         Map<String, Object> map = new HashMap<>();
@@ -57,7 +55,30 @@ public class MainController {
         map.put("success", "성공");
 
         return new ResponseEntity<>(map, HttpStatus.OK);
+    }
 
+    @GetMapping("/test33")
+    public ResponseEntity<Map<String, Object>> test33(@RequestHeader String header ) {
+        System.out.println("33 : "+header);
+        logger.info("test33");
+        System.out.println("teset33이에요");
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", "test33");
+        map.put("success", "성공");
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
+    }
+
+    @GetMapping("/test44")
+    public ResponseEntity<Map<String, Object>> test44(@RequestHeader String header ) {
+        System.out.println("44 : "+header);
+        logger.info("test44");
+        System.out.println("teset44이에요");
+        Map<String, Object> map = new HashMap<>();
+        map.put("message", "test44");
+        map.put("success", "성공");
+
+        return new ResponseEntity<>(map, HttpStatus.OK);
     }
 
 
@@ -195,29 +216,50 @@ public class MainController {
             //System.out.println(user.getEmail()+" "+user.getPassword());
             //System.out.println("user null ? "+user);
 //            if(user != null) {
-                System.out.println("1pass");
-                final String Token = jwtService.createToken(user.getEmail(), user.getIdentity());
+            System.out.println("1pass");
+            final String Token = jwtService.createToken(user.getEmail(), user.getIdentity());
+            //Profile profile = profileService.findbyEmail(user.getEmail());
+            //System.out.println("pid : "+profile.getProfile_id());
+
+            if (user.getIdentity() == UserIdentity.ROLE_UNAUTH) {
+                status = HttpStatus.OK;
+                Cookie profileCookie = new Cookie("profileid", "-1");
+                resultMap.put("profileid", "-1");
+                resultMap.put("status", HttpStatus.UNAUTHORIZED);
+                resultMap.put("message", "권한이 없습니다.");
+
+            } else {
+                String profileid = String.valueOf(user.getProfile().getProfile_id());
+                System.out.println("pid : " + profileid);
                 //final String refreshJwt = jwtService.generateRefershToken(user);
 
-                System.out.println("accessToken : "+Token);
+                System.out.println("accessToken : " + Token);
                 //System.out.println("refreshToken : "+refreshJwt);
 
                 Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
+                Cookie profileCookie = new Cookie("profileid", profileid);
+                Cookie identityCookie = new Cookie("identity", String.valueOf(user.getIdentity()));
 //                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
 
                 System.out.println("pass 2");
                 response.addCookie(accessToken);
+                response.addCookie(profileCookie);
+                response.addCookie(identityCookie);
+                //response.addCookie();
 //                response.addCookie(refreshToken);
 
                 System.out.println("pass 3");
                 //redisUtil.setDataExpire(Token, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
 
                 redisUtil.setData(user.getEmail(), Token);
-                resultMap.put("access-token", Token);
+                resultMap.put("accessToken", Token);
+                resultMap.put("profileid", profileid);
+                resultMap.put("Identity", user.getIdentity());
                 resultMap.put("message", "success");
                 status = HttpStatus.ACCEPTED;
                 logger.info("INFO SUCCESS");
             }
+        }
 //        else {
 //                //System.out.println("error");
 //                resultMap.put("message", "fail");
@@ -230,6 +272,7 @@ public class MainController {
             resultMap.put("message", "No Authorization");
             //throw new CustomException(ErrorCode.INVALID_ID);
         }
+
         System.out.println("status : "+status);
         return new ResponseEntity<Map<String, Object>>(resultMap, status);
     }

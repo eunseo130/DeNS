@@ -108,16 +108,19 @@
 
 package com.ssafy.BackEnd.controller;
 
-import com.ssafy.BackEnd.entity.ChatRoom;
-import com.ssafy.BackEnd.entity.LoginInfo;
-import com.ssafy.BackEnd.entity.Profile;
-import com.ssafy.BackEnd.entity.User;
+import com.ssafy.BackEnd.dto.ChatUserDto;
+import com.ssafy.BackEnd.entity.*;
+import com.ssafy.BackEnd.exception.CustomException;
+import com.ssafy.BackEnd.exception.ErrorCode;
 import com.ssafy.BackEnd.repository.ChatRoomRedisRepository;
-import com.ssafy.BackEnd.repository.ChatRoomRepository;
 import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -132,62 +135,94 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @RequiredArgsConstructor
-@Controller
+@RestController
 @CrossOrigin
 @RequestMapping("chat")
 public class ChatRoomController {
 
-    private final ChatRoomRedisRepository chatRoomRedisRepository;
+    private static final Logger logger = LogManager.getLogger(ChatRoomController.class);
 
-    private final ChatRoomRepository chatRoomRepository;
+    private final ChatRoomRedisRepository chatRoomRedisRepository;
 
     private final ProfileRepository profileRepository;
 
-
-    @GetMapping("/room")
-    public String rooms(Model model) {
-        return "/chat/room";
+    @GetMapping("/rooms")
+    public ResponseEntity<Iterable<ChatRoom>> rooms() {
+        Iterable<ChatRoom> all = chatRoomRedisRepository.findAll();
+        return new ResponseEntity<Iterable<ChatRoom>>(all, HttpStatus.OK);
     }
 
     @GetMapping("/rooms/{profileId}")
-    @ResponseBody
-    public Iterable<ChatRoom> room(@PathVariable Long profileId) {
+    public ResponseEntity<Iterable<ChatRoom>> room(@PathVariable Long profileId) {
         Iterable<ChatRoom> chatRooms = chatRoomRedisRepository.findAll();
         Profile profile = profileRepository.findById(profileId).get();
         List<ChatRoom> result = new ArrayList<>();
         for (ChatRoom chatRoom : chatRooms) {
-            if (chatRoom.getName().contains(profile.getName())) {
+            if (chatRoom.getName().contains(profile.getName()+profileId)) {
                 result.add(chatRoom);
             }
         }
-        return result;
+        logger.info("get chatrooms success");
+        return new ResponseEntity<Iterable<ChatRoom>>(result, HttpStatus.OK);
     }
 
     @PostMapping("/room/{profileId1}/{profileId2}")
-    @ResponseBody
-    public ChatRoom createRoom(@PathVariable Long profileId1, @PathVariable Long profileId2) {
-        Profile user1 = profileRepository.findById(profileId1).get();
-        Profile user2 = profileRepository.findById(profileId2).get();
-        ChatRoom chatRoom = ChatRoom.create(user1, user2);
-        return chatRoomRedisRepository.save(chatRoom);
+    public ResponseEntity<ChatRoom> createRoom(@PathVariable Long profileId1, @PathVariable Long profileId2) {
+        Profile profile1 = profileRepository.findById(profileId1).get();
+        ChatUserDto user1 = new ChatUserDto();
+        ChatUserDto chatUser1 = user1.builder().profileId(profileId1).name(profile1.getName()).build();
+        Profile profile2 = profileRepository.findById(profileId2).get();
+        ChatUserDto user2 = new ChatUserDto();
+        ChatUserDto chatUser2 = user2.builder().profileId(profileId2).name(profile2.getName()).build();
+
+        ChatRoom findRoom1 = chatRoomRedisRepository.findByName(chatUser1.getName()+chatUser1.getProfileId() +"_"+ chatUser2.getName()+chatUser2.getProfileId());
+        ChatRoom findRoom2 = chatRoomRedisRepository.findByName(chatUser2.getName()+chatUser2.getProfileId() +"_"+ chatUser1.getName()+chatUser1.getProfileId());
+        if (findRoom1 == null && findRoom2 == null){
+            ChatRoom chatRoom = ChatRoom.create(chatUser1, chatUser2);
+            ChatRoom save = chatRoomRedisRepository.save(chatRoom);
+            logger.info("CreateRoom success");
+            return new ResponseEntity<ChatRoom>(save, HttpStatus.CREATED);
+        } else if (findRoom1 == null && findRoom2 != null) {
+            logger.error("chatroom is already exists");
+//            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
+            return new ResponseEntity<ChatRoom>(findRoom2, HttpStatus.FOUND);
+        } else if (findRoom1 != null && findRoom2 == null) {
+            logger.error("chatroom is already exists");
+//            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
+            return new ResponseEntity<ChatRoom>(findRoom1, HttpStatus.FOUND);
+        } else {
+            logger.error("cannot create room");
+            throw new CustomException(ErrorCode.CANNOT_CREATE_CHATROOM);
+        }
     }
 
-    @GetMapping("/room/enter/{roomId}")
-    public String roomDetail(Model model, @PathVariable String roomId) {
-        model.addAttribute("roomId", roomId);
-        return "/chat/roomdetail";
+    @GetMapping("/room/enter/{roomId}/{profileId}")
+    public ResponseEntity<ChatRoom> enterRoom(Model model, @PathVariable String roomId, @PathVariable Long profileId) {
+        Profile profile = profileRepository.findById(profileId).get();
+        ChatRoom findRoom = chatRoomRedisRepository.findByRoomId(roomId);
+        if (findRoom.getUser1().getProfileId().equals(profileId) || findRoom.getUser2().getProfileId().equals(profileId)) {
+            return new ResponseEntity<ChatRoom>(findRoom, HttpStatus.OK);
+        }
+        throw new CustomException(ErrorCode.NO_CHAT_ROOM);
     }
 
     @GetMapping("/room/{roomId}")
-    @ResponseBody
-    public ChatRoom roomInfo(@PathVariable String roomId) {
-        return chatRoomRedisRepository.findByRoomId(roomId);
+    public ResponseEntity<ChatRoom> roomInfo(@PathVariable String roomId) {
+        ChatRoom chatRoom = chatRoomRedisRepository.findByRoomId(roomId);
+        if (chatRoom == null) {
+            logger.info("get room info success");
+            throw new CustomException(ErrorCode.NO_CHAT_ROOM);
+        }
+        return new ResponseEntity<ChatRoom>(chatRoom, HttpStatus.OK);
     }
 
     @GetMapping("/user")
-    @ResponseBody
     public LoginInfo getUserInfo() {
-        String name = SecurityContextHolder.getContext().getAuthentication().getName();
+        System.out.println("===========test===========");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println(authentication);
+        String name = authentication.getName();
+        System.out.println(name);
         return LoginInfo.builder().name(name).build();
     }
 }
