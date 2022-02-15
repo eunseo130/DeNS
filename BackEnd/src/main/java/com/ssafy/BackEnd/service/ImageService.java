@@ -65,8 +65,8 @@ public class ImageService {
                     File file = new File(uploadFolder + profile.getImage());
                     file.delete();
                 }
-                Path write = Files.write(imageFilePath, multipartFile.getBytes());
-                System.out.println(write.toString());
+                Files.write(imageFilePath, multipartFile.getBytes());
+
             } catch (Exception e) {
                 e.printStackTrace();
             }

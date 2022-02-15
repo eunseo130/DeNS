@@ -22,5 +22,12 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 .addResourceLocations("classpath:/templates/")
                 .setCacheControl(CacheControl.maxAge(10, TimeUnit.MINUTES));
 
+        registry
+                .addResourceHandler("/profileImg/**")
+                .addResourceLocations("file:///" + profileUploadFolder)
+                .setCachePeriod(60*10*6)
+                .resourceChain(true)
+                .addResolver(new PathResourceResolver());
+
     }
 }
