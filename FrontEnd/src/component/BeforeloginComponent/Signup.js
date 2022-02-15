@@ -20,8 +20,18 @@ export default function Signup() {
     }
 
     const join = () => {
-        signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
-        certi(input.email, (response) => { console.log(response) }, (error) => { console.log(error) });
+        // signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
+        console.log("verify test 11111");
+        console.log(input.email);
+        verify(input.email,
+            (response) => {
+                console.log("verify test33333333");
+                console.log(response)
+            },
+            (error) => {
+                console.log("verify test 43444444");
+                console.log(error)
+            });
         // signin(input,
         //     (response) => { console.log(response) },    //success
         //     (error) => { console.log(error) });         //fail
