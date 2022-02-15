@@ -223,6 +223,8 @@ public class MainController {
 
             if (user.getIdentity() == UserIdentity.ROLE_UNAUTH) {
                 status = HttpStatus.OK;
+                Cookie profileCookie = new Cookie("profileid", "-1");
+                resultMap.put("profileid", "-1");
                 resultMap.put("status", HttpStatus.UNAUTHORIZED);
                 resultMap.put("message", "권한이 없습니다.");
 
