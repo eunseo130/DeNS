@@ -273,7 +273,7 @@ public class TeamServiceImpl implements TeamService{
                         teamKeyword.setCount(teamKeyword.getCount()+1);
                     }
                     team.setTeam_keyword(teamKeywords);
-                    teamRepository.save(team);
+                    //teamRepository.save(team);
                 }
             }
             else {
