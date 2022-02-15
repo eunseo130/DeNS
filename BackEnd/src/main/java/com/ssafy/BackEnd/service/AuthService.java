@@ -8,6 +8,7 @@ import javassist.NotFoundException;
 import org.springframework.http.ResponseEntity;
 
 import javax.mail.MessagingException;
+import java.util.Map;
 
 public interface AuthService {
 
@@ -23,7 +24,7 @@ public interface AuthService {
 
     ResponseEntity<User> verifyEmail(String key) throws NotFoundException;
 
-    String sendVerificationMail(User user) throws NotFoundException, MessagingException;
+    ResponseEntity<Map<String, Object>> sendVerificationMail(User user) throws NotFoundException, MessagingException;
 
     void modifyUserRole(User user, UserIdentity role);
 

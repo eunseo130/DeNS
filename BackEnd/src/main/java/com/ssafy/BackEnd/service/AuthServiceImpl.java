@@ -20,9 +20,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 import javax.mail.MessagingException;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 
@@ -139,8 +137,8 @@ public class AuthServiceImpl implements AuthService{
         return savedUser;
     }
 
-    public String sendVerificationMail(User user) throws NotFoundException, MessagingException {
-        String VERIFICATION_LINK = "http://localhost:2345/verify/";
+    public ResponseEntity<Map<String, Object>> sendVerificationMail(User user) throws NotFoundException, MessagingException {
+        String VERIFICATION_LINK = "http://i6c201.p.ssafy.io:3040/verify/";
         if(user==null) throw new NotFoundException("멤버가 조회되지 않음");
         UUID uuid = UUID.randomUUID();
         System.out.println("key : " + uuid);
@@ -149,7 +147,9 @@ public class AuthServiceImpl implements AuthService{
                 +"<h3>"+user.getName() + "님</h3>" + "<p>인증하기 버튼을 누르시면 로그인을 하실 수 있습니다. <br>"
                 +"<a href="+VERIFICATION_LINK+uuid.toString()+">인증하기</a></p>";
         emailService.sendMail(user.getEmail(),"[DeNS] 회원가입 인증메일입니다.", htmlStr);
-        return uuid.toString();
+        Map<String, Object> result = new HashMap<>();
+        result.put("key", uuid.toString());
+        return new ResponseEntity<Map<String, Object>>(result, HttpStatus.OK);
     }
 
     public ResponseEntity<User> verifyEmail(@PathVariable String key) throws NotFoundException {
