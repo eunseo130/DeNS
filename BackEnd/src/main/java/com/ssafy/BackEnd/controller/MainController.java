@@ -222,16 +222,20 @@ public class MainController {
 //            if(user != null) {
                 System.out.println("1pass");
                 final String Token = jwtService.createToken(user.getEmail(), user.getIdentity());
+                Profile profile = profileService.findbyEmail(user.getEmail());
+                String profileid = String.valueOf(profile.getProfile_id());
                 //final String refreshJwt = jwtService.generateRefershToken(user);
 
                 System.out.println("accessToken : "+Token);
                 //System.out.println("refreshToken : "+refreshJwt);
 
                 Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
+                Cookie profileCookie = new Cookie("profileid", profileid);
 //                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
 
                 System.out.println("pass 2");
                 response.addCookie(accessToken);
+                response.addCookie(profileCookie);
 //                response.addCookie(refreshToken);
 
                 System.out.println("pass 3");

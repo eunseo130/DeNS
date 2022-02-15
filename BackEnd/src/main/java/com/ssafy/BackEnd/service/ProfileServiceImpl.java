@@ -53,6 +53,13 @@ public class ProfileServiceImpl implements ProfileService{
     }
 
     @Override
+    public Profile findbyEmail(String email) throws NotFoundException {
+        Profile profile = findbyEmail(email);
+        if (profile == null) throw new NotFoundException("프로필이 조회되지 않습니다.");
+        return profile;
+    }
+
+    @Override
     public User findUserById(Long profile_id) {
         Profile profile = profileRepository.findById(profile_id).get();
         User user = userRepository.findByEmail(profile.getEmail());
