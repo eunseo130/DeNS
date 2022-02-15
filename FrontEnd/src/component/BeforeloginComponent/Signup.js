@@ -23,7 +23,7 @@ export default function Signup() {
         // signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
         console.log("verify test 11111");
         console.log(input.email);
-        verify(input.email,
+        verify({ "email": input.email },
             (response) => {
                 console.log("verify test33333333");
                 console.log(response)
