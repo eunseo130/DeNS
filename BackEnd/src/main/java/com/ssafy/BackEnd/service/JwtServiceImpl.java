@@ -84,22 +84,40 @@ public class JwtServiceImpl { //implements JwtService {
 
     // Request의 Header에서 token 값을 가져옵니다.
     public String resolveToken(HttpServletRequest req) {
+        System.out.println("-------------resolvetk--------------");
+        int cnt = 0;
+        while (!req.getHeaderNames().hasMoreElements() || cnt <10){
+            System.out.println("r header : "+req.getHeaderNames().nextElement());
+            cnt++;
+        }
         String token = req.getHeader("Authorization");
         String newToken = null;
 //        while(req.getHeaderNames().hasMoreElements()){
 //            System.out.println("name : "+req.getHeaderNames().nextElement());
 //        }
 //        System.out.println("header name : "+req.getHeaderNames());
-        if(token != null) newToken = token.substring(8, token.length()-1);
+
+        if(token != null) {
+            newToken = token;
+            //String[] strlist = newToken.split(" ");
+            newToken = token.substring(8, token.length()-1);
+            //System.out.println("newtk : " + strlist[1]);
+            System.out.println("newtk : "+newToken);
+        }
         return newToken;
     }
 
     // 토큰의 유효성 + 만료일자 확인
     public boolean validateToken(String jwtToken) {
+        System.out.println("----------validation------------");
         try {
             Jws<Claims> claims = Jwts.parser().setSigningKey(SALT).parseClaimsJws(jwtToken);
+            System.out.println("jwttoken : "+jwtToken);
+            System.out.println("claims : "+claims.getBody().getExpiration().getTime());
+            System.out.println("date : "+claims.getBody().getExpiration().before(new Date()));
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
+            System.out.println("err : "+e.getMessage());
             System.out.println("false ");
             return false;
         }
