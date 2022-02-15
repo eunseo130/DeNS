@@ -233,11 +233,14 @@ public class MainController {
 
                 Cookie accessToken = cookieService.createCookie(JwtServiceImpl.ACCESS_TOKEN_NAME, Token);
                 Cookie profileCookie = new Cookie("profileid", profileid);
+                Cookie identityCookie = new Cookie("identity", String.valueOf(user.getIdentity()));
 //                Cookie refreshToken = cookieService.createCookie(JwtServiceImpl.REFRESH_TOKEN_NAME, refreshJwt);
 
                 System.out.println("pass 2");
                 response.addCookie(accessToken);
                 response.addCookie(profileCookie);
+                response.addCookie(identityCookie);
+                //response.addCookie();
 //                response.addCookie(refreshToken);
 
                 System.out.println("pass 3");
@@ -246,6 +249,7 @@ public class MainController {
                 redisUtil.setData(user.getEmail(), Token);
                 resultMap.put("accessToken", Token);
                 resultMap.put("profileid", profileid);
+                resultMap.put("Identity", user.getIdentity());
                 resultMap.put("message", "success");
                 status = HttpStatus.ACCEPTED;
                 logger.info("INFO SUCCESS");
