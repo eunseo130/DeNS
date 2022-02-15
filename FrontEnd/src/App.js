@@ -38,6 +38,7 @@ import HeaderBox from './component/commonComponent/HeaderBox'
 import 'bootstrap/dist/css/bootstrap.min.css'
 import LoginTest from './component/BeforeloginComponent/LoginTest'
 import MessageRoom from './component/MessengerComponent/MessageRoom'
+import CertiSubmit from './component/CertiSubmit'
 // import auth from './component/hoc/auth'
 const App = () => {
   const routes = useRoutes([
@@ -104,13 +105,17 @@ const App = () => {
         },
         {
           path: '/auth/messenger', element: <Messenger />,
-        },
+        }, 
         { path: '/auth/messenger/:roomid', element: <MessageRoom /> },
       ],
     },
     {
       path: '*',
       element: <Error />
+    },
+    {
+      path: '/certi/:key',
+      element: <CertiSubmit />
     },
   ])
 

@@ -21,6 +21,7 @@ export default function Signup() {
 
     const join = () => {
         signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
+        certi(input.email, (response) => { console.log(response) }, (error) => { console.log(error) });
         // signin(input,
         //     (response) => { console.log(response) },    //success
         //     (error) => { console.log(error) });         //fail

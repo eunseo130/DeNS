@@ -21,6 +21,11 @@ function profileTest(param, success, fail) {
   console.log('profile get')
   api.get(`/profile/${param}`).then(success).catch(fail)
 }
+function certi(param, success, fail) {
+  api.post(`/verify`,JSON.stringify(param)).then(success).catch(fail);
+}
+
+
 function profileUpdate([id, position, stack], success, fail) {
   console.log('profile update')
   console.log(position)
@@ -76,4 +81,5 @@ export {
   profileTest,
   profileUpdate,
   putKeyword,
+  certi
 }

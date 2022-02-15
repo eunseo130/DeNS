@@ -32,16 +32,18 @@ function Login() {
   const LoginConsole = () => {
     console.log(input);
     signin(input, (response) => {
-//      console.log(response.data);
+     console.log(response.data);
       dispatch(loginUser(response.data));
       // dispatch(getId());
-      console.log(store.getState().user.token);
-
+      // console.log(store.getState().user.token);
+      if (store.getState().user.profileid == -1) {
+        return navigate(`/asdfsasfsafsfd`)
+      }
       setToken('token', store.getState().user.token);
       setProfileid('myID', store.getState().user.profileid);
       navigate(`/auth`);
     }, (error) => {
-      console.log(error)
+      console.log(error);
     });
     // console.log(cookies);
   };
