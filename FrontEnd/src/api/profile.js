@@ -3,9 +3,18 @@ import { apiInstance } from './index.js'
 const api = apiInstance()
 
 function profileTest(param, success, fail) {
-  console.log('profile get')
   api.get(`/profile/${param}`).then(success).catch(fail)
-  // api.get(`/profile/image/${param}`).then(success).catch(fail)
+}
+function getKeyword(param, success, fail) {
+  api.get(`/profile/keyword/${param}`).then(success).catch(fail)
+}
+function getImage(param, success, fail) {
+  api
+    .get(`/profile/image/${param}`, {
+      responseType: 'blob',
+    })
+    .then(success)
+    .catch(fail)
 }
 function profileUpdate([id, position, stack, git_id], success, fail) {
   api
@@ -20,7 +29,7 @@ function putKeyword([id, keyword], success, fail) {
     .catch(fail)
 }
 function ImgUpload([id, formData], success, fail) {
-  console.log('check0')
+  console.log('에러1')
   api
     .post(`/profile/update/image/${id}`, formData, {
       headers: {
@@ -30,4 +39,4 @@ function ImgUpload([id, formData], success, fail) {
     .then(success)
     .catch(fail)
 }
-export { profileTest, profileUpdate, putKeyword, ImgUpload }
+export { profileTest, profileUpdate, putKeyword, ImgUpload, getImage, getKeyword}

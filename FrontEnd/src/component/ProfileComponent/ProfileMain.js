@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import { Outlet, useParams, useNavigate } from 'react-router-dom'
 import {
   profileTest,
   profileUpdate,
   putKeyword,
   ImgUpload,
+  getKeyword,
 } from '../../api/profile'
 import { Container, Row, Stack } from 'react-bootstrap'
 import ProfileGit from './ProfileGit'
@@ -15,7 +16,6 @@ import ProfileKeyword from './ProfileKeyword'
 
 export default function ProfileMain() {
   const [inputs, setInputs] = useState({
-    image: '',
     name: '',
     position: ' ',
     stack: '',
@@ -25,57 +25,44 @@ export default function ProfileMain() {
     gitId: '',
     git: true,
   })
-  const { image, name, position, stack, email, edit, keyword, gitId, git } =
-    inputs
+  const { name, position, stack, email, edit, keyword, gitId, git } = inputs
   const [keywords, setKeywords] = useState([])
   const { id } = useParams()
   const [files, setFiles] = useState('')
   const [fileImage, setFileImage] = useState('')
-  let navigate = useNavigate()
-  
-  useEffect(
-    () =>
-      profileTest(
-        id,
-        (res) => {
-          setInputs({
-            ...inputs,
-            image: res.data.image,
-            name: res.data.name,
-            position: res.data.position,
-            stack: res.data.stack,
-            email: res.data.email,
-            git: !git,
-            gitId: res.data.git_id,
-          })
-          let words = [
-            { value: res.data.position, count: 3 },
-            { value: res.data.stack, count: 3 },
-          ]
-          const keywordObjs = res.data.profile_keyword
-          keywordObjs.forEach((keywordObj) => {
-            const word = {
-              value: keywordObj.name,
-              count: keywordObj.count,
-            }
-            words.push(word)
-          })
-          setKeywords(words)
-        },
-        (error) => console.log(error)
-      ),
-    []
-  )
+  const [image, setImage] = useState('')
+  const [keywordObjs, setKeywordObjs] = useState('')
+  // const [localId, setLocalId] = useState('')
+  // setLocalId(localStorage.getItem(id))
+  // console.log(localId)
+  useEffect(() => {
+    profileTest(
+      id,
+      (res) => {
+        setInputs({
+          ...inputs,
+          name: res.data.name,
+          position: res.data.position,
+          stack: res.data.stack,
+          email: res.data.email,
+          git: !git,
+          gitId: res.data.git_id,
+        })
+      },
+      (error) => console.log(error)
+    )
+  }, [])
+  useEffect(() => {
+    getKeywords()
+  }, [position,stack])
 
   function update() {
-    console.log('업데이트 클릭시', gitId, inputs)
     profileUpdate(
       [id, position, stack, gitId],
       (res) => {
         console.log('반환시', res.data.git_id, res.data)
         setInputs({
           ...inputs,
-          image: res.data.image,
           name: res.data.name,
           position: res.data.position,
           stack: res.data.stack,
@@ -84,10 +71,31 @@ export default function ProfileMain() {
           git: !git,
           edit: !edit,
         })
-        // setKeywords([
-        //   { value: position, count: 10000 },
-        //   { value: stack, count: 10000 },
-        // ])
+      },
+      (error) => console.log(error)
+    )
+    getKeywords()
+  }
+  function getKeywords() {
+    getKeyword(
+      id,
+      (res) => {
+        let words = []
+        const keywordObjs = res.data
+        keywordObjs.forEach((keywordObj) => {
+          const word = {
+            value: keywordObj.name,
+            count: keywordObj.count,
+          }
+          words.push(word)
+        })
+        const value = keywordObjs.reduce(
+          (max, p) => (p.count > max ? p.count : max),
+          0
+        )
+        const c = 1 + value
+        words.push({ value: position, count: c }, { value: stack, count: c })
+        setKeywords(words)
       },
       (error) => console.log(error)
     )
@@ -111,20 +119,9 @@ export default function ProfileMain() {
     putKeyword(
       [id, keyword],
       (res) => {
-        const keywordObjs = res.data
         setKeywords([])
-        let words = [
-          { value: position, count: 10000 },
-          { value: stack, count: 10000 },
-        ]
-        keywordObjs.map((keywordObj) => {
-          const word = {
-            value: keywordObj.name,
-            count: keywordObj.count,
-          }
-          words.push(word)
-        })
-        setKeywords(words)
+        getKeywords()
+        console.log(keywords)
         setInputs({ ...inputs, keyword: '' })
       },
       (error) => console.log(error)
@@ -143,7 +140,7 @@ export default function ProfileMain() {
     ImgUpload(
       [id, formData],
       (res) => {
-        setInputs({ ...inputs, image: res.data })
+        setImage(res.data)
         setFiles('')
         window.location.replace(`/auth/profile/${id}`)
       },
@@ -161,7 +158,6 @@ export default function ProfileMain() {
           <Row>
             <ProfileImage
               id={id}
-              image={image}
               fileImage={fileImage}
               onLoad={onLoad}
               ImageUpload={ImageUpload}
