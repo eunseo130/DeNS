@@ -219,19 +219,19 @@ public class ChatRoomController {
         return new ResponseEntity<ChatRoom>(chatRoom, HttpStatus.OK);
     }
 //
-//    @GetMapping("/user")
-//    public LoginInfo getUserInfo() {
-////        String authorization = request.getHeader("Authorization");
-////        String email = jwtService.getUserEmail(authorization);
-////        Profile profile = profileRepository.findByEmail(email).get();
-////        String name = profile.getName();
-////        return LoginInfo.builder().name(name).token(authorization).build();
-////    }
-//
     @GetMapping("/user")
-    public void getUserInfo(HttpServletRequest request) {
-        String authorization = request.getHeader("Authorization");
-        System.out.println(authorization);
+    public LoginInfo getUserInfo(HttpServletRequest request) {
+        String authorization = jwtService.resolveToken(request);
+        String email = jwtService.getUserEmail(authorization);
+        Profile profile = profileRepository.findByEmail(email).get();
+        String name = profile.getName();
+        return LoginInfo.builder().name(name).token(authorization).build();
+    }
+//
+//    @GetMapping("/user")
+//    public void getUserInfo(HttpServletRequest request) {
+//        String authorization = request.getHeader("Authorization");
+//        System.out.println(authorization);
 //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //        auth.getDetails()
 //        return LoginInfo.builder().name(name).token(jwtService.createToken(name)).build();
