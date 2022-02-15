@@ -146,6 +146,8 @@ public class ChatRoomController {
 
     private final ProfileRepository profileRepository;
 
+    private final JwtServiceImpl jwtService;
+
     @GetMapping("/rooms")
     public ResponseEntity<Iterable<ChatRoom>> rooms() {
         Iterable<ChatRoom> all = chatRoomRedisRepository.findAll();
@@ -218,12 +220,11 @@ public class ChatRoomController {
     }
 
     @GetMapping("/user")
-    public LoginInfo getUserInfo() {
-        System.out.println("===========test===========");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication);
-        String name = authentication.getName();
-        System.out.println(name);
-        return LoginInfo.builder().name(name).build();
+    public LoginInfo getUserInfo(HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        String email = jwtService.getUserEmail(authorization);
+        Profile profile = profileRepository.findByEmail(email).get();
+        String name = profile.getName();
+        return LoginInfo.builder().name(name).token(authorization).build();
     }
 }

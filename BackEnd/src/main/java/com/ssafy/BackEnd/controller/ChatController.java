@@ -1,8 +1,10 @@
 package com.ssafy.BackEnd.controller;
 import com.ssafy.BackEnd.entity.ChatMessage;
 
+import com.ssafy.BackEnd.entity.Profile;
 import com.ssafy.BackEnd.repository.ChatMessageRedisRepository;
 import com.ssafy.BackEnd.repository.ChatMessageRepository;
+import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.JwtService;
 import com.ssafy.BackEnd.service.JwtServiceImpl;
@@ -17,6 +19,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +39,8 @@ public class ChatController {
 
     private final ChatMessageRedisRepository chatMessageRedisRepository;
 
+    private final ProfileRepository profileRepository;
+
     private final RedisTemplate<String, Object> redisTemplate;
 
     private final ChannelTopic channelTopic;
@@ -52,7 +57,11 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("chat/message")
-    public void message(ChatMessage message, @Header("name") String name) {
+    public void message(ChatMessage message, HttpServletRequest request) {
+        String authorization = request.getHeader("Authorization");
+        String email = jwtService.getUserEmail(authorization);
+        Profile profile = profileRepository.findByEmail(email).get();
+        String name = profile.getName();
         message.setSender(name);
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             message.setSender("[알림]");
