@@ -138,7 +138,7 @@ public class AuthServiceImpl implements AuthService{
     }
 
     public Map<String, Object> sendVerificationMail(User user) throws NotFoundException, MessagingException {
-        String VERIFICATION_LINK = "http://i6c201.p.ssafy.io:3040/verify/";
+        String VERIFICATION_LINK = "http://i6c201.p.ssafy.io:3040/certi/";
         if(user==null) throw new NotFoundException("멤버가 조회되지 않음");
         UUID uuid = UUID.randomUUID();
         System.out.println("key : " + uuid);
