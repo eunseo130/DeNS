@@ -245,6 +245,7 @@ public class MainController {
 
                 redisUtil.setData(user.getEmail(), Token);
                 resultMap.put("access-token", Token);
+                resultMap.put("profileid", profileid);
                 resultMap.put("message", "success");
                 status = HttpStatus.ACCEPTED;
                 logger.info("INFO SUCCESS");
