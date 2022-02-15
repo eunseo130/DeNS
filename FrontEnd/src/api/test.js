@@ -21,7 +21,9 @@ function profileTest(param, success, fail) {
   console.log('profile get')
   api.get(`/profile/${param}`).then(success).catch(fail)
 }
-function certi(param, success, fail) {
+function verify(param, success, fail) {
+  console.log("verify test 2222");
+  console.log(param);
   api.post(`/verify`,JSON.stringify(param)).then(success).catch(fail);
 }
 
@@ -81,5 +83,5 @@ export {
   profileTest,
   profileUpdate,
   putKeyword,
-  certi
+  verify
 }
