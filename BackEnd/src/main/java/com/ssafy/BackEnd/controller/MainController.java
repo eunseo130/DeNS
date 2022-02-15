@@ -244,7 +244,7 @@ public class MainController {
                 //redisUtil.setDataExpire(Token, user.getEmail(), JwtServiceImpl.REFRESH_TOKEN_VALIDATION_SECOND);
 
                 redisUtil.setData(user.getEmail(), Token);
-                resultMap.put("access-token", Token);
+                resultMap.put("accessToken", Token);
                 resultMap.put("profileid", profileid);
                 resultMap.put("message", "success");
                 status = HttpStatus.ACCEPTED;
