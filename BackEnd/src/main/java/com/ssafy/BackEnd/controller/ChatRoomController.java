@@ -117,6 +117,8 @@ import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
 import com.ssafy.BackEnd.service.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -138,11 +140,11 @@ import java.util.stream.Stream;
 @RequestMapping("chat")
 public class ChatRoomController {
 
+    private static final Logger logger = LogManager.getLogger(ChatRoomController.class);
+
     private final ChatRoomRedisRepository chatRoomRedisRepository;
 
-
     private final ProfileRepository profileRepository;
-
 
     @GetMapping("/room")
     public ResponseEntity<Iterable<ChatRoom>> rooms() {
@@ -157,13 +159,13 @@ public class ChatRoomController {
         List<ChatRoom> result = new ArrayList<>();
         for (ChatRoom chatRoom : chatRooms) {
             if (chatRoom.getName().contains(profile.getName())) {
-                System.out.println(chatRoom.getName());
                 result.add(chatRoom);
             }
         }
         if (result.isEmpty()) {
             throw new CustomException(ErrorCode.NO_CHAT_ROOM);
         }
+        logger.info("get chatrooms success");
         return new ResponseEntity<Iterable<ChatRoom>>(result, HttpStatus.OK);
     }
 
@@ -181,12 +183,16 @@ public class ChatRoomController {
         if (findRoom1 == null && findRoom2 == null){
             ChatRoom chatRoom = ChatRoom.create(chatUser1, chatUser2);
             ChatRoom save = chatRoomRedisRepository.save(chatRoom);
+            logger.info("CreateRoom success");
             return new ResponseEntity<ChatRoom>(save, HttpStatus.CREATED);
         } else if (findRoom1 == null && findRoom2 != null) {
+            logger.error("chatroom is already exists");
             throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
         } else if (findRoom1 != null && findRoom2 == null) {
+            logger.error("chatroom is already exists");
             throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
         } else {
+            logger.error("cannot create room");
             throw new CustomException(ErrorCode.CANNOT_CREATE_CHATROOM);
         }
     }
@@ -201,6 +207,7 @@ public class ChatRoomController {
     public ResponseEntity<ChatRoom> roomInfo(@PathVariable String roomId) {
         ChatRoom chatRoom = chatRoomRedisRepository.findByRoomId(roomId);
         if (chatRoom == null) {
+            logger.info("get room info success");
             throw new CustomException(ErrorCode.NO_CHAT_ROOM);
         }
         return new ResponseEntity<ChatRoom>(chatRoom, HttpStatus.OK);
