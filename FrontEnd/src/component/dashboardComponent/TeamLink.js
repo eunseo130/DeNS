@@ -4,17 +4,20 @@ import Slider from "react-slick";
 import TeamLinkBox from "./TeamLinkBox";
 import { myteam } from '../../api/team';
 
+
 function TeamLink() {
     const [link, setLink] = useState('');
     useEffect(() => {
-      myteam(1,
+      myteam(88,
           (response) => {
               setLink(response.data);
+              console.log(response);
       },  
       (error) => {
           console.log("오류가 됨.", (error));
       });
     }, []);
+    
     const settings = {
       dots: true,
       infinite: false,

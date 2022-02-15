@@ -9,8 +9,8 @@ export default function TeamSettings() {
 		// profile_id, team_id 불러오기 필요
 
 		const [title, setTitle] = useState('');
-		const [membersName, setMemberName] = useState('');
-		const [membersEmail, setMembersEmail] = useState('');
+		// const [membersName, setMemberName] = useState('');
+		// const [membersEmail, setMembersEmail] = useState('');
 		const [members, setMembers] = useState('');
 
 		const teamId = useParams().id;
@@ -22,7 +22,7 @@ export default function TeamSettings() {
 		const toChangeTitle = (e) => {
 			e.preventDefault();
 			const formData = new FormData();
-			formData.append("title", JSON.stringify(title));
+			formData.append("title", title);
 			
 			setTitle(''); // 초기화
 			titleChange(
@@ -54,12 +54,7 @@ export default function TeamSettings() {
 			detail(
 				teamId,
 				(response) => {
-					// console.log(response.data[5][0].team.team_member);
-					// console.log(response.data[5][0].team.team_member[1].user.name);
-					setMemberName(response.data[5][0].team.team_member[1].user.name);
-					setMembersEmail(response.data[5][0].team.team_member[1].user.email);
-					// console.log(response.data[teamId][0].team.team_member)
-					setMembers(response.data[teamId][0].team.team_member);
+					setMembers(response.data[teamId]);
 				},
 				(error) => {
 					console.log('에러', error);
@@ -70,6 +65,7 @@ export default function TeamSettings() {
 		const membersInfo = () => {
 			// 팀원 방출하기
 			const outMembers = (email) => {
+				// 팀원 방출 함수(api)
 				dischargeMembers(
 					teamId, email,
 					(response) => {
@@ -82,6 +78,7 @@ export default function TeamSettings() {
 					}
 				)
 			}
+
 			const result = [];
 			for (let i=1; i < members.length; i++) {
 				const email = members[i].user.email

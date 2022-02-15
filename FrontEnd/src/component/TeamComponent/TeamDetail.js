@@ -1,21 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { detail, bringTeamMembers } from '../../api/team';
+import { detail, bringTeamMembers, checkLeader } from '../../api/team';
 import styled from "styled-components";
 import { useParams } from 'react-router-dom';
 import TeamFeedContainer from './TeamFeedContainer';
 import TeamMemberInfo from './TeamMemberInfo'
 import MembersImg from './MembersImg';
+import { Link } from "react-router-dom";
 
 export default function TeamDetail(props) {
     const [teamTitle, setTeamTitle] = useState('');
     const [teamContent, setTeamContent] = useState('');
     const [teamMembers, setTeamMembers] = useState('');
+		const [email, setEmail] = useState('');
 
     const teamId = useParams().id;
     // 팀 명 및 팀 소개
     useEffect(() => {
         detail(teamId,
             (response) => {
+								console.log(response)
                 setTeamTitle(response.data[teamId][0].team.content);
                 setTeamContent(response.data[teamId][0].team.title);
             },
@@ -29,22 +32,45 @@ export default function TeamDetail(props) {
         bringTeamMembers(teamId,
             (response) => {
                 setTeamMembers(response.data);
+								setEmail("ssafy3@naver.com") // formData 전송 용
             },
             (error) => {
                 console.log("오류가 됨.", (error));
             });
         },[]);
-
+		
+		// 리더 확인
+		useEffect(() => {
+			// const formData = new FormData();
+			// formData.append('email', email);
+			// console.log(email);
+			checkLeader(
+				teamId, "ssafy3@naver.com",
+				(response) => {
+					console.log("리더 확인", response);
+				},
+				(error) => {
+					console.log("리더 확인", error);
+				}
+			)
+		}, [])	
     return (
+
     <TeamDetailBox>
-        {/* 팀 Title */}
-        <TheTeamTitle>
-            {teamTitle}
-        </TheTeamTitle>
+        <TeamDetailHeaders>
+					<Link to={{pathname:`/auth/team/${teamId}/settings`}}>
+							<button>팀 설정</button>
+					</Link>
+					{/* 팀 Title */}
+					<TheTeamTitle>
+							{teamTitle}
+					</TheTeamTitle>
+        </TeamDetailHeaders>
         <TeamDetailGrid>
             {/* 팀 피드 */}
             <TeamFeedContainer>
             </TeamFeedContainer>
+
             {/* 팀 소개 */}
             <TeamInfoContainer>
                 <TeamInfoTitle>팀 소개</TeamInfoTitle>
@@ -81,8 +107,12 @@ export default function TeamDetail(props) {
             </TeamInfoContainer>
         </TeamDetailGrid>
     </TeamDetailBox>
+
     )
 }
+const TeamDetailHeaders = styled.div`
+	display: flex;
+`
 const TeamDetailBox = styled.div`
 `
 const TheTeamTitle = styled.h3`

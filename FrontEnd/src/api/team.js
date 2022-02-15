@@ -57,16 +57,23 @@ function deleteTeamFeed(teamfeed_id, profile_id, success, fail){
 
 
 // 팀 Settings
+
+// 현재 유저가 Leader인지 판단
+function checkLeader(team_id, param, success, fail){
+    api.get(`teammember/getidentity/${team_id}`, JSON.stringify({email: param})).then(success).catch(fail);
+    console.log(team_id, JSON.stringify({email: param}));
+}
 // 팀 이름 변경
 function titleChange(profile_id, team_id, param, success, fail) {
     api.put(`team/${profile_id}/${team_id}`, JSON.stringify({title: param})).then(success).catch(fail);
     console.log(param, JSON.stringify(param), JSON.stringify({title: param}))
 }
+
 // 팀 멤버 방출
 function dischargeMembers(team_id, param, success, fail){
     api.delete(`/teammember/${team_id}`, JSON.stringify({email: param})).then(success).catch(fail);
-    console.log(JSON.stringify({email: param}))
 }
+
 // 팀 삭제
 function teamBreakup(team_id, success, fail){
     api.delete(`/team/${team_id}`).then(success).catch(fail);
@@ -77,5 +84,5 @@ function searchMyteam(param, success, fail){
 
 export {
     teamBreakup,searchMyteam, makeMyTeam, team, myteam, detail, teamFeed, makeTeamFeed, bringTeamMembers, titleChange, dischargeMembers, editTeamFeed,
-    deleteTeamFeed
+    deleteTeamFeed, checkLeader
 }
