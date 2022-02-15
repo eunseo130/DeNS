@@ -1,4 +1,5 @@
-import {store} from '../..'
+import { store } from '../..'
+import { API_BASE_URL } from '../../config'
 import React, { useState, useEffect } from 'react'
 import { Outlet, useParams, useNavigate } from 'react-router-dom'
 import {
@@ -36,7 +37,7 @@ export default function ProfileMain() {
   const userId = store.getState().user.profileid
   const [cookies] = useCookies(['token'])
   const authAxios = axios.create({
-    baseURL: 'http://3.36.131.59:2345/',
+    baseURL: API_BASE_URL,
     headers: {
       Authorization: `Bearer "${cookies.token}"`,
       withCredentials: true,
