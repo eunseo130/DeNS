@@ -34,6 +34,7 @@
     "react-tagcloud": "^2.2.0",
     "redux": "^4.1.2",
     "redux-devtools-extension": "^2.13.9",
+    "redux-logger": "^3.0.6",
     "slick-carousel": "^1.8.1",
     "sockjs": "^0.3.24",
     "sockjs-client": "^1.5.2",
