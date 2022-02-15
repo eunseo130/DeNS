@@ -108,12 +108,12 @@ public class TeamFeedServiceImpl implements TeamFeedService{
 
     @Override
     public TeamFeed modifyTeamFeed(TeamFeed teamFeed, Long profile_id, TeamFeedDto teamFeedDto) throws IOException {
-        Profile profile = profileRepository.findById(profile_id).get();
-
-        if(!teamFeed.getWriter().equals(profile.getName())) { //피드작성자와 프로필작성자 이름이 같지 않다면
-            System.out.println("권한이 없습니다");
-            throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
-        }
+//        Profile profile = profileRepository.findById(profile_id).get();
+//
+//        if(!teamFeed.getWriter().equals(profile_id)) { //피드작성자와 프로필작성자 프로필 아이디가 같지 않다면
+//            System.out.println("권한이 없습니다");
+//            throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
+//        }
 
         List<TeamFeedFile> teamFeedFiles = teamFeedFileService.saveTeamFeedFiles(teamFeedDto.getTeamFeedFiles());
 
@@ -231,10 +231,10 @@ public class TeamFeedServiceImpl implements TeamFeedService{
             }
         }
 
-        if (!teamFeed.getWriter().equals(user.getName()) || !teamFeed.getWriter().equals(teamLeader.getUser().getName())) {
-            System.out.println("권한이 없습니다");
-            throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
-        }
+//        if (!teamFeed.getWriter().equals(profile_id) && !teamFeed.getWriter().equals(teamLeader.getUser().getName())) {
+//            System.out.println("권한이 없습니다");
+//            throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
+//        }
 
 //        Team team = teamFeed.getTeam();
         List<TeamFeedKeyword> teamFeedKeywordList = teamFeed.getTeamFeedKeywords();
