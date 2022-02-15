@@ -114,7 +114,7 @@ const App = () => {
       element: <Error />
     },
     {
-      path: '/certi/:key',
+      path: '/certi',
       element: <CertiSubmit />
     },
   ])
