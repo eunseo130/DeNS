@@ -222,8 +222,8 @@ public class MainController {
             //System.out.println("pid : "+profile.getProfile_id());
 
             if (user.getIdentity() == UserIdentity.ROLE_UNAUTH) {
-                status = HttpStatus.UNAUTHORIZED;
-                resultMap.put("status", status);
+                status = HttpStatus.OK;
+                resultMap.put("status", HttpStatus.UNAUTHORIZED);
                 resultMap.put("message", "권한이 없습니다.");
 
             } else {
