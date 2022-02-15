@@ -1,21 +1,32 @@
+import { useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
 import { useNavigate, useParams } from 'react-router-dom'
 import { verify22 } from '../api/test';
 
 export default function CertiSubmit() {
     const navigate = useNavigate();
-    const goHome = () => {
+    const [certi] = useCookies(["certi"]);
+    const [point, setPoint] = useState(false);
+    useEffect(() => {
+        verify22(certi, (response) => {
+            console.log("last Test");
+            console.log(response)
+            setPoint(true);
+        }, (error) => { console.log(error) });
+    },[])
 
-        verify22(param, (response) => { console.log(response) }, (error) => { console.log(error) });
-        navigate(`/signin`);
     
+    const goHome = () => {
+        navigate(`/signin`);
+        
     }
     
     return (
         <>
-            { param}
-            <div>인증절차의 마지막 절차입니다.</div>
+            {/* { param} */}
+            {!point ?<div>인증을 진행하는 중입니다.</div> : <div>인증절차가 완료되었습니다.</div>}
             {/* <button onClick={goHome}>인증완료하기</button> */}
-            {/* <div>인증절차가 완료되었습니다.</div> */}
+            {/*  */}
             <button onClick={goHome}>홈으로</button>
         </>
     )

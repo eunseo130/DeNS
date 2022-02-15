@@ -1,9 +1,11 @@
 import React, { useState, useEffect }from 'react';
+import { useCookies } from 'react-cookie';
 import {signup,verify } from '../../api/test';
 // import TeamList from './TeamList';
 // import UserList from './UserList';
 
 export default function Signup() {
+    const [certiText, setCertiText] = useCookies(["certi"]);
     const [input, setInput] = useState({
         email: '',
         name: '',
@@ -27,6 +29,8 @@ export default function Signup() {
             (response) => {
                 console.log("verify test33333333");
                 console.log(response)
+                setCertiText('certi', response.data);
+
             },
             (error) => {
                 console.log("verify test 43444444");
