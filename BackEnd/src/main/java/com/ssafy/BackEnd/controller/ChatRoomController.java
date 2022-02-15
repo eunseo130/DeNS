@@ -160,6 +160,7 @@ public class ChatRoomController {
         for (ChatRoom chatRoom : chatRooms) {
             if (chatRoom.getName().contains(profile.getName()+profileId)) {
                 result.add(chatRoom);
+                logger.info(chatRoom.getName());
             }
         }
         logger.info("get chatrooms success");
