@@ -8,7 +8,7 @@ export default function CertiSubmit() {
     const [certi] = useCookies(["certi"]);
     const [point, setPoint] = useState(false);
     useEffect(() => {
-        verify22(certi, (response) => {
+        verify22(certi.certi, (response) => {
             console.log("last Test");
             console.log(response)
             setPoint(true);
