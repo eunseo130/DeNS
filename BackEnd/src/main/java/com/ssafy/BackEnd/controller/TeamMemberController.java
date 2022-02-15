@@ -1,6 +1,7 @@
 package com.ssafy.BackEnd.controller;
 
 import com.ssafy.BackEnd.dto.TeamMemberDto;
+import com.ssafy.BackEnd.dto.UserDto;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.TeamMemberIdentity;
@@ -86,9 +87,9 @@ public class TeamMemberController {
         return new ResponseEntity<List<User>>(teammemberlist, HttpStatus.OK);
     }
     @GetMapping("/getidentity/{team_id}") //이메일과 팀아이디로 자신의 팀아이덴티티 확인하기
-    public ResponseEntity<TeamMember> getMyTeamIndentity(@PathVariable long team_id, @RequestParam String email) {
+    public ResponseEntity<TeamMember> getMyTeamIndentity(@PathVariable long team_id, @RequestBody UserDto userDto) {
 
-        TeamMember teamMember = teamMemberService.getMyTeamIndentity(team_id, email);
+        TeamMember teamMember = teamMemberService.getMyTeamIndentity(team_id, userDto);
 
         return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
 

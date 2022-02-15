@@ -97,7 +97,7 @@ public class TeamFeedServiceImpl implements TeamFeedService{
             }
             teamFeed.setTeamFeedKeywords(teamFeedKeywords);
             //teamFeed.setTeamFeedFiles(teamFeedFiles);
-            teamFeed.setWriter(user.getName());
+            teamFeed.setWriter(user.getEmail()); //이메일로 변경
             return teamFeedRepository.save(teamFeed);
         } else {
             System.out.println("권한이 없습니다");

@@ -57,10 +57,11 @@ public class User implements UserDetails {
 //    @JoinColumn(name = "salt_id")
 //    private Salt salt;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER) //EAGER로 바꿔야 profile_id 확인 가능
     @JoinColumn(name = "profile_id")
-    @JsonIgnore
+    //@JsonIgnore
     private Profile profile;
+
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
     //@JsonIgnore

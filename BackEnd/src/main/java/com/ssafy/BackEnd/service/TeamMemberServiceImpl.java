@@ -1,6 +1,7 @@
 package com.ssafy.BackEnd.service;
 
 import com.ssafy.BackEnd.dto.TeamMemberDto;
+import com.ssafy.BackEnd.dto.UserDto;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.TeamMemberIdentity;
@@ -128,9 +129,9 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     }
 
     @Override
-    public TeamMember getMyTeamIndentity(long team_id, String email) {
-        System.out.println(team_id + "FFF" + email);
-        TeamMember teamMember = teamMemberRepository.findIdentity(team_id, email);
+    public TeamMember getMyTeamIndentity(long team_id, UserDto userDto) {
+        //System.out.println(team_id + "FFF" + email);
+        TeamMember teamMember = teamMemberRepository.findIdentity(team_id, userDto.getEmail());
         System.out.println(teamMember.getTeam_identity() + "왜안나와");
 
         return teamMember;

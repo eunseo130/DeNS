@@ -1,6 +1,7 @@
 package com.ssafy.BackEnd.service;
 
 import com.ssafy.BackEnd.dto.TeamMemberDto;
+import com.ssafy.BackEnd.dto.UserDto;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.TeamMemberIdentity;
@@ -21,6 +22,6 @@ public interface TeamMemberService{
 
     List<User> showTeamMemberList(Long team_id);
 
-    TeamMember getMyTeamIndentity(long team_id, String email);
+    TeamMember getMyTeamIndentity(long team_id, UserDto userDto);
 
 }
