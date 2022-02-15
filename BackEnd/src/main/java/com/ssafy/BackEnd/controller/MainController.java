@@ -222,8 +222,10 @@ public class MainController {
 //            if(user != null) {
                 System.out.println("1pass");
                 final String Token = jwtService.createToken(user.getEmail(), user.getIdentity());
-                Profile profile = profileService.findbyEmail(user.getEmail());
-                String profileid = String.valueOf(profile.getProfile_id());
+                //Profile profile = profileService.findbyEmail(user.getEmail());
+                //System.out.println("pid : "+profile.getProfile_id());
+                String profileid = String.valueOf(user.getProfile().getProfile_id());
+                System.out.println("pid : "+profileid);
                 //final String refreshJwt = jwtService.generateRefershToken(user);
 
                 System.out.println("accessToken : "+Token);
