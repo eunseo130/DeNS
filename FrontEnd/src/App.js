@@ -37,6 +37,7 @@ import HeaderBox from './component/commonComponent/HeaderBox'
 
 import 'bootstrap/dist/css/bootstrap.min.css'
 import LoginTest from './component/BeforeloginComponent/LoginTest'
+import MessageRoom from './component/MessengerComponent/MessageRoom'
 // import auth from './component/hoc/auth'
 const App = () => {
   const routes = useRoutes([
@@ -102,13 +103,9 @@ const App = () => {
           ],
         },
         {
-          path: '/auth/messenger',
-          element: <Messenger />,
-          children: [
-            { index: true, element: <Messenger /> },
-            { path: '/auth/messenger/:id', element: <Message /> },
-          ],
+          path: '/auth/messenger', element: <Messenger />,
         },
+        { path: '/auth/messenger/:roomid', element: <MessageRoom /> },
       ],
     },
     {

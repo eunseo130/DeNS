@@ -2,28 +2,25 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import { useDispatch, useSelector } from 'react-redux';
-import { loginUser } from '../../redux/userreduce';
+import { getId, getTOKEN, loginUser } from '../../redux/userreduce';
 import { store } from '../..';
 import {useCookies} from 'react-cookie';
-import { signin, signup } from '../../api/test';
+import { signin, signup, test11 } from '../../api/test';
+import axios from 'axios';
+import { apiInstance } from '../../api';
 function Login() {
   const dispatch = useDispatch();
-  const [cookies, setCookie] = useCookies(['token']);
+  const [token, setToken] = useCookies(['token']);
+  const [profileid, setProfileid] = useCookies(['myID']);
 
+  const token2 = useSelector(state => state);
   let navigate = useNavigate();
   
   const [input, setInput] = useState({
     email: '',
     password: '',
   });
-  // useEffect(() => { console.log(input) }, [input]);
-
-  useEffect(() => {
-    console.log(cookies);
-    console.log(store.getState("token"));
-  },[]);
-  
-  
+    
   const changeCheck = (e) => {
     const { name, value } = e.target;
     setInput({
@@ -31,20 +28,23 @@ function Login() {
       [name]: value,
     });
   }
-  
-  
-  
-  
+
   const LoginConsole = () => {
     console.log(input);
-    signin(input, (response) => { console.log(response.data) }, (error) => { console.log(error) });
-    let data = 'testtestsetsetset';
-    dispatch(loginUser(data));
-    setCookie('token', data);
-    console.log(store.getState("token"));
-    navigate(`/auth`);
+    signin(input, (response) => {
+//      console.log(response.data);
+      dispatch(loginUser(response.data));
+      // dispatch(getId());
+      console.log(store.getState().user.token);
+
+      setToken('token', store.getState().user.token);
+      setProfileid('myID', store.getState().user.profileid);
+      navigate(`/auth`);
+    }, (error) => {
+      console.log(error)
+    });
+    // console.log(cookies);
   };
-  
     return (
       <LoginBox>
         <H3>로그인</H3>

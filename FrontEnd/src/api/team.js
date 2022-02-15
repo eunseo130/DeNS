@@ -28,6 +28,7 @@ function bringTeamMembers(param, success, fail) {
 function teamFeed(param,success, fail) {
     api.get(`/teamfeed/ourteamfeed/${param}`).then(success).catch(fail);
 }
+
 // Feed 작성
 function makeTeamFeed([teamId, profile_id, formData], success, fail) {
     api.post(`teamfeed/${teamId}/${profile_id}`, formData, {
@@ -38,18 +39,41 @@ function makeTeamFeed([teamId, profile_id, formData], success, fail) {
     .then(success)
     .catch(fail);
 }
+// Feed 수정
+function editTeamFeed([teamfeed_id, profile_id, formData], success, fail) {
+    api.put(`/teamfeed/${teamfeed_id}/${profile_id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+    .then(success)
+    .catch(fail);
+    console.log([teamfeed_id, profile_id, formData], success, fail)
+}
+// Feed 삭제
+function deleteTeamFeed(teamfeed_id, profile_id, success, fail){
+    api.delete(`/teamfeed/${teamfeed_id}/${profile_id}`).then(success).catch(fail);
+}
+
 
 // 팀 Settings
-// 팀 이름
+
+// 현재 유저가 Leader인지 판단
+function checkLeader(team_id, param, success, fail){
+    api.get(`teammember/getidentity/${team_id}`, JSON.stringify({email: param})).then(success).catch(fail);
+    console.log(team_id, JSON.stringify({email: param}));
+}
+// 팀 이름 변경
 function titleChange(profile_id, team_id, param, success, fail) {
     api.put(`team/${profile_id}/${team_id}`, JSON.stringify({title: param})).then(success).catch(fail);
     console.log(param, JSON.stringify(param), JSON.stringify({title: param}))
 }
+
 // 팀 멤버 방출
 function dischargeMembers(team_id, param, success, fail){
     api.delete(`/teammember/${team_id}`, JSON.stringify({email: param})).then(success).catch(fail);
-    console.log(JSON.stringify({email: param}))
 }
+
 // 팀 삭제
 function teamBreakup(team_id, success, fail){
     api.delete(`/team/${team_id}`).then(success).catch(fail);
@@ -59,5 +83,6 @@ function searchMyteam(param, success, fail){
 }
 
 export {
-    teamBreakup,searchMyteam, makeMyTeam, team, myteam, detail, teamFeed, makeTeamFeed, bringTeamMembers, titleChange, dischargeMembers
+    teamBreakup,searchMyteam, makeMyTeam, team, myteam, detail, teamFeed, makeTeamFeed, bringTeamMembers, titleChange, dischargeMembers, editTeamFeed,
+    deleteTeamFeed, checkLeader
 }

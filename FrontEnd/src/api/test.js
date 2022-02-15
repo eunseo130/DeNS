@@ -1,17 +1,20 @@
+import axios from 'axios';
+import { store } from '../index.js'
 import { apiInstance } from './index.js'
 
-const api = apiInstance()
+const api = apiInstance();
 //localhost:8080/test22 -> 를 가져오고싶다.
 function test22(param, success, fail) {
   api.get(`/test22`, param).then(success).catch(fail)
 }
 
 function signup(param, success, fail) {
-  api.post(`/signup`, param).then(success).catch(fail)
+  api.post(`/signup`, param).then(success).catch(fail);
 }
 
 function signin(param, success, fail) {
   api.post(`/signin`, JSON.stringify(param)).then(success).catch(fail)
+  // axios.defaults.headers.common['Authorization'] = `Bearer ${store.getState().user.token}`;
 }
 
 function profileTest(param, success, fail) {
@@ -53,11 +56,17 @@ function getMember(param, success, fail) {
     .then(success)
     .catch(fail)
 }
+function test11(param,auth ,success, fail) {
+  console.log("checkckkkkkkkkkkkkkkk");
+  console.log(store.getState().user.token);
 
+  api.get(`/test11`).then(success).catch(fail);
+}
 
 
 export {
   getMember,
+  test11,
   test22,
   signup,
   signin,

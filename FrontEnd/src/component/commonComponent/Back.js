@@ -1,31 +1,32 @@
+import axios from 'axios';
 import React, { useEffect } from 'react';
 import { useCookies } from 'react-cookie';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Outlet } from 'react-router-dom';
 import { store } from '../..';
-import { getMember } from '../../api/test';
-import { authUser, loginUser } from '../../redux/userreduce';
+import { apiInstance } from '../../api';
+import { getMember, test11 } from '../../api/test';
+import { API_BASE_URL } from '../../config';
+import { authUser, getTOKEN, loginUser, sessionCheck } from '../../redux/userreduce';
 import HeaderBox from './HeaderBox';
 import Sidebar from './sidebar';
-
 
 export default function Back(props) {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const [cookies, setCookie] = useCookies(['token']);
+    const token = useSelector(state => state.user.token);
+    const [cookies] = useCookies();
+
     useEffect(() => {
-        const foo = store.getState().user.auth;
-        const tokencheck = store.getState().user.token;
-        //redux에 값이 있는가
-        if (foo === false) {
-            //쿠키에 token값이 잇는가
+        //새로고침 시
+        if (!token) {
+            //쿠키에 있는지 먼저 확인
             if (cookies.token) {
-                //리덕스에 저장.
-                dispatch(loginUser(cookies.token));
-                //param으로 검색한 사용자정보와 token에 저장된 사용자정보가 같은지 구분을 할 수 있음.
+                //다시 리덕스로 넣어주기.
+                dispatch(sessionCheck(cookies));
+            //쿠키에도 없다면
             } else {
-                alert('로그인이 필요합니다');
-                navigate('/signin')
+                navigate(`/signin`);
             }
         }
     }, []);
@@ -35,8 +36,8 @@ export default function Back(props) {
     return (
         <>
         <HeaderBox />
-            <Sidebar />
-            <div className='tewst' style={{ backgroundColor:'#fde1e36b' }}>
+        <Sidebar />
+        <div className='tewst' style={{ backgroundColor:'#fde1e36b' }}>
                 <Outlet />
         </div>
         </>

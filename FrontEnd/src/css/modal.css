@@ -85,3 +85,8 @@
       opacity: 1;
     }
   }
+
+/* 스크롤이 안보이는 기능 */
+::-webkit-scrollbar {
+  display: none;
+}
