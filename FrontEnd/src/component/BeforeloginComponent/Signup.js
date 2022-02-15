@@ -1,5 +1,5 @@
 import React, { useState, useEffect }from 'react';
-import {signup } from '../../api/test';
+import {signup,verify } from '../../api/test';
 // import TeamList from './TeamList';
 // import UserList from './UserList';
 
