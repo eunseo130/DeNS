@@ -24,7 +24,7 @@ public interface AuthService {
 
     ResponseEntity<User> verifyEmail(String key) throws NotFoundException;
 
-    Map<String, Object> sendVerificationMail(User user) throws NotFoundException, MessagingException;
+    String sendVerificationMail(User user) throws NotFoundException, MessagingException;
 
     void modifyUserRole(User user, UserIdentity role);
 

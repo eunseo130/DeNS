@@ -137,7 +137,7 @@ public class AuthServiceImpl implements AuthService{
         return savedUser;
     }
 
-    public Map<String, Object> sendVerificationMail(User user) throws NotFoundException, MessagingException {
+    public String sendVerificationMail(User user) throws NotFoundException, MessagingException {
         String VERIFICATION_LINK = "http://i6c201.p.ssafy.io:3040/certi/";
         if(user==null) throw new NotFoundException("멤버가 조회되지 않음");
         UUID uuid = UUID.randomUUID();
@@ -147,9 +147,9 @@ public class AuthServiceImpl implements AuthService{
                 +"<h3>"+user.getName() + "님</h3>" + "<p>인증하기 버튼을 누르시면 로그인을 하실 수 있습니다. <br>"
                 +"<a href="+VERIFICATION_LINK+uuid.toString()+">인증하기</a></p>";
         emailService.sendMail(user.getEmail(),"[DeNS] 회원가입 인증메일입니다.", htmlStr);
-        Map<String, Object> result = new HashMap<>();
-        result.put("key", uuid.toString());
-        return result;
+//        Map<String, Object> result = new HashMap<>();
+//        result.put(", uuid.toString());
+        return uuid.toString();
     }
 
     public ResponseEntity<User> verifyEmail(@PathVariable String key) throws NotFoundException {
