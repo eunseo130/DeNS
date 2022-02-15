@@ -35,7 +35,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     {
         // static 디렉터리의 하위 파일 목록은 인증 무시 ( = 항상통과 )
         web.ignoring().antMatchers("/swagger-resources/**",
-                "/swagger-ui.html", "/webjars/**", "/swagger/**", "/signin", "/signup", "/chat/**");
+                "/swagger-ui.html", "/webjars/**", "/swagger/**", "/signin", "/signup", "/chat/**", "/testgo");
     }
 
     @Override
