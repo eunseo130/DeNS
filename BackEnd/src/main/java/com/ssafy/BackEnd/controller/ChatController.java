@@ -66,6 +66,7 @@ public class ChatController {
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             message.setSender("[알림]");
             message.setMessage(name + "님이 입장하셨습니다.");
+
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
         redisTemplate.convertAndSend(channelTopic.getTopic(), message);
@@ -74,12 +75,14 @@ public class ChatController {
             ChatMessage save = chatMessageRedisRepository.save(message);
             logger.info("save message success");
             System.out.println(save.getMessage());
+            if (save == null) {
+                System.out.println("save message error");
+            }
         }
     }
 
 
     @GetMapping("chat/messages/{roomId}")
-    @ResponseBody
     public List<ChatMessage> messages(@PathVariable String roomId) {
         return chatMessageRedisRepository.findByRoomId(roomId);
     }
