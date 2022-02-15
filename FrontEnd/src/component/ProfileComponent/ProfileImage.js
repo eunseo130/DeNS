@@ -1,15 +1,24 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { Button, Image } from 'react-bootstrap'
-export default function ProfileImage({
-  id,
-  image,
-  fileImage,
-  onLoad,
-  ImageUpload,
-}) {
+import { getImage } from '../../api/profile'
+export default function ProfileImage({ id, fileImage, onLoad, ImageUpload }) {
+  const [image, setImage] = useState('')
+  useEffect(() => {
+    getImage(
+      id,
+      (res) => {
+        const url = window.URL.createObjectURL(
+          new Blob([res.data], { type: res.headers['content-type'] })
+        )
+        console.log(url)
+        setImage(url)
+      },
+      (error) => console.log(error)
+    )
+  }, [])
   return (
     <div>
-      {fileImage?(
+      {fileImage ? (
         <div>
           <Image
             alt="sample"
@@ -19,16 +28,9 @@ export default function ProfileImage({
             thumbnail
           />
         </div>
-      )  :(
+      ) : (
         <div>
-          {(
-            <Image
-              width={180}
-              height={160}
-              src={`http://3.36.131.59:2222/profile/image/${id}`}
-              roundedCircle
-            />
-          ) && (
+          {<Image width={180} height={160} src={image} roundedCircle /> || (
             <Image
               width={180}
               height={160}
@@ -48,11 +50,13 @@ export default function ProfileImage({
           style={{ display: 'none' }}
           onChange={onLoad}
         ></input>
-        <Button size="sm" variant="secondary">
-          <label name="ImgBtn" htmlFor="imgInput">
-            프로필 사진 등록
-          </label>
-        </Button>
+        {!fileImage && (
+          <Button size="sm" variant="secondary">
+            <label name="ImgBtn" htmlFor="imgInput">
+              프로필 사진 등록
+            </label>
+          </Button>
+        )}
       </form>
       {fileImage && (
         <Button onClick={ImageUpload} size="sm" variant="secondary">

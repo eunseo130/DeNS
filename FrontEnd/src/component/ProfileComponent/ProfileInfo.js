@@ -20,7 +20,7 @@ export default function ProfileInfo({
           <div>
             직무 : &nbsp;
             {edit ? (
-              <input onChange={onSave} name="position" value={position}></input>
+              <input onChange={onSave} name="position" value={position} ></input>
             ) : (
               position
             )}
