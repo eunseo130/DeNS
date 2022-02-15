@@ -12,6 +12,8 @@ function TeamFeedContainer() {
   const [fileName, setFileName] = useState('');
   const [img, setImg] = useState([]);
   const [file, setFile] = useState([]);
+
+  
   const teamId = useParams().id;
 
   const [inputs, setInputs] = useState({
@@ -61,7 +63,7 @@ function TeamFeedContainer() {
     formData.append("imageFiles", img);
     formData.append("generalFiles", file);
 
-    
+    // 피드 작성하기
     makeTeamFeed(
       [teamId, 1, formData],
       (response) => {
@@ -74,29 +76,19 @@ function TeamFeedContainer() {
 
   };
 
-  // 피드 정보 가져오기
-  useEffect(() => {
-      teamFeed(teamId,
-        (response) => {
-          console.log(response)
-        },
-        (error) => {
-            console.log("오류가 됨.", (error));
-        }); 
-    }, []);
-
-
   return (
     <Container>
       <TeamFeedTitle>팀 피드</TeamFeedTitle>
       <InputBox>
         <FormInput onSubmit={DataSend}>
+          {/* input 창 */}
           <TeamFeedInput 
             placeholder="작성할 피드를 입력해주세요" 
             onChange={onInput} 
             onKeyPress={KeyboardSend}
             name="content"
             />
+          {/* 이미지/파일 전송 */}
           <ImgBox>
             <ImgInputLabel onChange={handleInput} htmlFor="img-input">
               <img src="https://img.icons8.com/ios/50/000000/image.png" width="20vw" height="20vh"/>
@@ -107,6 +99,7 @@ function TeamFeedContainer() {
               <FeedImgUpload onChange={setTheFile} name="files" id="file-input" type="file" hidden />
             </ImgInputLabel>
           </ImgBox>
+          {/* 글 작성 완료 버튼 */}
           <FeedInputBtn type="submit" value="Upload File" onClick={DataSend}>글 작성</FeedInputBtn>
         </FormInput>
         <NameInfo>
@@ -118,13 +111,26 @@ function TeamFeedContainer() {
           </div>
         </NameInfo>
       </InputBox>
-      
+
         {/* Team Feed Index */}
       <TeamFeedIndex/>
     </Container>
   )
 };
 export default TeamFeedContainer;
+
+// 팀 피드
+const Container = styled.div`
+  border: 1px solid;
+  border-radius: 5px;
+  display: flex;
+  height: 60vh;
+  width: 50vw;
+  flex-direction: column;
+  align-items: start;
+
+  overflow: scroll;
+`
 
 const NameInfo = styled.div`
   display:flex;
@@ -152,6 +158,7 @@ const TeamFeedInput = styled.input`
 `
 const InputBox = styled.div`
   width: 100%;
+  height: 5vh;
 `
 const ImgBox = styled.div`
   position: relative;
@@ -160,7 +167,13 @@ const ImgBox = styled.div`
 `
 const FeedInputBtn = styled.button`
   position: relative;
-  margin-left: 8%;
+  margin-left: 5%;
+  background-color: #F46A72;
+  border: none;
+  border-radius: 2px;
+  color: white;
+  height: 3.5vh;
+  width: 15%;
 `
 const ImgInputLabel = styled.label`
   border: none;
@@ -171,15 +184,6 @@ const ImgInputLabel = styled.label`
 const FeedImgUpload = styled.input`
   border: none;
   background-color: white;
-`
-// 팀 피드
-const Container = styled.div`
-  border: 1px solid;
-  // text-align: center;
-  border-radius: 5px;
-  display: flex;
-  flex-direction: column;
-  align-items: start;
 `
 const FormInput = styled.form`
   display: flex;

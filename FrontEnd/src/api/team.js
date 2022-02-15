@@ -28,6 +28,7 @@ function bringTeamMembers(param, success, fail) {
 function teamFeed(param,success, fail) {
     api.get(`/teamfeed/ourteamfeed/${param}`).then(success).catch(fail);
 }
+
 // Feed 작성
 function makeTeamFeed([teamId, profile_id, formData], success, fail) {
     api.post(`teamfeed/${teamId}/${profile_id}`, formData, {
@@ -38,9 +39,25 @@ function makeTeamFeed([teamId, profile_id, formData], success, fail) {
     .then(success)
     .catch(fail);
 }
+// Feed 수정
+function editTeamFeed([teamfeed_id, profile_id, formData], success, fail) {
+    api.put(`/teamfeed/${teamfeed_id}/${profile_id}`, formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+        },
+    })
+    .then(success)
+    .catch(fail);
+    console.log([teamfeed_id, profile_id, formData], success, fail)
+}
+// Feed 삭제
+function deleteTeamFeed(teamfeed_id, profile_id, success, fail){
+    api.delete(`/teamfeed/${teamfeed_id}/${profile_id}`).then(success).catch(fail);
+}
+
 
 // 팀 Settings
-// 팀 이름
+// 팀 이름 변경
 function titleChange(profile_id, team_id, param, success, fail) {
     api.put(`team/${profile_id}/${team_id}`, JSON.stringify({title: param})).then(success).catch(fail);
     console.log(param, JSON.stringify(param), JSON.stringify({title: param}))
@@ -59,5 +76,6 @@ function searchMyteam(param, success, fail){
 }
 
 export {
-    teamBreakup,searchMyteam, makeMyTeam, team, myteam, detail, teamFeed, makeTeamFeed, bringTeamMembers, titleChange, dischargeMembers
+    teamBreakup,searchMyteam, makeMyTeam, team, myteam, detail, teamFeed, makeTeamFeed, bringTeamMembers, titleChange, dischargeMembers, editTeamFeed,
+    deleteTeamFeed
 }
