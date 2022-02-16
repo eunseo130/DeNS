@@ -19,6 +19,7 @@ import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -57,7 +58,7 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public ChatMessage message(ChatMessage message, @Header("token") String token) {
+    public void message(ChatMessage message, @Header("token") String token) {
         System.out.println("===========message=========");
         System.out.println(message.getMessage());
         System.out.println(token);
@@ -72,8 +73,7 @@ public class ChatController {
             message.setSender("[알림]");
             message.setSenderId(null);
             message.setMessage(name + "님이 입장하셨습니다.");
-            redisTemplate.convertAndSend(channelTopic.getTopic(), message);
-            return message;
+
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
         redisTemplate.convertAndSend(channelTopic.getTopic(), message);
@@ -85,7 +85,6 @@ public class ChatController {
                 System.out.println("save message error");
             }
         }
-        return message;
     }
 
 
