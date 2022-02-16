@@ -112,6 +112,7 @@ import com.ssafy.BackEnd.dto.ChatUserDto;
 import com.ssafy.BackEnd.entity.*;
 import com.ssafy.BackEnd.exception.CustomException;
 import com.ssafy.BackEnd.exception.ErrorCode;
+import com.ssafy.BackEnd.pubsub.RedisSubscriber;
 import com.ssafy.BackEnd.repository.ChatRoomRedisRepository;
 import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
@@ -119,6 +120,8 @@ import com.ssafy.BackEnd.service.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -130,6 +133,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -147,6 +151,13 @@ public class ChatRoomController {
     private final ProfileRepository profileRepository;
 
     private final JwtServiceImpl jwtService;
+
+    private Map<String, ChannelTopic> channels;
+
+    private final RedisSubscriber redisSubscriber;
+
+    private final RedisMessageListenerContainer redisMessageListenerContainer;
+
 
     @GetMapping("/rooms")
     public ResponseEntity<Iterable<ChatRoom>> rooms() {
@@ -183,6 +194,8 @@ public class ChatRoomController {
         if (findRoom1 == null && findRoom2 == null){
             ChatRoom chatRoom = ChatRoom.create(chatUser1, chatUser2);
             ChatRoom save = chatRoomRedisRepository.save(chatRoom);
+            ChannelTopic channel1 = new ChannelTopic(save.getRoomId());
+            channels.put(save.getRoomId(), channel1);
             logger.info("CreateRoom success");
             return new ResponseEntity<ChatRoom>(save, HttpStatus.CREATED);
         } else if (findRoom1 == null && findRoom2 != null) {
