@@ -137,7 +137,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin
-@RequestMapping("chat")
+@RequestMapping("/chat")
 public class ChatRoomController {
 
     private static final Logger logger = LogManager.getLogger(ChatRoomController.class);

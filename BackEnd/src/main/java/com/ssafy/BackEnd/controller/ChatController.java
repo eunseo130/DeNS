@@ -56,7 +56,7 @@ public class ChatController {
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
-    @MessageMapping("chat/message")
+    @MessageMapping("/chat/message")
     public void message(ChatMessage message, HttpServletRequest request) {
         String authorization = request.getHeader("Authorization");
         String email = jwtService.getUserEmail(authorization);
