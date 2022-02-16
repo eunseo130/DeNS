@@ -49,9 +49,9 @@ public class ChatController {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate simpMessagingTemplate;
 
-    private SimpMessageSendingOperations messagingTemplate;
+    private final SimpMessageSendingOperations messagingTemplate;
 
     private final ChannelTopic channelTopic;
 
