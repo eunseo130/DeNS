@@ -89,7 +89,8 @@ public class ChatController {
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
 //        ChannelTopic channel = channels.get(roomId);
-        redisTemplate.convertAndSend(channelTopic.getTopic(), message);
+//        redisTemplate.convertAndSend(channelTopic.getTopic(), message);
+        simpMessagingTemplate.convertAndSend("/topic/"+message.getRoomId(), message);
 
         System.out.println(roomId);
         if (!message.getSender().equals("[알림]")) {
