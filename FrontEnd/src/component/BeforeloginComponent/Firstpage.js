@@ -11,8 +11,6 @@ export default function Firstpage() {
             <Outlet/>
         </>
     )
-
-
 }
 const HeadBlock = styled.div`
     // background-color: pink;
@@ -20,4 +18,6 @@ const HeadBlock = styled.div`
     display: flex;
     background-color: rgba(244,106,114,1);
     width:100vw;
+    color:#fbebeb;
+    font-family: 'Baloo', cursive;
 `

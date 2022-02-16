@@ -4,6 +4,9 @@ import { searchprofileID } from "../../api/search";
 import dd from './dd.png'
 export default function UserCard(props){
     const check = () => {
+
+        console.log("props.check");
+        console.log(props.check);
         props.click(props.check,props.data.name,props.data.email);
         //searchprofileID(props.check,(response) => {console.log(response.data)}, (error)=> {console.log(error)});
     }

@@ -31,19 +31,15 @@ export default function Messenger() {
             .catch((error) => { console.log(error) });
     },[id])
     const createRoom = () => {
-        // const authAxios = axios.create({
-        //     baseURL: API_BASE_URL,
-        //     headers: {
-        //         Authorization: `Bearer "${cookie.token}"`,
-        //         withCredentials : true,
-        //     }
-        // })
-        // console.log("check");
-        // authAxios.post(`/chat/room/1/8`)
-        //     .then((res) => { console.log(res) })
-        //     .catch((error) => { console.log(error) });
+        const authAxios = axios.create({
+            baseURL: API_BASE_URL,
+            headers: {
+                Authorization: `Bearer "${cookie.token}"`,
+                withCredentials : true,
+            }
+        })
 
-        // // createRooms(1,(res) => { console.log(res) }, (error) => { console.log(error) });
+        // createRooms(1,(res) => { console.log(res) }, (error) => { console.log(error) });
     }
 
     return (
