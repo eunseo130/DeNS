@@ -17,6 +17,7 @@ import org.springframework.data.redis.core.ListOperations;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.simp.annotation.SendToUser;
@@ -57,8 +58,8 @@ public class ChatController {
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
-    @MessageMapping("/chat/message")
-    public void message(ChatMessage message, @Header("token") String token) {
+    @MessageMapping("/chat/message/{roomId}")
+    public void message(ChatMessage message, @Header("token") String token, @DestinationVariable("roomId") String roomId) {
         System.out.println("===========message=========");
         System.out.println(message.getMessage());
         System.out.println(token);
@@ -76,8 +77,7 @@ public class ChatController {
 
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
-        System.out.println("channelTopic" + channelTopic.getTopic());
-        redisTemplate.convertAndSend(message.getRoomId(), message);
+        redisTemplate.convertAndSend("/sub/chat/room/"+ roomId, message);
         if (!message.getSender().equals("[알림]")) {
             ChatMessage save = chatMessageRedisRepository.save(message);
             logger.info("save message success");

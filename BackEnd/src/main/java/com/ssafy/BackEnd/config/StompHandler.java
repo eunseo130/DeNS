@@ -29,6 +29,7 @@ public class StompHandler implements ChannelInterceptor {
             System.out.println(channel);
             jwtService.validateToken(accessor.getFirstNativeHeader("token"));
         }
+
         System.out.println(message);
         System.out.println("==========presend============");
         return message;
