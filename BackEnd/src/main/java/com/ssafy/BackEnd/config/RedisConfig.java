@@ -38,32 +38,30 @@ public class RedisConfig {
     /**
      * 단일 Topic 사용을 위한 Bean 설정
      */
-    @Bean
-    public ChannelTopic channelTopic() {
-        return new ChannelTopic("chatroom");
-    }
+//    @Bean
+//    public ChannelTopic channelTopic() {
+//        return new ChannelTopic("chatroom");
+//    }
 
     /**
      * redis pub/sub 메시지를 처리하는 listener 설정
      */
     @Bean
-    public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory,
-                                                              MessageListenerAdapter listenerAdapter,
-                                                              ChannelTopic channelTopic) {
+    public RedisMessageListenerContainer redisMessageListener(RedisConnectionFactory connectionFactory) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
-        container.addMessageListener(listenerAdapter, channelTopic);
+//        container.addMessageListener(listenerAdapter, );
         return container;
     }
 
     /**
      * 실제 메시지를 처리하는 subscriber 설정 추가
      */
-    @Bean
-    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
-        System.out.println("========sendMessage 실행================");
-        return new MessageListenerAdapter(subscriber, "sendMessage");
-    }
+//    @Bean
+//    public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
+//        System.out.println("========sendMessage 실행================");
+//        return new MessageListenerAdapter(subscriber, "sendMessage");
+//    }
 
     /**
      * 어플리케이션에서 사용할 redisTemplate 설정

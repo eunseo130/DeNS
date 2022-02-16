@@ -2,6 +2,7 @@ package com.ssafy.BackEnd.controller;
 import com.ssafy.BackEnd.entity.ChatMessage;
 
 import com.ssafy.BackEnd.entity.Profile;
+import com.ssafy.BackEnd.pubsub.RedisPublisher;
 import com.ssafy.BackEnd.repository.ChatMessageRedisRepository;
 import com.ssafy.BackEnd.repository.ChatMessageRepository;
 import com.ssafy.BackEnd.repository.ProfileRepository;
@@ -54,6 +55,8 @@ public class ChatController {
 
     private final RedisUtil redisUtil;
 
+    private final RedisPublisher redisPublisher;
+
     private static final String CHAT_MESSAGES = "CHAT_MESSAGES";
 
     private static final Logger logger = LogManager.getLogger(ChatController.class);
@@ -80,6 +83,7 @@ public class ChatController {
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
         redisTemplate.convertAndSend("/topic/"+ roomId, message);
+
         System.out.println(roomId);
         if (!message.getSender().equals("[알림]")) {
             ChatMessage save = chatMessageRedisRepository.save(message);
