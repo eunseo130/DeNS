@@ -218,7 +218,7 @@ public class ChatRoomController {
         }
         return new ResponseEntity<ChatRoom>(chatRoom, HttpStatus.OK);
     }
-//
+
     @GetMapping("/user")
     public LoginInfo getUserInfo(HttpServletRequest request) {
         String authorization = jwtService.resolveToken(request);
@@ -235,4 +235,12 @@ public class ChatRoomController {
 //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //        auth.getDetails()
 //        return LoginInfo.builder().name(name).token(jwtService.createToken(name)).build();
-    }
+
+//    @GetMapping("/user")
+//    @ResponseBody
+//    public LoginInfo getUserInfo() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        String name = auth.getName();
+//        return LoginInfo.builder().name(name).token(jwtService.createToken(name)).build();
+//    }
+}

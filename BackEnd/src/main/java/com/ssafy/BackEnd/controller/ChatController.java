@@ -67,8 +67,10 @@ public class ChatController {
         System.out.println(profile.getName());
         String name = profile.getName();
         message.setSender(name);
+        message.setSenderId(profile.getProfile_id());
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             message.setSender("[알림]");
+            message.setSenderId(null);
             message.setMessage(name + "님이 입장하셨습니다.");
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
