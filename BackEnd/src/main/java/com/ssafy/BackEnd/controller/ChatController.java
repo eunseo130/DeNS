@@ -34,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -82,6 +83,7 @@ public class ChatController {
         String name = profile.getName();
         message.setSender(name);
         message.setSenderId(profile.getProfile_id());
+        message.setTime(LocalDateTime.now());
         System.out.println(ChatMessage.MessageType.ENTER.equals(message.getType()));
         System.out.println("type: " + message.getType());
         System.out.println("enum : " + ChatMessage.MessageType.ENTER);
