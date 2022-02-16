@@ -1,111 +1,172 @@
 import React, { useEffect, useState } from 'react';
-import { detail, bringTeamMembers, checkLeader } from '../../api/team';
+import { detail, bringTeamMembers, editTeamContent, bringMembersImg } from '../../api/team';
 import styled from "styled-components";
 import { useParams } from 'react-router-dom';
 import TeamFeedContainer from './TeamFeedContainer';
 import TeamMemberInfo from './TeamMemberInfo'
 import MembersImg from './MembersImg';
 import { Link } from "react-router-dom";
+import { store } from '../..';
 
 export default function TeamDetail(props) {
     const [teamTitle, setTeamTitle] = useState('');
     const [teamContent, setTeamContent] = useState('');
     const [teamMembers, setTeamMembers] = useState('');
-		const [email, setEmail] = useState('');
+    const [checkId, setCheckId] = useState('');
+    const [showInput, setShowInput] = useState(false);
+		const [editInput, setEditInput] = useState('');
+		const membersImgsList = [];
 
     const teamId = useParams().id;
+		const profileId = store.getState().user.profileid;
+
+		// 현재 유저가 Leader인지 판단
+		const LeaderSettings = styled.div`
+				${() => {
+						return checkId == profileId ? "display:flex;" : "display:none;";
+				}}
+		`
+
+
     // 팀 명 및 팀 소개
     useEffect(() => {
         detail(teamId,
             (response) => {
-								console.log(response)
-                setTeamTitle(response.data[teamId][0].team.content);
-                setTeamContent(response.data[teamId][0].team.title);
+                setTeamContent(response.data[teamId][0].team.content);
+                setTeamTitle(response.data[teamId][0].team.title);
+                setCheckId(response.data[teamId][0].user.profile.profile_id);
+								// console.log(response.data[teamId][0].user.profile.profile_id);
             },
             (error) => {
                 console.log("오류가 됨.", (error));
+                                console.log(teamId)
             });
-        },[]);
-        
+        }, []);
+
+		// 팀원 사진 가져오기
+		// useEffect(() => {
+		// 	bringMembersImg(
+		// 		88,
+		// 		(res) => {
+		// 			const url = window.URL.createObjectURL(
+		// 				new Blob([res.data], { type: res.headers['content-type'] })
+		// 			)
+		// 			membersImgsList.push(url)
+		// 		},
+		// 		(error) => console.log(error)
+		// 	)
+		// })
+
     // 팀원 정보 가져오기
     useEffect(() => {
         bringTeamMembers(teamId,
             (response) => {
                 setTeamMembers(response.data);
-								setEmail("ssafy3@naver.com") // formData 전송 용
             },
             (error) => {
                 console.log("오류가 됨.", (error));
             });
         },[]);
-		
-		// 리더 확인
-		useEffect(() => {
-			// const formData = new FormData();
-			// formData.append('email', email);
-			// console.log(email);
-			checkLeader(
-				teamId, "ssafy3@naver.com",
+
+    // 팀 소개 수정
+			// Leader만 수정 버튼 활성화
+		const TextBox = styled.div`
+				${() => {
+					return checkId == profileId ? "display : flex;" : "display: none;";
+				}}
+		`
+		  // 글 수정 Input
+		const inputChange = (e) => {
+			setEditInput(e.target.value);
+		}
+		  // 글 수정 완료 Btn
+		const editSubmit = (params) => {
+			editTeamContent(
+				teamId, profileId, params,
 				(response) => {
-					console.log("리더 확인", response);
+					console.log(response);
 				},
 				(error) => {
-					console.log("리더 확인", error);
+					console.log(error);
+					console.log(teamId, profileId, params)
 				}
 			)
-		}, [])	
+			window.location.replace(`/auth/team/${teamId}`)
+		}
+
+
+
     return (
 
     <TeamDetailBox>
-        <TeamDetailHeaders>
+			<TeamDetailHeaders>
+				<LeaderSettings>
 					<Link to={{pathname:`/auth/team/${teamId}/settings`}}>
 							<button>팀 설정</button>
 					</Link>
-					{/* 팀 Title */}
-					<TheTeamTitle>
-							{teamTitle}
-					</TheTeamTitle>
-        </TeamDetailHeaders>
-        <TeamDetailGrid>
-            {/* 팀 피드 */}
-            <TeamFeedContainer>
-            </TeamFeedContainer>
+				</LeaderSettings>
 
-            {/* 팀 소개 */}
-            <TeamInfoContainer>
-                <TeamInfoTitle>팀 소개</TeamInfoTitle>
-                {/* 팀장/팀원 이미지 */}
-                <ImgBox>
-                    {teamMembers ? teamMembers.map((el, key) => {
-                        return (
-                            <TeamMemberInfo name={el.name} email={el.email} key={key}/>
-                        )
-                    }) : null}
-                    <BringTeamMembersImg 
-                    src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
-                    ></BringTeamMembersImg>
-                    <BringTeamMembersImg 
-                    src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
-                    ></BringTeamMembersImg>
-                    <BringTeamMembersImg 
-                    src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
-                    ></BringTeamMembersImg>
-                    <BringTeamMembersImg 
-                    src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
-                    ></BringTeamMembersImg>
-                </ImgBox>
-                {/* 팀 Content */}
-                <TeamInfoTextBox>
-                    <TextBox>
-                        {teamContent}
-                    </TextBox>
-                </TeamInfoTextBox>
-                {/* 팀 소개 해쉬태그 */}
-                <TeamInfoHashtag>
-                    #자바스크립트 #프론트엔드 #자바
-                </TeamInfoHashtag>
-            </TeamInfoContainer>
-        </TeamDetailGrid>
+				{/* 팀 Title */}
+				<TheTeamTitle>
+						{teamTitle}
+				</TheTeamTitle>
+			</TeamDetailHeaders>
+			<TeamDetailGrid>
+					{/* 팀 피드 */}
+					<TeamFeedContainer>
+					</TeamFeedContainer>
+
+					{/* 팀 소개 */}
+					<TeamInfoContainer>
+							<TeamInfoTitle>팀 소개</TeamInfoTitle>
+							{/* 팀장/팀원 이미지 */}
+							<ImgBox>
+									{teamMembers ? teamMembers.map((el, key) => {
+											return (
+													<TeamMemberInfo name={el.name} email={el.email} key={key}/>
+											)
+									}) : null}
+
+								{/* {membersImgsList}	 */}
+
+
+									{/* <BringTeamMembersImg 
+									src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
+									></BringTeamMembersImg>
+									<BringTeamMembersImg 
+									src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
+									></BringTeamMembersImg>
+									<BringTeamMembersImg 
+									src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
+									></BringTeamMembersImg>
+									<BringTeamMembersImg 
+									src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
+									></BringTeamMembersImg> */}
+							</ImgBox>
+							{/* 팀 Content */}
+							<TeamInfoTextBox>
+
+									{teamContent}
+									<TextBox>
+										<button onClick={() => {setShowInput(!showInput)}}>글 수정하기</button>
+									</TextBox>
+
+										{ showInput && 
+											<>
+												<input type="text" onChange={inputChange} />
+												<button onClick={() => {editSubmit(editInput)}}>수정하기</button>
+											</>
+										}
+										
+							</TeamInfoTextBox>
+
+							{/* 팀 소개 해쉬태그 */}
+							<TeamInfoHashtag>
+									#자바스크립트 #프론트엔드 #자바
+							</TeamInfoHashtag>
+
+					</TeamInfoContainer>
+			</TeamDetailGrid>
     </TeamDetailBox>
 
     )
@@ -171,8 +232,6 @@ const TeamInfoTextBox = styled.div`
     left: 5%;
     width: 90%;
     word-break:break-all;
-`
-const TextBox = styled.div`
 `
 const TeamInfoHashtag = styled.div`
     position: relative;

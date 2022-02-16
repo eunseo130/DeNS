@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import styled from "styled-components";
+import { store } from '../..';
 import { makeMyTeam } from "../../api/team";
-
 export default function CreateTeam() {
 
     const [teamName, setTeamName] = useState('');
@@ -19,11 +19,13 @@ export default function CreateTeam() {
         title:teamName,
         content:teamInfo,
     }
+    
+    const profileId = store.getState().user.profileid;
 
     const TeamMaker = () => {
         // e.preventDefault()
         makeMyTeam(
-            1, toSend,
+            profileId, toSend,
             (response) => {
             console.log(response);
             },  
