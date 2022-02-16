@@ -75,7 +75,7 @@
         }
       },
       enterRoom: function(roomId, roomName) {
-        localStorage.setItem('wschat.roomId',roomId);
+        localStorage.setItem(\'wschat.roomId',roomId);
         console.log(localStorage.getItem('wschat.roomId'))
         localStorage.setItem('wschat.roomName',roomName);
         location.href="/chat/room/enter/"+roomId;

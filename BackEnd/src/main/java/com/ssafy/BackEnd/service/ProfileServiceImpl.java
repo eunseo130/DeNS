@@ -70,7 +70,7 @@ public class ProfileServiceImpl implements ProfileService{
     @Override
     public Profile modifyProfile(Profile findProfile, RequestModifyProfile2 requestModifyProfile2) throws NotFoundException {
 
-        User user = userRepository.findByName(findProfile.getName());
+        User user = userRepository.findByEmail(findProfile.getEmail());
         System.out.println("position : "+requestModifyProfile2.getPosition());
         System.out.println("stack : "+requestModifyProfile2.getStack());
         findProfile.setPosition(requestModifyProfile2.getPosition());

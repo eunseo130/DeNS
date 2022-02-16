@@ -25,5 +25,8 @@ public class ChatMessage implements Serializable {
     @Indexed
     private String roomId;
     private String sender;
+    @Indexed
+    private Long senderId;
     private String message;
+
 }
