@@ -162,8 +162,8 @@ public class TeamFeedController {
         logger.info("INFO SUCCESS");
     }
 
-    @GetMapping("/download")
-    public ResponseEntity<Resource> download(@RequestBody String filename) throws IOException {
+    @GetMapping("/download/{filename}")
+    public ResponseEntity<Resource> download(@PathVariable String filename) throws IOException {
         Path path = Paths.get("C:/Users/001/Pictures/" + filename);
         String contentType = Files.probeContentType(path);
 
