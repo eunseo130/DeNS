@@ -40,7 +40,6 @@ public class TeamFeedFileServiceImpl implements TeamFeedFileService {
         return result;
     }
 
-
     @Override
     public void save(TeamFeedFile file) {
         teamFeedFileRepository.save(file);
