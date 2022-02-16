@@ -57,17 +57,17 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message, HttpServletRequest request) {
+    public void message(ChatMessage message) {
         System.out.println("===========message=========");
         System.out.println(message.getMessage());
-        String authorization = request.getHeader("Authorization");
-        String email = jwtService.getUserEmail(authorization);
-        Profile profile = profileRepository.findByEmail(email).get();
-        String name = profile.getName();
-        message.setSender(name);
+//        String authorization = request.getHeader("Authorization");
+//        String email = jwtService.getUserEmail(authorization);
+//        Profile profile = profileRepository.findByEmail(email).get();
+//        String name = profile.getName();
+        message.setSender("이름");
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             message.setSender("[알림]");
-            message.setMessage(name + "님이 입장하셨습니다.");
+            message.setMessage("이름" + "님이 입장하셨습니다.");
 
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
