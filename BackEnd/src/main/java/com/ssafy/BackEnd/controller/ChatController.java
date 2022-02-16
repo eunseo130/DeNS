@@ -76,6 +76,9 @@ public class ChatController {
         String name = profile.getName();
         message.setSender(name);
         message.setSenderId(profile.getProfile_id());
+        System.out.println(ChatMessage.MessageType.ENTER.equals(message.getType()));
+        System.out.println("type: " + message.getType());
+        System.out.println("enum : " + ChatMessage.MessageType.ENTER);
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             message.setSender("[알림]");
             message.setSenderId(null);
