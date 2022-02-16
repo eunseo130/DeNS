@@ -61,16 +61,13 @@ public class ChatController {
         System.out.println("===========message=========");
         System.out.println(message.getMessage());
         System.out.println(token);
-//        String authorization = request.getHeader("Authorization");
-//        System.out.println(request);
-//        String email = jwtService.getUserEmail(authorization);
-//        Profile profile = profileRepository.findByEmail(email).get();
-//        String name = profile.getName();
-        message.setSender("이름");
+        String email = jwtService.getUserEmail(token);
+        Profile profile = profileRepository.findByEmail(email).get();
+        String name = profile.getName();
+        message.setSender(name);
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
             message.setSender("[알림]");
-            message.setMessage("이름" + "님이 입장하셨습니다.");
-
+            message.setMessage(name + "님이 입장하셨습니다.");
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
         redisTemplate.convertAndSend(channelTopic.getTopic(), message);
