@@ -2,7 +2,7 @@ package com.ssafy.BackEnd.controller;
 import com.ssafy.BackEnd.entity.ChatMessage;
 
 import com.ssafy.BackEnd.entity.Profile;
-import com.ssafy.BackEnd.pubsub.RedisPublisher;
+//import com.ssafy.BackEnd.pubsub.RedisPublisher;
 import com.ssafy.BackEnd.repository.ChatMessageRedisRepository;
 import com.ssafy.BackEnd.repository.ChatMessageRepository;
 import com.ssafy.BackEnd.repository.ProfileRepository;
@@ -55,7 +55,7 @@ public class ChatController {
 
     private final RedisUtil redisUtil;
 
-    private final RedisPublisher redisPublisher;
+
 
     private static final String CHAT_MESSAGES = "CHAT_MESSAGES";
 

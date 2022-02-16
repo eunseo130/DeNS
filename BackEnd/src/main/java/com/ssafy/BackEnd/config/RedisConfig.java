@@ -38,10 +38,10 @@ public class RedisConfig {
     /**
      * 단일 Topic 사용을 위한 Bean 설정
      */
-//    @Bean
-//    public ChannelTopic channelTopic() {
-//        return new ChannelTopic("chatroom");
-//    }
+    @Bean
+    public ChannelTopic channelTopic() {
+        return new ChannelTopic("chatroom");
+    }
 
     /**
      * redis pub/sub 메시지를 처리하는 listener 설정
