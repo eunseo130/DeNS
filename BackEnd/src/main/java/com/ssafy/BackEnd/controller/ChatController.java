@@ -57,7 +57,7 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message, @Header("token") String token) {
+    public ChatMessage message(ChatMessage message, @Header("token") String token) {
         System.out.println("===========message=========");
         System.out.println(message.getMessage());
         System.out.println(token);
@@ -72,12 +72,12 @@ public class ChatController {
             message.setSender("[알림]");
             message.setSenderId(null);
             message.setMessage(name + "님이 입장하셨습니다.");
+            redisTemplate.convertAndSend(channelTopic.getTopic(), message);
+            return message;
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
         redisTemplate.convertAndSend(channelTopic.getTopic(), message);
-        System.out.println(channelTopic.getTopic());
         if (!message.getSender().equals("[알림]")) {
-
             ChatMessage save = chatMessageRedisRepository.save(message);
             logger.info("save message success");
             System.out.println(save.getMessage());
@@ -85,6 +85,7 @@ public class ChatController {
                 System.out.println("save message error");
             }
         }
+        return message;
     }
 
 
