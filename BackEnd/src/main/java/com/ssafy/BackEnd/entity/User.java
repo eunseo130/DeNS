@@ -59,11 +59,11 @@ public class User implements UserDetails {
 
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinColumn(name = "profile_id")
-    //@JsonIgnore
+    @JsonIgnore
     private Profile profile;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
-    @JsonIgnore
+//    @JsonIgnore
     private List<TeamMember> team_member = new ArrayList<>( );
 
     @Builder
