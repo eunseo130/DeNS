@@ -30,6 +30,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
@@ -61,6 +62,8 @@ public class ChatController {
 
     private static final Logger logger = LogManager.getLogger(ChatController.class);
 
+
+
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
@@ -85,7 +88,8 @@ public class ChatController {
             message.setMessage(name + "님이 입장하셨습니다.");
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
-        redisTemplate.convertAndSend("/topic/"+ roomId, message);
+//        ChannelTopic channel = channels.get(roomId);
+        redisTemplate.convertAndSend(channelTopic.getTopic(), message);
 
         System.out.println(roomId);
         if (!message.getSender().equals("[알림]")) {

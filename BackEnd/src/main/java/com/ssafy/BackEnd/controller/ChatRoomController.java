@@ -195,6 +195,7 @@ public class ChatRoomController {
             ChatRoom chatRoom = ChatRoom.create(chatUser1, chatUser2);
             ChatRoom save = chatRoomRedisRepository.save(chatRoom);
             ChannelTopic channel1 = new ChannelTopic(save.getRoomId());
+            channels.put(save.getRoomId(), channel1);
             redisMessageListenerContainer.addMessageListener(redisSubscriber, channel1);
             logger.info("CreateRoom success");
             return new ResponseEntity<ChatRoom>(save, HttpStatus.CREATED);
