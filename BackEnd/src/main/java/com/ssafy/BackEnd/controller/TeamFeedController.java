@@ -164,7 +164,7 @@ public class TeamFeedController {
 
     @GetMapping("/download/{filename}")
     public ResponseEntity<Resource> download(@PathVariable String filename) throws IOException {
-        Path path = Paths.get("/home/ubuntu/files/generals" + filename);
+        Path path = Paths.get("/home/ubuntu/files/generals/" + filename);
         String contentType = Files.probeContentType(path);
 
         HttpHeaders headers = new HttpHeaders();
