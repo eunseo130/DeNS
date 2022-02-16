@@ -72,6 +72,7 @@ public class ChatController {
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
         redisTemplate.convertAndSend(channelTopic.getTopic(), message);
+        System.out.println(channelTopic.getTopic());
         if (!message.getSender().equals("[알림]")) {
 
             ChatMessage save = chatMessageRedisRepository.save(message);
