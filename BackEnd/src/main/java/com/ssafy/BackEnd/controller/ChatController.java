@@ -62,7 +62,9 @@ public class ChatController {
         System.out.println(message.getMessage());
         System.out.println(token);
         String email = jwtService.getUserEmail(token);
+        System.out.println(email);
         Profile profile = profileRepository.findByEmail(email).get();
+        System.out.println(profile.getName());
         String name = profile.getName();
         message.setSender(name);
         if (ChatMessage.MessageType.ENTER.equals(message.getType())) {
