@@ -40,6 +40,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.util.UriUtils;
 
 
@@ -60,11 +61,13 @@ public class TeamFeedController {
 
     @ApiOperation(value = "팀 피드 생성")
     @PostMapping("/{team_id}/{profile_id}")
-    public ResponseEntity<TeamFeed> createTeamFeed(@PathVariable Long team_id, @PathVariable Long profile_id, @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) throws IOException, NotFoundException {
-        if (bindingResult.hasErrors()) {
-            log.info("bindingResult : {}", bindingResult.getFieldError());
-            return new ResponseEntity<TeamFeed>((TeamFeed) null, HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<TeamFeed> createTeamFeed(@PathVariable Long team_id, @PathVariable Long profile_id, MultipartHttpServletRequest request) throws IOException, NotFoundException {
+//        if (bindingResult.hasErrors()) {
+//            log.info("bindingResult : {}", bindingResult.getFieldError());
+//            return new ResponseEntity<TeamFeed>((TeamFeed) null, HttpStatus.NOT_FOUND);
+//        }
+
+
 
         Team team = teamService.findByTeam(team_id);
         if (team == null) {
@@ -72,7 +75,9 @@ public class TeamFeedController {
             throw new CustomException("no team", ErrorCode.NO_DATA_ERROR);
         }
 
-        TeamFeedDto teamFeedDto = teamFeedAddForm.createTeamFeedDto(team);
+        TeamFeedDto teamFeedDto = new TeamFeedDto(team, request.getParameter("content"), request.getFile("imageFiles"), request.getFile("generalFiles"));
+        //TeamFeedDto teamFeedDto = teamFeedAddForm.createTeamFeedDto(team);
+
         TeamFeed teamFeed = teamFeedService.createTeamFeed(profile_id, teamFeedDto);
         logger.info("INFO SUCCESS");
         return new ResponseEntity<TeamFeed>(teamFeed, HttpStatus.OK);
