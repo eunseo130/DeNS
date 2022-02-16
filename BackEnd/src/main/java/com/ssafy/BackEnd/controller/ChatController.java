@@ -21,6 +21,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.security.core.Authentication;
@@ -49,6 +50,8 @@ public class ChatController {
     private final RedisTemplate<String, Object> redisTemplate;
 
     private SimpMessagingTemplate simpMessagingTemplate;
+
+    private SimpMessageSendingOperations messagingTemplate;
 
     private final ChannelTopic channelTopic;
 
@@ -90,7 +93,8 @@ public class ChatController {
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
 //        ChannelTopic channel = channels.get(roomId);
 //        redisTemplate.convertAndSend(channelTopic.getTopic(), message);
-        simpMessagingTemplate.convertAndSend("/topic/"+message.getRoomId(), message);
+//        simpMessagingTemplate.convertAndSend("/topic/"+message.getRoomId(), message);
+        messagingTemplate.convertAndSend("/topic/chat/room/"+message.getRoomId(), message);
 
         System.out.println(roomId);
         if (!message.getSender().equals("[알림]")) {
