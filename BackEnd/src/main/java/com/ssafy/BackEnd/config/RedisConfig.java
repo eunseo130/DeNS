@@ -61,6 +61,7 @@ public class RedisConfig {
      */
     @Bean
     public MessageListenerAdapter listenerAdapter(RedisSubscriber subscriber) {
+        System.out.println("========sendMessage 실행================");
         return new MessageListenerAdapter(subscriber, "sendMessage");
     }
 
