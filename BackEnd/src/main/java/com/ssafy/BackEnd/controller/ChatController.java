@@ -58,6 +58,7 @@ public class ChatController {
      */
     @MessageMapping("/chat/message")
     public void message(ChatMessage message, HttpServletRequest request) {
+        System.out.println("===========message=========");
         System.out.println(message.getMessage());
         String authorization = request.getHeader("Authorization");
         String email = jwtService.getUserEmail(authorization);
