@@ -25,18 +25,11 @@ public class TeamFeedDto {
     @Nullable
     private Map<FileType, List<MultipartFile>> teamFeedFiles = new ConcurrentHashMap<>();
 
-    @Nullable
-    MultipartFile imageFiles;
-
-    @Nullable
-    MultipartFile generalFiles;
-
     @Builder
-    public TeamFeedDto(Team team, String content, MultipartFile imageFiles, MultipartFile generalFiles) {
+    public TeamFeedDto(Team team, String content, Map<FileType, List<MultipartFile>> teamFeedFiles) {
         this.team = team;
         this.content = content;
-        this.imageFiles = imageFiles;
-        this.generalFiles = generalFiles;
+        this.teamFeedFiles = teamFeedFiles;
     }
 
     public TeamFeed createTeamFeed(TeamFeedDto teamFeedDto) {
