@@ -26,6 +26,7 @@ public class TeamFeedAddForm {
     @Nullable
     private List<MultipartFile> generalFiles;
 
+
     @Builder
     private TeamFeedAddForm(String content, List<MultipartFile> imageFiles, List<MultipartFile> generalFiles) {
         this.content = content;
@@ -33,14 +34,15 @@ public class TeamFeedAddForm {
         this.generalFiles = (generalFiles != null) ? generalFiles : new ArrayList<>();
     }
 
-    public TeamFeedDto createTeamFeedDto(Team team) {
-        Map<FileType, List<MultipartFile>> teamFeedFiles = getFileTypeListMap();
-        return TeamFeedDto.builder()
-                .team(team)
-                .content(content)
-                .teamFeedFiles(teamFeedFiles)
-                .build();
-    }
+//    public TeamFeedDto createTeamFeedDto(Team team) {
+//        Map<FileType, List<MultipartFile>> teamFeedFiles = getFileTypeListMap();
+//        return TeamFeedDto.builder()
+//                .team(team)
+//                .content(content)
+//                .generalFiles()
+//                .imageFiles()
+//                .build();
+//    }
 
     private Map<FileType, List<MultipartFile>> getFileTypeListMap() {
         Map<FileType, List<MultipartFile>> userFeedFiles = new ConcurrentHashMap<>();

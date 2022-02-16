@@ -41,6 +41,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
+import org.springframework.web.multipart.MultipartRequest;
 import org.springframework.web.util.UriUtils;
 
 
@@ -106,25 +107,25 @@ public class TeamFeedController {
         return new ResponseEntity<List<TeamFeed>>(our_teamfeeds, HttpStatus.OK);
     }
 
-    @PutMapping("/{teamfeed_id}/{profile_id}")
-    @ApiOperation(value = "팀 피드 수정")
-    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id, @PathVariable Long profile_id, @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) throws IOException {
-        //        TeamFeed teamFeed = teamFeedDto.createTeamFeed(teamFeedDto);
-        if (bindingResult.hasErrors()) {
-            log.info("bindingResult : {}", bindingResult.getFieldError());
-            return new ResponseEntity<TeamFeed>((TeamFeed) null, HttpStatus.NOT_FOUND);
-        }
-        TeamFeed teamFeed = teamFeedRepository.findByFeedId(teamfeed_id);
-        if (teamFeed == null) {
-            throw new CustomException("no teamfeed info", ErrorCode.NO_DATA_ERROR);
-        }
-
-        TeamFeedDto teamFeedDto = teamFeedAddForm.createTeamFeedDto(teamFeed.getTeam());
-        TeamFeed newTeamFeed = teamFeedService.modifyTeamFeed(teamFeed, profile_id, teamFeedDto);
-
-        logger.info("INFO SUCCESS");
-        return new ResponseEntity<TeamFeed>(teamFeed, HttpStatus.OK);
-    }
+//    @PutMapping("/{teamfeed_id}/{profile_id}")
+//    @ApiOperation(value = "팀 피드 수정")
+//    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id, @PathVariable Long profile_id, MultipartRequest request) throws IOException {
+//        //        TeamFeed teamFeed = teamFeedDto.createTeamFeed(teamFeedDto);
+////        if (bindingResult.hasErrors()) {
+////            log.info("bindingResult : {}", bindingResult.getFieldError());
+////            return new ResponseEntity<TeamFeed>((TeamFeed) null, HttpStatus.NOT_FOUND);
+////        }
+//        TeamFeed teamFeed = teamFeedRepository.findByFeedId(teamfeed_id);
+//        if (teamFeed == null) {
+//            throw new CustomException("no teamfeed info", ErrorCode.NO_DATA_ERROR);
+//        }
+//
+//        //TeamFeedDto teamFeedDto = teamFeedAddForm.createTeamFeedDto(teamFeed.getTeam());
+//        TeamFeed newTeamFeed = teamFeedService.modifyTeamFeed(teamFeed, profile_id, teamFeedDto);
+//
+//        logger.info("INFO SUCCESS");
+//        return new ResponseEntity<TeamFeed>(teamFeed, HttpStatus.OK);
+//    }
 
     @DeleteMapping("/{teamfeed_id}/{profile_id}")
     @ApiOperation(value = "팀 피드 삭제")
