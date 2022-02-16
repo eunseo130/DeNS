@@ -58,7 +58,7 @@ public class ChatController {
     /**
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
-    @MessageMapping("/chat/message/{roomId}")
+    @MessageMapping("/chat/{roomId}")
     public void message(ChatMessage message, @Header("token") String token, @DestinationVariable("roomId") String roomId) {
         System.out.println("===========message=========");
         System.out.println(message.getMessage());
@@ -77,7 +77,7 @@ public class ChatController {
 
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
-        redisTemplate.convertAndSend("/sub/chat/room/"+ roomId, message);
+        redisTemplate.convertAndSend("/topic/"+ roomId, message);
         System.out.println(roomId);
         if (!message.getSender().equals("[알림]")) {
             ChatMessage save = chatMessageRedisRepository.save(message);
