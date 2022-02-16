@@ -57,10 +57,12 @@ public class ChatController {
      * websocket "/pub/chat/message"로 들어오는 메시징을 처리한다.
      */
     @MessageMapping("/chat/message")
-    public void message(ChatMessage message) {
+    public void message(ChatMessage message, @Header("token") String token) {
         System.out.println("===========message=========");
         System.out.println(message.getMessage());
+        System.out.println(token);
 //        String authorization = request.getHeader("Authorization");
+//        System.out.println(request);
 //        String email = jwtService.getUserEmail(authorization);
 //        Profile profile = profileRepository.findByEmail(email).get();
 //        String name = profile.getName();
