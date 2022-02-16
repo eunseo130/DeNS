@@ -60,11 +60,11 @@ public class TeamFeedController {
 
     @ApiOperation(value = "팀 피드 생성")
     @PostMapping("/{team_id}/{profile_id}")
-    public ResponseEntity<TeamFeed> createTeamFeed(@PathVariable Long team_id, @PathVariable Long profile_id, @ModelAttribute TeamFeedAddForm teamFeedAddForm) throws IOException, NotFoundException {
-//        if (bindingResult.hasErrors()) {
-//            log.info("bindingResult : {}", bindingResult.getFieldError());
-//            return new ResponseEntity<TeamFeed>((TeamFeed) null, HttpStatus.NOT_FOUND);
-//        }
+    public ResponseEntity<TeamFeed> createTeamFeed(@PathVariable Long team_id, @PathVariable Long profile_id, @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) throws IOException, NotFoundException {
+        if (bindingResult.hasErrors()) {
+            log.info("bindingResult : {}", bindingResult.getFieldError());
+            return new ResponseEntity<TeamFeed>((TeamFeed) null, HttpStatus.NOT_FOUND);
+        }
 
         Team team = teamService.findByTeam(team_id);
         if (team == null) {
