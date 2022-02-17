@@ -57,7 +57,7 @@ public class User implements UserDetails {
 //    @JoinColumn(name = "salt_id")
 //    private Salt salt;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "profile_id")
     //@JsonIgnore
     private Profile profile;
