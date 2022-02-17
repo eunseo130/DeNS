@@ -305,5 +305,18 @@ public class TeamServiceImpl implements TeamService{
         }
         return findTeams;
     }
+
+    @Override
+    public List<Team> showLeaderTeams(long profile_id) {
+        List<Team> teams = showMyTeamList(profile_id);
+        List<Team> leader_teams = new ArrayList<>();
+
+        for (Team team : teams) {
+            if (team.getTeam_member().get(0).getUser().getProfile().getProfile_id() == profile_id) {
+                leader_teams.add(team);
+            }
+        }
+        return leader_teams;
+    }
 }
 

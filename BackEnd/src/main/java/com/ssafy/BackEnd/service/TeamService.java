@@ -31,4 +31,6 @@ public interface TeamService {
 
     List<Team> findTeamByKeyword(String keyword);
 
+    List<Team> showLeaderTeams(long profile_id);
+
 }

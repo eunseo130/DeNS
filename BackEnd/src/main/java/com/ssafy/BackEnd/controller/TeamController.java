@@ -165,4 +165,16 @@ public class TeamController {
 
         return new ResponseEntity<Team>(newTeam, HttpStatus.OK);
     }
+
+    @GetMapping("/leaderteam/{profile_id}")
+    @ApiOperation(value = "내가 팀장인 팀들 정보 반환")
+    public ResponseEntity<List<Team>> getLeaderTeam(@PathVariable long profile_id) throws NotFoundException {
+        List<Team> teams = teamService.showLeaderTeams(profile_id);
+        if (teams.isEmpty()) {
+            logger.info("내가 팀장인 팀이 없습니다");
+        }
+
+        return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
+    }
+
 }
