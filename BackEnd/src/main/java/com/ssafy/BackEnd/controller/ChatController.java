@@ -21,6 +21,7 @@ import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.handler.annotation.DestinationVariable;
 import org.springframework.messaging.handler.annotation.Header;
 import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.messaging.simp.annotation.SendToUser;
 import org.springframework.security.core.Authentication;
@@ -33,6 +34,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.annotation.PostConstruct;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,7 +50,9 @@ public class ChatController {
 
     private final RedisTemplate<String, Object> redisTemplate;
 
-    private SimpMessagingTemplate simpMessagingTemplate;
+    private final SimpMessagingTemplate simpMessagingTemplate;
+
+    private final SimpMessageSendingOperations messagingTemplate;
 
     private final ChannelTopic channelTopic;
 
@@ -79,6 +83,7 @@ public class ChatController {
         String name = profile.getName();
         message.setSender(name);
         message.setSenderId(profile.getProfile_id());
+        message.setTime(LocalDateTime.now());
         System.out.println(ChatMessage.MessageType.ENTER.equals(message.getType()));
         System.out.println("type: " + message.getType());
         System.out.println("enum : " + ChatMessage.MessageType.ENTER);
@@ -89,7 +94,9 @@ public class ChatController {
         }
         // Websocket에 발행된 메시지를 redis로 발행한다(publish)
 //        ChannelTopic channel = channels.get(roomId);
-        redisTemplate.convertAndSend(channelTopic.getTopic(), message);
+//        redisTemplate.convertAndSend(channelTopic.getTopic(), message);
+//        simpMessagingTemplate.convertAndSend("/topic/"+message.getRoomId(), message);
+        messagingTemplate.convertAndSend("/topic/chat/room/"+message.getRoomId(), message);
 
         System.out.println(roomId);
         if (!message.getSender().equals("[알림]")) {

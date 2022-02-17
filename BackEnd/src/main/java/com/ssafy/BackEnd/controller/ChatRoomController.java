@@ -120,6 +120,7 @@ import com.ssafy.BackEnd.service.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.HttpStatus;
@@ -201,7 +202,7 @@ public class ChatRoomController {
 //            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
             return new ResponseEntity<ChatRoom>(findRoom2, HttpStatus.FOUND);
         } else if (findRoom1 != null && findRoom2 == null) {
-            logger.error("chatroom is already exists");
+            logger.error("Chatroom is already exists");
 //            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
             return new ResponseEntity<ChatRoom>(findRoom1, HttpStatus.FOUND);
         } else {
