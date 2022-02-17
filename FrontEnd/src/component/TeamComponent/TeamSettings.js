@@ -11,8 +11,8 @@ export default function TeamSettings() {
 		const myProfileId = store.getState().user.profileid;
 
 		const [title, setTitle] = useState('');
-		// const [membersName, setMemberName] = useState('');
-		// const [membersEmail, setMembersEmail] = useState('');
+		const [membersName, setMemberName] = useState('');
+		const [membersEmail, setMembersEmail] = useState('');
 		const [members, setMembers] = useState('');
 
 		const teamId = useParams().id;
@@ -109,11 +109,11 @@ export default function TeamSettings() {
 					<hr />
 
 					<h3>팀 멤버 관리</h3>
-					{/* {membersName}, {email} */}
+					{membersName}
 					{membersInfo()}
 					{/* {console.log(membersInfo)} */}
 
-					{/* {membersName ? membersName.map((el, key) => {
+					{membersName ? membersName.map((el, key) => {
 						return (
 							<div>
 								<SettingsMembers
@@ -122,7 +122,7 @@ export default function TeamSettings() {
 								/>
 							</div>
 						)
-					}): null} */}
+					}): null}
 					<hr />
 					<button onClick={TeamDelete}>팀 삭제하기</button>
 

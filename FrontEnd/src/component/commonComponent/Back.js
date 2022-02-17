@@ -17,6 +17,7 @@ import Header from './HeaderBox'
 import Sidebar from './sidebar'
 import Head from '../Header/Head'
 import { Container, Navbar } from 'react-bootstrap'
+import styled from 'styled-components';
 
 export default function Back(props) {
   const dispatch = useDispatch()
@@ -41,17 +42,24 @@ export default function Back(props) {
   // console.log(dispatch());
 
   return (
-    <>
-      <Navbar style={{ backgroundColor: '#f46a72' }}>
+    <TheBody>
+      <Navbar style={{ backgroundColor: '#f46a72', position: 'fixed', width: '100vw' }}>
         <Container>
           <Head />
         </Container>
       </Navbar>
 
       <Sidebar />
-      <div className="tewst" style={{ backgroundColor: '#fde1e36b' }}>
+      <Background>
         <Outlet />
-      </div>
-    </>
+      </Background>
+    </TheBody>
   )
 }
+const hey = document.body
+hey.style.backgroundColor = '#FDE1E3';
+
+const TheBody = styled.div`
+`
+const Background = styled.div`
+`

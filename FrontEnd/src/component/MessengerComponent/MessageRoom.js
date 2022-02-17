@@ -13,7 +13,6 @@ import TeamInviteModal from './TeamInviteModal';
 
 export default function MessageRoom() {
     const yourId = useLocation().state.yourId;
-    console.log(yourId);
 
     const token =  store.getState().user.token;
     const profileId = store.getState().user.profileid;

@@ -80,8 +80,6 @@ export default function TeamFeedIndex() {
 						<div>
 							{ `${feedIndex[i].content}` }
 						</div>
-
-						
 					 </FeedContent>
 						
 						<WriterBtn>
@@ -126,13 +124,14 @@ const Feed = styled.div`
 const FeedContent = styled.div`
 	display: flex;
 	flex-direction: column;
+	margin-top: 4%;
 `
 const EditBtn = styled.button`
 	border: none;
-	background-color: white;
+	background-color: transparent;
 `
 const DeleteBtn = styled.button`
 	border: none;
-	background-color: white;
+	background-color: transparent;
 
 `
