@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { detail, bringTeamMembers, editTeamContent, bringMembersImg } from '../../api/team';
 import styled from "styled-components";
-import { useNavigate, useParams } from 'react-router-dom';
+import { Link,useNavigate, useParams } from 'react-router-dom';
 import TeamFeedContainer from './TeamFeedContainer';
 import TeamMemberInfo from './TeamMemberInfo'
 import MembersImg from './MembersImg';
-import { Link, useNavigate } from "react-router-dom";
+// import {  } from "react-router-dom";
 import { store } from '../..';
 import { API_BASE_URL } from '../../config';
 import axios from 'axios';
@@ -87,8 +87,6 @@ export default function TeamDetail(props) {
 				}
 			)
 		}
-
-	const navigate = useNavigate();
 	
 	const goTeamSetting = () => {
 		navigate(`/auth/team/${teamId}/settings`)
