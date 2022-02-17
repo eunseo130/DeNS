@@ -8,13 +8,17 @@ export default function ProfileTagCloud({ keywords }) {
   }
   return (
     <>
-      <TagCloud
-        minSize={10}
-        maxSize={40}
-        tags={keywords}
-        style={{ width: 600, textAlign: 'center' }}
-        colorOptions={options}
-      />
+      <div class="card mb-3">
+        <div class="card-body">
+          <TagCloud
+            minSize={10}
+            maxSize={40}
+            tags={keywords}
+            style={{ width:'100%', textAlign: 'center' }}
+            colorOptions={options}
+          />
+        </div>
+      </div>
     </>
   )
 }

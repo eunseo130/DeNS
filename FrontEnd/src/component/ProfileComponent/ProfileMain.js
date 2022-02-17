@@ -1,4 +1,5 @@
-import {store} from '../..'
+import { store } from '../..'
+import { API_BASE_URL } from '../../config'
 import React, { useState, useEffect } from 'react'
 import { Outlet, useParams, useNavigate } from 'react-router-dom'
 import {
@@ -16,11 +17,13 @@ import ProfileInfo from './ProfileInfo'
 import ProfileKeyword from './ProfileKeyword'
 import axios from 'axios'
 import { useCookies } from 'react-cookie'
+import '../../css/profile.css'
+
 export default function ProfileMain() {
   const [inputs, setInputs] = useState({
     name: '',
-    position: ' ',
-    stack: '',
+    position: '',
+    stack: '  ',
     email: '',
     keyword: '',
     edit: false,
@@ -33,15 +36,27 @@ export default function ProfileMain() {
   const [files, setFiles] = useState('')
   const [fileImage, setFileImage] = useState('')
   const [image, setImage] = useState('')
-  const userId = store.getState().user.profileid
   const [cookies] = useCookies(['token'])
+  const userId = store.getState().user.profileid
+
+  const [idCheck, setIdCheck] = useState(false)
+
   const authAxios = axios.create({
-    baseURL: 'http://3.36.131.59:2345/',
+    baseURL: API_BASE_URL,
     headers: {
       Authorization: `Bearer "${cookies.token}"`,
       withCredentials: true,
     },
   })
+  console.log('id: ', id, 'userId: ', userId)
+  useEffect(() => {
+    if (userId === id) {
+      setIdCheck(idCheck)
+    } else {
+      setIdCheck(!idCheck)
+    }
+  }, [userId])
+
   useEffect(() => {
     authAxios
       .get(`/profile/${id}`)
@@ -66,26 +81,25 @@ export default function ProfileMain() {
     authAxios
       .get(`/profile/keyword/${id}`)
       .then((res) => {
-        let words = []
         const keywordObjs = res.data
-        keywordObjs.forEach((keywordObj) => {
-          const word = {
-            value: keywordObj.name,
-            count: keywordObj.count,
-          }
-          words.push(word)
-        })
-        const value = keywordObjs.reduce(
-          (max, p) => (p.count > max ? p.count : max),
-          0
-        )
-        const c = 1 + value
-        words.push({ value: position, count: c }, { value: stack, count: c })
-        setKeywords(words)
+        setKeywords(keywordPlus(keywordObjs))
       })
       .catch((error) => console.log(error))
   }
-
+  function keywordPlus(e) {
+    let words = []
+    e.forEach((keywordObj) => {
+      const word = {
+        value: keywordObj.name,
+        count: keywordObj.count,
+      }
+      words.push(word)
+    })
+    const value = e.reduce((max, p) => (p.count > max ? p.count : max), 0)
+    const c = 1 + value
+    words.push({ value: position, count: c }, { value: stack, count: c })
+    return words
+  }
   function update() {
     authAxios
       .put(`/profile/${id}`, {
@@ -105,7 +119,7 @@ export default function ProfileMain() {
           edit: !edit,
         })
       })
-      .catch((error) => console.log(error))
+      .catch((error) => console.log(id))
 
     getKeywords()
   }
@@ -141,7 +155,7 @@ export default function ProfileMain() {
   function onEdit() {
     setInputs({
       ...inputs,
-      edit: !edit,
+      edit: true,
     })
   }
   function onSave(e) {
@@ -155,49 +169,51 @@ export default function ProfileMain() {
     setFiles(e.target.files)
     setFileImage(URL.createObjectURL(e.target.files[0]))
   }
+
   return (
     <div>
-      <Container fluid>
-        <Row className="justify-content-md-center">
-          <ProfileTagCloud keywords={keywords} />
-        </Row>
-        <Stack gap={3}>
-          <Row>
-            <ProfileImage
-              id={id}
-              fileImage={fileImage}
-              onLoad={onLoad}
-              ImageUpload={ImageUpload}
-              authAxios={authAxios}
-            />
-          </Row>
-          <Row className="justify-content-md-center">
-            <ProfileInfo
-              id={id}
-              name={name}
-              edit={edit}
-              position={position}
-              stack={stack}
-              email={email}
-              onSave={onSave}
-              update={update}
-              onEdit={onEdit}
-              gitId={gitId}
-            />
+      <div className="container">
+        <div className="main-body">
+          <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+              <ProfileImage
+                id={id}
+                fileImage={fileImage}
+                onLoad={onLoad}
+                ImageUpload={ImageUpload}
+                authAxios={authAxios}
+                idCheck={idCheck}
+              />
+              <ProfileInfo
+                id={id}
+                name={name}
+                edit={edit}
+                position={position}
+                stack={stack}
+                email={email}
+                onSave={onSave}
+                update={update}
+                onEdit={onEdit}
+                gitId={gitId}
+                idCheck={idCheck}
+              />
+            </div>
+            <div className="col-md-8">
+              <ProfileTagCloud keywords={keywords} />
 
-            <ProfileGit edit={edit} gitId={gitId} onSave={onSave} />
-          </Row>
-        </Stack>
+              <ProfileKeyword
+                keyword={keyword}
+                onSave={onSave}
+                putKeywords={putKeywords}
+              />
 
-        <Row>
-          <ProfileKeyword
-            keyword={keyword}
-            onSave={onSave}
-            putKeywords={putKeywords}
-          />
-        </Row>
-        <Outlet />
-      </Container>
+              <ProfileGit edit={edit} gitId={gitId} onSave={onSave} />
+            </div>
+
+            <Outlet />
+          </div>
+        </div>
+      </div>
     </div>
   )
 }

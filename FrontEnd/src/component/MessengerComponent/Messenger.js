@@ -15,7 +15,7 @@ export default function Messenger() {
     const id = useSelector(state => state.user.profileid);
     const [cookie] = useCookies(['token']);
     const [temp, setTemp] = useState([]);
-    useEffect(() => { 
+    useEffect(() => {
         const authAxios = axios.create({
             baseURL: API_BASE_URL,
             headers: {
@@ -44,7 +44,7 @@ export default function Messenger() {
 
     return (
         <>
-        
+
         {temp?
             temp.map((data, idx) => {
                 return <MessangerCard key={idx } data={data }/>
