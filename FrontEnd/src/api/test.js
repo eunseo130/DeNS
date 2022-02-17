@@ -28,10 +28,11 @@ function verify22(param, success, fail) {
   api.get(`/verify/${param}`).then(success).catch(fail);
 }
 function password(param, success, fail) {
-  // console.log(param);
-  api.post(`/password`, {email:param}).then(success).catch(fail);
+  api.post(`/password`, JSON.stringify({ email: param })).then(success).catch(fail);
 }
-
+function certiPWD(param, success, fail) {
+  api.put(`/password`, JSON.stringify(param)).then(success).catch(fail);
+}
 function profileUpdate([id, position, stack], success, fail) {
   console.log('profile update')
   console.log(position)
@@ -89,5 +90,6 @@ export {
   profileUpdate,
   putKeyword,
   verify,
-  verify22
+  verify22,
+  certiPWD
 }

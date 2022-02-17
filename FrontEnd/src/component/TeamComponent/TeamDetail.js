@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { detail, bringTeamMembers, editTeamContent, bringMembersImg } from '../../api/team';
 import styled from "styled-components";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import TeamFeedContainer from './TeamFeedContainer';
 import TeamMemberInfo from './TeamMemberInfo'
 import MembersImg from './MembersImg';
@@ -84,7 +84,11 @@ export default function TeamDetail(props) {
 			)
 		}
 
-
+	const navigate = useNavigate();
+	
+	const goTeamSetting = () => {
+		navigate(`/auth/team/${teamId}/settings`)
+	}
 
     return (
 
@@ -96,9 +100,7 @@ export default function TeamDetail(props) {
 					</TheTeamTitle>
 
 					<LeaderSettings>
-						<Link to={{pathname:`/auth/team/${teamId}/settings`}}>
-								<button>팀 설정</button>
-						</Link>
+								<button onClick={goTeamSetting}>팀 설정</button>
 					</LeaderSettings>
 			</TeamDetailHeaders>
 

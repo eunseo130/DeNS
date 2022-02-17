@@ -100,10 +100,7 @@ export default function MessageRoom() {
             console.log(fail);
         })
     }
-    useEffect(() => {
-        console.log(yourId);
-    })
-    
+
     useEffect(() => {
         // 0.
         for (let i=0; i < messagelog.length; i++) {

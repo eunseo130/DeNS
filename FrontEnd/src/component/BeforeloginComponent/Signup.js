@@ -37,27 +37,27 @@ export default function Signup() {
     }
   return (
     <div>
-      <section class="ftco-section">
-        <div class="container">
-          <div class="row justify-content-center">
-            <div class="col-md-6 text-center mb-5">
-              <h2 class="heading-section" style={{ color: '#f46a72' }}>
+      <section className="ftco-section">
+        <div className="container">
+          <div className="row justify-content-center">
+            <div className="col-md-6 text-center mb-5">
+              <h2 className="heading-section" style={{ color: '#f46a72' }}>
                 Sing Up
               </h2>
             </div>
           </div>
-          <div class="row justify-content-center">
-            <div class="col-md-6 col-lg-5">
-              <div class="login-wrap p-4 p-md-5">
-                <div class="icon d-flex align-items-center justify-content-center">
-                  <span class="fa fa-user-o"></span>
+          <div className="row justify-content-center">
+            <div className="col-md-6 col-lg-5">
+              <div className="login-wrap p-4 p-md-5">
+                <div className="icon d-flex align-items-center justify-content-center">
+                  <span className="fa fa-user-o"></span>
                 </div>
-                <h3 class="text-center mb-4" style={{ color: '#f46a72' }}>
+                <h3 className="text-center mb-4" style={{ color: '#f46a72' }}>
                   해당 정보를 입력해 주세요.
                 </h3>
-                <form action="#" class="login-form">
+                <form action="#" className="login-form">
                   <br />
-                  <div class="form-group d-flex justify-content-center">
+                  <div className="form-group d-flex justify-content-center">
                     <input
                       placeholder="이메일"
                       name="email"
@@ -65,27 +65,28 @@ export default function Signup() {
                     />
                   </div>
                   <br />
-                  <div class="form-group d-flex justify-content-center ">
+                  <div className="form-group d-flex justify-content-center ">
                     <input
                       placeholder="이름"
-                      name="email"
+                      name="name"
                       onChange={changeCheck}
                     />
                   </div>
                   <br />
-                  <div class="form-group d-flex justify-content-center">
+                  <div className="form-group d-flex justify-content-center">
                     <input
                       placeholder="비밀번호"
                       name="password"
                       onChange={changeCheck}
+                      style={{WebkitTextSecurity: `disc`}}
                     />
                   </div>
 
                   <hr />
-                  <div class="form-group d-flex justify-content-center">
+                  <div className="form-group d-flex justify-content-center">
                     <button
                       onClick={join}
-                      class="btn rounded submit p-2 px-5"
+                      className="btn rounded submit p-2 px-5"
                       style={{
                         backgroundColor: '#f46a72',
                         textAlign: 'center',
