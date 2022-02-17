@@ -12,7 +12,7 @@ export default function TeamDetail(props) {
     const [teamTitle, setTeamTitle] = useState('');
     const [teamContent, setTeamContent] = useState('');
     const [teamMembers, setTeamMembers] = useState('');
-    const [checkId, setCheckId] = useState('');
+    const [checkId, setCheckId] = useState(''); // 팀장 프로필 id
     const [showInput, setShowInput] = useState(false);
 		const [editInput, setEditInput] = useState('');
 		const membersImgsList = [];
@@ -26,7 +26,6 @@ export default function TeamDetail(props) {
 						return checkId == profileId ? "display:flex;" : "display:none;";
 				}}
 		`
-
 
     // 팀 명 및 팀 소개
     useEffect(() => {
@@ -85,13 +84,13 @@ export default function TeamDetail(props) {
 				teamId, profileId, params,
 				(response) => {
 					console.log(response);
+					window.location.replace(`/auth/team/${teamId}`)
 				},
 				(error) => {
 					console.log(error);
 					console.log(teamId, profileId, params)
 				}
 			)
-			window.location.replace(`/auth/team/${teamId}`)
 		}
 
 
@@ -111,6 +110,7 @@ export default function TeamDetail(props) {
 						{teamTitle}
 				</TheTeamTitle>
 			</TeamDetailHeaders>
+
 			<TeamDetailGrid>
 					{/* 팀 피드 */}
 					<TeamFeedContainer>
