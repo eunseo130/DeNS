@@ -19,7 +19,17 @@ export default function TeamList( props) {
     const [modalcontent, setModalcontent] = useState("");
     const [leaderID, setleaderID] = useState("");
     
-    const openModal = (title,content) => {
+    const openModal = (teamid,title, content) => {
+        let recentTest = localStorage.getItem("recent");
+        // console.log(JSON.parse(localStorage.getItem("recent")))
+        console.log(recentTest);
+        if (recentTest) {
+            recentTest = recentTest + "," + teamid;
+        } else {
+            recentTest = teamid;
+        }
+
+        localStorage.setItem("recent",recentTest);
         setModalppen(true);
         setModaltitle(title);
         setModalcontent(content);

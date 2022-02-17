@@ -18,7 +18,7 @@ function signin(param, success, fail) {
 }
 
 function profileTest(param, success, fail) {
-  console.log('profile get')
+  // console.log('profile get')
   api.get(`/profile/${param}`).then(success).catch(fail)
 }
 function verify(param, success, fail) {
@@ -27,7 +27,10 @@ function verify(param, success, fail) {
 function verify22(param, success, fail) {
   api.get(`/verify/${param}`).then(success).catch(fail);
 }
-
+function password(param, success, fail) {
+  // console.log(param);
+  api.post(`/password`, {email:param}).then(success).catch(fail);
+}
 
 function profileUpdate([id, position, stack], success, fail) {
   console.log('profile update')
@@ -75,6 +78,7 @@ function test11(param,auth ,success, fail) {
 export {
   getMember,
   test11,
+  password,
   test22,
   signup,
   signin,

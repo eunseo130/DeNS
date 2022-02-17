@@ -12,7 +12,7 @@ export default function TeamListBox(props) {
             <Rect>
                 <BotBox>
                     <BotText>{props.title}</BotText>
-                    <BotText>#자바</BotText>
+                    {/* <BotText>#자바</BotText> */}
                 </BotBox>
             </Rect>
         </Box>

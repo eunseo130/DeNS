@@ -29,7 +29,6 @@ function putKeyword([id, keyword], success, fail) {
     .catch(fail)
 }
 function ImgUpload([id, formData], success, fail) {
-  console.log('에러1')
   api
     .post(`/profile/update/image/${id}`, formData, {
       headers: {

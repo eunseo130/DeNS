@@ -7,6 +7,9 @@ import TeamMemberInfo from './TeamMemberInfo'
 import MembersImg from './MembersImg';
 import { Link } from "react-router-dom";
 import { store } from '../..';
+import { API_BASE_URL } from '../../config';
+import axios from 'axios';
+import { useSelector } from 'react-redux';
 
 export default function TeamDetail(props) {
     const [teamTitle, setTeamTitle] = useState('');
@@ -14,59 +17,47 @@ export default function TeamDetail(props) {
     const [teamMembers, setTeamMembers] = useState('');
     const [checkId, setCheckId] = useState(''); // 팀장 프로필 id
     const [showInput, setShowInput] = useState(false);
-		const [editInput, setEditInput] = useState('');
-		const membersImgsList = [];
+	const [editInput, setEditInput] = useState('');
+	const membersImgsList = [];
+    const token = useSelector(state => state.user.token);
+	const profileId = store.getState().user.profileid;
 
     const teamId = useParams().id;
-		const profileId = store.getState().user.profileid;
 
-		// 현재 유저가 Leader인지 판단
-		const LeaderSettings = styled.div`
-				${() => {
-						return checkId == profileId ? "display:flex;" : "display:none;";
-				}}
-		`
-
+	// 현재 유저가 Leader인지 판단
+	const LeaderSettings = styled.div`
+		${() => {
+				return checkId == profileId ? "display:flex;" : "display:none;";
+		}}
+	`
+	const authAxios = axios.create({
+        baseURL: API_BASE_URL,
+        headers: {
+            Authorization: `Bearer "${token}"`,
+            withCredentials : true,
+        }
+	})
+	
     // 팀 명 및 팀 소개
-    useEffect(() => {
-        detail(teamId,
-            (response) => {
-                setTeamContent(response.data[teamId][0].team.content);
-                setTeamTitle(response.data[teamId][0].team.title);
-                setCheckId(response.data[teamId][0].user.profile.profile_id);
-								// console.log(response.data[teamId][0].user.profile.profile_id);
-            },
-            (error) => {
-                console.log("오류가 됨.", (error));
-                                console.log(teamId)
-            });
-        }, []);
-
-		// 팀원 사진 가져오기
-		// useEffect(() => {
-		// 	bringMembersImg(
-		// 		88,
-		// 		(res) => {
-		// 			const url = window.URL.createObjectURL(
-		// 				new Blob([res.data], { type: res.headers['content-type'] })
-		// 			)
-		// 			membersImgsList.push(url)
-		// 		},
-		// 		(error) => console.log(error)
-		// 	)
-		// })
-
-    // 팀원 정보 가져오기
-    useEffect(() => {
-        bringTeamMembers(teamId,
-            (response) => {
-                setTeamMembers(response.data);
-            },
-            (error) => {
-                console.log("오류가 됨.", (error));
-            });
-        },[]);
-
+	useEffect(() => {
+		console.log(teamId);
+		authAxios.get(`/team/showteam/${teamId}`)
+			.then((response) => {
+				console.log(response);
+			setTeamContent(response.data[teamId][0].team.content);
+			setTeamTitle(response.data[teamId][0].team.title);
+			setCheckId(response.data[teamId][0].user.profile.profile_id);
+			// console.log(response.data[teamId][0].user.profile.profile_id);
+		},)
+		.catch( (error) => {
+			console.log("오류가 됨.", (error));
+							console.log(teamId)
+		});
+		
+		
+		// 팀원 정보 가져오기
+		authAxios.get(`/teammember/${teamId}`).then((response) => { setTeamMembers(response.data); }).catch((error) => { console.log("팀원 정보 가져오기", (error)); });
+	}, []);
     // 팀 소개 수정
 			// Leader만 수정 버튼 활성화
 		const TextBox = styled.div`

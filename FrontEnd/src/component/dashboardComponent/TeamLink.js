@@ -11,18 +11,24 @@ function TeamLink() {
 
     const [link, setLink] = useState('');
     useEffect(() => {
-      myteam(profileId,
-          (response) => {
-              console.log(response);
-              
-              setLink(response.data);
-              // window.location.replace(`/auth/dashboard/`);
-      },  
-      (error) => {
-          console.log("오류가 됨.", (error));
-      });
+      myTeamLookup();
     }, []);
     
+  const myTeamLookup = () => {
+    myteam(profileId,
+      (response) => {
+          // console.log(response);
+          
+          setLink(response.data);
+          // window.location.replace(`/auth/dashboard/`);
+    },  
+    (error) => {
+        console.log("오류가 됨.", (error));
+    });
+
+  }
+  
+  
     const settings = {
       dots: true,
       infinite: false,

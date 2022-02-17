@@ -62,7 +62,7 @@ function Login() {
         </Container>
         <Btn onClick={LoginConsole}>로그인</Btn>
         <SignUpBtn onClick={() => navigate("/signup") }>회원가입</SignUpBtn>
-        <FindIdPw>아이디/비밀번호 찾기</FindIdPw>
+        <FindIdPw onClick={() => navigate("/password")}>아이디/비밀번호 찾기</FindIdPw>
       </LoginBox>
     );
 }

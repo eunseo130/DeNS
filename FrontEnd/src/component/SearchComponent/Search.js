@@ -8,6 +8,9 @@ import UserList from './UserList';
 import AllList from './AllList';
 import Slider from 'react-slick';
 import { searchTeamkeyword, searchUserkeyword } from '../../api/search';
+import axios, { Axios } from 'axios';
+import { API_BASE_URL } from '../../config';
+import { useCookies } from 'react-cookie';
 // import '../../css/search.css';
 export default function Search() {
 
@@ -31,13 +34,31 @@ export default function Search() {
         }, (error) => { console.log(error) });
         searchUserkeyword("", (response) => { setUserList(response.data) }, (error) => { console.log(error) });
     }, []);
-    
-    const searchKeyword = (e) => {
+    const [cookies] = useCookies();
+    const authAxios = axios.create({
+        baseURL: API_BASE_URL,
+        headers: {
+          Authorization: `Bearer "${cookies.token}"`,
+          withCredentials: true,
+        },
+      })
+    const searchKeywordTest = (e) => {
+        const user = authAxios.get(`/search/keyword/user`, {params : {keyword:e.target.value}}).then((res)=> {console.log(res) }).catch((err)=> { console.log(err)});
+        const team = authAxios.get(`/search/keyword/team`, {params : {keyword:e.target.value}}).then((res)=> {console.log(res) }).catch((err)=> { console.log(err)});
         
-        setNullSearch(true);
+        console.log(user);
+        console.log(team);
+
+
+    }
+      const searchKeyword = (e) => {
+          
+          setNullSearch(true);
+          
+          
         searchTeamkeyword(e.target.value, (response) => { setTeamList(response.data) }, (error) => { initList(1) });
         searchUserkeyword(e.target.value, (response) => { setUserList(response.data) }, (error) => { initList(2) });
-       // setTotalList(...teamList, ...userList);
+        // setTotalList(...teamList, ...userList);
         //title, content, profile_id
         //teammember(사람)
         //keyword
