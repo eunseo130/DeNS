@@ -165,4 +165,12 @@ public class TeamController {
 
         return new ResponseEntity<Team>(newTeam, HttpStatus.OK);
     }
+
+    @GetMapping("/leaderteam/{profile_id}")
+    public ResponseEntity<List<Team>> getLeaderTeam(@PathVariable long profile_id) throws NotFoundException {
+        List<Team> teams = teamService.showLeaderTeams(profile_id);
+
+        return new ResponseEntity<List<Team>>(teams, HttpStatus.OK);
+    }
+
 }
