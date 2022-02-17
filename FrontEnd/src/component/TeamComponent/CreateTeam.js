@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styled from "styled-components";
 import { store } from '../..';
 import { makeMyTeam } from "../../api/team";
@@ -22,12 +23,15 @@ export default function CreateTeam() {
     
     const profileId = store.getState().user.profileid;
 
+    let navigate = useNavigate();
     const TeamMaker = () => {
         // e.preventDefault()
         makeMyTeam(
             profileId, toSend,
             (response) => {
-            console.log(response);
+            console.log("response!!!!!")
+                console.log(response);
+                navigate(`/auth/dashboard`,{ replace: true })
             },  
             (error) => {
             console.log("오류가 됨.", (error));

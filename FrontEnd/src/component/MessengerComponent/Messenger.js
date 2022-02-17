@@ -31,14 +31,6 @@ export default function Messenger() {
             .catch((error) => { console.log(error) });
     },[id])
     const createRoom = () => {
-        const authAxios = axios.create({
-            baseURL: API_BASE_URL,
-            headers: {
-                Authorization: `Bearer "${cookie.token}"`,
-                withCredentials : true,
-            }
-        })
-
         // createRooms(1,(res) => { console.log(res) }, (error) => { console.log(error) });
     }
 

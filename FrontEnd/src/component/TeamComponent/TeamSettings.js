@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { titleChange, teamBreakup, detail, dischargeMembers } from '../../api/team';
 import styled from "styled-components";
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { store } from '../..';
 
 export default function TeamSettings() {
@@ -34,13 +34,13 @@ export default function TeamSettings() {
 				console.log('오류', error);
 			})
 		}
-
+		let navigate = useNavigate(); 
 		// 팀 삭제하기
 		const TeamDelete = (e) => {
 			teamBreakup(
 				teamId,
 				(response) => {
-					console.log(response);
+					navigate(`/auth/team/${myProfileId}`, { replace: true })
 				},
 				(error) => {
 					console.log("오류", error);

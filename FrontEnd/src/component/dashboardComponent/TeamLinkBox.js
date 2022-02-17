@@ -6,6 +6,9 @@ export default function TeamLinkBox(props) {
     // user가 URL에 직접 쳐서 들어간다면?
     // 1. Path
     //    URL/JWT로부터 가져와야
+    
+    
+    
     return (
         <Box>
             <Link to={{

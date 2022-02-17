@@ -2,7 +2,7 @@ import styled from 'styled-components';
 import React, { useState, useEffect } from 'react';
 import { myteam } from '../../api/team';
 import TeamLinkBox from '../dashboardComponent/TeamLinkBox';
-import { Outlet, Link } from 'react-router-dom';
+import { Outlet, Link, useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../config';
 import { useSelector } from 'react-redux';
 import axios from 'axios';
@@ -36,14 +36,16 @@ export default function TeamIndex() {
   useEffect(() => {
     myteam();
   },[]);
+  let navigate = useNavigate();
+  const goMakeTeam = () => {
+    navigate(`/auth/team/maketeam`);
+  }
 
   // 팀 생성하기
 
   return (
     <div>
-      <Link Link to={{pathname:`/auth/team/maketeam`}}>
-        <button>팀 생성하기</button>
-      </Link>
+        <button onClick={goMakeTeam}>팀 생성하기</button>
       <div>
         {index ? index.map((el, key) => {
           return (
@@ -57,7 +59,6 @@ export default function TeamIndex() {
 
       </div>
 
-      <Outlet/>
     </div>
 
   )

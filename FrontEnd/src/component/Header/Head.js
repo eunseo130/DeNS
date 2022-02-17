@@ -37,14 +37,13 @@ export default function Head() {
     //   )}
     // </>
     <>
-      <Navbar.Brand >채널명</Navbar.Brand>
+      {/* <Navbar.Brand >채널명</Navbar.Brand> */}
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>
-          Signed in as:
           <Image
-            width={20}
-            height={20}
+            width={30}
+            height={30}
             src={require('./profile_default.png')}
             roundedCircle
           />

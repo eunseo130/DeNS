@@ -4,31 +4,31 @@ import Slider from "react-slick";
 import TeamLinkBox from "./TeamLinkBox";
 import { myteam } from '../../api/team';
 import { store } from "../..";
+import axios from 'axios';
+import { API_BASE_URL } from '../../config';
 
 function TeamLink() {
 
     const profileId = store.getState().user.profileid;
-
-    const [link, setLink] = useState('');
+    
+    const token = store.getState().user.token;
+    const [link, setLink] = useState([]);
+    const [data, setData] = useState(null);
+    const authAxios = axios.create({
+      baseURL: API_BASE_URL,
+      headers: {
+          Authorization: `Bearer "${token}"`,
+          withCredentials : true,
+      }
+    })
+    
     useEffect(() => {
-      myTeamLookup();
+      authAxios.get(`/team/myteam/${profileId}`).then((response) => {
+        setLink(response.data);
+      }).catch();
     }, []);
     
-  const myTeamLookup = () => {
-    myteam(profileId,
-      (response) => {
-          // console.log(response);
-          
-          setLink(response.data);
-          // window.location.replace(`/auth/dashboard/`);
-    },  
-    (error) => {
-        console.log("오류가 됨.", (error));
-    });
 
-  }
-  
-  
     const settings = {
       dots: true,
       infinite: false,

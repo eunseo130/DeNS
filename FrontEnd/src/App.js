@@ -39,6 +39,7 @@ import 'bootstrap/dist/css/bootstrap.min.css'
 import LoginTest from './component/BeforeloginComponent/LoginTest'
 import MessageRoom from './component/MessengerComponent/MessageRoom'
 import CertiSubmit from './component/CertiSubmit'
+import CertiPassword from './component/BeforeloginComponent/CertiPassword'
 // import auth from './component/hoc/auth'
 const App = () => {
   const routes = useRoutes([
@@ -112,6 +113,9 @@ const App = () => {
     {
       path: '*',
       element: <Error />
+    },
+    {
+      path: '/user/password/:key', element:<CertiPassword/>
     },
     {
       path: '/certi',

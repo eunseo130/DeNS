@@ -8,18 +8,18 @@ import { useState } from "react";
 export default function Dashboard() {
 
     // 팀 페이지로 들어가서 setItem하고.. TeamList에서 getItem하고...
-    const jsonLocalStorage = {
-      setItem: (key, value) => {
-        localStorage.setItem(key, JSON.stringify(value));
-      },
-      getItem: (key) => {
-        return JSON.parse(localStorage.getItem(key));
-      },
-    };
+    // const jsonLocalStorage = {
+    //   setItem: (key, value) => {
+    //     localStorage.setItem(key, JSON.stringify(value));
+    //   },
+    //   getItem: (key) => {
+    //     return JSON.parse(localStorage.getItem(key));
+    //   },
+    // };
     
-    const Hello = []
-    const [seen, setSeen] = useState('')
-    jsonLocalStorage.setItem(Hello, 'hey')
+    // const Hello = []
+    // const [seen, setSeen] = useState('')
+    // jsonLocalStorage.setItem(Hello, 'hey')
     // console.log(jsonLocalStorage.getItem(Hello))
 
     return (
