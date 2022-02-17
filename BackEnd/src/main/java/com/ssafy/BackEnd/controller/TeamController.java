@@ -104,7 +104,7 @@ public class TeamController {
 
     @GetMapping("/showteam/{team_id}")
     @ApiOperation(value = "팀 조회")
-    public ResponseEntity<Team> findTeam(@PathVariable Long team_id) throws NotFoundException {
+    public ResponseEntity<Map<Object, Object>> findTeam(@PathVariable Long team_id) throws NotFoundException {
         //Team team = teamDto.createTeam();
 
         Team team = teamService.findByTeam(team_id);
@@ -122,7 +122,7 @@ public class TeamController {
         System.out.println("team id : "+team.getTeam_id());
         logger.info("INFO SUCCESS");
 
-        return new ResponseEntity<>(team, HttpStatus.OK);
+        return new ResponseEntity<Map<Object, Object>>(result, HttpStatus.OK);
 
     }
 
