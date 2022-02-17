@@ -48,6 +48,8 @@ function TeamLink() {
 
       <Slider {...settings} style={SliderStyle}>
         <TeamLinkBox title={"내 프로필"}/>
+          {console.log(link)}
+
           {link ? link.map((el, key) => {
                       return (
                           <TeamLinkBox 

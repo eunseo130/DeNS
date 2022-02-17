@@ -26,30 +26,7 @@ const FeedEditModal = ({
   const handleInput = (e) => {
     setChildContent(e.target.value);
   }
-  	// 피드 수정 image, file
-	const setTheEditImg = (e) => {
-    setEditImg(e.target.files[0])
-    // setImg("hello");
-  }
-  const setTheEditFile = (e) => {
-    setEditFile(e.target.files[0])
-  }
-	const [inputs, setInputs] = useState({
-    images: null,
-    files: null,
-  });
-  const handleFiles = (e) => {
-    const { name, value } = e.target;
-    setInputs({
-        ...inputs,
-        [name]: value,
-    });
-  }
-
-  useEffect(() => {
-    setImgName(inputs.images);
-    setFileName(inputs.files);
-  })
+	
   // 수정 완료 button
   const formData = new FormData();
 	const submitContent = ({editFeedId}) => {
