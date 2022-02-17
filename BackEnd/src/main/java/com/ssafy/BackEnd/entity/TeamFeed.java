@@ -7,6 +7,7 @@ import lombok.*;
 import org.apache.tomcat.jni.Local;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
+import reactor.util.annotation.Nullable;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -39,10 +40,10 @@ public class TeamFeed extends BaseTimeEntity{
     Team team;
 
     @OneToMany(mappedBy = "team_feed", cascade = CascadeType.ALL) // many로 끝날때 fetch nono
+    @Nullable
     List<TeamFeedFile> teamFeedFiles = new ArrayList<>();
 
     @OneToMany(mappedBy = "team_feed", cascade = CascadeType.ALL)
-//    @JsonIgnore
     List<TeamFeedKeyword> teamFeedKeywords = new ArrayList<>();
 
     @Builder

@@ -157,8 +157,9 @@ public class MainController {
 
     @PostMapping("/password")
     @ApiOperation(value = "사용자 비밀번호 변경요청", response = String.class)
-    public ResponseEntity<Response> requestChangePassword(@RequestParam String email) {
+    public ResponseEntity<Response> requestChangePassword(@RequestBody RequestVerifyEmail reqEmail) {
         Response response = new Response();
+        String email = reqEmail.getEmail();
         try {
             User user = authService.findByEmail(email);
             if (!user.getEmail().equals(email)) throw new NoSuchFieldException("");

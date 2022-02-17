@@ -30,7 +30,7 @@ public class TeamMember {
 
     @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "email")
-//    @JsonIgnore
+    //@JsonIgnore
     User user;
 
     @Builder

@@ -1,5 +1,7 @@
 package com.ssafy.BackEnd.service;
 
+import com.ssafy.BackEnd.dto.TeamMemberDto;
+import com.ssafy.BackEnd.dto.UserDto;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.TeamMemberIdentity;
@@ -27,21 +29,24 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     private final TeamMemberRepository teamMemberRepository;
 
     @Override
-    public TeamMember addTeamMember(String email, Long teamId) { //팀에 팀원 추가하는 기능
-        System.out.println("add " + email);
-        User user = userRepository.findByEmail(email); //해당 유저정보 가져오기
+    public TeamMember addTeamMember(long team_id, long profile_id) { //팀에 팀원 추가하는 기능
+        User user = userRepository.findByProfileId(profile_id); //해당 유저정보 가져오기
+        System.out.println(user.getEmail() + "유저 이르");
 //        for(User u : user){
 //            System.out.println(u.getEmail()+" hihi");
 //        }
         //System.out.println(user.getEmail()+" "+teamName+" hihi");
-        Team team = teamRespository.findById(teamId).get(); //팀이름으로 해당 팀정보 가
+        Team team = teamRespository.findByTeam(team_id);
+        System.out.println(team.getTitle() +"팀이름");
         List<TeamMember> findTeamMember = team.getTeam_member();
         for (TeamMember member : findTeamMember) {
-            if (member.getUser().getEmail().equals(email)) {
+            System.out.println(member.getUser().getEmail() + "이메일");
+            if (member.getUser().getProfile().getProfile_id() == profile_id) {
                 return null;
             }
         }
 
+        System.out.println(user.getEmail() + "유저 이르");
         TeamMember teamMember = TeamMember.builder().team(team).user(user).teamMemberIdentity(TeamMemberIdentity.MEMBER).build();
         teamMemberRepository.save(teamMember);
 
@@ -50,12 +55,16 @@ public class TeamMemberServiceImpl implements TeamMemberService {
 
     @Override
     @Transactional
-    public TeamMember deleteTeamMember(String email, String teamName) {
-        Team findTeam = teamRespository.findByTitle(teamName);
+    public TeamMember deleteTeamMember(long team_id, long profile_id) {
+        Team findTeam = teamRespository.findByTeam(team_id);
+
         List<TeamMember> findTeamMember = findTeam.getTeam_member();
+        System.out.println(findTeam.getTitle());
         for (TeamMember member : findTeamMember) {
-            if (member.getUser().getEmail().equals(email)) {
-                System.out.println("member email : "+member.getUser().getEmail().equals(email));
+            System.out.println("팀 프로필" + member.getUser().getProfile().getProfile_id());
+            if (member.getUser().getProfile().getProfile_id() == profile_id) {
+                System.out.println(member.getUser().getProfile().getProfile_id() + "해당 팀멤버 프로필");
+                System.out.println(profile_id + "보내보는 프로필 아이디");
                 teamMemberRepository.delete(member);
                 findTeamMember.remove(member);
                 return member;
@@ -124,14 +133,15 @@ public class TeamMemberServiceImpl implements TeamMemberService {
         return teammembers_infos;
     }
 
-    @Override
-    public TeamMember getMyTeamIndentity(long team_id, String email) {
-        System.out.println(team_id + "FFF" + email);
-        TeamMember teamMember = teamMemberRepository.findIdentity(team_id, email);
-        System.out.println(teamMember.getTeam_identity() + "왜안나와");
-
-        return teamMember;
-    }
+//    @Override
+//    public TeamMember getMyTeamIndentity(long team_id, long profile_id) {
+//        //System.out.println(team_id + "FFF" + email);
+//
+//        TeamMember teamMember = teamMemberRepository.findByIdentity(team_id, profile_id);
+//        System.out.println(teamMember.getTeam_identity() + "왜안나와");
+//
+//        return teamMember;
+//    }
 
 
 }

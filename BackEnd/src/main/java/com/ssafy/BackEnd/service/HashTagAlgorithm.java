@@ -1,19 +1,18 @@
 package com.ssafy.BackEnd.service;
 
-import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-@Service
 public class HashTagAlgorithm {
     public static List<String> strList(String content){
 
         List<String> strlist = new ArrayList<>();
-        String[] strArr = content.split("#");
+        String[] strArr = content.split("#| ");
         for (String s : strArr){
-            String key = "#"+s;
-            strlist.add(key);
+            if(s.equals("")) continue;
+            System.out.println("해시태그 #"+s);
+            strlist.add(s);
         }
         return strlist;
     }
