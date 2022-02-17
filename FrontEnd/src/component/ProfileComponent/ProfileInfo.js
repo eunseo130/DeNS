@@ -73,7 +73,7 @@ export default function ProfileInfo({
                   <input name="gitId" value={gitId} onChange={onSave}></input>
                 </>
               ) : (
-                <>아이디를 입력해주세요</>
+                gitId
               )}
             </div>
           </div>
