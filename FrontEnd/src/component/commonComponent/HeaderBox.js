@@ -1,18 +1,19 @@
 import React, { Component } from 'react'
 import styled, { css } from 'styled-components'
 import Head from '../Header/Head'
-
+import { Navbar } from 'react-bootstrap'
 function HeaderBox(props) {
   return (
     <>
-      <Container {...props}>
+      {/* <Container {...props}>
         <HeaderchannelRow>
           <Head />
         </HeaderchannelRow>
+      </Container> */}
+
+      <Container>
+        <Head />
       </Container>
-
-
-
     </>
   )
 }

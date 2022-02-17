@@ -48,12 +48,11 @@ export default function ProfileMain() {
       withCredentials: true,
     },
   })
-  console.log('id: ', id, 'userId: ', userId)
   useEffect(() => {
     if (userId === id) {
-      setIdCheck(idCheck)
-    } else {
       setIdCheck(!idCheck)
+    } else {
+      setIdCheck(idCheck)
     }
   }, [userId])
 
@@ -179,6 +178,7 @@ export default function ProfileMain() {
               <ProfileImage
                 id={id}
                 fileImage={fileImage}
+                userId={userId}
                 onLoad={onLoad}
                 ImageUpload={ImageUpload}
                 authAxios={authAxios}
