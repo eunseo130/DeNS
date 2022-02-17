@@ -25,7 +25,7 @@ export default function Messenger() {
         })
         authAxios.get(`/chat/rooms/${id}`)
             .then((res) => {
-                console.log(res)
+                // console.log(res)
                 setTemp(res.data);
             })
             .catch((error) => { console.log(error) });
@@ -39,7 +39,7 @@ export default function Messenger() {
 
         {temp?
             temp.map((data, idx) => {
-                return <MessangerCard key={idx } data={data }/>
+                return <MessangerCard key={idx } data={data}/>
             })
         :``}
         <button onClick={createRoom}>채팅방 개설하기</button>

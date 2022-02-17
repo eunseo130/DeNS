@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, createContext } from 'react'
 import { useCookies } from 'react-cookie'
-import { useParams } from 'react-router-dom'
+import { useParams, useLocation } from 'react-router-dom'
 import { API_BASE_URL } from '../../config';
 // import SockJs from 'sockjs-client';
 import * as StompJs from '@stomp/stompjs';
@@ -12,6 +12,9 @@ import axios from 'axios';
 import TeamInviteModal from './TeamInviteModal';
 
 export default function MessageRoom() {
+    const yourId = useLocation().state.yourId;
+    console.log(yourId);
+
     const token =  store.getState().user.token;
     const profileId = store.getState().user.profileid;
 
@@ -87,7 +90,6 @@ export default function MessageRoom() {
     // 1. 자기가 속한 (리더인) 팀을 보여준다.
     // 2. 리스트 중에 누르면 초대
 
-    const [yourId, setYourId] = useState('');
     const [leaderTeams, setLeaderTeams] = useState();
 
     // 내가 리더인 팀만 가져오기
@@ -102,13 +104,6 @@ export default function MessageRoom() {
     }
 
     useEffect(() => {
-        // 0.
-        for (let i=0; i < messagelog.length; i++) {
-            if (profileId != messagelog[i].senderId) {
-                setYourId(messagelog[i].senderId);
-                break
-            }
-        }
         // 1.
         {myleadersteam()}
     }, [profileId])
@@ -158,16 +153,31 @@ export default function MessageRoom() {
                 onCancel={onCancel}
                 teamId={teamId}
                 yourId={yourId}
-            />
+                />
+        {/* <> 
+            <h3>메시지보내기 창</h3>
+                { messagelog.map((data,idx) => (
+                    <MessageBox key={idx } data={data}/>
+                ))
+            }
+            <input name="text" ref={message}></input>
+            
+                    
+            <button onClick={send}>전송하기</button>
+        </> */}
+
             <MessageContainer>
-                <h3>메시지보내기 창</h3>
-                    { messagelog.map((data,idx) => (
-                        <MessageBox key={idx } data={data}/>
-                        ))
-                    }
-                <input name="text" ref={message}></input>
-                
-                <button onClick={send}>전송하기</button>
+                <MessageIndex>
+                    <h3>메시지보내기 창</h3>
+                        { messagelog.map((data,key) => (
+                            <MessageBox data={data} key={key}/>
+                            )) 
+                        }
+                </MessageIndex>
+                <MessageInputDiv>
+                    <MessageInput name="text" ref={message}></MessageInput>
+                    <button onClick={send}>전송하기</button>
+                </MessageInputDiv>
             </MessageContainer>
         </Container>
 
@@ -176,9 +186,23 @@ export default function MessageRoom() {
 
 const Container = styled.div`
 `
+
+const MessageIndex = styled.div`
+    overflow: scroll;
+    width:100%;
+    height: 100%;
+`
+
 const MessageContainer = styled.div`
     position: absolute;
     top: 50%;
     left: 50%;
     transform:translate(-50%, -50%);
+    width: 50vw;
+    height: 70vh;
+`
+const MessageInput = styled.input`   
+`
+const MessageInputDiv = styled.div`
+    poisition: fixed;
 `

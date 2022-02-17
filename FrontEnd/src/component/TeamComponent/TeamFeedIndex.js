@@ -85,8 +85,8 @@ export default function TeamFeedIndex() {
 					 </FeedContent>
 						
 						<WriterBtn>
-							<EditBtn onClick={() => {modalOn(teamFeedId)}} id="EditBtn">글 수정</EditBtn>
-							<DeleteBtn onClick={() => {feedDelete(teamFeedId)}}>글 삭제</DeleteBtn>
+							<EditBtn onClick={() => {modalOn(teamFeedId)}} id="EditBtn">✏️</EditBtn>
+							<DeleteBtn onClick={() => {feedDelete(teamFeedId)}}>🗑️</DeleteBtn>
 						</WriterBtn>
 					
 				 </Feed>
@@ -128,7 +128,11 @@ const FeedContent = styled.div`
 	flex-direction: column;
 `
 const EditBtn = styled.button`
-		position: relative;
+	border: none;
+	background-color: white;
 `
 const DeleteBtn = styled.button`
+	border: none;
+	background-color: white;
+
 `

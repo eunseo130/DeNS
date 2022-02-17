@@ -16,18 +16,18 @@ function TeamFeedContainer() {
   let [img, setImg] = useState();
   let [file, setFile] = useState();
 
-  const [inputs, setInputs] = useState({
-    images: [],
-    files: [],
-  });
+  // const [inputs, setInputs] = useState({
+  //   images: [],
+  //   files: [],
+  // });
   
-  const handleInput = (e) => {
-    const { name, value } = e.target;
-    setInputs({
-        ...inputs,
-        [name]: value,
-    });
-  }
+  // const handleInput = (e) => {
+  //   const { name, value } = e.target;
+  //   setInputs({
+  //       ...inputs,
+  //       [name]: value,
+  //   });
+  // }
 
   const [content, setContent] = useState('');
   
@@ -41,20 +41,20 @@ function TeamFeedContainer() {
     }
   };
 
-  const [imgBase64, setImgBase64] = useState([])
-  let reader = new FileReader();
-  const setTheImg = (e) => {
-    setImg(e.target.files[0])
-    reader.readAsDataURL(e.target.files[0]);
-  }
-  reader.onloadend = () => {
-    const base64 = reader.result;
-    console.log(base64);
-    if (base64) {
-      let base64Sub = base64.toString();
-      setImgBase64(imgBase64 => [...imgBase64, base64Sub])
-    }
-  }
+  // const [imgBase64, setImgBase64] = useState([])
+  // let reader = new FileReader();
+  // const setTheImg = (e) => {
+  //   setImg(e.target.files[0])
+  //   reader.readAsDataURL(e.target.files[0]);
+  // }
+  // reader.onloadend = () => {
+  //   const base64 = reader.result;
+  //   console.log(base64);
+  //   if (base64) {
+  //     let base64Sub = base64.toString();
+  //     setImgBase64(imgBase64 => [...imgBase64, base64Sub])
+  //   }
+  // }
   // 이미지, 파일 set
   // useEffect(() => {
   //   downloadFeedFile(
@@ -68,31 +68,30 @@ function TeamFeedContainer() {
   //     }
   //   )
   // })
-  const [bringFileName, setBringFileName] = useState('');
-  const setTheFile = (e) => {
-    setFile(e.target.files[0]);
-    // setBringFileName(e.target.files[0].name);
-  }
+  // const [bringFileName, setBringFileName] = useState('');
+  // const setTheFile = (e) => {
+  //   setFile(e.target.files[0]);
+  //   // setBringFileName(e.target.files[0].name);
+  // }
 
-  useEffect(() => {
-    // console.log(content, img, file);
-      setImgName(inputs.images);
-      setFileName(inputs.files);       
-  })
+  // useEffect(() => {
+  //   // console.log(content, img, file);
+  //     setImgName(inputs.images);
+  //     setFileName(inputs.files);       
+  // })
 
   // 데이터 전송
+  const formData = new FormData();
   const DataSend = (e) => {
     e.preventDefault();
     setContent(''); // 초기화
     if (!img) {
       img = new File([""], "filename");
-      console.log(11);
     }
     if (!file) {
       file = new File([""], "filename");
     }
 
-    const formData = new FormData();
     formData.append("content", content);
     formData.append("imageFiles", img);
     formData.append("generalFiles", file);
@@ -105,6 +104,7 @@ function TeamFeedContainer() {
       },
       (error) => {
         console.log("오류", error);
+        console.log(teamId, profileId, formData);
       }
     )
   };
@@ -124,7 +124,17 @@ function TeamFeedContainer() {
             onKeyPress={KeyboardSend}
             name="content"
             />
-
+          {/* 이미지/파일 전송 */}
+          {/* <ImgBox>
+            <ImgInputLabel onChange={handleInput} htmlFor="img-input">
+              <img src="https://img.icons8.com/ios/50/000000/image.png" width="20vw" height="20vh"/>
+              <FeedImgUpload onChange={setTheImg} name="images" id="img-input" type="file" hidden />
+            </ImgInputLabel>
+            <ImgInputLabel onChange={handleInput} htmlFor="file-input">
+              <img src="https://img.icons8.com/material-outlined/96/000000/add-file.png" width="20vw" height="20vh" />
+              <FeedImgUpload onChange={setTheFile} name="files" id="file-input" type="file" hidden />
+            </ImgInputLabel>
+          </ImgBox> */}
           {/* 글 작성 완료 버튼 */}
           <FeedInputBtn type="submit" value="Upload File" onClick={DataSend}>글 작성</FeedInputBtn>
         </FormInput>
