@@ -1,6 +1,9 @@
-import React from "react";
-import styled from "styled-components";
-import { searchprofileID } from "../../api/search";
+import React, { useState, useEffect } from 'react'
+import {  Image } from 'react-bootstrap'
+import styled from 'styled-components'
+import { API_BASE_URL } from '../../config'
+import { searchprofileID } from '../../api/search'
+import { Link, useNavigate } from 'react-router-dom'
 import dd from './dd.png'
 export default function UserCard(props){
     const check = () => {
@@ -21,16 +24,16 @@ export default function UserCard(props){
     )
 }
 const TeamCarddg = styled.div`
-    dsiplay : flex;
-    flex-direction : row;
-    background-color: white;
-    // flex-basis: 100px;
-    height: 100px;
-    min-height: 100px;
-    margin-left: 10px;
-    margin-right: 10px;
-    margin-top: 5px;
-    margin-bottom: 5px;
+  dsiplay: flex;
+  flex-direction: row;
+  background-color: white;
+  // flex-basis: 100px;
+  height: 100px;
+  min-height: 100px;
+  margin-left: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
 
     box-shadow : 0px 30px 40px pink;
     border-radius: 10px;
