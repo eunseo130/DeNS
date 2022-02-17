@@ -3,10 +3,12 @@ import axios from 'axios';
 import { titleChange, teamBreakup, detail, dischargeMembers } from '../../api/team';
 import styled from "styled-components";
 import { useParams } from 'react-router-dom';
+import { store } from '../..';
 
 export default function TeamSettings() {
 
 		// profile_id, team_id 불러오기 필요
+		const myProfileId = store.getState().user.profileid;
 
 		const [title, setTitle] = useState('');
 		// const [membersName, setMemberName] = useState('');
@@ -21,12 +23,10 @@ export default function TeamSettings() {
 
 		const toChangeTitle = (e) => {
 			e.preventDefault();
-			const formData = new FormData();
-			formData.append("title", title);
 			
 			setTitle(''); // 초기화
 			titleChange(
-			1, teamId, title,
+			myProfileId, teamId, title,
 			(response) => {
 				console.log(response);
 			},
@@ -55,6 +55,7 @@ export default function TeamSettings() {
 				teamId,
 				(response) => {
 					setMembers(response.data[teamId]);
+					console.log(response.data)
 				},
 				(error) => {
 					console.log('에러', error);
@@ -64,29 +65,28 @@ export default function TeamSettings() {
 		// 팀원 멤버 정보 가져오기
 		const membersInfo = () => {
 			// 팀원 방출하기
-			const outMembers = (email) => {
+			const outMembers = (profileId) => {
 				// 팀원 방출 함수(api)
 				dischargeMembers(
-					teamId, email,
+					teamId, profileId,
 					(response) => {
 						console.log(response);
-						console.log(email, "성공")
 					},
 					(error) => {
 						console.log('오류', error);
-						console.log(email, "실패")
 					}
 				)
 			}
 
 			const result = [];
 			for (let i=1; i < members.length; i++) {
-				const email = members[i].user.email
+				const profileId = members[i].user.profile.profile_id;
+				console.log(profileId);
 				result.push(
 				 <div key={i}>
 					 { `${members[i].user.name}` }
 					 { `${members[i].user.email}` }
-					 <button onClick={() => outMembers(email)}>방출하기</button>
+					 <button onClick={() => outMembers(profileId)}>방출하기</button>
 				 </div> 
 				)
 				

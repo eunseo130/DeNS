@@ -1,86 +1,45 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import { teamFeed, editTeamFeed, deleteTeamFeed } from "../../api/team";
+import { teamFeed, deleteTeamFeed ,downloadFeedFile } from "../../api/team";
 import { useParams } from 'react-router-dom';
+import { store } from "../..";
+import FeedEditModal from "./FeedEditModal";
 
 export default function TeamFeedIndex() {
 
 	const teamId = useParams().id;
 	const [feedIndex, setFeedIndex] = useState([]);
-	const [showInput, setShowInput] = useState(false);
-	const [showEdit, setShowEdit] = useState(false);
-	const [editContent, setEditContent] = useState('');
-  const [img, setImg] = useState([]);
-  const [file, setFile] = useState([]);
-	const [imgName, setImgName] = useState('');
-	const [fileName, setFileName] = useState('');
-	const [inputs, setInputs] = useState({
-    images: null,
-    files: null,
-  });
+	const profileId = store.getState().user.profileid;
 
-	// const [theImgs, setTheImgs] = useState('');
-
-	
   // 피드 정보 가져오기
+	// 피드 이미지 출력
+	const [feedBase64, setFeedBase64] = useState([])
+	let feedReader = new FileReader();
   useEffect(() => {
     teamFeed(teamId,
       (response) => {
 				setFeedIndex(response.data);
-				// const url = window.URL.createObjectURL(
-        //   new Blob([res.data], { type: res.headers['content-type'] })
-        // )
-        // setTheImgs(url) 
+				let url = response.data[0].teamFeedFiles[0];
+				feedReader.readAsDataURL(url);
+				// feedReader.readAsDataURL(response.data[0].teamFeedFiles[0]);
+				feedReader.onloadend = () => {
+					const indexBase64 = feedReader.result;
+					console.log(indexBase64);
+					if (indexBase64) {
+						let indexBase64Sub = indexBase64.toString();
+						setFeedBase64(feedBase64 => [...feedBase64, indexBase64Sub])
+					}
+				}
       },
       (error) => {
           console.log("오류가 됨.", (error));
       }); 
   }, []);
-  
-	// 피드 수정 input
-	const changeContent = (e) => {
-		setEditContent(e.target.value);
-	}
-	// 피드 수정 image, file
-	const setTheImg = (e) => {
-    setImg(e.target.files[0])
-  }
-  const setTheFile = (e) => {
-    setFile(e.target.files[0])
-  }
-	// 피드 수정 image, file 이름 표시
-	const handleInput = (e) => {
-    const { name, value } = e.target;
-    setInputs({
-        ...inputs,
-        [name]: value,
-    });
-  }
-	// 피드 수정 시 이미지/파일 이름 표기 용
-	useEffect(() => {
-    setImgName(inputs.images);
-    setFileName(inputs.files);
-  })
-
-	// 피드 수정 완료 button
-	const submitContent = ({teamFeedId, formData}) => {
-		editTeamFeed(
-			[teamFeedId, 1, formData],
-			(response) => {
-				console.log(response);
-				console.log([teamFeedId, 1, formData]);
-			},
-			(error) => {
-				console.log(error);
-				console.log([teamFeedId, 1, formData]);
-			}
-		)
-	}
 
 	// 피드 삭제
 	const feedDelete = (teamFeedId) => {
 		deleteTeamFeed(
-			teamFeedId, 1,
+			teamFeedId, profileId,
 			(response) => {
 				console.log(response);
 			},
@@ -89,28 +48,29 @@ export default function TeamFeedIndex() {
 			}
 		)
 	}
-	
-	{/* { `${feedIndex[i].teamFeedFiles[0].originalFileName}` } */}
+
 	// Index 렌더링
+	const [modal, setModal] = useState(false);
+	const [editFeedId, setEditFeedId] = useState('');
+	const modalOn = (teamFeedId) => {
+		setModal(true);
+		setEditFeedId(teamFeedId);
+	};
+	const onCancel = () => {
+    setModal(false);
+  };
+  const onConfirm = () => {
+    setModal(false);
+  };
+
 	const membersInfo = () => {
 		const result = [];
-		for (let i=0; i < feedIndex.length; i++) {
-			const teamFeedId = feedIndex[i].teamfeed_id;
-			const formData = new FormData();
-			formData.append("content", editContent);
-			formData.append("imageFiles", img);
-			formData.append("generalFiles", file);
 
-			// 자신이 작성한 글 edit/delete 할 수 있도록
-			// if (feedIndex[i].writer === "seol") {
-			// 	setShowEdit(!showEdit)
-			// }
-			// if (feedIndex[i].writer === "seol") {
-			// 	setShowEdit(!showEdit)
-			// }
+		for (let i=0; i < feedIndex.length; i++) {
+			let teamFeedId = feedIndex[i].teamfeed_id;
 			const WriterBtn = styled.div`
 				${(  ) => {
-					return feedIndex[i].writer === "seol" ? 'display: flex' : 'display: none';
+					return feedIndex[i].writer === profileId ? 'display: flex' : 'display: none';
 				}}
 			`
 
@@ -119,33 +79,26 @@ export default function TeamFeedIndex() {
 					 <FeedContent>
 						<div>
 							{ `${feedIndex[i].content}` }
-							{/* {`${feedIndex[i].teamFeedFiles[0]}`} */}
+						</div>
+						<div>
+						{feedBase64.map((item, key) => {
+              return(
+                <img
+                  // className="d-block w-100"
+                  src={item}
+                  alt="First slide"
+                  style={{width:"50px", height:"50px"}}
+                  key={key}
+                />
+              )
+              })
+            }
 						</div>
 						
-						<div>
-							{showInput && 
-								<EditBox>
-									<input onChange={changeContent} />
-									<ImgInputLabel onChange={handleInput} htmlFor="img-edit-input">
-										<img src="https://img.icons8.com/ios/50/000000/image.png" width="20vw" height="20vh"/>
-										<FeedImgUpload onChange={setTheImg} name="images" id="img-edit-input" type="file" hidden />
-									</ImgInputLabel>
-									<ImgInputLabel onChange={handleInput} htmlFor="file-edit-input">
-										<img src="https://img.icons8.com/material-outlined/96/000000/add-file.png" width="20vw" height="20vh" />
-										<FeedImgUpload onChange={setTheFile} name="files" id="file-edit-input" type="file" hidden />
-									</ImgInputLabel>
-									<button onClick={() => {submitContent({teamFeedId, formData})}}>확인</button>
-									<div>
-										{imgName}
-										{fileName}
-									</div>
-								</EditBox>
-							}
-						</div>
 					 </FeedContent>
-
+						
 						<WriterBtn>
-							<EditBtn onClick={() => {setShowInput(!showInput)}}>글 수정</EditBtn>
+							<EditBtn onClick={() => {modalOn(teamFeedId)}} id="EditBtn">글 수정</EditBtn>
 							<DeleteBtn onClick={() => {feedDelete(teamFeedId)}}>글 삭제</DeleteBtn>
 						</WriterBtn>
 					
@@ -154,10 +107,17 @@ export default function TeamFeedIndex() {
 		}
 		return result;
 	};
-
-    return (
-        <IndexContainer>
+	
+	return (
+		<IndexContainer>
 					{membersInfo()}
+					<FeedEditModal 
+						visible={modal}
+						onConfirm={onConfirm}
+						onCancel={onCancel}
+						teamId={teamId}
+						editFeedId={editFeedId}
+					/>
         </IndexContainer>
     )
 };
@@ -182,20 +142,6 @@ const FeedContent = styled.div`
 `
 const EditBtn = styled.button`
 		position: relative;
-`
-
-const ImgInputLabel = styled.label`
-  border: none;
-  background-color: white;
-  color: white;
-  margin-left: 5%;
-`
-const FeedImgUpload = styled.input`
-  border: none;
-  background-color: white;
-`
-const EditBox = styled.div`
-	display: flex;
 `
 const DeleteBtn = styled.button`
 `

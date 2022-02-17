@@ -3,15 +3,20 @@ import styled, { css } from "styled-components";
 import Slider from "react-slick";
 import TeamLinkBox from "./TeamLinkBox";
 import { myteam } from '../../api/team';
-
+import { store } from "../..";
 
 function TeamLink() {
+
+    const profileId = store.getState().user.profileid;
+
     const [link, setLink] = useState('');
     useEffect(() => {
-      myteam(88,
+      myteam(profileId,
           (response) => {
-              setLink(response.data);
               console.log(response);
+              
+              setLink(response.data);
+              // window.location.replace(`/auth/dashboard/`);
       },  
       (error) => {
           console.log("오류가 됨.", (error));
