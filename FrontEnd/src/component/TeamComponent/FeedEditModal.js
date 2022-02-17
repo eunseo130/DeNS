@@ -91,19 +91,7 @@ const FeedEditModal = ({
         <h2>{title}</h2>
         <p>{description}</p>
         <input type="text" onChange={handleInput} />
-        <ImgInputLabel onChange={handleFiles} htmlFor="img-edit-input">
-          <img src="https://img.icons8.com/ios/50/000000/image.png" width="20vw" height="20vh" alt=""/>
-          <FeedImgUpload onChange={setTheEditImg} name="images" id="img-edit-input" type="file" hidden />
-        </ImgInputLabel>
-        <ImgInputLabel onChange={handleFiles} htmlFor="file-edit-input">
-          <img src="https://img.icons8.com/material-outlined/96/000000/add-file.png" width="20vw" height="20vh" alt="" />
-          <FeedImgUpload onChange={setTheEditFile} name="files" id="file-edit-input" type="file" hidden />
-        </ImgInputLabel>
         <button onClick={() => {submitContent({editFeedId})}}>확인</button>
-        <div>
-          {imgName}
-          {fileName}
-        </div>
 
 
 

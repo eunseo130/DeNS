@@ -90,16 +90,16 @@ export default function TeamDetail(props) {
 
     <TeamDetailBox>
 			<TeamDetailHeaders>
-				<LeaderSettings>
-					<Link to={{pathname:`/auth/team/${teamId}/settings`}}>
-							<button>팀 설정</button>
-					</Link>
-				</LeaderSettings>
+					{/* 팀 Title */}
+					<TheTeamTitle>
+							{teamTitle}
+					</TheTeamTitle>
 
-				{/* 팀 Title */}
-				<TheTeamTitle>
-						{teamTitle}
-				</TheTeamTitle>
+					<LeaderSettings>
+						<Link to={{pathname:`/auth/team/${teamId}/settings`}}>
+								<button>팀 설정</button>
+						</Link>
+					</LeaderSettings>
 			</TeamDetailHeaders>
 
 			<TeamDetailGrid>
@@ -153,7 +153,6 @@ export default function TeamDetail(props) {
 
 							{/* 팀 소개 해쉬태그 */}
 							<TeamInfoHashtag>
-									#자바스크립트 #프론트엔드 #자바
 							</TeamInfoHashtag>
 
 					</TeamInfoContainer>
@@ -164,13 +163,16 @@ export default function TeamDetail(props) {
 }
 const TeamDetailHeaders = styled.div`
 	display: flex;
-`
-const TeamDetailBox = styled.div`
+	justify-content: space-between;
+	width: 80vw;
 `
 const TheTeamTitle = styled.h3`
     position: relative;
-    margin-top: 2%;
-    left: 5%;
+    // margin-top: 2%;
+    // left: 5%;
+`
+const TeamDetailBox = styled.div`
+
 `
 const TeamDetailGrid = styled.div`
     position: absolute;

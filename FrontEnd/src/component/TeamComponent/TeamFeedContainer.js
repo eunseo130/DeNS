@@ -124,41 +124,11 @@ function TeamFeedContainer() {
             onKeyPress={KeyboardSend}
             name="content"
             />
-          {/* 이미지/파일 전송 */}
-          <ImgBox>
-            <ImgInputLabel onChange={handleInput} htmlFor="img-input">
-              <img src="https://img.icons8.com/ios/50/000000/image.png" width="20vw" height="20vh"/>
-              <FeedImgUpload onChange={setTheImg} name="images" id="img-input" type="file" hidden />
-            </ImgInputLabel>
-            <ImgInputLabel onChange={handleInput} htmlFor="file-input">
-              <img src="https://img.icons8.com/material-outlined/96/000000/add-file.png" width="20vw" height="20vh" />
-              <FeedImgUpload onChange={setTheFile} name="files" id="file-input" type="file" hidden />
-            </ImgInputLabel>
-          </ImgBox>
+
           {/* 글 작성 완료 버튼 */}
           <FeedInputBtn type="submit" value="Upload File" onClick={DataSend}>글 작성</FeedInputBtn>
         </FormInput>
-        <NameInfo>
-          <div>
-            {imgName}
-          </div>
-          <div>
-            {fileName}
-            {imgBase64.map((item, key) => {
-              return(
-                <img
-                  // className="d-block w-100"
-                  src={item}
-                  alt="First slide"
-                  style={{width:"50px", height:"50px"}}
-                  key={key}
-                />
-              )
-              })
-            }
-          </div>
-          
-        </NameInfo>
+
       </InputBox>
 
         {/* Team Feed Index */}
