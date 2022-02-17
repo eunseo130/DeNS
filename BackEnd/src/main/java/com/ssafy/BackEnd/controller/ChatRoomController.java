@@ -212,8 +212,8 @@ public class ChatRoomController {
 
     @GetMapping("/room/enter/{roomId}/{profileId}")
     public ResponseEntity<ChatRoom> enterRoom(Model model, @PathVariable String roomId, @PathVariable Long profileId) {
-        Profile profile = profileRepository.findById(profileId).get();
-        ChatRoom findRoom = chatRoomRedisRepository.findByRoomId(roomId);
+       Profile profile = profileRepository.findById(profileId).get();
+       ChatRoom findRoom = chatRoomRedisRepository.findByRoomId(roomId);
         if (findRoom.getUser1().getProfileId().equals(profileId) || findRoom.getUser2().getProfileId().equals(profileId)) {
             return new ResponseEntity<ChatRoom>(findRoom, HttpStatus.OK);
         }
@@ -224,7 +224,7 @@ public class ChatRoomController {
     public ResponseEntity<ChatRoom> roomInfo(@PathVariable String roomId) {
         ChatRoom chatRoom = chatRoomRedisRepository.findByRoomId(roomId);
         if (chatRoom == null) {
-            logger.info("get room info success");
+            logger.info("no chat room");
             throw new CustomException(ErrorCode.NO_CHAT_ROOM);
         }
         return new ResponseEntity<ChatRoom>(chatRoom, HttpStatus.OK);
