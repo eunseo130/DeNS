@@ -12,7 +12,7 @@ import java.util.Map;
 
 public interface TeamMemberService{
 
-    TeamMember addTeamMember(String email, Long teamId);
+    TeamMember addTeamMember(long team_id, long profile_id);
 
     TeamMember deleteTeamMember(long team_id, long profile_id);
 

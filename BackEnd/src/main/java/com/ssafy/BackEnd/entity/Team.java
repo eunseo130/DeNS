@@ -35,7 +35,7 @@ public class Team extends CreateTimeEntity {
     String content;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "team", cascade = CascadeType.ALL)
-            @JsonIgnore
+    @JsonIgnore
     List<TeamKeyword> team_keyword = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")

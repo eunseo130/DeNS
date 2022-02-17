@@ -29,10 +29,10 @@ public class TeamMemberController {
 
     private final TeamMemberService teamMemberService;
 
-    @PostMapping
-    public ResponseEntity<TeamMember> createTeamMember(@RequestParam String email, @RequestParam Long teamId) {
-        System.out.println("cont "+email+" "+teamId);
-        TeamMember teamMember = teamMemberService.addTeamMember(email, teamId);
+    @PostMapping("/{team_id}/{profile_id}")
+    public ResponseEntity<TeamMember> createTeamMember(@PathVariable long team_id, @PathVariable long profile_id) {
+
+        TeamMember teamMember = teamMemberService.addTeamMember(team_id, profile_id);
         if (teamMember == null) {
             throw new CustomException(ErrorCode.NOT_ADD_TEAMMEMBER);
             //return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);

@@ -29,21 +29,24 @@ public class TeamMemberServiceImpl implements TeamMemberService {
     private final TeamMemberRepository teamMemberRepository;
 
     @Override
-    public TeamMember addTeamMember(String email, Long teamId) { //팀에 팀원 추가하는 기능
-        System.out.println("add " + email);
-        User user = userRepository.findByEmail(email); //해당 유저정보 가져오기
+    public TeamMember addTeamMember(long team_id, long profile_id) { //팀에 팀원 추가하는 기능
+        User user = userRepository.findByProfileId(profile_id); //해당 유저정보 가져오기
+        System.out.println(user.getEmail() + "유저 이르");
 //        for(User u : user){
 //            System.out.println(u.getEmail()+" hihi");
 //        }
         //System.out.println(user.getEmail()+" "+teamName+" hihi");
-        Team team = teamRespository.findById(teamId).get(); //팀이름으로 해당 팀정보 가
+        Team team = teamRespository.findByTeam(team_id);
+        System.out.println(team.getTitle() +"팀이름");
         List<TeamMember> findTeamMember = team.getTeam_member();
         for (TeamMember member : findTeamMember) {
-            if (member.getUser().getEmail().equals(email)) {
+            System.out.println(member.getUser().getEmail() + "이메일");
+            if (member.getUser().getProfile().getProfile_id() == profile_id) {
                 return null;
             }
         }
 
+        System.out.println(user.getEmail() + "유저 이르");
         TeamMember teamMember = TeamMember.builder().team(team).user(user).teamMemberIdentity(TeamMemberIdentity.MEMBER).build();
         teamMemberRepository.save(teamMember);
 
