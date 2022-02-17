@@ -35,32 +35,19 @@ export default function TeamDetail(props) {
                 setTeamTitle(response.data[teamId][0].team.title);
                 setCheckId(response.data[teamId][0].user.profile.profile_id);
 								// console.log(response.data[teamId][0].user.profile.profile_id);
+								console.log(response);
             },
             (error) => {
                 console.log("오류가 됨.", (error));
-                                console.log(teamId)
             });
         }, []);
-
-		// 팀원 사진 가져오기
-		// useEffect(() => {
-		// 	bringMembersImg(
-		// 		88,
-		// 		(res) => {
-		// 			const url = window.URL.createObjectURL(
-		// 				new Blob([res.data], { type: res.headers['content-type'] })
-		// 			)
-		// 			membersImgsList.push(url)
-		// 		},
-		// 		(error) => console.log(error)
-		// 	)
-		// })
 
     // 팀원 정보 가져오기
     useEffect(() => {
         bringTeamMembers(teamId,
             (response) => {
                 setTeamMembers(response.data);
+								console.log(response.data);
             },
             (error) => {
                 console.log("오류가 됨.", (error));
@@ -99,16 +86,16 @@ export default function TeamDetail(props) {
 
     <TeamDetailBox>
 			<TeamDetailHeaders>
-				<LeaderSettings>
-					<Link to={{pathname:`/auth/team/${teamId}/settings`}}>
-							<button>팀 설정</button>
-					</Link>
-				</LeaderSettings>
+					{/* 팀 Title */}
+					<TheTeamTitle>
+							{teamTitle}
+					</TheTeamTitle>
 
-				{/* 팀 Title */}
-				<TheTeamTitle>
-						{teamTitle}
-				</TheTeamTitle>
+					<LeaderSettings>
+						<Link to={{pathname:`/auth/team/${teamId}/settings`}}>
+								<button>팀 설정</button>
+						</Link>
+					</LeaderSettings>
 			</TeamDetailHeaders>
 
 			<TeamDetailGrid>
@@ -162,7 +149,6 @@ export default function TeamDetail(props) {
 
 							{/* 팀 소개 해쉬태그 */}
 							<TeamInfoHashtag>
-									#자바스크립트 #프론트엔드 #자바
 							</TeamInfoHashtag>
 
 					</TeamInfoContainer>
@@ -173,13 +159,16 @@ export default function TeamDetail(props) {
 }
 const TeamDetailHeaders = styled.div`
 	display: flex;
-`
-const TeamDetailBox = styled.div`
+	justify-content: space-between;
+	width: 80vw;
 `
 const TheTeamTitle = styled.h3`
     position: relative;
-    margin-top: 2%;
-    left: 5%;
+    // margin-top: 2%;
+    // left: 5%;
+`
+const TeamDetailBox = styled.div`
+
 `
 const TeamDetailGrid = styled.div`
     position: absolute;

@@ -58,7 +58,7 @@ function Login() {
 
         <Container>
           <Name>비밀번호</Name>
-          <InputSquare placeholder="비밀번호" name="password" onChange={changeCheck}/>
+          <InputSquare type="password" placeholder="비밀번호" name="password" onChange={changeCheck}/>
         </Container>
         <Btn onClick={LoginConsole}>로그인</Btn>
         <SignUpBtn onClick={() => navigate("/signup") }>회원가입</SignUpBtn>
@@ -73,9 +73,10 @@ const LoginBox = styled.div`
   left: 50%;
   transform:translate(-50%, -50%);
 
-  border: 1px solid; // 위치 확인용
+  // border: 1px solid; // 위치 확인용
   display: flex;
   flex-direction: column;
+  background-color: white;
 `;
 
 const H3 = styled.h3`

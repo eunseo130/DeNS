@@ -1,5 +1,8 @@
+import React, { useState, useEffect } from 'react'
+import { store } from '../..'
+
 export default function MessageBox(props) {
-    console.log("chjeck");
+
     return (
         <>
             <hr/>

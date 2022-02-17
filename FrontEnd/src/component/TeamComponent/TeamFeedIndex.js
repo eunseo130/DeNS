@@ -80,20 +80,7 @@ export default function TeamFeedIndex() {
 						<div>
 							{ `${feedIndex[i].content}` }
 						</div>
-						<div>
-						{feedBase64.map((item, key) => {
-              return(
-                <img
-                  // className="d-block w-100"
-                  src={item}
-                  alt="First slide"
-                  style={{width:"50px", height:"50px"}}
-                  key={key}
-                />
-              )
-              })
-            }
-						</div>
+
 						
 					 </FeedContent>
 						

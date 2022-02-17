@@ -1,4 +1,3 @@
-import axios from 'axios'
 import { useEffect, useRef, useState, createContext } from 'react'
 import { useCookies } from 'react-cookie'
 import { useParams } from 'react-router-dom'
@@ -7,19 +6,22 @@ import { API_BASE_URL } from '../../config';
 import * as StompJs from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
 import MessageBox from './MessageBox';
-
-
-
-
+import styled from "styled-components";
+import { store } from '../..'
+import axios from 'axios';
+import TeamInviteModal from './TeamInviteModal';
 
 export default function MessageRoom() {
+    const token =  store.getState().user.token;
+    const profileId = store.getState().user.profileid;
+
     const paramTest = useParams();
     const [cookie] = useCookies(['token']);
     const client = useRef({});
     const message = useRef();
     const [messagelog, setMessagelog] = useState([]);
     const ref = useRef(null);
-   
+
     function connect() {
         client.current = new StompJs.Client({
             webSocketFactory: () => new SockJS(`${API_BASE_URL}ws-stomp`),
@@ -76,23 +78,110 @@ export default function MessageRoom() {
                     ]
                 )
             })
-
-
         }).catch((error) => { console.log(error) });
-        
         connect();
     },[])
-    return (
-        <>
-            <h3>메시지보내기 창</h3>
-                { messagelog.map((data,idx) => (
-                    <MessageBox key={idx } data={data}/>
-                ))
+
+    // 팀 초대하기 로직
+    // 0. myId와 senderId가 다르면 senderId 저장
+    // 1. 자기가 속한 (리더인) 팀을 보여준다.
+    // 2. 리스트 중에 누르면 초대
+
+    const [yourId, setYourId] = useState('');
+    const [leaderTeams, setLeaderTeams] = useState();
+
+    // 내가 리더인 팀만 가져오기
+    const myleadersteam = () => {
+        authAxios.get(`/team/leaderteam/${profileId}`)
+        .then((response) => {
+            setLeaderTeams(response.data);
+        })
+        .catch((fail) => {
+            console.log(fail);
+        })
+    }
+    useEffect(() => {
+        console.log(yourId);
+    })
+    
+    useEffect(() => {
+        // 0.
+        for (let i=0; i < messagelog.length; i++) {
+            if (profileId != messagelog[i].senderId) {
+                setYourId(messagelog[i].senderId);
+                break
             }
-            <input name="text" ref={message}></input>
-            
-                    
-            <button onClick={send}>전송하기</button>
-        </>
+        }
+        // 1.
+        {myleadersteam()}
+    }, [profileId])
+    
+    console.log(messagelog);
+	const [modal, setModal] = useState(false);
+	const [teamId, setTeamId] = useState('');
+    // const [theirId, setTheirId] = useState('');
+    const modalOn = (theTeamId) => {
+		setModal(true);
+		setTeamId(theTeamId);
+        // setTheirId(yourId);
+	};
+    const onCancel = () => {
+        setModal(false);
+    };
+    const onConfirm = () => {
+        setModal(false);
+    };
+
+    const showTheTeams = ({ leaderTeams }) => {
+        const result = []
+        if (leaderTeams) {
+            for (let i=0; i < leaderTeams.length; i++) {
+                let theTeamId = leaderTeams[i].team_id;
+                result.push(
+                    // <button onClick={inviteTeam({teamId, yourId})} key={i}>
+                    // </button>
+                    <div>
+                        {`${leaderTeams[i].title}`}
+                        <button onClick={() => {modalOn(theTeamId)}}>초대하기</button>
+                    </div>
+                )
+            }
+        }
+        return result;
+    }
+    
+    
+    return (
+        
+        <Container>
+            {showTheTeams({leaderTeams})}
+            <TeamInviteModal
+                visible={modal}
+                onConfirm={onConfirm}
+                onCancel={onCancel}
+                teamId={teamId}
+                yourId={yourId}
+            />
+            <MessageContainer>
+                <h3>메시지보내기 창</h3>
+                    { messagelog.map((data,idx) => (
+                        <MessageBox key={idx } data={data}/>
+                        ))
+                    }
+                <input name="text" ref={message}></input>
+                
+                <button onClick={send}>전송하기</button>
+            </MessageContainer>
+        </Container>
+
     )
 }
+
+const Container = styled.div`
+`
+const MessageContainer = styled.div`
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform:translate(-50%, -50%);
+`

@@ -14,6 +14,10 @@ function team(success, fail) {
 function myteam(param, success, fail) {
     api.get(`/team/myteam/${param}`).then(success).catch(fail);
 }
+// 내가 팀장인 팀 정보 가져오기
+function myleadersteam(profile_id, success, fail) {
+    api.get(`team/leaderteam/${profile_id}`).then(success).catch(fail);
+}
 // 팀의 모든 정보 가져오기
 function detail(team_id, success, fail) {
     api.get(`/team/showteam/${team_id}`).then(success).catch(fail);
@@ -95,5 +99,5 @@ function searchMyteam(param, success, fail){
 
 export {
     teamBreakup,searchMyteam, makeMyTeam, team, myteam, detail, teamFeed, makeTeamFeed, bringTeamMembers, titleChange, dischargeMembers, editTeamFeed,
-    deleteTeamFeed, editTeamContent, bringMembersImg,downloadFeedFile
+    deleteTeamFeed, editTeamContent, bringMembersImg,downloadFeedFile, myleadersteam
 }
