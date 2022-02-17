@@ -3,6 +3,7 @@ import TeamCard from './TeamCard';
 import Modal from './Modal';
 import { Navigate } from 'react-router-dom';
 import styled from 'styled-components';
+import '../../css/font.css';
 export default function TeamList( props) {
     const [temp, setTemp] = useState([]);
 
@@ -19,17 +20,7 @@ export default function TeamList( props) {
     const [modalcontent, setModalcontent] = useState("");
     const [leaderID, setleaderID] = useState("");
     
-    const openModal = (teamid,title, content) => {
-        let recentTest = localStorage.getItem("recent");
-        // console.log(JSON.parse(localStorage.getItem("recent")))
-        console.log(recentTest);
-        if (recentTest) {
-            recentTest = recentTest + "," + teamid;
-        } else {
-            recentTest = teamid;
-        }
-
-        localStorage.setItem("recent",recentTest);
+    const openModal = (title,content) => {
         setModalppen(true);
         setModaltitle(title);
         setModalcontent(content);
@@ -47,6 +38,8 @@ export default function TeamList( props) {
     return (
         <ContainerT>
         <SectionName>회원님과 연관될만한 팀리스트</SectionName>
+
+        
         <SearchBigBox >
             <>
                     <Modal open={modalppen} close={closeModal} content={modalcontent} gomessanger={gomessanger} header={modaltitle }>{ modaltitle}</Modal>
@@ -63,13 +56,16 @@ const ContainerT = styled.div`
 display : flex;
 flex-direction : column;
 align-items: center;
+height: 100vh;
 `
-const SectionName = styled.span`
-
+const SectionName = styled.h3`
+font-family : 'Cafe24Ssurround';
+color: grey;
+text-shadow: 3px 3px #ccc; 
 `
 
 const SearchBigBox = styled.div`
-margin-left: 100px;
+    margin-left: 100px;
     display: flex;
     background-color: white;
     border: 1px solid pick;
@@ -77,8 +73,8 @@ margin-left: 100px;
     box-shadow : 0px 30px 40px #f18fa1;
     flex-flow: column nowrap;
     width: 30vw;
-    height: 60vh;
-    margin: 50px;
+    height: 76vh;
+    margin: 20px;
     overflow: scroll;
     &::-webkit-scrollbar{
         display:none;

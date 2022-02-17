@@ -6,14 +6,14 @@ export default function TeamCard(props){
    // console.log(props.data);
     //console.log(props.check);
     const check = () => {
-        props.click(props.check,props.data.title,props.data.content);
+        props.click(props.data.title,props.data.content);
         searchTeamID(props.check,(response) => {console.log(response.data)}, (error)=> {console.log(error)});
     }
 
     return(
         <TeamCarddg onClick={check}>
-            <p>{props.data.title}</p>
-            <p>{props.data.content}</p>
+            <TeamCardTitle>팀 이름 : {props.data.title}</TeamCardTitle>
+            <TeamCardContent>{props.data.content}</TeamCardContent>
         </TeamCarddg>
     )
 }
@@ -32,4 +32,18 @@ const TeamCarddg = styled.div`
     &:hover{
         background: white;
     }
+`
+
+const TeamCardTitle = styled.h5`
+    font-family : 'Cafe24Ssurround';
+    color: #F46A72;
+    margin-top: 10px;
+    margin-left: 10px;
+`
+
+const TeamCardContent = styled.p`
+    font-family : 'Cafe24SsurroundAir';
+    color: grey
+    margin-left: 10px;
+    font-size: 15px;
 `

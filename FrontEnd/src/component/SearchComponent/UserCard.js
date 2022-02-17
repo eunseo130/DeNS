@@ -4,20 +4,18 @@ import { searchprofileID } from "../../api/search";
 import dd from './dd.png'
 export default function UserCard(props){
     const check = () => {
-
-        console.log("props.check");
-        console.log(props.check);
         props.click(props.check,props.data.name,props.data.email);
         //searchprofileID(props.check,(response) => {console.log(response.data)}, (error)=> {console.log(error)});
     }
 
     return(
         <TeamCarddg onClick={check}>
-            <p>{props.data.name}</p>
-            <img src={dd } alt='test중입니다' width={'50px'} height={ '50px'}/>
-            <p>{props.data.email}</p>
-            <p>{props.data.position}</p>
-            <p>{props.data.stack}</p>
+            <UserCardTitle>{props.data.name}</UserCardTitle>
+            <img src={dd } alt='test중입니다' align={"right"} width={'50px'} height={ '50px'}/>
+            <UserCardContent>email: {props.data.email}</UserCardContent>
+            <UserCardContent>position: {props.data.position}</UserCardContent>
+            <UserCardContent>stack: {props.data.stack}</UserCardContent>
+            
             {/* <p>{props.data.}</p> */}
         </TeamCarddg>
     )
@@ -39,4 +37,21 @@ const TeamCarddg = styled.div`
     &:hover{
         background: white;
     }
+`
+
+
+const UserCardTitle = styled.h5`
+    font-family : 'Cafe24Ssurround';
+    color: #F46A72;
+    margin-top: 10px;
+    margin-left: 10px;
+    margin-bottom: 3px;
+`
+
+const UserCardContent = styled.p`
+    font-family : 'Cafe24SsurroundAir';
+    font-size: 13px;
+    color: grey
+    margin-left: 10px;
+    margin-bottom: -2px;
 `

@@ -13,11 +13,10 @@ export default function UserList(props) {
     const [modalppen, setModalppen] = useState(false);
 
     const [modaltitle, setModaltitle] = useState("");
-    const [modalID, setmodalID] = useState("");
     const [modalcontent, setModalcontent] = useState("");
     const [modalprofilekeyword, setModalprofilekeyword] = useState([]);
-    const openModal = (id, title, content) => {
-        setmodalID(id);
+
+    const openModal = (id,title,content) => {
         setModalppen(true);
         setModaltitle(title);
         setModalcontent(content);
@@ -49,7 +48,7 @@ export default function UserList(props) {
             <SectionName>회원님과 연관될만한 사람리스트</SectionName>
             <SearchBigBox>
                 <>
-                    {modalppen ? <Modal open={modalppen} close={closeModal} profile_keyword={modalprofilekeyword} content={modalcontent} id={modalID} header={modaltitle}>{modaltitle}</Modal> : ``}
+                    {modalppen ? <Modal open={modalppen} close={closeModal} profile_keyword={modalprofilekeyword} content={modalcontent} header={modaltitle}>{modaltitle}</Modal> : ``}
                 </>
                     {temp.map((data) => {return <UserCard  click={openModal} check= {data.profile_id} data={data}/>}) }
             </SearchBigBox>
@@ -71,13 +70,15 @@ const SearchBigBox = styled.div`
     box-shadow : 0px 30px 40px #f18fa1;
     flex-flow: column nowrap;
     width: 30vw;
-    height: 60vh;
-    margin: 50px;
+    height: 76vh;
+    margin: 20px;
     overflow: scroll;
     &::-webkit-scrollbar{
         display:none;
     }
 `
-const SectionName = styled.span`
-    font: 20px;
+const SectionName = styled.h3`
+font-family : 'Cafe24Ssurround';
+color: grey;
+text-shadow: 3px 3px #ccc; 
 `
