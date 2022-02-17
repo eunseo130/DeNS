@@ -9,7 +9,7 @@ import {
   InputGroup,
   FormControl,
 } from 'react-bootstrap'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 export default function ProfileKeyword({ keyword, onSave, putKeywords }) {
   function enterKey(e) {
     if (e.key === 'Enter') {
