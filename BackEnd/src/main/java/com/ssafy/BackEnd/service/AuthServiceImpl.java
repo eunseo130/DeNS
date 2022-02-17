@@ -116,7 +116,7 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public void requestChangePassword(User user) throws NotFoundException, MessagingException {
-        String CHANGE_PASSWORD_LINK = "http://localhost:2345/user/password/";
+        String CHANGE_PASSWORD_LINK = "http://i6c201.p.ssafy.io:3040/user/password/";
         if(user == null) throw new NotFoundException("멤버가 조회되지 않습니다.");
         String key = REDIS_CHANGE_PASSWORD_PREFIX+ UUID.randomUUID();
         redisUtil.setDataExpire(key, user.getName(), 60*30L);

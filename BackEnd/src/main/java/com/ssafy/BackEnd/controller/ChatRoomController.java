@@ -201,7 +201,7 @@ public class ChatRoomController {
 //            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
             return new ResponseEntity<ChatRoom>(findRoom2, HttpStatus.FOUND);
         } else if (findRoom1 != null && findRoom2 == null) {
-            logger.error("chatroom is already exists");
+            logger.error("Chatroom is already exists");
 //            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
             return new ResponseEntity<ChatRoom>(findRoom1, HttpStatus.FOUND);
         } else {
