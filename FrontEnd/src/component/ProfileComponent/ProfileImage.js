@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Image } from 'react-bootstrap'
 import { getImage } from '../../api/profile'
-import { Link } from 'react-router-dom'
-
+import { Link, useNavigate } from 'react-router-dom'
+import { store } from '../..'
 export default function ProfileImage({
   id,
   fileImage,
@@ -12,6 +12,8 @@ export default function ProfileImage({
   idCheck,
 }) {
   const [image, setImage] = useState('')
+  const nav = useNavigate()
+  const userId = store.getState().user.profileid
 
   useEffect(() => {
     authAxios
@@ -24,9 +26,27 @@ export default function ProfileImage({
         )
         console.log(url)
         setImage(url)
+
       })
       .catch((error) => console.log(error))
   }, [])
+  function sendMessanger() {
+    authAxios
+      .post(`/chat/room/${userId}/${id}`)
+      .then((res) => {
+        authAxios
+          .get(`/chat/room/enter/${res.data.roomId}/${userId}`)
+          .then((res) => {
+            return nav(`/auth/messenger/${res.data.roomId}`)
+          })
+          .catch(() => {
+            return nav(`/auth/messenger`)
+          })
+      })
+      .catch(() => {
+        return nav(`/auth/messenger`)
+      })
+  }
   return (
     <div className="card">
       <div className="card-body">
@@ -90,8 +110,8 @@ export default function ProfileImage({
               </div>
             ) : (
               <div>
-                <button className="btn btn-primary">
-                  <Link to={`/auth/messenger/${id}`}>메세지</Link>
+                <button className="btn btn-primary" onClick={sendMessanger}>
+                  메세지
                 </button>
               </div>
             )}
