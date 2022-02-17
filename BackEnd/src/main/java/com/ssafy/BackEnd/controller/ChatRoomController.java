@@ -120,6 +120,7 @@ import com.ssafy.BackEnd.service.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.redis.connection.MessageListener;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.HttpStatus;
@@ -196,7 +197,7 @@ public class ChatRoomController {
             ChatRoom save = chatRoomRedisRepository.save(chatRoom);
             ChannelTopic channel1 = new ChannelTopic(save.getRoomId());
             channels.put(save.getRoomId(), channel1);
-            redisMessageListenerContainer.addMessageListener(redisSubscriber, channel1);
+            redisMessageListenerContainer.addMessageListener((MessageListener) redisSubscriber, channel1);
             logger.info("CreateRoom success");
             return new ResponseEntity<ChatRoom>(save, HttpStatus.CREATED);
         } else if (findRoom1 == null && findRoom2 != null) {

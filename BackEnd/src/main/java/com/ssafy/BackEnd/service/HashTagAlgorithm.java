@@ -12,7 +12,8 @@ public class HashTagAlgorithm {
         List<String> strlist = new ArrayList<>();
         String[] strArr = content.split("#");
         for (String s : strArr){
-            String key = "#"+s;
+            if(s.equals(" ")) continue;
+            String key = s;
             strlist.add(key);
         }
         return strlist;
