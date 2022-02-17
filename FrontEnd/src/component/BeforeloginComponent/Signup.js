@@ -1,40 +1,31 @@
-import React, { useState, useEffect }from 'react';
-import { useCookies } from 'react-cookie';
-import {signup,verify } from '../../api/test';
+import React, { useState, useEffect } from 'react'
+import { signup, verify } from '../../api/test'
+import styled from 'styled-components'
+import { useNavigate } from 'react-router-dom'
 // import TeamList from './TeamList';
 // import UserList from './UserList';
 
 export default function Signup() {
-    const [certiText, setCertiText] = useCookies(["certi"]);
-    const [input, setInput] = useState({
-        email: '',
-        name: '',
-        password: '',
-    });
-    // useEffect(() => { console.log(input) }, [input]);
-
-  const join = () => {
-    signup(
-      input,
-      (response) => {
-        console.log(response)
-        navigate('/signup')
-      },
-      (error) => {
-        console.log(error)
-      }
-    )
+  const [input, setInput] = useState({
+    email: '',
+    name: '',
+    password: '',
+  })
+  const [certoText, setCertiText] = useState('');
+  // useEffect(() => { console.log(input) }, [input]);
+  let navigate = useNavigate()
+  const changeCheck = (e) => {
+    const { name, value } = e.target
+    setInput({
+      ...input,
+      [name]: value,
+    })
   }
     const join = () => {
-        // signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
-        console.log("verify test 11111");
-        console.log(input.email);
+        signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
         verify({ "email": input.email },
             (response) => {
-                console.log("verify test33333333");
-                console.log(response)
                 setCertiText('certi', response.data);
-
             },
             (error) => {
                 console.log("verify test 43444444");
@@ -112,3 +103,4 @@ export default function Signup() {
     </div>
   )
 }
+

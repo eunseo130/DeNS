@@ -22,13 +22,9 @@ function profileTest(param, success, fail) {
   api.get(`/profile/${param}`).then(success).catch(fail)
 }
 function verify(param, success, fail) {
-  console.log("verify test 2222");
-  console.log(param);
   api.post(`/verify`,JSON.stringify(param)).then(success).catch(fail);
 }
 function verify22(param, success, fail) {
-  console.log("verify test 2222");
-  console.log(param);
   api.get(`/verify/${param}`).then(success).catch(fail);
 }
 
