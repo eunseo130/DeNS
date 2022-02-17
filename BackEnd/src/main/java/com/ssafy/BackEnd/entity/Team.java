@@ -2,6 +2,7 @@ package com.ssafy.BackEnd.entity;
 
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Builder;
 import lombok.Getter;
@@ -34,9 +35,11 @@ public class Team extends CreateTimeEntity {
     String content;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "team", cascade = CascadeType.ALL)
+    @JsonIgnore
     List<TeamKeyword> team_keyword = new ArrayList<>();
 
     @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY, mappedBy = "team")
+    @JsonIgnore
     List<TeamMember> team_member = new ArrayList<>(); //타입을 TeamMember에서 User로 바꿈
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "team", cascade = CascadeType.ALL)

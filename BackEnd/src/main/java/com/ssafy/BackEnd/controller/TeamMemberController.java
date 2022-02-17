@@ -1,5 +1,8 @@
 package com.ssafy.BackEnd.controller;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.ssafy.BackEnd.dto.TeamMemberDto;
+import com.ssafy.BackEnd.dto.UserDto;
 import com.ssafy.BackEnd.entity.Team;
 import com.ssafy.BackEnd.entity.TeamMember;
 import com.ssafy.BackEnd.entity.TeamMemberIdentity;
@@ -26,10 +29,10 @@ public class TeamMemberController {
 
     private final TeamMemberService teamMemberService;
 
-    @PostMapping
-    public ResponseEntity<TeamMember> createTeamMember(@RequestParam String email, @RequestParam Long teamId) {
-        System.out.println("cont "+email+" "+teamId);
-        TeamMember teamMember = teamMemberService.addTeamMember(email, teamId);
+    @PostMapping("/{team_id}/{profile_id}")
+    public ResponseEntity<TeamMember> createTeamMember(@PathVariable long team_id, @PathVariable long profile_id) {
+
+        TeamMember teamMember = teamMemberService.addTeamMember(team_id, profile_id);
         if (teamMember == null) {
             throw new CustomException(ErrorCode.NOT_ADD_TEAMMEMBER);
             //return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
@@ -39,9 +42,10 @@ public class TeamMemberController {
         return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
     }
 
-    @DeleteMapping
-    public ResponseEntity<TeamMember> deleteTeamMember(@RequestParam String email, @RequestParam String teamName) {
-        TeamMember teammember = teamMemberService.deleteTeamMember(email, teamName);
+    @DeleteMapping("/{team_id}/{profile_id}")
+    public ResponseEntity<TeamMember> deleteTeamMember(@PathVariable long team_id, @PathVariable long profile_id) {
+        TeamMember teammember = teamMemberService.deleteTeamMember(team_id, profile_id);
+
         if (teammember == null) {
             logger.error("NO DELETE TEAMMEMBER");
             throw new CustomException(ErrorCode.NO_DATA_ERROR);
@@ -80,13 +84,13 @@ public class TeamMemberController {
         logger.info("INFO SUCCESS");
         return new ResponseEntity<List<User>>(teammemberlist, HttpStatus.OK);
     }
-    @GetMapping("/getidentity/{team_id}") //이메일과 팀아이디로 자신의 팀아이덴티티 확인하기
-    public ResponseEntity<TeamMember> getMyTeamIndentity(@PathVariable long team_id, @RequestParam String email) {
-
-        TeamMember teamMember = teamMemberService.getMyTeamIndentity(team_id, email);
-
-        return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
-
-    }
+//    @GetMapping("/getidentity/{team_id}/{profile_id}") //이메일과 팀아이디로 자신의 팀아이덴티티 확인하기
+//    public ResponseEntity<TeamMember> getMyTeamIndentity(@PathVariable long team_id, @PathVariable long profile_id) {
+//
+//        TeamMember teamMember = teamMemberService.getMyTeamIndentity(team_id, profile_id);
+//
+//        return new ResponseEntity<TeamMember>(teamMember, HttpStatus.OK);
+//
+//    }
 
 }

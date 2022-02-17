@@ -195,9 +195,6 @@ public class ChatRoomController {
         if (findRoom1 == null && findRoom2 == null){
             ChatRoom chatRoom = ChatRoom.create(chatUser1, chatUser2);
             ChatRoom save = chatRoomRedisRepository.save(chatRoom);
-            ChannelTopic channel1 = new ChannelTopic(save.getRoomId());
-            channels.put(save.getRoomId(), channel1);
-            redisMessageListenerContainer.addMessageListener((MessageListener) redisSubscriber, channel1);
             logger.info("CreateRoom success");
             return new ResponseEntity<ChatRoom>(save, HttpStatus.CREATED);
         } else if (findRoom1 == null && findRoom2 != null) {
@@ -205,7 +202,7 @@ public class ChatRoomController {
 //            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
             return new ResponseEntity<ChatRoom>(findRoom2, HttpStatus.FOUND);
         } else if (findRoom1 != null && findRoom2 == null) {
-            logger.error("chatroom is already exists");
+            logger.error("Chatroom is already exists");
 //            throw new CustomException(ErrorCode.ALREADY_EXISTS_CHATROOM);
             return new ResponseEntity<ChatRoom>(findRoom1, HttpStatus.FOUND);
         } else {

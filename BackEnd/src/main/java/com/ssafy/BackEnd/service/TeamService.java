@@ -16,7 +16,7 @@ public interface TeamService {
 
     Team modifyTeam(Long profile_id, Team team, TeamDto teamDto);
 
-    void deleteTeam(long profile_id, long team_id);
+    void deleteTeam(long team_id);
 
     //List<Team> showTeamList();
     List<Team> showFindTeamList(String keyword);

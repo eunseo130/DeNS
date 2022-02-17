@@ -19,7 +19,11 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.apache.logging.log4j.core.config.plugins.validation.constraints.Required;
+import org.springframework.core.io.InputStreamResource;
+import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
+import org.springframework.http.ContentDisposition;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -32,6 +36,9 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 
 import lombok.RequiredArgsConstructor;
@@ -102,7 +109,7 @@ public class TeamFeedController {
 
     @PutMapping("/{teamfeed_id}/{profile_id}")
     @ApiOperation(value = "팀 피드 수정")
-    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id, @PathVariable Long profile_id, @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) {
+    public ResponseEntity<TeamFeed> modifyTeamFeed(@PathVariable Long teamfeed_id, @PathVariable Long profile_id, @ModelAttribute TeamFeedAddForm teamFeedAddForm, BindingResult bindingResult) throws IOException {
         //        TeamFeed teamFeed = teamFeedDto.createTeamFeed(teamFeedDto);
         if (bindingResult.hasErrors()) {
             log.info("bindingResult : {}", bindingResult.getFieldError());
@@ -153,5 +160,21 @@ public class TeamFeedController {
     public void deleteFiles(@PathVariable String filename) {
         teamFeedFileService.deleteFile(filename);
         logger.info("INFO SUCCESS");
+    }
+
+    @GetMapping("/download/{filename}")
+    public ResponseEntity<Resource> download(@PathVariable String filename) throws IOException {
+        Path path = Paths.get("/home/ubuntu/files/generals/" + filename);
+        String contentType = Files.probeContentType(path);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add(HttpHeaders.CONTENT_TYPE, contentType);
+
+        headers.setContentDisposition(ContentDisposition.builder("attachment")
+                .filename(filename, StandardCharsets.UTF_8)
+                .build());
+
+        Resource resource = new InputStreamResource(Files.newInputStream(path));
+        return new ResponseEntity<>(resource, headers, HttpStatus.OK);
     }
 }

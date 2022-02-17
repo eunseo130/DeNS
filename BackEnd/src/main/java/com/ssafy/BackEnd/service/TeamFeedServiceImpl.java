@@ -38,6 +38,8 @@ public class TeamFeedServiceImpl implements TeamFeedService{
 
     private final UserRepository userRepository;
 
+    private final TeamFeedFileRepository teamFeedFileRepository;
+
 
 
     @Override
@@ -46,6 +48,7 @@ public class TeamFeedServiceImpl implements TeamFeedService{
         User user = userRepository.findByProfileId(profile_id);
         List<TeamMember> teamMembers = teamFeed.getTeam().getTeam_member();
         boolean flag = false;
+
         for (TeamMember teamMember : teamMembers) {
             if (teamMember.getUser().equals(user)) {
                 flag = true;
@@ -53,24 +56,36 @@ public class TeamFeedServiceImpl implements TeamFeedService{
             }
         }
         if (flag) {
-
+            System.out.println("들어왔다");
             List<TeamFeedFile> teamFeedFiles = teamFeedFileService.saveTeamFeedFiles(teamFeedDto.getTeamFeedFiles());
+
             for (TeamFeedFile teamFeedFile : teamFeedFiles) {
                 log.info(teamFeedFile.getOriginalFileName());
                 teamFeedFile.setTeam_feed(teamFeed);
+                teamFeedFileRepository.save(teamFeedFile);
             }
-            List<String> keywords = hashTagAlgorithm.strList(teamFeed.getContent());
+
+            List<String> keywords = hashTagAlgorithm.strList(teamFeed.getContent()); //새로운 팀피드 키워드
             List<TeamFeedKeyword> teamFeedKeywords = new ArrayList<>();
+
             for (String keyword : keywords) {
                 if (teamKeywordRepository.findTeamKeyword(keyword, teamFeed.getTeam()) == null) {
-                    TeamKeyword newTeamKeyword = TeamKeyword.builder().team(teamFeed.getTeam()).name(keyword).count(1).build();
+                    System.out.println("새로운 키워드");
+                    TeamKeyword newTeamKeyword = new TeamKeyword();
+                    newTeamKeyword.setName(keyword);
+                    newTeamKeyword.setCount(1);
+                    newTeamKeyword.setTeam(teamFeed.getTeam());
                     teamKeywordRepository.save(newTeamKeyword);
+
                     TeamFeedKeyword newTeamFeedKeyword = TeamFeedKeyword.builder().teamFeed(teamFeed).name(keyword).build();
                     teamFeedKeywordRepository.save(newTeamFeedKeyword);
                     teamFeedKeywords.add(newTeamFeedKeyword);
                 } else {
                     TeamKeyword findTeamKeyword = teamKeywordRepository.findTeamKeyword(keyword, teamFeed.getTeam());
+                    System.out.println(findTeamKeyword.getName() + " 같은키워드");
+                    System.out.println(findTeamKeyword.getCount() + "기존 수");
                     findTeamKeyword.setCount(findTeamKeyword.getCount() + 1);
+                    System.out.println(findTeamKeyword.getCount() + "새로운수");
                     TeamFeedKeyword findTeamFeedKeyword = teamFeedKeywordRepository.findTeamFeedKeyword(keyword, teamFeed.getTeamfeed_id());
                     if (findTeamFeedKeyword == null) {
                         TeamFeedKeyword newTeamFeedKeyword = TeamFeedKeyword.builder().teamFeed(teamFeed).name(keyword).build();
@@ -81,8 +96,8 @@ public class TeamFeedServiceImpl implements TeamFeedService{
                 }
             }
             teamFeed.setTeamFeedKeywords(teamFeedKeywords);
-            teamFeed.setTeamFeedFiles(teamFeedFiles);
-            teamFeed.setWriter(user.getName());
+            //teamFeed.setTeamFeedFiles(teamFeedFiles);
+            teamFeed.setWriter(Long.toString(user.getProfile().getProfile_id())); //프로필아이디 로 변경
             return teamFeedRepository.save(teamFeed);
         } else {
             System.out.println("권한이 없습니다");
@@ -92,12 +107,20 @@ public class TeamFeedServiceImpl implements TeamFeedService{
 
 
     @Override
-    public TeamFeed modifyTeamFeed(TeamFeed teamFeed, Long profile_id, TeamFeedDto teamFeedDto){
-        Profile profile = profileRepository.findById(profile_id).get();
+    public TeamFeed modifyTeamFeed(TeamFeed teamFeed, Long profile_id, TeamFeedDto teamFeedDto) throws IOException {
+//        Profile profile = profileRepository.findById(profile_id).get();
+//
+//        if(!teamFeed.getWriter().equals(profile_id)) { //피드작성자와 프로필작성자 프로필 아이디가 같지 않다면
+//            System.out.println("권한이 없습니다");
+//            throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
+//        }
 
-        if(!teamFeed.getWriter().equals(profile.getName())) { //피드작성자와 프로필작성자 이름이 같지 않다면
-            System.out.println("권한이 없습니다");
-            throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
+        List<TeamFeedFile> teamFeedFiles = teamFeedFileService.saveTeamFeedFiles(teamFeedDto.getTeamFeedFiles());
+
+        for (TeamFeedFile teamFeedFile : teamFeedFiles) {
+            log.info(teamFeedFile.getOriginalFileName());
+            teamFeedFile.setTeam_feed(teamFeed);
+            teamFeedFileRepository.save(teamFeedFile);
         }
 
         teamFeed.setContent(teamFeedDto.getContent());
@@ -208,10 +231,10 @@ public class TeamFeedServiceImpl implements TeamFeedService{
             }
         }
 
-        if (!teamFeed.getWriter().equals(user.getName()) || !teamFeed.getWriter().equals(teamLeader.getUser().getName())) {
-            System.out.println("권한이 없습니다");
-            throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
-        }
+//        if (!teamFeed.getWriter().equals(profile_id) && !teamFeed.getWriter().equals(teamLeader.getUser().getName())) {
+//            System.out.println("권한이 없습니다");
+//            throw new CustomException("권한 없음", ErrorCode.UNAUTH_USER_ERROR);
+//        }
 
 //        Team team = teamFeed.getTeam();
         List<TeamFeedKeyword> teamFeedKeywordList = teamFeed.getTeamFeedKeywords();
