@@ -16,11 +16,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.mail.MessagingException;
 import java.time.LocalDateTime;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.logging.Logger;
 
 
@@ -115,8 +115,8 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public void requestChangePassword(User user) throws NotFoundException {
-        String CHANGE_PASSWORD_LINK = "http://localhost:8080/user/password/";
+    public void requestChangePassword(User user) throws NotFoundException, MessagingException {
+        String CHANGE_PASSWORD_LINK = "http://localhost:2345/user/password/";
         if(user == null) throw new NotFoundException("멤버가 조회되지 않습니다.");
         String key = REDIS_CHANGE_PASSWORD_PREFIX+ UUID.randomUUID();
         redisUtil.setDataExpire(key, user.getName(), 60*30L);
@@ -137,16 +137,22 @@ public class AuthServiceImpl implements AuthService{
         return savedUser;
     }
 
-    public void sendVerificationMail(User user) throws NotFoundException {
-        String VERIFICATION_LINK = "http://3.36.131.59:2222/verify/"; //나중에 원격서버 포트로 바꾸기
+    public String sendVerificationMail(User user) throws NotFoundException, MessagingException {
+        String VERIFICATION_LINK = "http://i6c201.p.ssafy.io:3040/certi";
         if(user==null) throw new NotFoundException("멤버가 조회되지 않음");
         UUID uuid = UUID.randomUUID();
         System.out.println("key : " + uuid);
         redisUtil.setDataExpire(uuid.toString(),user.getEmail(), 60 * 30L);
-        emailService.sendMail(user.getEmail(),"[팀 조이] 회원가입 인증메일입니다.",VERIFICATION_LINK+uuid.toString());
+        String htmlStr = "<h2>안녕하세요 DeNS입니다.</h2><br>"
+                +"<h3>"+user.getName() + "님</h3>" + "<p>인증하기 버튼을 누르시면 로그인을 하실 수 있습니다. <br>"
+                +"<a href="+VERIFICATION_LINK+">인증하기</a></p>";
+        emailService.sendMail(user.getEmail(),"[DeNS] 회원가입 인증메일입니다.", htmlStr);
+//        Map<String, Object> result = new HashMap<>();
+//        result.put(", uuid.toString());
+        return uuid.toString();
     }
 
-    public ResponseEntity<User> verifyEmail(String key) throws NotFoundException {
+    public ResponseEntity<User> verifyEmail(@PathVariable String key) throws NotFoundException {
         String userId = redisUtil.getData(key);
         User user = userRepository.findByEmail(userId);
         if(user==null) throw new NotFoundException("멤버가 조회되지않음");

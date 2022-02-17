@@ -68,9 +68,8 @@
                 this.messages = response.data;
             })
             axios.get('/chat/user').then(response => {
-                // _this.token = response.data.token;
-                _this.name = response.data.name;
-                ws.connect({"name": _this.name}, function(frame) {
+                _this.token = response.data.token;
+                ws.connect({"token": _this.token}, function(frame) {
                     ws.subscribe("/sub/chat/room/"+_this.roomId, function(message) {
                         var recv = JSON.parse(message.body);
                         console.log(recv)

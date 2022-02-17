@@ -112,6 +112,7 @@ import com.ssafy.BackEnd.dto.ChatUserDto;
 import com.ssafy.BackEnd.entity.*;
 import com.ssafy.BackEnd.exception.CustomException;
 import com.ssafy.BackEnd.exception.ErrorCode;
+import com.ssafy.BackEnd.pubsub.RedisSubscriber;
 import com.ssafy.BackEnd.repository.ChatRoomRedisRepository;
 import com.ssafy.BackEnd.repository.ProfileRepository;
 import com.ssafy.BackEnd.repository.UserRepository;
@@ -119,6 +120,8 @@ import com.ssafy.BackEnd.service.JwtServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import org.springframework.data.redis.listener.ChannelTopic;
+import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -130,6 +133,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -137,7 +141,7 @@ import java.util.stream.Stream;
 @RequiredArgsConstructor
 @RestController
 @CrossOrigin
-@RequestMapping("chat")
+@RequestMapping("/chat")
 public class ChatRoomController {
 
     private static final Logger logger = LogManager.getLogger(ChatRoomController.class);
@@ -145,6 +149,15 @@ public class ChatRoomController {
     private final ChatRoomRedisRepository chatRoomRedisRepository;
 
     private final ProfileRepository profileRepository;
+
+    private final JwtServiceImpl jwtService;
+
+    private Map<String, ChannelTopic> channels;
+
+    private final RedisSubscriber redisSubscriber;
+
+    private final RedisMessageListenerContainer redisMessageListenerContainer;
+
 
     @GetMapping("/rooms")
     public ResponseEntity<Iterable<ChatRoom>> rooms() {
@@ -160,6 +173,7 @@ public class ChatRoomController {
         for (ChatRoom chatRoom : chatRooms) {
             if (chatRoom.getName().contains(profile.getName()+profileId)) {
                 result.add(chatRoom);
+                logger.info(chatRoom.getName());
             }
         }
         logger.info("get chatrooms success");
@@ -217,12 +231,27 @@ public class ChatRoomController {
     }
 
     @GetMapping("/user")
-    public LoginInfo getUserInfo() {
-        System.out.println("===========test===========");
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        System.out.println(authentication);
-        String name = authentication.getName();
-        System.out.println(name);
-        return LoginInfo.builder().name(name).build();
+    public LoginInfo getUserInfo(HttpServletRequest request) {
+        String authorization = jwtService.resolveToken(request);
+        String email = jwtService.getUserEmail(authorization);
+        Profile profile = profileRepository.findByEmail(email).get();
+        String name = profile.getName();
+        return LoginInfo.builder().name(name).token(authorization).build();
     }
+//
+//    @GetMapping("/user")
+//    public void getUserInfo(HttpServletRequest request) {
+//        String authorization = request.getHeader("Authorization");
+//        System.out.println(authorization);
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        auth.getDetails()
+//        return LoginInfo.builder().name(name).token(jwtService.createToken(name)).build();
+
+//    @GetMapping("/user")
+//    @ResponseBody
+//    public LoginInfo getUserInfo() {
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        String name = auth.getName();
+//        return LoginInfo.builder().name(name).token(jwtService.createToken(name)).build();
+//    }
 }
