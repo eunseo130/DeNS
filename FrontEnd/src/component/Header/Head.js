@@ -4,6 +4,7 @@ import { Image } from 'react-bootstrap'
 import { Link } from 'react-router-dom'
 import { store } from '../..'
 import { Navbar } from 'react-bootstrap'
+
 export default function Head() {
   const [drop, setDrop] = useState(false)
   const userId = store.getState().user.profileid
@@ -15,6 +16,7 @@ export default function Head() {
   return (
     <>
       <Navbar.Toggle />
+      <img src={require('./logo.png')} style={{ width: "60px", height: "60px", border:"1px solid #FFFFFF50"}}></img>
       <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>
           {/* <Image

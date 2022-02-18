@@ -40,21 +40,21 @@ export default function Signup() {
       <section className="ftco-section">
         <div className="container">
           <div className="row justify-content-center">
-            <div className="col-md-6 text-center mb-5">
-              <h2 className="heading-section" style={{ color: '#f46a72' }}>
-                Sing Up
+            <div className="col-md-6 text-center mb-3 mt-4">
+              <h2 className="heading-section" style={{ color: '#f46a72', fontFamily: 'Cafe24Ssurround', }}>
+                SignUp
               </h2>
             </div>
           </div>
           <div className="row justify-content-center">
-            <div className="col-md-6 col-lg-5">
+            <div className="col-md-6 col-lg-5"  style={{ backgroundColor: 'white'}}>
               <div className="login-wrap p-4 p-md-5">
                 <div className="icon d-flex align-items-center justify-content-center">
                   <span className="fa fa-user-o"></span>
                 </div>
-                <h3 className="text-center mb-4" style={{ color: '#f46a72' }}>
+                <h4 className="text-center mb-4" style={{ color: '#f46a72', fontFamily: 'Cafe24Ssurround', }}>
                   해당 정보를 입력해 주세요.
-                </h3>
+                </h4>
                 <form action="#" className="login-form">
                   <br />
                   <div className="form-group d-flex justify-content-center">
@@ -62,6 +62,7 @@ export default function Signup() {
                       placeholder="이메일"
                       name="email"
                       onChange={changeCheck}
+                      style={{fontFamily:'Cafe24SsurroundAir'}}
                     />
                   </div>
                   <br />
@@ -70,6 +71,7 @@ export default function Signup() {
                       placeholder="이름"
                       name="name"
                       onChange={changeCheck}
+                      style={{fontFamily:'Cafe24SsurroundAir'}}
                     />
                   </div>
                   <br />
@@ -79,6 +81,7 @@ export default function Signup() {
                       name="password"
                       onChange={changeCheck}
                       style={{WebkitTextSecurity: `disc`}}
+                      style={{fontFamily:'Cafe24SsurroundAir'}}
                     />
                   </div>
 
@@ -90,6 +93,8 @@ export default function Signup() {
                       style={{
                         backgroundColor: '#f46a72',
                         textAlign: 'center',
+                        fontFamily: 'Cafe24SsurroundAir',
+                        color:'white'
                       }}
                     >
                       가입하기
@@ -104,4 +109,5 @@ export default function Signup() {
     </div>
   )
 }
+
 

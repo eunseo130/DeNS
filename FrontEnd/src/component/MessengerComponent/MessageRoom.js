@@ -148,14 +148,8 @@ export default function MessageRoom() {
           // <button onClick={inviteTeam({teamId, yourId})} key={i}>
           // </button>
           <div>
-            {`${leaderTeams[i].title}`}
-            <button
-              onClick={() => {
-                modalOn(theTeamId)
-              }}
-            >
-              초대하기
-            </button>
+            <H5>{`${leaderTeams[i].title}`}</H5>
+            <Btn onClick={() => {modalOn(theTeamId)}}>초대하기</Btn>
           </div>
         )
       }
@@ -264,3 +258,18 @@ const ButtonBox = styled.button`
   color: white;
   background-color: #f46a72;
 `
+const H5 = styled.span `
+    color: #838383    
+    margin: 10px;
+    padding-top: 20px;
+    font-family: 'Cafe24Ssurround';
+`
+
+const Btn = styled.button `
+    border-radius: 5px;
+    background: #06864D;
+    color: white;
+    border: none;
+    font-size: 15px;
+    font-family: 'Cafe24Ssurround';
+    `
