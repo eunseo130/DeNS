@@ -63,10 +63,8 @@ console.log(singleData)
         to={{
           pathname: `/auth/messenger/${singleData.roomId}`,
         }}
-        style={{ textDecoration: 'none' }}
-        state={{
-          yourId: yourId,
-        }}
+        style={{ textDecoration: 'none',yourId: yourId }}
+
       >
         <TeamCardTitle> {name} </TeamCardTitle>
         <TeamCardContent>최근 메세지: {singleData.message}</TeamCardContent>
