@@ -61,7 +61,7 @@ function Message(props) {
                       >
                         {val.user2.name}                      
                       </Link>
-                    : <Name align='center'>{val.user1.name}</Name>
+                    : <Name align='center'>{val.user2.name}</Name>
                   }
               </div>
             )

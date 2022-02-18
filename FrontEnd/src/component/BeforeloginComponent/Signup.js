@@ -81,8 +81,7 @@ export default function Signup() {
                       placeholder="비밀번호"
                       name="password"
                       onChange={changeCheck}
-                      style={{WebkitTextSecurity: `disc`}}
-                      style={{fontFamily:'Cafe24SsurroundAir'}}
+                      style={{WebkitTextSecurity: `disc`,fontFamily:'Cafe24SsurroundAir'}}
                     />
                   </div>
 
