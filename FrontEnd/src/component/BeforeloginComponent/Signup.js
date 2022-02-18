@@ -25,7 +25,8 @@ export default function Signup() {
         signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
         verify({ "email": input.email },
             (response) => {
-                setCertiText('certi', response.data);
+              setCertiText('certi', response.data);
+              navigate(`/signin`);
             },
             (error) => {
                 console.log("verify test 43444444");
