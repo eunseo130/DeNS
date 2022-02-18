@@ -6,12 +6,12 @@ export default function TeamListBox(props) {
         <Box>
             <TopBox>
                 <TextBox>
-                    <TopText>{props.content}</TopText>
+                    <TeamCardTitle>{props.title}</TeamCardTitle>
                 </TextBox>
             </TopBox>
             <Rect>
                 <BotBox>
-                    <BotText>{props.title}</BotText>
+                    <TeamCardContent>{props.content}</TeamCardContent>
                     {/* <BotText>#자바</BotText> */}
                 </BotBox>
             </Rect>
@@ -28,16 +28,7 @@ const TextBox = styled.div`
     flex-direction: column;
     justify-content: center;
 `
-const Box = styled.div`
-    border-radius: 5px;
-    box-shadow: 3px 3px 13px rgba(244,106,114,1);
-    
-    width: 70%;
-    height: 20vh;
-    position:relative;
-    left: 50%;
-    transform:translate(-50%);
-`
+
 const Rect = styled.div`
     height: 50%;
 `
@@ -51,9 +42,36 @@ const BotBox = styled.div`
     display:grid;
     grid-template-columns: 50% 50%;
 `
-const BotText = styled.h3`
-    font-size: 1em;
-    display: flex;
+
+const TeamCardTitle = styled.h5`
+    font-family : 'Cafe24Ssurround';
+    color: #F46A72;
+    margin-top: 10px;
+    margin-left: 10px;
+`
+
+const TeamCardContent = styled.p`
+    font-family : 'Cafe24SsurroundAir';
+    color: grey
+    margin-left: 10px;
+    font-size: 15px;
+`
+const Box = styled.div`
+    border-radius: 5px;
+    
+    width: 20vh;
+    height: 20vh;
+    position:relative;
+    left: 50%;
+    transform:translate(-50%);
+
+    display:flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-`
+    box-shadow: 3px 3px 13px rgba(244,106,114,1);
+    background-color: white;
+
+    margin-bottom: 40px;
+    
+`;

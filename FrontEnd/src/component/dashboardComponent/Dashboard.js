@@ -39,7 +39,7 @@ export default function Dashboard() {
   }
   const DashBoardBox = styled.div`
     position: absolute;
-    top: 35%;
+    top: 30%;
     left: 50%;
     transform:translate(-50%, -50%);
     height: 40%;

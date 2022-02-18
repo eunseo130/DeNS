@@ -20,7 +20,12 @@ export default function TeamList( props) {
     const [modalcontent, setModalcontent] = useState("");
     const [leaderID, setleaderID] = useState("");
     
-    const openModal = (title,content) => {
+    const openModal = (teamid, title, content) => {
+        let temp = localStorage.getItem("recent");
+        // console.log(temp+','+teamid);
+        
+        temp= temp+"," + teamid;
+        localStorage.setItem("recent", temp);
         setModalppen(true);
         setModaltitle(title);
         setModalcontent(content);
@@ -37,12 +42,12 @@ export default function TeamList( props) {
 
     return (
         <ContainerT>
+                    <Modal open={modalppen} close={closeModal} content={modalcontent} gomessanger={gomessanger} header={modaltitle }>{ modaltitle}</Modal>
         <SectionName>회원님과 연관될만한 팀리스트</SectionName>
 
         
         <SearchBigBox >
             <>
-                    <Modal open={modalppen} close={closeModal} content={modalcontent} gomessanger={gomessanger} header={modaltitle }>{ modaltitle}</Modal>
             </>
             {
                     temp.map((data) => { return <TeamCard click={ openModal} check={data.team_id} data= {data}/>})

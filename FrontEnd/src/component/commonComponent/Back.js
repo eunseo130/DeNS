@@ -41,19 +41,19 @@ export default function Back(props) {
 
   // console.log(dispatch());
 
-  return (
-    <TheBody>
-      <Navbar style={{ backgroundColor: '#f46a72', position: 'fixed', width: '100vw' }}>
+  return(
+    <>
+      <Navbar style={{ backgroundColor: '#f46a72' }}>
         <Container>
           <Head />
         </Container>
       </Navbar>
 
       <Sidebar />
-      <Background>
+      <div className="tewst" style={{ backgroundColor: '#fde1e36b' }}>
         <Outlet />
-      </Background>
-    </TheBody>
+      </div>
+    </>
   )
 }
 const hey = document.body

@@ -13,41 +13,21 @@ export default function Head() {
   }
 
   return (
-    // <>
-    //   <span>채널명</span>
-    //   <Profileimage onClick={clickCheck}>check</Profileimage>
-    //   <br />
-    //   <br />
-    //   <br />
-
-    //   {drop ? (
-    //     <>
-    //       <ProfileDrop>
-    //         <Image
-    //           width={20}
-    //           height={20}
-    //           src={require('./profile_default.png')}
-    //           roundedCircle
-    //         />
-    //         <Link to={`/auth/profile/${userId}`}>프로필가기</Link>
-    //       </ProfileDrop>
-    //     </>
-    //   ) : (
-    //     ''
-    //   )}
-    // </>
     <>
-      {/* <Navbar.Brand >채널명</Navbar.Brand> */}
       <Navbar.Toggle />
       <Navbar.Collapse className="justify-content-end">
         <Navbar.Text>
-          <Image
+          {/* <Image
             width={30}
             height={30}
             src={require('./profile_default.png')}
             roundedCircle
-          />
-          <Link to={`/auth/profile/${userId}`}>프로필가기</Link>
+          /> */}
+          <Link to={`/auth/profile/${userId}`}>
+            <svg xmlns="http://www.w3.org/2000/svg" width={30} height={30} fill="currentColor" class="bi bi-person-fill text-light" viewBox="0 0 16 16">
+              <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"/>
+            </svg>
+          </Link>
         </Navbar.Text>
       </Navbar.Collapse>
     </>

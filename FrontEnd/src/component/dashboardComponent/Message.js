@@ -1,8 +1,10 @@
+
 import axios from 'axios';
 import React, { Component, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
 import { store } from '../..';
 import { API_BASE_URL } from '../../config';
+import { Link} from 'react-router-dom'
 
 function Message(props) {
   const profileId = store.getState().user.profileid;
@@ -28,7 +30,7 @@ function Message(props) {
     .then((res) => {
       setData(res.data);
       console.log(res);
-      // setRoomid(res.data[0].roomId);
+      // setRoomid(res.data[0].roomid);
     })
       .catch((error) => { console.log(error) });
   };
@@ -43,55 +45,79 @@ function Message(props) {
     <Container {...props}>
       <Title>메시지</Title>
       <Rect>
-        <tr style={{display:'flex',justifyContent:'space-around'}}>
-          <TableHeader>프로필</TableHeader>
-          <TableHeader>최근 메세지 내용</TableHeader>
-          <TableHeader>팀 이름/팀장</TableHeader>
-          <TableHeader>연결된 팀원 정보</TableHeader>
-        </tr>
-        {data ? data.map((val, key) => {
-          return (
-            <tr key={key}>
-              <TableContent>{val.user2.name}</TableContent>
-              {/* <TableContent>{val.name}</TableContent> */}
-              {/* <TableContent>{val.name}</TableContent> */}
-            </tr>
-          )
-        }): ``}
+        <MessageTitle>최근 메세지를 보낸 사람</MessageTitle>
+        <hr ></hr>
+          {data ? data.map((val, key) => {
+            return (
+    
+              <div key={key} align='center'>                  
+                  {
+                    profileId === val.user1.profileId
+                    
+                    ? <Link
+                        to={{
+                          pathname:`/auth/messenger/${val.roomId}`,
+                        }}
+                      >
+                        {val.user2.name}                      
+                      </Link>
+                    : <Name align='center'>{val.user1.name}</Name>
+                  }
+              </div>
+            )
+          }): ``}
       </Rect>
     </Container>
   );
 }
 
 const Container = styled.div`
-  display: flex;
-  justify-content: row;
+  // display: flex;
+  // justify-content: column;
   margin-top: 2vh;
 `;
 
-const Title = styled.span`
-  font-family: Roboto;
+const Title = styled.h3`
+  font-family : 'Cafe24Ssurround';
   font-style: normal;
   font-weight: 700;
   color: rgba(244,106,114,1);
   height: 22px;
-  width: 57px;
-  margin-left: 3px;
+  width: 90px;
+  // margin-left: 3px;
 `;
 
 const Rect = styled.div`
   width: 100%;
-  height: 40vh;
-  margin-top: 21px;
-  box-shadow: 3px 3px 5px;
-  border: 2px solid forestgreen;
+  height: 20vh;
+  margin-top: 40px;
+  margin-bottom: 30px;
+
+  box-shadow: 3px 3px 13px rgba(244,106,114,1);
+  background-color: white;
 `;
 
-const TableHeader = styled.th`
-border-bottom: 1px solid black;
+
+const MessageTitle = styled.p`
+  font-family : 'Cafe24SsurroundAir';
+  color: Black;
+  text-align: center;
+  vertical-align: middle;
+  margin-top: 20px;
+  padding-top: 20px;
 `
-const TableContent = styled.td`
-text-align: center;
+
+const Name = styled.p`
+  font-family : 'Cafe24SsurroundAir';
+  color: Black;
+  align: 'center';
+
+  `
+
+const NameDiv = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
 `
 
 export default Message;

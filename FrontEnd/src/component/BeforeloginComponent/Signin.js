@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import styled from 'styled-components'
@@ -77,11 +78,13 @@ const LoginBox = styled.div`
   display: flex;
   flex-direction: column;
   background-color: white;
+  padding: 20px;
 `;
 
 const H3 = styled.h3`
   text-align: center;
   color: #F46A72; 
+  font-family : 'Cafe24Ssurround';
 `;
 
 const Btn = styled.button`
@@ -106,7 +109,7 @@ const Container = styled.div`
 `;
 
 const Name = styled.span`
-  font-family: Roboto;
+  font-family : 'Cafe24SsurroundAir';  
   font-style: normal;
   font-weight: 700;
   width: 150px;
@@ -115,7 +118,7 @@ const Name = styled.span`
   `;
   
 const InputSquare = styled.input`
-  font-family: Roboto;
+font-family : 'Cafe24SsurroundAir'; 
   font-style: normal;
   font-weight: 700;
   margin-top: 5px;
@@ -137,13 +140,16 @@ const SignUpBtn = styled.a`
   text-align: center;
   margin-top: 5%;
   color: #F46A72;
-  font-family: Roboto;
+  font-family : 'Cafe24SsurroundAir'; 
+  text-decoration:none;
 `
 
 const FindIdPw = styled.a`
   text-align: center;
   margin-top: 2%;
-  font-family: Roboto;
+  font-family : 'Cafe24SsurroundAir'; 
+  color: #F46A72;
+  text-decoration:none;
 `
 
 

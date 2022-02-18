@@ -17,8 +17,14 @@ export default function TeamLinkBox(props) {
             state={{
                 team_id: props.team_id,
             }}
+            class="text-decoration-none"
+            style={{ fontFamily: 'Cafe24SsurroundAir'}}
             >
-                <Title>{props.title}</Title>
+                <img src={require('./computer.PNG')} width={80} height={80}></img>
+                <div>
+                    <Title>{props.title}</Title> 
+                </div>
+            
             </Link>
         </Box>
     )
@@ -37,7 +43,13 @@ const Box = styled.div`
     justify-content: center;
     align-items: center;
     box-shadow: 3px 3px 13px rgba(244,106,114,1);
+    background-color: white;
+
+    margin-bottom: 40px;
+    
 `;
 const Title = styled.h3`
     font-size: 1em;
-`
+    color: #f46a72;
+    text-decoration-line: none;
+    margin-top: 5px;`

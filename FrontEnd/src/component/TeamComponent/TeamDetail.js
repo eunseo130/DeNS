@@ -124,11 +124,26 @@ export default function TeamDetail(props) {
 											)
 									}) : null}
 
-							{teamContent}
+								{/* {membersImgsList}	 */}
+
+
+									{/* <BringTeamMembersImg 
+									src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
+									></BringTeamMembersImg>
+									<BringTeamMembersImg 
+									src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
+									></BringTeamMembersImg>
+									<BringTeamMembersImg 
+									src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
+									></BringTeamMembersImg>
+									<BringTeamMembersImg 
+									src="https://w.namu.la/s/38cf17d29ddeab5a69f6de682176bbd6b8f71285f5adc1d5465c910f8d7651e8f82db2bdba9e25f1d29affdedb9ddc04edeadc4e7f539ce975eaad093a2b8c68adc73e19b58ff0f4cce679d2f2bb15e273bdcaa5e3db26bd4464e1707b67c69a"
+									></BringTeamMembersImg> */}
 							</ImgBox>
 							{/* 팀 Content */}
+							    {/* 팀 Content */}
 
-							<TeamInfoTextBox>
+								<TeamInfoTextBox>
 
 									<TextBox>
 										<ContentEditBtn onClick={() => {setShowInput(!showInput)}}>수정하기</ContentEditBtn>
@@ -140,7 +155,7 @@ export default function TeamDetail(props) {
 												<ContentConfirmBtn onClick={() => {editSubmit(editInput)}}>완료</ContentConfirmBtn>
 											</>
 										}
-							</TeamInfoTextBox>
+									</TeamInfoTextBox>
 
 							{/* 팀 소개 해쉬태그 */}
 							<TeamInfoHashtag>
@@ -149,16 +164,16 @@ export default function TeamDetail(props) {
 					</TeamInfoContainer>
 			</TeamDetailGrid>
     </TeamDetailBox>
+
     )
 }
-
 const TeamDetailHeaders = styled.div`
 	display: flex;
 	justify-content: space-between;
 	width: 80vw;
 `
 const TheTeamTitle = styled.h3`
-	position: relative;
+    position: relative;
 `
 const GotoTeamSettings = styled.button`
 	position: relative;
@@ -166,8 +181,8 @@ const GotoTeamSettings = styled.button`
 	border: none;
 	border-radius: 2px;
 	color: white;
-	height: 5.5vh;
-	width: 7vw;
+	height: 3.5vh;
+	width: 5vw;
 `
 const TeamDetailBox = styled.div`
 	position: absolute;
@@ -203,7 +218,6 @@ const TeamInfoContainer = styled.div`
     height: 40vh;
     width: 20vw;
     overflow: scroll;
-		background-color: white;
 
 `
 const TeamInfoTitle = styled.h3`
@@ -211,6 +225,10 @@ const TeamInfoTitle = styled.h3`
     margin-top: 5%;
     left: 5%;
     font-weight: bold;
+`
+const BringTeamMembersImg = styled.img`
+    width: 50px;
+    height: 50px;
 `
 const ImgBox = styled.div`
     position: relative;
@@ -220,9 +238,6 @@ const ImgBox = styled.div`
 `
 const TeamInfoTextBox = styled.div`
     position: relative;
-		display:flex ;
-		flex-direction: column;
-		align-items: center;
     margin-top: 5%;
     left: 5%;
     width: 90%;
@@ -236,20 +251,20 @@ const TeamInfoHashtag = styled.div`
     word-break:break-all;
 `
 const ContentEditBtn = styled.button`
-	position: relative;
-	background-color: #F46A72;
-	border: none;
-	border-radius: 2px;
-	color: white;
-	height: 5.5vh;
-	width: 7vw;
+position: relative;
+background-color: #F46A72;
+border: none;
+border-radius: 2px;
+color: white;
+height: 5.5vh;
+width: 7vw;
 `
 const ContentConfirmBtn = styled.button`
-	position: relative;
-	background-color: #F46A72;
-	border: none;
-	border-radius: 2px;
-	color: white;
-	height: 5.5vh;
-	width: 7vw;
+position: relative;
+background-color: #F46A72;
+border: none;
+border-radius: 2px;
+color: white;
+height: 5.5vh;
+width: 7vw;
 `

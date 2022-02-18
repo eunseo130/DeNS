@@ -77,4 +77,6 @@ const Title = styled.h3`
     font-style: normal;
     font-weight: 700;
     color: rgba(244,106,114,1);
+    font-family: 'Cafe24Ssurround';
+
 `

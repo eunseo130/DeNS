@@ -29,7 +29,7 @@ export default function Modal(props) {
     return (
         <div className={ open ? 'openModal modal':'modal'}>
             {open ? (
-                <section>
+                <section style={{left:'-50vw'}}>
                     <div>
                     <header>
                         {header}
