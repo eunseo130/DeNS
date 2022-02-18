@@ -1,70 +1,160 @@
-import React, { useState } from 'react'
-import { Navigate, Outlet } from 'react-router-dom'
+import { store } from '../..'
+import { API_BASE_URL } from '../../config'
+import React, { useState, useEffect } from 'react'
+import { Outlet, useParams, useNavigate } from 'react-router-dom'
+import {
+  profileTest,
+  profileUpdate,
+  putKeyword,
+  ImgUpload,
+  getKeyword,
+} from '../../api/profile'
+import { Container, Row, Stack } from 'react-bootstrap'
+import ProfileGit from './ProfileGit'
+import ProfileTagCloud from './ProfileTagCloud'
+import ProfileImage from './ProfileImage'
 import ProfileInfo from './ProfileInfo'
-import ProfileKeyword from './ProfileKeyword.js'
-import { TagCloud } from 'react-tagcloud'
-import { profileTest, profileUpdate } from '../../api/test'
+import ProfileKeyword from './ProfileKeyword'
+import axios from 'axios'
+import { useCookies } from 'react-cookie'
+import '../../css/profile.css'
 
 export default function ProfileMain() {
-  let [inputs, setInputs] = useState({
-    image: '',
+  const [inputs, setInputs] = useState({
     name: '',
     position: '',
-    stack: '',
+    stack: '  ',
     email: '',
     keyword: '',
     edit: false,
+    gitId: '',
+    git: true,
   })
-  const { image, name, position, stack, email, edit } = inputs
-  // const [keyword, setKeyword] = useState(
-  //   { value: 'JavaScript', count: 10000 },
-  //   { value: 'React', count: 30 },
-  //   { value: 'Nodejs', count: 28 },
-  //   { value: 'Express.js', count: 25 },
-  //   { value: 'HTML5', count: 33 },
-  //   { value: 'MongoDB', count: 18 },
-  //   { value: 'CSS3', count: 20 }
-  // )
-  const keyword = [
-    { value: 'JavaScript', count: 10000 },
-    { value: 'React', count: 30 },
-    { value: 'Nodejs', count: 28 },
-    { value: 'Express.js', count: 25 },
-    { value: 'HTML5', count: 33 },
-    { value: 'MongoDB', count: 18 },
-    { value: 'CSS3', count: 20 },
-  ]
-  const userId = email
-  profileTest(
-    userId,
-    (res) => {
-      setInputs({
-        ...inputs,
-        image: res.data.image,
-        name: res.data.name,
-        position: res.data.position,
-        stack: res.data.stack,
-        email: res.data.email,
-      })
+  const { name, position, stack, email, edit, keyword, gitId, git } = inputs
+  const [keywords, setKeywords] = useState([])
+  const { id } = useParams()
+  const [files, setFiles] = useState('')
+  const [fileImage, setFileImage] = useState('')
+  const [image, setImage] = useState('')
+  const [cookies] = useCookies(['token'])
+  const userId = store.getState().user.profileid
+
+  const [idCheck, setIdCheck] = useState(false)
+
+  const authAxios = axios.create({
+    baseURL: API_BASE_URL,
+    headers: {
+      Authorization: `Bearer "${cookies.token}"`,
+      withCredentials: true,
     },
-    (error) => console.log(error)
-  )
-  profileUpdate(
-    [email, { params: { position: position, stack: stack } }],
-    (res) => {
-      setInputs({
-        ...inputs,
-        position: res.data.position,
-        stack: res.data.stack,
-        edit: !edit,
+  })
+  useEffect(() => {
+    if (userId === id) {
+      setIdCheck(!idCheck)
+    } else {
+      setIdCheck(idCheck)
+    }
+  }, [userId])
+
+  useEffect(() => {
+    authAxios
+      .get(`/profile/${id}`)
+      .then((res) => {
+        setInputs({
+          ...inputs,
+          name: res.data.name,
+          position: res.data.position,
+          stack: res.data.stack,
+          email: res.data.email,
+          git: !git,
+          gitId: res.data.git_id,
+        })
       })
-    },
-    (error) => console.log(error)
-  )
+      .catch((error) => console.log(error))
+  }, [])
+  useEffect(() => {
+    getKeywords()
+  }, [position, stack])
+
+  function getKeywords() {
+    authAxios
+      .get(`/profile/keyword/${id}`)
+      .then((res) => {
+        const keywordObjs = res.data
+        setKeywords(keywordPlus(keywordObjs))
+      })
+      .catch((error) => console.log(error))
+  }
+  function keywordPlus(e) {
+    let words = []
+    e.forEach((keywordObj) => {
+      const word = {
+        value: keywordObj.name,
+        count: keywordObj.count,
+      }
+      words.push(word)
+    })
+    const value = e.reduce((max, p) => (p.count > max ? p.count : max), 0)
+    const c = 1 + value
+    words.push({ value: position, count: c }, { value: stack, count: c })
+    return words
+  }
+  function update() {
+    authAxios
+      .put(`/profile/${id}`, {
+        position: position,
+        stack: stack,
+        git_id: gitId,
+      })
+      .then((res) => {
+        setInputs({
+          ...inputs,
+          name: res.data.name,
+          position: res.data.position,
+          stack: res.data.stack,
+          email: res.data.email,
+          gitId: res.data.git_id,
+          git: !git,
+          edit: !edit,
+        })
+      })
+      .catch((error) => console.log(id))
+
+    getKeywords()
+  }
+
+  function putKeywords() {
+    authAxios
+      .post(`/profile/keyword/${id}`, null, { params: { content: keyword } })
+      .then((res) => {
+        setKeywords([])
+        getKeywords()
+        console.log(keywords)
+        setInputs({ ...inputs, keyword: '' })
+      })
+      .catch((error) => console.log(error))
+  }
+
+  function ImageUpload(e) {
+    const formData = new FormData()
+    formData.append('file', files[0])
+    authAxios
+      .post(`/profile/update/image/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      })
+      .then((res) => {
+        setImage(res.data)
+        setFiles('')
+        window.location.replace(`/auth/profile/${id}`)
+      })
+      .catch((error) => console.log(error))
+  }
   function onEdit() {
     setInputs({
       ...inputs,
-      edit: !edit,
+      edit: true,
     })
   }
   function onSave(e) {
@@ -74,48 +164,56 @@ export default function ProfileMain() {
       [name]: value,
     })
   }
-  // function plusKeyword(e) {
-  //   const { value, name } = e.target
-  //   setKeyword({
-  //     ...keyword,
-  //     [name]:value
-  //   })
-  // }
+  function onLoad(e) {
+    setFiles(e.target.files)
+    setFileImage(URL.createObjectURL(e.target.files[0]))
+  }
+
   return (
     <div>
-      <h3>프로필 메인페이지입니다</h3>
-      <TagCloud minSize={12} maxSize={35} tags={keyword} />
-      <div>
-        <img src={image} alt={name} />
-        <p>이름:&nbsp; {name}</p>
-        <p>
-          직무 : &nbsp;
-          {edit ? (
-            <input onChange={onSave} name="position" value={position}></input>
-          ) : (
-            position
-          )}
-        </p>
-        <p>
-          스택 : &nbsp;
-          {edit ? (
-            <input onChange={onSave} name="stack" value={stack}></input>
-          ) : (
-            stack
-          )}
-        </p>
-        <p>이메일:&nbsp; {email}</p>
-        {edit ? (
-          <button onClick={profileUpdate}>확인</button>
-        ) : (
-          <button onClick={onEdit}>편집</button>
-        )}
+      <div className="container">
+        <div className="main-body">
+          <div class="row gutters-sm">
+            <div class="col-md-4 mb-3">
+              <ProfileImage
+                id={id}
+                fileImage={fileImage}
+                userId={userId}
+                onLoad={onLoad}
+                ImageUpload={ImageUpload}
+                authAxios={authAxios}
+                idCheck={idCheck}
+              />
+              <ProfileInfo
+                id={id}
+                name={name}
+                edit={edit}
+                position={position}
+                stack={stack}
+                email={email}
+                onSave={onSave}
+                update={update}
+                onEdit={onEdit}
+                gitId={gitId}
+                idCheck={idCheck}
+              />
+            </div>
+            <div className="col-md-8">
+              <ProfileTagCloud keywords={keywords} />
+
+              <ProfileKeyword
+                keyword={keyword}
+                onSave={onSave}
+                putKeywords={putKeywords}
+              />
+
+              <ProfileGit edit={edit} gitId={gitId} onSave={onSave} />
+            </div>
+
+            <Outlet />
+          </div>
+        </div>
       </div>
-      키워드를 입력해 주세요.
-      <br />
-      <input></input>
-      <button>전송</button>
-      <Outlet />
     </div>
   )
 }
