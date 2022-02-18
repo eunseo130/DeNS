@@ -64,6 +64,7 @@ const FeedEditModal = ({
   return (
 
     <Fullscreen>
+
       <AskModalBlock>
         <h2>{title}</h2>
         <p>{description}</p>
@@ -79,7 +80,9 @@ const FeedEditModal = ({
           </StyledButton>
         </div>
       </AskModalBlock>
+      
     </Fullscreen>
+
   );
 };
 

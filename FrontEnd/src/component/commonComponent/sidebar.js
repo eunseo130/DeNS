@@ -50,10 +50,11 @@ export default function Sidebar() {
 
 
 const Container = styled.div`
-background:white;
-float:left;
-height:100vh;
-width:50px;
+    position:fixed;
+    background:white;
+    float:left;
+    height:99vh;
+    width:50px;
 `
 
 

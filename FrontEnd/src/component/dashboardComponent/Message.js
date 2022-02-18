@@ -65,7 +65,7 @@ function Message(props) {
 
 const Container = styled.div`
   display: flex;
-  justify-content: column;
+  justify-content: row;
   margin-top: 2vh;
 `;
 
