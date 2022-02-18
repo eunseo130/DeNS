@@ -24,14 +24,14 @@ export default function Signup() {
     const join = () => {
         signup(input, (response) => { console.log(response) }, (error) => { console.log(error) });
         verify({ "email": input.email },
-            (response) => {
-              setCertiText('certi', response.data);
-              navigate(`/signin`);
-            },
+        (response) => {
+          setCertiText('certi', response.data);
+        },
             (error) => {
                 console.log("verify test 43444444");
                 console.log(error)
             });
+        navigate(`/signin`);
         // signin(input,
         //     (response) => { console.log(response) },    //success
         //     (error) => { console.log(error) });         //fail
