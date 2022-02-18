@@ -14,6 +14,4 @@ public interface TeamRespository extends JpaRepository<Team, Long> {
     Team findByTeam(Long team_id);
 
     List<Team> findByTitleContaining(String keyword);
-
-    Team findByTitle(String title);
 }

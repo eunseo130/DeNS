@@ -1,28 +1,35 @@
-import React, { Component } from "react";
-import styled, { css } from "styled-components";
-
+import React, { Component } from 'react'
+import styled, { css } from 'styled-components'
+import Head from '../Header/Head'
+import { Navbar } from 'react-bootstrap'
 function HeaderBox(props) {
   return (
-    <Container {...props}>
-      <HeaderchannelRow>
-      </HeaderchannelRow>
-    </Container>
-  );
+    <>
+      {/* <Container {...props}>
+        <HeaderchannelRow>
+          <Head />
+        </HeaderchannelRow>
+      </Container> */}
+
+      <Container>
+        <Head />
+      </Container>
+    </>
+  )
 }
 
 const Container = styled.div`
   display: flex;
-  background-color: rgba(244,106,114,1);
-  width:100vw;
-`;
+  background-color: rgba(244, 106, 114, 1);
+  width: 100%;
+`
 
 const HeaderchannelRow = styled.div`
-  height: 82px;
+  height: 4vh;
   display: flex;
-  flex: 1 1 0%;
+  // flex: 1 1 0%;
   margin-right: 23px;
   margin-left: 31px;
-  margin-top: 19px;
-`;
+`
 
-export default HeaderBox;
+export default HeaderBox

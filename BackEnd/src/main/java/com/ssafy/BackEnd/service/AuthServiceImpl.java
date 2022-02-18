@@ -7,6 +7,7 @@ import com.ssafy.BackEnd.entity.UserIdentity;
 import com.ssafy.BackEnd.repository.UserRepository;
 import javassist.NotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,22 +36,24 @@ public class AuthServiceImpl implements AuthService{
     private String key;
 
     @Override
-    @Transactional(rollbackFor = Exception.class)
+    @Transactional
     public void signUp(User user) {
         String password = user.getPassword();
-        String salt = saltUtil.genSalt();
-        user.setSalt(new Salt(salt));
-        user.setPassword(saltUtil.encodePassword(salt, password));
-        validateDuplicateUser(user);
+        user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+        System.out.println(user.getPassword());
+//        String salt = saltUtil.genSalt();
+//        user.setSalt(new Salt(salt));
+//        user.setPassword(saltUtil.encodePassword(salt, password));
         userRepository.save(user);
     }
 
     @Override
-    public void validateDuplicateUser(User user) {
+    public boolean validateDuplicateUser(User user) {
         User findUsers = userRepository.findByEmail(user.getEmail());
         if (findUsers != null) {
-            throw new IllegalStateException("이미 존재하는 회원입니다.");
+            return false;
         }
+        return true;
     }
 
     @Override
@@ -72,12 +75,14 @@ public class AuthServiceImpl implements AuthService{
         User findUser = userRepository.findByEmail(email);
         System.out.println("find "+findUser.getEmail());
         if(findUser == null) throw new Exception ("멤버가 조회되지 않습니다.");
-        String salt = findUser.getSalt().getSalt();
-        password = saltUtil.encodePassword(salt, password);
-        System.out.println("pass : "+password);
-        System.out.println("u pass : "+findUser.getPassword());
-        if(!findUser.getPassword().equals(password))
-            throw new Exception("비밀번호가 틀립니다.");
+        boolean checkpw = BCrypt.checkpw(password, findUser.getPassword());
+        if (checkpw == false) throw new Exception("비밀번호가 틀립니다.");
+//        String salt = findUser.getSalt().getSalt();
+//        password = saltUtil.encodePassword(salt, password);
+//        System.out.println("pass : "+password);
+//        System.out.println("u pass : "+findUser.getPassword());
+//        if(!findUser.getPassword().equals(password))
+//            throw new Exception("비밀번호가 틀립니다.");
         return findUser;
     }
 
@@ -111,13 +116,14 @@ public class AuthServiceImpl implements AuthService{
     }
 
     @Override
-    public void changePassword(User user, String password) throws NotFoundException {
+    public User changePassword(User user, String password) throws NotFoundException {
         if(user==null) throw new NotFoundException("changePassword(), 멤버가 조회되지 않습니다.");
-        String salt = saltUtil.genSalt();
-        user.setSalt(new Salt(salt));
-        user.setPassword(saltUtil.encodePassword(salt, password));
-        userRepository.save(user);
-
+        user.setPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
+//        String salt = saltUtil.genSalt();
+//        user.setSalt(new Salt(salt));
+//        user.setPassword(saltUtil.encodePassword(salt, password));
+        User savedUser = userRepository.save(user);
+        return savedUser;
     }
 
     public void sendVerificationMail(User user) throws NotFoundException {

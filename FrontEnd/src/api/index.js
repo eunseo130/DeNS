@@ -1,5 +1,5 @@
 import axios from "axios";
-
+import { store } from '..';
 import { API_BASE_URL } from "../config";
 
 function apiInstance() {
@@ -7,9 +7,14 @@ function apiInstance() {
         baseURL: API_BASE_URL,
         headers: {
             "Content-type": "application/json",
-            "Access-Control-Allow-Origin":"*",
+            "Access-Control-Allow-Origin": "*",
         }
     });
     return instance;
 }
+
+
+
+
+
 export { apiInstance };
