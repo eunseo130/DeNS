@@ -25,8 +25,7 @@
    ![dens_architecture](README.assets/dens_architecture.PNG)
 
 5. 주요 기능
-
-   ![page1](README.assets/page1.png)
+  ![page1](README.assets/page1.png)
 
 ​	![page2](README.assets/page2.png)
 
