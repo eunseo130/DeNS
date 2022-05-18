@@ -29,4 +29,3 @@
 
 ​	![page2](README.assets/page2.png)
 
-​	![page3](README.assets/page3.png)
